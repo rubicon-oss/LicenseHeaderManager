@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="LicenseHeaderManager.Options.WpfLanguages"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lh="clr-namespace:LicenseHeaderManager"
+             xmlns:lho="clr-namespace:LicenseHeaderManager.Options"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="400">
+    <UserControl.Resources>
+        <lho:ExtensionConverter x:Key="ExtensionConverter" Separator=" "/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Name="firstColumn" Text="{x:Static lh:Resources.Extensions}" Grid.Column="0" TextAlignment="Center" Margin="2"/>
+            <TextBlock Text="{x:Static lh:Resources.LineComment}" Grid.Column="1" Margin="2"/>
+            <TextBlock Text="{x:Static lh:Resources.BeginComment}" Grid.Column="2" Margin="2"/>
+            <TextBlock Text="{x:Static lh:Resources.EndComment}" Grid.Column="3" Margin="2"/>
+        </Grid>
+
+        <ListBox Name="grid" HorizontalContentAlignment="Stretch" Grid.Row="1" AlternationCount="2" SelectionChanged="OnSelectionChanged">
+            <ListBox.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Control.Background" Value="White"/>
+                    <Style.Triggers>
+                        <Trigger Property="ListBox.AlternationIndex" Value="1">
+                            <Setter Property="Control.Background" Value="#D4D0C8"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid HorizontalAlignment="Stretch" MouseLeftButtonDown="OnClick">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Extensions, Converter={StaticResource ExtensionConverter}}" Grid.Column="0" Margin="2" TextWrapping="Wrap" MaxWidth="{Binding ElementName=firstColumn, Path=ActualWidth}"/>
+                        <TextBlock Text="{Binding LineComment}" Grid.Column="1" Margin="2"/>
+                        <TextBlock Text="{Binding BeginComment}" Grid.Column="2" Margin="2"/>
+                        <TextBlock Text="{Binding EndComment}" Grid.Column="3" Margin="2"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2">
+            <Button Name="add" FlowDirection="LeftToRight" Content="{x:Static lh:Resources.Add}" Click="Add" Width="50" Margin="2"  HorizontalAlignment="Right"/>
+            <Button Name="edit" FlowDirection="LeftToRight" Content="{x:Static lh:Resources.Edit}" Click="Edit" Width="50" Margin="2"  HorizontalAlignment="Right"/>
+            <Button Name="remove"  FlowDirection="LeftToRight" Content="{x:Static lh:Resources.Remove}" Click="Remove" Width="50" Margin="2" HorizontalAlignment="Right"/>
+        </WrapPanel>
+    </Grid>
+</UserControl>

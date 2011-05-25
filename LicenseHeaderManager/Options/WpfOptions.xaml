@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="LicenseHeaderManager.Options.WpfOptions"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:lh="clr-namespace:LicenseHeaderManager"
+        xmlns:lho="clr-namespace:LicenseHeaderManager.Options"
+        Height="400" Width="400" Name="control">
+
+    <Grid Margin="2">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <CheckBox Name="useRequiredKeywords" IsChecked="{Binding UseRequiredKeywords}" Content="{x:Static lh:Resources.UseRequiredKeywords}" Margin="2" Grid.Row="0"/>
+        <lho:InteropTextBox x:Name="requiredKeywords" Text="{Binding RequiredKeywords, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=useRequiredKeywords, Path=IsChecked}" Margin="2" Grid.Row="1" ToolTip="{x:Static lh:Resources.RequiredKeywordsTooltip}" />
+        
+        <CheckBox Name="attach" IsChecked="{Binding AttachToCommand}" Content="{x:Static lh:Resources.ExecuteBeforeCommand}" Margin="2" Grid.Row="3"/>
+        <Grid IsEnabled="{Binding ElementName=attach, Path=IsChecked}" Grid.Row="4" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Text="Search: " Grid.Row="0" Grid.Column="0" Margin="2" VerticalAlignment="Center"/>
+            <lho:InteropTextBox x:Name="search" TextChanged="OnTextChanged" Grid.Row="0" Grid.Column="1" Margin="2"/>
+            <ListBox Name="commands" Grid.Row="1" Grid.ColumnSpan="2" Margin="2" DisplayMemberPath="Name" SelectionMode="Single" SelectionChanged="OnSelectionChanged" />            
+        </Grid>
+    </Grid>
+</UserControl>
