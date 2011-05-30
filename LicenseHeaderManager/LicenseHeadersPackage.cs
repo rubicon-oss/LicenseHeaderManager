@@ -91,21 +91,21 @@ namespace LicenseHeaderManager
         if (page.AttachToCommand)
         {
           _events = _dte.Events.CommandEvents[page.AttachedCommandGuid, page.AttachedCommandId];
-          _events.BeforeExecute += AttachedCommandExecuted;
+          _events.AfterExecute += AttachedCommandExecuted;
         }
 
         page.OptionsChanged += (s, e) =>
         {
           if (_events != null)
           {
-            _events.BeforeExecute -= AttachedCommandExecuted;
+            _events.AfterExecute -= AttachedCommandExecuted;
             _events = null;
           }
 
           if (page.AttachToCommand)
           {
             _events = _dte.Events.CommandEvents[page.AttachedCommandGuid, page.AttachedCommandId];
-            _events.BeforeExecute += AttachedCommandExecuted;
+            _events.AfterExecute += AttachedCommandExecuted;
           }
         };
       }
@@ -134,7 +134,7 @@ namespace LicenseHeaderManager
       _removeLicenseHeaderCommand.Visible = visible;
     }
 
-    private void AttachedCommandExecuted (string Guid, int ID, object CustomIn, object CustomOut, ref bool CancelDefault)
+    private void AttachedCommandExecuted (string Guid, int ID, object CustomIn, object CustomOut)
     {
       _addLicenseHeaderCommand.Invoke();
     }

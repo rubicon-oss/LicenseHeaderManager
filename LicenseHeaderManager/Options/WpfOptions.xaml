@@ -17,7 +17,7 @@
         <CheckBox Name="useRequiredKeywords" IsChecked="{Binding UseRequiredKeywords}" Content="{x:Static lh:Resources.UseRequiredKeywords}" Margin="2" Grid.Row="0"/>
         <lho:InteropTextBox x:Name="requiredKeywords" Text="{Binding RequiredKeywords, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=useRequiredKeywords, Path=IsChecked}" Margin="2" Grid.Row="1" ToolTip="{x:Static lh:Resources.RequiredKeywordsTooltip}" />
         
-        <CheckBox Name="attach" IsChecked="{Binding AttachToCommand}" Content="{x:Static lh:Resources.ExecuteBeforeCommand}" Margin="2" Grid.Row="3"/>
+        <CheckBox Name="attach" IsChecked="{Binding AttachToCommand}" Content="{x:Static lh:Resources.ExecuteAfterCommand}" Margin="2" Grid.Row="3"/>
         <Grid IsEnabled="{Binding ElementName=attach, Path=IsChecked}" Grid.Row="4" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>

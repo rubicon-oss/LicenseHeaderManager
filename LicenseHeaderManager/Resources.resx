@@ -159,8 +159,8 @@
   <data name="Error_NoLicenseHeaderFile" xml:space="preserve">
     <value>The project has no license header file.</value>
   </data>
-  <data name="ExecuteBeforeCommand" xml:space="preserve">
-    <value>Execute 'Add License Header' command before other command</value>
+  <data name="ExecuteAfterCommand" xml:space="preserve">
+    <value>Execute 'Add License Header' command after other command</value>
   </data>
   <data name="Extension" xml:space="preserve">
     <value>Extension</value>
