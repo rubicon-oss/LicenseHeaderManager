@@ -3,7 +3,7 @@
   <Identifier Id="4c570677-8476-4d33-bd0c-da36c89287c8">
     <Name>LicenseHeaders</Name>
     <Author>Rubicon</Author>
-    <Version>1.0</Version>
+    <Version>0.9</Version>
     <Description xml:space="preserve">An extension for automatically inserting license information file headers.</Description>
     <Locale>1033</Locale>
     <Icon>Icon.png</Icon>

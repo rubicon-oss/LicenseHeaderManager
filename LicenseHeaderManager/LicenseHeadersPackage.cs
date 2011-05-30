@@ -33,7 +33,7 @@ namespace LicenseHeaderManager
   [PackageRegistration (UseManagedResourcesOnly = true)]
   // This attribute is used to register the informations needed to show the this package
   // in the Help/About dialog of Visual Studio.
-  [InstalledProductRegistration ("#110", "#112", "1.0", IconResourceID = 400)]
+  [InstalledProductRegistration ("#110", "#112", "0.9", IconResourceID = 400)]
   // This attribute is needed to let the shell know that this package exposes some menus.
   [ProvideMenuResource ("Menus.ctmenu", 1)]
   [ProvideOptionPage (typeof (OptionsPage), "License Headers", "General", 0, 0, true)]
