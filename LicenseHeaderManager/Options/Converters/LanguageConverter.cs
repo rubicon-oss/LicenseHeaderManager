@@ -25,11 +25,11 @@ namespace LicenseHeaderManager.Options.Converters
                   new XElement (c_extensions,
                     from e in l.Extensions
                     select new XElement (c_extension, e)),
-                  new XAttribute (c_linecomment, l.LineComment ?? string.Empty),
-                  new XAttribute (c_beginComment, l.BeginComment ?? string.Empty),
-                  new XAttribute (c_endComment, l.EndComment ?? string.Empty),
-                  new XAttribute (c_beginRegion, l.BeginRegion ?? string.Empty),
-                  new XAttribute (c_endRegion, l.EndRegion ?? string.Empty));
+                  new XAttribute (c_linecomment, l.LineComment),
+                  new XAttribute (c_beginComment, l.BeginComment),
+                  new XAttribute (c_endComment, l.EndComment),
+                  new XAttribute (c_beginRegion, l.BeginRegion),
+                  new XAttribute (c_endRegion, l.EndRegion));
 
       return new XElement (c_languages, xml).ToString ();
     }

@@ -279,6 +279,22 @@ namespace LicenseHeaderManager.Test
     }
 
     [Test]
+    public void TestMultiLineHeaderOnly ()
+    {
+      var header = new[]
+      {
+        "/*",
+        "This is a comment that ",
+        "spans multiple lines.",
+        "*/"
+      };
+
+      var text = new string[0];
+
+      Test (header, text);
+    }
+
+    [Test]
     public void TestHeaderOnlyWithEmptyLines ()
     {
       var header = new[]
@@ -326,6 +342,21 @@ namespace LicenseHeaderManager.Test
     }
 
     [Test]
+    public void TestNoHeaderButNormalRegion ()
+    {
+      var header = new string[0];
+
+      var text = new[]
+      {
+        "#region normal region",
+        "This is not a comment.",
+        "#endregion"
+      };
+
+      Test (header, text);
+    }
+
+    [Test]
     public void TestEmptyFile ()
     {
       var header = new string[0];
@@ -349,6 +380,8 @@ namespace LicenseHeaderManager.Test
     [Test]
     public void TestMissingEndRegion ()
     {
+      var header = new string[0];
+
       var text = new[]
       {
         "#region copyright",
@@ -356,12 +389,14 @@ namespace LicenseHeaderManager.Test
         "This is not a comment."
       };
 
-      TestError (text);
+      Test (header, text);
     }
 
     [Test]
     public void TestNestedMissingEndRegion ()
     {
+      var header = new string[0];
+
       var text = new[]
       {
         "#region copyright",
@@ -372,12 +407,14 @@ namespace LicenseHeaderManager.Test
         "This is not a comment."
       };
 
-      TestError (text);
+      Test (header, text);
     }
 
     [Test]
     public void TestTextInRegion ()
     {
+      var header = new string[0];
+
       var text = new[]
       {
         "#region copyright",
@@ -386,7 +423,27 @@ namespace LicenseHeaderManager.Test
         "#endregion"
       };
 
-      TestError (text);
+      Test (header, text);
+    }
+
+    [Test]
+    public void TestCommentBeforeRegionWithText ()
+    {
+      var header = new []
+      {
+        "",
+        "//This is a comment."
+      };
+
+      var text = new[]
+      {
+        "#region copyright",
+        "//This is a comment.",
+        "This is not a comment.",
+        "#endregion"
+      };
+
+      Test (header, text);
     }
   }
 }

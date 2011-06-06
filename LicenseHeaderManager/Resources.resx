@@ -163,7 +163,7 @@
     <value>Error</value>
   </data>
   <data name="Error_InvalidLicenseHeader" xml:space="preserve">
-    <value>License headers can only contains comments and regions.</value>
+    <value>An error occured while parsing the file {0}.\nMake sure the comment syntax is correct.</value>
   </data>
   <data name="Error_LanguageInvalid" xml:space="preserve">
     <value>Please provide at least an extension and line comment or begin- and end indicators.</value>
@@ -206,5 +206,11 @@
   </data>
   <data name="UseRequiredKeywords" xml:space="preserve">
     <value>Only remove comments containing at least one of the keywords below</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="Warning_InvalidLicenseHeader" xml:space="preserve">
+    <value>The header definition for {0} files contains non-comment text.\nIf you insert this header, you will not be able to remove or replace the header automatically!\nDo you really want to add this header to the file?</value>
   </data>
 </root>

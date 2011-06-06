@@ -196,7 +196,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to License headers can only contains comments and regions..
+        ///   Looks up a localized string similar to An error occured while parsing the file {0}.\nMake sure the comment syntax is correct..
         /// </summary>
         public static string Error_InvalidLicenseHeader {
             get {
@@ -327,6 +327,24 @@ namespace LicenseHeaderManager {
         public static string UseRequiredKeywords {
             get {
                 return ResourceManager.GetString("UseRequiredKeywords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning.
+        /// </summary>
+        public static string Warning {
+            get {
+                return ResourceManager.GetString("Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The header definition for {0} files contains non-comment text.\nIf you insert this header, you will not be able to remove or replace the header automatically!\nDo you really want to add this header to the file?.
+        /// </summary>
+        public static string Warning_InvalidLicenseHeader {
+            get {
+                return ResourceManager.GetString("Warning_InvalidLicenseHeader", resourceCulture);
             }
         }
     }

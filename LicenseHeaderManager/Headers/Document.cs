@@ -26,6 +26,14 @@ namespace LicenseHeaderManager.Headers
       _parser = new Parser (language.LineComment, language.BeginComment, language.EndComment, language.BeginRegion, language.EndRegion);
     }
 
+    public bool ValidateHeader ()
+    {
+      if (_header == null)
+        return true;
+      else
+        return LicenseHeader.Validate (_header, _parser);
+    }
+
     private string GetText (TextPoint start, TextPoint end)
     {
       return _document.CreateEditPoint(start).GetText (end);

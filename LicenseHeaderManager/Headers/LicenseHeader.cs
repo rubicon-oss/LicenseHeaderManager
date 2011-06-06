@@ -46,6 +46,19 @@ namespace LicenseHeaderManager.Headers
       return headers;
     }
 
+    public static bool Validate (string header, Parser parser)
+    {
+      try
+      {
+        var result = parser.Parse (header);
+        return result == header;
+      }
+      catch (ParseException)
+      {
+        return false;
+      }
+    }
+
     private static void AddHeaders (IDictionary<string, string[]> headers, string definition)
     {
       IEnumerable<string> extensions = null;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
 namespace LicenseHeaderManager.Headers
@@ -7,7 +8,8 @@ namespace LicenseHeaderManager.Headers
   {
     private bool _started;
     private int _position;
-    private int _regions;
+    private Stack<int> _regionStarts;
+
     private string _text;
 
     public string LineComment { get; private set; }
@@ -22,11 +24,11 @@ namespace LicenseHeaderManager.Headers
       Contract.Requires (string.IsNullOrWhiteSpace (beginRegion) == string.IsNullOrWhiteSpace (endRegion));
       Contract.Requires (!(string.IsNullOrWhiteSpace (lineComment) && string.IsNullOrWhiteSpace (beginComment)));
 
-      LineComment = lineComment;
-      BeginComment = beginComment;
-      EndComment = endComment;
-      BeginRegion = beginRegion;
-      EndRegion = endRegion;
+      LineComment = string.IsNullOrEmpty(lineComment) ? null : lineComment;
+      BeginComment = string.IsNullOrEmpty (beginComment) ? null : beginComment;
+      EndComment = string.IsNullOrEmpty(endComment) ? null : endComment;
+      BeginRegion = string.IsNullOrEmpty(beginRegion) ? null : beginRegion;
+      EndRegion = string.IsNullOrEmpty(endRegion) ? null : endRegion;
     }
 
     public string Parse (string text)
@@ -35,16 +37,20 @@ namespace LicenseHeaderManager.Headers
 
       _started = false;
       _position = 0;
-      _regions = 0;
-      _text = text;  
+      _text = text;
+
+      _regionStarts = new Stack<int> ();
 
       for (string token = GetToken (); HandleToken (token); token = GetToken ()) { }
 
       if (!_started)
         return string.Empty; //don't return any empty lines at the begin of the file which would normally be part of the header
 
-      if (_regions != 0)
-        throw new ParseException ();
+      while (_regionStarts.Count > 1)
+        _regionStarts.Pop ();
+
+      if (_regionStarts.Count > 0)
+        _position = _regionStarts.Pop();
 
       return _text.Substring (0, _position);
     }
@@ -71,7 +77,7 @@ namespace LicenseHeaderManager.Headers
         return true;
 
       //if the header has already started and we're not in an open region, check if there was more than one NewLine
-      if (_started && _regions == 0)
+      if (_started && _regionStarts.Count == 0)
       {
         int firstNewLine = _text.IndexOf (Environment.NewLine, start, _position - start);
         if (firstNewLine >= 0)
@@ -125,7 +131,7 @@ namespace LicenseHeaderManager.Headers
         if (!_started)
           _started = true;
 
-        _regions++;
+        _regionStarts.Push(_position - BeginRegion.Length);
 
         _position = _text.IndexOf (Environment.NewLine, _position);
         if (_position < 0)
@@ -139,9 +145,10 @@ namespace LicenseHeaderManager.Headers
         if (!_started)
           _started = true;
 
-        _regions--;
-        if (_regions < 0)
+        if (_regionStarts.Count == 0)
           throw new ParseException ();
+
+        _regionStarts.Pop ();
 
         _position = _text.IndexOf (Environment.NewLine, _position);
         if (_position < 0)

@@ -64,6 +64,8 @@ namespace LicenseHeaderManager
     private OleMenuCommand _addLicenseHeaderCommand;
     private OleMenuCommand _removeLicenseHeaderCommand;
 
+    private IDictionary<string, bool> _extensionsWithInvalidHeaders = new Dictionary<string, bool> ();
+
     /// <summary>
     /// Initialization of the package; this method is called right after the package is sited, so this is the place
     /// where you can put all the initilaization code that rely on services provided by VisualStudio.
@@ -196,6 +198,8 @@ namespace LicenseHeaderManager
 
     private void RemoveOrReplaceHeader (bool removeOnly)
     {
+      string message;
+
       var item = GetActiveProjectItem ();
       if (item != null)
       {
@@ -208,10 +212,24 @@ namespace LicenseHeaderManager
           switch (result)
           {
             case CreateDocumentResult.DocumentCreated:
-              document.ReplaceHeaderIfNecessary ();
+              if (!document.ValidateHeader())
+              {
+                message = string.Format (Resources.Warning_InvalidLicenseHeader, Path.GetExtension (item.Name)).Replace (@"\n", "\n");
+                if (MessageBox.Show (message, Resources.Warning, MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) == MessageBoxResult.No)
+                  break;
+              }
+              try
+              {
+                document.ReplaceHeaderIfNecessary ();
+              }
+              catch (ParseException e)
+              {
+                message = string.Format (Resources.Error_InvalidLicenseHeader, item.Name).Replace (@"\n", "\n");
+                MessageBox.Show (message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+              }
               break;
             case CreateDocumentResult.LanguageNotFound:
-              string message = string.Format (Resources.Error_LanguageNotFound, Path.GetExtension (item.Name)).Replace(@"\n", "\n");
+              message = string.Format (Resources.Error_LanguageNotFound, Path.GetExtension (item.Name)).Replace(@"\n", "\n");
               if (MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
                 ShowOptionPage (typeof (LanguagesPage));
               break;
@@ -244,6 +262,7 @@ namespace LicenseHeaderManager
         }
         else
         {
+          _extensionsWithInvalidHeaders.Clear ();
           foreach (ProjectItem item in project.ProjectItems)
             RemoveOrReplaceHeaderRecursive (item, headers);
         }
@@ -255,6 +274,7 @@ namespace LicenseHeaderManager
       var project = GetActiveProject ();
       if (project != null)
       {
+        _extensionsWithInvalidHeaders.Clear ();
         foreach (ProjectItem item in project.ProjectItems)
           RemoveOrReplaceHeaderRecursive (item, null);
       }
@@ -262,13 +282,40 @@ namespace LicenseHeaderManager
 
     private void RemoveOrReplaceHeaderRecursive (ProjectItem item, IDictionary<string, string[]> headers)
     {
+      string message;
+
       bool isOpen = item.IsOpen[Constants.vsViewKindAny];
       bool isSaved = item.Saved;
 
       Document document;
       if (TryCreateDocument (item, out document, headers) == CreateDocumentResult.DocumentCreated)
       {
-        document.ReplaceHeaderIfNecessary ();
+        bool replace = true;
+
+        if (!document.ValidateHeader ())
+        {
+          string extension = Path.GetExtension (item.Name);
+          if (!_extensionsWithInvalidHeaders.TryGetValue(extension, out replace))
+          {
+            message = string.Format (Resources.Warning_InvalidLicenseHeader, extension).Replace (@"\n", "\n");
+            replace = MessageBox.Show (message, Resources.Warning, MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) == MessageBoxResult.Yes;
+            _extensionsWithInvalidHeaders[extension] = replace;
+          }
+        }
+
+        if (replace)
+        {
+          try
+          {
+            document.ReplaceHeaderIfNecessary();
+          }
+          catch (ParseException e)
+          {
+            message = string.Format (Resources.Error_InvalidLicenseHeader, item.Name).Replace (@"\n", "\n");
+            MessageBox.Show (message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+          }
+        }
+
         if (isOpen)
         {
           if (isSaved)
