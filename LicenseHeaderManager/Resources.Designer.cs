@@ -70,6 +70,51 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to After.
+        /// </summary>
+        public static string After {
+            get {
+                return ResourceManager.GetString("After", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to after selected command.
+        /// </summary>
+        public static string AfterCommand {
+            get {
+                return ResourceManager.GetString("AfterCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Before.
+        /// </summary>
+        public static string Before {
+            get {
+                return ResourceManager.GetString("Before", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to before selected command.
+        /// </summary>
+        public static string BeforeCommand {
+            get {
+                return ResourceManager.GetString("BeforeCommand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Begin.
+        /// </summary>
+        public static string Begin {
+            get {
+                return ResourceManager.GetString("Begin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Begin Comment.
         /// </summary>
         public static string BeginComment {
@@ -97,11 +142,29 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can chain the &apos;Add License Header&apos; command to other commands so that it is automatically executed before/after them..
+        /// </summary>
+        public static string ChainedCommands {
+            get {
+                return ResourceManager.GetString("ChainedCommands", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit....
         /// </summary>
         public static string Edit {
             get {
                 return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End.
+        /// </summary>
+        public static string End {
+            get {
+                return ResourceManager.GetString("End", resourceCulture);
             }
         }
         
@@ -187,11 +250,11 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Execute &apos;Add License Header&apos; command before other command.
+        ///   Looks up a localized string similar to Execute &apos;Add License Header&apos; command.
         /// </summary>
-        public static string ExecuteBeforeCommand {
+        public static string Execute {
             get {
-                return ResourceManager.GetString("ExecuteBeforeCommand", resourceCulture);
+                return ResourceManager.GetString("Execute", resourceCulture);
             }
         }
         
@@ -246,6 +309,15 @@ namespace LicenseHeaderManager {
         public static string RequiredKeywordsTooltip {
             get {
                 return ResourceManager.GetString("RequiredKeywordsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search:.
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
             }
         }
         

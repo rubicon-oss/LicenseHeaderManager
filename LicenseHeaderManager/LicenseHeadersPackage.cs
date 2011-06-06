@@ -15,6 +15,7 @@ using Constants = EnvDTE.Constants;
 using Document = LicenseHeaderManager.Headers.Document;
 using System.Reflection;
 using System.Windows;
+using System.Collections.Specialized;
 
 namespace LicenseHeaderManager
 {
@@ -33,13 +34,13 @@ namespace LicenseHeaderManager
   [PackageRegistration (UseManagedResourcesOnly = true)]
   // This attribute is used to register the informations needed to show the this package
   // in the Help/About dialog of Visual Studio.
-  [InstalledProductRegistration ("#110", "#112", "1.0", IconResourceID = 400)]
+  [InstalledProductRegistration ("#110", "#112", "0.9.1", IconResourceID = 400)]
   // This attribute is needed to let the shell know that this package exposes some menus.
   [ProvideMenuResource ("Menus.ctmenu", 1)]
-  [ProvideOptionPage (typeof (OptionsPage), "License Headers", "General", 0, 0, true)]
-  [ProvideOptionPage (typeof (LanguagesPage), "License Headers", "Languages", 0, 0, true)]
-  [ProvideProfile (typeof (OptionsPage), "License Headers", "General", 0, 0, true)]
-  [ProvideProfile (typeof (LanguagesPage), "License Headers", "Languages", 0, 0, true)]
+  [ProvideOptionPage (typeof (OptionsPage), c_licenseHeaders, c_general, 0, 0, true)]
+  [ProvideOptionPage (typeof (LanguagesPage), c_licenseHeaders, c_languages, 0, 0, true)]
+  [ProvideProfile (typeof (OptionsPage), c_licenseHeaders, c_general, 0, 0, true)]
+  [ProvideProfile (typeof (LanguagesPage), c_licenseHeaders, c_languages, 0, 0, true)]
   [ProvideAutoLoad (VSConstants.UICONTEXT.SolutionOpening_string)]
   [Guid (GuidList.guidLicenseHeadersPkgString)]
   public sealed class LicenseHeadersPackage : Package
@@ -55,8 +56,11 @@ namespace LicenseHeaderManager
     {
     }
 
+    private const string c_licenseHeaders = "License Header Manager";
+    private const string c_general = "General";
+    private const string c_languages = "Languages";
+
     private DTE2 _dte;
-    private CommandEvents _events;
     private OleMenuCommand _addLicenseHeaderCommand;
     private OleMenuCommand _removeLicenseHeaderCommand;
 
@@ -88,26 +92,62 @@ namespace LicenseHeaderManager
 
       if (page != null)
       {
-        if (page.AttachToCommand)
+        foreach (var command in page.ChainedCommands)
         {
-          _events = _dte.Events.CommandEvents[page.AttachedCommandGuid, page.AttachedCommandId];
-          _events.BeforeExecute += AttachedCommandExecuted;
+          command.Events =_dte.Events.CommandEvents[command.Guid, command.Id];
+          
+          switch (command.ExecutionTime)
+          {
+            case ExecutionTime.Before:
+              command.Events.BeforeExecute += BeforeExecuted;
+              break;
+            case ExecutionTime.After:
+              command.Events.AfterExecute += AfterExecuted;
+              break;
+          }
         }
 
-        page.OptionsChanged += (s, e) =>
-        {
-          if (_events != null)
-          {
-            _events.BeforeExecute -= AttachedCommandExecuted;
-            _events = null;
-          }
+        page.ChainedCommandsChanged += CommandsChanged;
+      }
+    }
 
-          if (page.AttachToCommand)
+    public void CommandsChanged (object sender, NotifyCollectionChangedEventArgs e)
+    {
+      if (e.Action == NotifyCollectionChangedAction.Move)
+        return;
+
+      if (e.OldItems != null)
+      {
+        foreach (ChainedCommand command in e.OldItems)
+        {
+          switch (command.ExecutionTime)
           {
-            _events = _dte.Events.CommandEvents[page.AttachedCommandGuid, page.AttachedCommandId];
-            _events.BeforeExecute += AttachedCommandExecuted;
+            case ExecutionTime.Before:
+              command.Events.BeforeExecute -= BeforeExecuted;
+              break;
+            case ExecutionTime.After:
+              command.Events.AfterExecute -= AfterExecuted;
+              break;
           }
-        };
+        }
+      }
+
+      if (e.NewItems != null)
+      {
+        foreach (ChainedCommand command in e.NewItems)
+        {
+          command.Events = _dte.Events.CommandEvents[command.Guid, command.Id];
+
+          switch (command.ExecutionTime)
+          {
+            case ExecutionTime.Before:
+              command.Events.BeforeExecute += BeforeExecuted;
+              break;
+            case ExecutionTime.After:
+              command.Events.AfterExecute += AfterExecuted;
+              break;
+          }
+        }
       }
     }
 
@@ -134,7 +174,12 @@ namespace LicenseHeaderManager
       _removeLicenseHeaderCommand.Visible = visible;
     }
 
-    private void AttachedCommandExecuted (string Guid, int ID, object CustomIn, object CustomOut, ref bool CancelDefault)
+    private void BeforeExecuted (string guid, int id, object customIn, object customOut, ref bool cancelDefault)
+    {
+      _addLicenseHeaderCommand.Invoke ();
+    }
+
+    private void AfterExecuted (string guid, int id, object customIn, object customOut)
     {
       _addLicenseHeaderCommand.Invoke();
     }
@@ -250,7 +295,7 @@ namespace LicenseHeaderManager
         var fileName = LicenseHeader.GetNewFileName (project);
         var item = _dte.ItemOperations.AddNewItem ("General\\Text File", fileName);
         
-        using (var resource = Assembly.GetExecutingAssembly ().GetManifestResourceStream (typeof(LicenseHeadersPackage), "default.licenseheader"))
+        using (var resource = Assembly.GetExecutingAssembly ().GetManifestResourceStream (typeof (LicenseHeadersPackage), "default.licenseheader"))
         {
           var text = item.Document.Object ("TextDocument") as TextDocument;
           if (text != null)

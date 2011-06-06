@@ -4,7 +4,7 @@
         xmlns:lho="clr-namespace:LicenseHeaderManager.Options"
         xmlns:lhoc="clr-namespace:LicenseHeaderManager.Options.Converters"
         xmlns:lh="clr-namespace:LicenseHeaderManager"
-        Title="LanguageDialog" Height="250" Width="250" WindowStartupLocation="CenterScreen">
+        Title="Edit Language" Height="250" Width="250" WindowStartupLocation="CenterScreen" Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}">
     <Window.Resources>
         <lhoc:ExtensionConverter x:Key="ExtensionConverter"/>
     </Window.Resources>

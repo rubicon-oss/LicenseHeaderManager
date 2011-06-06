@@ -159,6 +159,9 @@
     <Compile Include="Options\WpfHost.Designer.cs">
       <DependentUpon>WpfHost.cs</DependentUpon>
     </Compile>
+    <Compile Include="Options\WpfCommandDialog.xaml.cs">
+      <DependentUpon>WpfCommandDialog.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
@@ -204,6 +207,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Options\WpfOptions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Options\WpfCommandDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

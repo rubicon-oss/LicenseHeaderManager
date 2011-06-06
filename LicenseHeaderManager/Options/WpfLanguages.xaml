@@ -26,8 +26,8 @@
             </Grid.ColumnDefinitions>
             <TextBlock Name="firstColumn" Text="{x:Static lh:Resources.Extensions}" Grid.Column="0" TextAlignment="Center" Margin="2"/>
             <TextBlock Text="{x:Static lh:Resources.LineComment}" Grid.Column="1" Margin="2"/>
-            <TextBlock Text="{x:Static lh:Resources.BeginComment}" Grid.Column="2" Margin="2"/>
-            <TextBlock Text="{x:Static lh:Resources.EndComment}" Grid.Column="3" Margin="2"/>
+            <TextBlock Text="{x:Static lh:Resources.Begin}" Grid.Column="2" Margin="2"/>
+            <TextBlock Text="{x:Static lh:Resources.End}" Grid.Column="3" Margin="2"/>
         </Grid>
 
         <ListBox Name="grid" HorizontalContentAlignment="Stretch" Grid.Row="1" AlternationCount="2" SelectionChanged="OnSelectionChanged">
@@ -60,9 +60,9 @@
         </ListBox>
 
         <WrapPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2">
-            <Button Name="add" FlowDirection="LeftToRight" Content="{x:Static lh:Resources.Add}" Click="Add" Width="50" Margin="2"  HorizontalAlignment="Right"/>
-            <Button Name="edit" FlowDirection="LeftToRight" Content="{x:Static lh:Resources.Edit}" Click="Edit" Width="50" Margin="2"  HorizontalAlignment="Right"/>
-            <Button Name="remove"  FlowDirection="LeftToRight" Content="{x:Static lh:Resources.Remove}" Click="Remove" Width="50" Margin="2" HorizontalAlignment="Right"/>
+            <Button Name="add" Content="{x:Static lh:Resources.Add}" Click="Add" Width="50" Margin="2"  HorizontalAlignment="Right"/>
+            <Button Name="edit" Content="{x:Static lh:Resources.Edit}" Click="Edit" Width="50" Margin="2"  HorizontalAlignment="Right"/>
+            <Button Name="remove" Content="{x:Static lh:Resources.Remove}" Click="Remove" Width="50" Margin="2" HorizontalAlignment="Right"/>
         </WrapPanel>
     </Grid>
 </UserControl>

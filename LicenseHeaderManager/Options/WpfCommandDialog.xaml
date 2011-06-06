@@ -1,0 +1,36 @@
+﻿<Window x:Class="LicenseHeaderManager.Options.WpfCommandDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:lh="clr-namespace:LicenseHeaderManager"
+        xmlns:lho="clr-namespace:LicenseHeaderManager.Options"
+        Title="Select Command" Height="300" Width="400" Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="{x:Static lh:Resources.Search}" Grid.Row="0" Grid.Column="0" Margin="2" VerticalAlignment="Center"/>
+        <lho:InteropTextBox x:Name="search" TextChanged="OnTextChanged" Grid.Row="0" Grid.Column="1" Margin="2"/>
+        <ListBox Name="commands" Grid.Row="1" Grid.ColumnSpan="2" Margin="2" DisplayMemberPath="Name" SelectionMode="Single" SelectionChanged="OnSelectionChanged" />
+
+        <TextBlock Text="{x:Static lh:Resources.Execute}" Grid.Row="2" Grid.ColumnSpan="2" Margin="2" VerticalAlignment="Center"/>
+
+        <RadioButton Name="before" GroupName="ExecutionTime" Content="{x:Static lh:Resources.BeforeCommand}" Grid.Row="3" Grid.ColumnSpan="2" Margin="2"/>
+        <RadioButton Name="after" GroupName="ExecutionTime" Content="{x:Static lh:Resources.AfterCommand}" Grid.Row="4" Grid.ColumnSpan="2" Margin="2"/>
+
+        <WrapPanel Orientation="Horizontal" Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Right">
+            <Button TabIndex="5" Name="ok" Content="{x:Static lh:Resources.Ok}" Margin="2" Width="50" Click="OnClick" IsEnabled="False"/>
+            <Button TabIndex="6" Name="cancel" Content="{x:Static lh:Resources.Cancel}" Margin="2" Width="50" Click="OnClick"/>
+        </WrapPanel>
+    </Grid>
+</Window>

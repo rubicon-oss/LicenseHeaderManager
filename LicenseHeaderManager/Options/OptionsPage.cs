@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Linq;
 using EnvDTE;
 using EnvDTE80;
+using LicenseHeaderManager.Options.Converters;
 using Microsoft.VisualStudio.Shell;
 using System.Collections.ObjectModel;
+using System.Collections;
 
 namespace LicenseHeaderManager.Options
 {
@@ -13,16 +17,43 @@ namespace LicenseHeaderManager.Options
   [Guid ("EB6F9B18-D203-43E3-8033-35AD9BEFC70D")]
   public class OptionsPage : DialogPage
   {
-    public event Action<object, EventArgs> OptionsChanged;
+    public event NotifyCollectionChangedEventHandler ChainedCommandsChanged;
+
+    private DTE2 Dte { get { return GetService (typeof (DTE)) as DTE2; } }
+    
+    public Commands Commands { get { return Dte.Commands; } }
 
     //serialized properties
     public bool UseRequiredKeywords { get; set; }
     public string RequiredKeywords { get; set; }
-    public ObservableCollection<ChainedCommand> ChainedCommands { get; set; }
 
-    public Commands Commands { get { return Dte.Commands; } }
+    private ObservableCollection<ChainedCommand> _chainedCommands;
+    [TypeConverter (typeof (ChainedCommandConverter))]
+    [DesignerSerializationVisibility (DesignerSerializationVisibility.Visible)]
+    public ObservableCollection<ChainedCommand> ChainedCommands {
+      get { return _chainedCommands; }
+      set {
+        if (_chainedCommands != null)
+        {
+          _chainedCommands.CollectionChanged -= OnChainedCommandsChanged;
+          if (ChainedCommandsChanged != null)
+            ChainedCommandsChanged (_chainedCommands, new NotifyCollectionChangedEventArgs (NotifyCollectionChangedAction.Remove, _chainedCommands));
+        }
+        _chainedCommands = value;
+        if (_chainedCommands != null)
+        {
+          _chainedCommands.CollectionChanged += OnChainedCommandsChanged;
+          if (ChainedCommandsChanged != null)
+            ChainedCommandsChanged (value, new NotifyCollectionChangedEventArgs (NotifyCollectionChangedAction.Add, _chainedCommands));
+        }
+      }
+    }
 
-    private DTE2 Dte { get { return GetService (typeof (DTE)) as DTE2; } }
+    private void OnChainedCommandsChanged (object sender, NotifyCollectionChangedEventArgs e)
+    {
+      if (ChainedCommandsChanged != null)
+        ChainedCommandsChanged (sender, e);
+    }
 
     public OptionsPage ()
     {
@@ -37,20 +68,6 @@ namespace LicenseHeaderManager.Options
       base.ResetSettings ();
     }
 
-    protected override void OnApply (PageApplyEventArgs e)
-    {
-      base.OnApply (e);
-      if (OptionsChanged != null)
-        OptionsChanged (this, EventArgs.Empty);
-    }
-
-    public Command GetAttachedCommand ()
-    {
-      if (string.IsNullOrEmpty (AttachedCommandGuid) || AttachedCommandId < 0)
-        return null;
-      else
-        return Commands.Item (AttachedCommandGuid, AttachedCommandId);
-    }
 
     [Browsable (false)]
     [DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]

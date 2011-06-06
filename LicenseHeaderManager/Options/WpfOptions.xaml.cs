@@ -2,108 +2,75 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Forms;
+using System.Windows.Input;
 using EnvDTE;
 
 namespace LicenseHeaderManager.Options
 {
   public partial class WpfOptions : System.Windows.Controls.UserControl
   {
-    private Timer _timer;
-
-    private ICollectionView View
-    {
-      get { return commands.ItemsSource as ICollectionView; }
-      set {
-        commands.ItemsSource = value;
-        value.Filter = Filter;
-      }
-    }
-
-    public IEnumerable Commands {
-      get { return View.SourceCollection; }
-      set { View = CollectionViewSource.GetDefaultView (value); }
-    }
-
     public OptionsPage Page { get; set; }
 
     public WpfOptions (OptionsPage page)
     {
       InitializeComponent();
 
-      _timer = new Timer();
-      _timer.Interval = 200;
-      _timer.Tick += OnTick;
-
       DataContext = Page = page;
-      Commands = from Command c in page.Commands
-                 where !String.IsNullOrEmpty (c.Name)
-                 orderby c.Name
-                 select c;
 
       Loaded += (s, e) =>
       {
-        //reset the filter (without updating the view because the selected
-        //item would scroll out of view again once the timer expires)
-        search.TextChanged -= OnTextChanged;
-        search.Text = string.Empty;
-        search.TextChanged += OnTextChanged;  
-        
-        //refresh the view as it is still only displaying the last filtered result
-        if (View != null)
-          View.Refresh ();
-
-        //select the currently attached command
-        var command = page.GetAttachedCommand ();
-        if (command != null)
-        {
-          commands.SelectedItem = command;
-          commands.ScrollIntoView (command);
-        }
+        grid.ItemsSource = page.ChainedCommands;
+        EnableButtons ();
       };
     }
 
-    private void OnTick (object sender, EventArgs e)
+    private void Add (object sender, RoutedEventArgs e)
     {
-      _timer.Stop ();
-      if (View != null)
-        View.Refresh ();
+      var dialog = new WpfCommandDialog (new ChainedCommand(), Page.Commands);
+      bool? result = dialog.ShowDialog ();
+      if (result.HasValue && result.Value)
+        Page.ChainedCommands.Add (dialog.Command);
     }
 
-    private void OnTextChanged (object sender, TextChangedEventArgs e)
+    private void Remove (object sender, RoutedEventArgs e)
     {
-      _timer.Stop ();
-      _timer.Start ();
-    }
-
-    private bool Filter (object item)
-    {
-      var command = item as Command;
+      var command = grid.SelectedItem as ChainedCommand;
       if (command != null)
-      {
-        char[] chars = new[] { ' ', '.' };
-        string[] parts = command.Name.Split (chars, StringSplitOptions.RemoveEmptyEntries);
-        string[] queries = search.Text.Split (chars, StringSplitOptions.RemoveEmptyEntries);
-        return queries.All (q => parts.Any (p => p.ToLower ().Contains (q.ToLower ())));
-      }
-      return false;
+        Page.ChainedCommands.Remove (command);
+    }
+
+    private void Edit (object sender, RoutedEventArgs e)
+    {
+      Edit (grid.SelectedItem as ChainedCommand);
+    }
+
+    private void OnClick (object sender, MouseButtonEventArgs e)
+    {
+      if (e.ClickCount == 2)
+        Edit (((FrameworkElement) sender).DataContext as ChainedCommand);
+    }
+
+    private void Edit (ChainedCommand command)
+    {
+      if (command == null)
+        return;
+
+      var dialog = new WpfCommandDialog (command, Page.Commands);
+      dialog.ShowDialog ();
+    }
+
+    private void EnableButtons ()
+    {
+      edit.IsEnabled = remove.IsEnabled = grid.SelectedItem != null;
     }
 
     private void OnSelectionChanged (object sender, SelectionChangedEventArgs e)
     {
-      var command = commands.SelectedItem as Command;
-      if (command == null)
-      {
-        Page.AttachedCommandGuid = null;
-        Page.AttachedCommandId = -1;
-      }
-      else
-      {
-        Page.AttachedCommandGuid = command.Guid;
-        Page.AttachedCommandId = command.ID;
-      }
+      EnableButtons ();
     }
   }
 }

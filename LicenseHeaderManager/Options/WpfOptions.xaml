@@ -5,32 +5,59 @@
         xmlns:lho="clr-namespace:LicenseHeaderManager.Options"
         Height="400" Width="400" Name="control">
 
-    <Grid Margin="2">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="10"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <CheckBox Name="useRequiredKeywords" IsChecked="{Binding UseRequiredKeywords}" Content="{x:Static lh:Resources.UseRequiredKeywords}" Margin="2" Grid.Row="0"/>
         <lho:InteropTextBox x:Name="requiredKeywords" Text="{Binding RequiredKeywords, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=useRequiredKeywords, Path=IsChecked}" Margin="2" Grid.Row="1" ToolTip="{x:Static lh:Resources.RequiredKeywordsTooltip}" />
-        
-        <CheckBox Name="attach" IsChecked="{Binding AttachToCommand}" Content="{x:Static lh:Resources.ExecuteBeforeCommand}" Margin="2" Grid.Row="3"/>
-        <Grid IsEnabled="{Binding ElementName=attach, Path=IsChecked}" Grid.Row="4" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            
-            <TextBlock Text="Search: " Grid.Row="0" Grid.Column="0" Margin="2" VerticalAlignment="Center"/>
-            <lho:InteropTextBox x:Name="search" TextChanged="OnTextChanged" Grid.Row="0" Grid.Column="1" Margin="2"/>
-            <ListBox Name="commands" Grid.Row="1" Grid.ColumnSpan="2" Margin="2" DisplayMemberPath="Name" SelectionMode="Single" SelectionChanged="OnSelectionChanged" />            
-        </Grid>
+
+        <TextBlock Text="{x:Static lh:Resources.ChainedCommands}" Margin="2,4" Grid.Row="3" Grid.Column="0" TextWrapping="Wrap"/>
+
+        <ListBox Name="grid" HorizontalContentAlignment="Stretch" Grid.Row="4" AlternationCount="2" SelectionChanged="OnSelectionChanged">
+            <ListBox.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Control.Background" Value="White"/>
+                    <Style.Triggers>
+                        <Trigger Property="ListBox.AlternationIndex" Value="1">
+                            <Setter Property="Control.Background" Value="#D4D0C8"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid MouseLeftButtonDown="OnClick" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Name="ExecutionTime" Grid.Column="0" Margin="2"/>
+                        <TextBlock Text="{Binding Name}" Grid.Column="1" Margin="2" />
+                    </Grid>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding ExecutionTime}" Value="{x:Static lho:ExecutionTime.Before}">
+                            <Setter TargetName="ExecutionTime" Property="Text" Value="{x:Static lh:Resources.Before}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ExecutionTime}" Value="{x:Static lho:ExecutionTime.After}">
+                            <Setter TargetName="ExecutionTime" Property="Text" Value="{x:Static lh:Resources.After}"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="5">
+            <Button Name="add" Content="{x:Static lh:Resources.Add}" Click="Add" Width="50" Margin="2"  HorizontalAlignment="Right"/>
+            <Button Name="edit" Content="{x:Static lh:Resources.Edit}" Click="Edit" Width="50" Margin="2"  HorizontalAlignment="Right"/>
+            <Button Name="remove" Content="{x:Static lh:Resources.Remove}" Click="Remove" Width="50" Margin="2" HorizontalAlignment="Right"/>
+        </WrapPanel>
+
     </Grid>
 </UserControl>
