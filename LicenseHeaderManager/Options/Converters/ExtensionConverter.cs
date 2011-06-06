@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Data;
 
-namespace LicenseHeaderManager.Options
+namespace LicenseHeaderManager.Options.Converters
 {
   class ExtensionConverter : IValueConverter
   {

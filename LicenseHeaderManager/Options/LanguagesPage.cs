@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Microsoft.VisualStudio.Shell;
+using LicenseHeaderManager.Options.Converters;
 
 namespace LicenseHeaderManager.Options
 {
@@ -12,7 +13,7 @@ namespace LicenseHeaderManager.Options
   public class LanguagesPage : DialogPage
   {
     //serialized property
-    [TypeConverter(typeof(LanguagesConverter))]
+    [TypeConverter(typeof(LanguageConverter))]
     [DesignerSerializationVisibility (DesignerSerializationVisibility.Visible)]
     public ObservableCollection<Language> Languages { get; set;}
 
@@ -25,9 +26,9 @@ namespace LicenseHeaderManager.Options
     {
       Languages = new ObservableCollection<Language> ()
       {
-        new Language() { Extensions = new[] { ".cs", ".designer.cs", ".xaml.cs", "aspx.cs", "ascx.cs"}, LineComment = "//", BeginComment = "/*", EndComment = "*/" },
-        new Language() { Extensions = new[] { ".c", ".cpp", ".cxx", ".h", ".hpp" }, LineComment = "//", BeginComment = "/*", EndComment = "*/" },
-        new Language() { Extensions = new[] { ".vb", ".designer.vb", ".xaml.vb" }, LineComment = "'" },
+        new Language() { Extensions = new[] { ".cs", ".designer.cs", ".xaml.cs", "aspx.cs", "ascx.cs"}, LineComment = "//", BeginComment = "/*", EndComment = "*/", BeginRegion = "#region", EndRegion = "#endregion"},
+        new Language() { Extensions = new[] { ".c", ".cpp", ".cxx", ".h", ".hpp" }, LineComment = "//", BeginComment = "/*", EndComment = "*/"},
+        new Language() { Extensions = new[] { ".vb", ".designer.vb", ".xaml.vb" }, LineComment = "'", BeginRegion = "#Region", EndRegion = "End Region" },
         new Language() { Extensions = new[] { ".aspx", ".ascx", }, BeginComment = "<%--", EndComment = "--%>" },
         new Language() { Extensions = new[] { ".htm", ".html", ".xhtml", ".xml", ".xaml", ".resx" }, BeginComment = "<!--", EndComment = "-->" },
         new Language() { Extensions = new[] { ".css" }, BeginComment = "/*", EndComment = "*/" },

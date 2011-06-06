@@ -250,7 +250,7 @@ namespace LicenseHeaderManager
         var fileName = LicenseHeader.GetNewFileName (project);
         var item = _dte.ItemOperations.AddNewItem ("General\\Text File", fileName);
         
-        using (var resource = Assembly.GetExecutingAssembly ().GetManifestResourceStream ("Rubicon.LicenseHeaders.default.licenseheader"))
+        using (var resource = Assembly.GetExecutingAssembly ().GetManifestResourceStream (typeof(LicenseHeadersPackage), "default.licenseheader"))
         {
           var text = item.Document.Object ("TextDocument") as TextDocument;
           if (text != null)

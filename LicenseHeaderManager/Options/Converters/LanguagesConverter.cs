@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Xml.Linq;
 
-namespace LicenseHeaderManager.Options
+namespace LicenseHeaderManager.Options.Converters
 {
-  class LanguagesConverter : TypeConverter
+  class LanguageConverter : XmlTypeConverter<IEnumerable<Language>>
   {
     private const string c_language = "Language";
     private const string c_languages = "Languages";
@@ -18,40 +18,7 @@ namespace LicenseHeaderManager.Options
     private const string c_beginRegion = "BeginRegion";
     private const string c_endRegion = "EndRegion";
 
-    public override bool CanConvertFrom (ITypeDescriptorContext context, Type sourceType)
-    {
-      return CanConvertType (sourceType);
-    }
-
-    public override bool CanConvertTo (ITypeDescriptorContext context, Type destinationType)
-    {
-      return CanConvertType (destinationType);
-    }
-
-    private bool CanConvertType (Type type)
-    {
-      return type == typeof (string) || type == typeof (ObservableCollection<Language>);
-    }
-
-    public override object ConvertFrom (ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
-    {
-      return Convert(value);
-    }
-
-    public override object ConvertTo (ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
-    {
-      return Convert (value);
-    }
-
-    private object Convert (object value)
-    {
-      if (value is string)
-        return FromXml (value as string);
-      else
-        return ToXml (value as ObservableCollection<Language>);
-    }
-
-    private string ToXml (ObservableCollection<Language> languages)
+    public override string ToXml (IEnumerable<Language> languages)
     {
       var xml = from l in languages
                 select new XElement (c_language,
@@ -67,7 +34,7 @@ namespace LicenseHeaderManager.Options
       return new XElement (c_languages, xml).ToString ();
     }
 
-    private ObservableCollection<Language> FromXml (string xml)
+    public override IEnumerable<Language> FromXml (string xml)
     {
       try
       {
@@ -89,15 +56,6 @@ namespace LicenseHeaderManager.Options
       {
         return new ObservableCollection<Language> ();
       }
-    }
-
-    private string GetAttributeValue (XElement element, string name)
-    {
-      var attribute = element.Attribute (name);
-      if (attribute != null)
-        return attribute.Value;
-      else
-        return null;
     }
   }
 }

@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
+using System.Collections.ObjectModel;
 
 namespace LicenseHeaderManager.Options
 {
@@ -17,9 +18,7 @@ namespace LicenseHeaderManager.Options
     //serialized properties
     public bool UseRequiredKeywords { get; set; }
     public string RequiredKeywords { get; set; }
-    public bool AttachToCommand { get; set; }
-    public string AttachedCommandGuid { get; set; }
-    public int AttachedCommandId { get; set; }
+    public ObservableCollection<ChainedCommand> ChainedCommands { get; set; }
 
     public Commands Commands { get { return Dte.Commands; } }
 
@@ -34,7 +33,7 @@ namespace LicenseHeaderManager.Options
     {
       UseRequiredKeywords = true;
       RequiredKeywords = "license, copyright, (c)";
-      AttachToCommand = false;
+      ChainedCommands = new ObservableCollection<ChainedCommand> ();
       base.ResetSettings ();
     }
 

@@ -4,11 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:lh="clr-namespace:LicenseHeaderManager"
-             xmlns:lho="clr-namespace:LicenseHeaderManager.Options"
+             xmlns:lhoc="clr-namespace:LicenseHeaderManager.Options.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="400">
     <UserControl.Resources>
-        <lho:ExtensionConverter x:Key="ExtensionConverter" Separator=" "/>
+        <lhoc:ExtensionConverter x:Key="ExtensionConverter" Separator=" "/>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
