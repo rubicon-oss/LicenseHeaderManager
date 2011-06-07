@@ -9,7 +9,7 @@ namespace LicenseHeaderManager.Options
     After
   }
 
-  public class ChainedCommand
+  public class LinkedCommand
   {
     public string Name { get; set; }
     public string Guid { get; set; }

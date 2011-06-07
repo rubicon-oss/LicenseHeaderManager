@@ -142,15 +142,6 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can chain the &apos;Add License Header&apos; command to other commands so that it is automatically executed before/after them..
-        /// </summary>
-        public static string ChainedCommands {
-            get {
-                return ResourceManager.GetString("ChainedCommands", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Edit....
         /// </summary>
         public static string Edit {
@@ -205,7 +196,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please provide at least an extension and line comment or begin- and end indicators..
+        ///   Looks up a localized string similar to Please provide at least an extension and either a line comment or begin and end comment tags..
         /// </summary>
         public static string Error_LanguageInvalid {
             get {
@@ -277,11 +268,29 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Automatically insert license headers in new files.
+        /// </summary>
+        public static string InsertInNewFiles {
+            get {
+                return ResourceManager.GetString("InsertInNewFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Line.
         /// </summary>
         public static string LineComment {
             get {
                 return ResourceManager.GetString("LineComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can link the &apos;Add License Header&apos; command to other commands so that it is automatically executed before or after them..
+        /// </summary>
+        public static string LinkedCommands {
+            get {
+                return ResourceManager.GetString("LinkedCommands", resourceCulture);
             }
         }
         
@@ -304,7 +313,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can specify a list of keywords sepearated by commas..
+        ///   Looks up a localized string similar to You can specify a list of keywords separated by commas..
         /// </summary>
         public static string RequiredKeywordsTooltip {
             get {

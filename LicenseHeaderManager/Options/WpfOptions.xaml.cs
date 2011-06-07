@@ -23,38 +23,38 @@ namespace LicenseHeaderManager.Options
 
       Loaded += (s, e) =>
       {
-        grid.ItemsSource = page.ChainedCommands;
+        grid.ItemsSource = page.LinkedCommands;
         EnableButtons ();
       };
     }
 
     private void Add (object sender, RoutedEventArgs e)
     {
-      var dialog = new WpfCommandDialog (new ChainedCommand(), Page.Commands);
+      var dialog = new WpfCommandDialog (new LinkedCommand(), Page.Commands);
       bool? result = dialog.ShowDialog ();
       if (result.HasValue && result.Value)
-        Page.ChainedCommands.Add (dialog.Command);
+        Page.LinkedCommands.Add (dialog.Command);
     }
 
     private void Remove (object sender, RoutedEventArgs e)
     {
-      var command = grid.SelectedItem as ChainedCommand;
+      var command = grid.SelectedItem as LinkedCommand;
       if (command != null)
-        Page.ChainedCommands.Remove (command);
+        Page.LinkedCommands.Remove (command);
     }
 
     private void Edit (object sender, RoutedEventArgs e)
     {
-      Edit (grid.SelectedItem as ChainedCommand);
+      Edit (grid.SelectedItem as LinkedCommand);
     }
 
     private void OnClick (object sender, MouseButtonEventArgs e)
     {
       if (e.ClickCount == 2)
-        Edit (((FrameworkElement) sender).DataContext as ChainedCommand);
+        Edit (((FrameworkElement) sender).DataContext as LinkedCommand);
     }
 
-    private void Edit (ChainedCommand command)
+    private void Edit (LinkedCommand command)
     {
       if (command == null)
         return;

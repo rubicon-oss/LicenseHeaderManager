@@ -121,8 +121,8 @@
     <Compile Include="Headers\LicenseHeader.cs" />
     <Compile Include="Headers\ParseException.cs" />
     <Compile Include="Headers\Parser.cs" />
-    <Compile Include="Options\ChainedCommand.cs" />
-    <Compile Include="Options\Converters\ChainedCommandConverter.cs" />
+    <Compile Include="Options\LinkedCommand.cs" />
+    <Compile Include="Options\Converters\LinkedCommandConverter.cs" />
     <Compile Include="Options\Converters\ExtensionConverter.cs" />
     <Compile Include="Options\Converters\XmlTypeConverter.cs" />
     <Compile Include="Options\WpfLanguageDialog.xaml.cs">
@@ -134,7 +134,6 @@
     </Compile>
     <Compile Include="Options\InteropTextBox.cs" />
     <Compile Include="Options\Language.cs" />
-    <Compile Include="Options\Options.cs" />
     <Compile Include="Options\LanguagesPage.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -28,13 +28,13 @@ namespace LicenseHeaderManager.Options
       set { View = CollectionViewSource.GetDefaultView (value); }
     }
 
-    public ChainedCommand Command
+    public LinkedCommand Command
     {
-      get { return DataContext as ChainedCommand; }
+      get { return DataContext as LinkedCommand; }
       set { DataContext = value;}
     }
 
-    public WpfCommandDialog (ChainedCommand command, Commands allCommands)
+    public WpfCommandDialog (LinkedCommand command, Commands allCommands)
     {
       InitializeComponent ();
 

@@ -28,8 +28,13 @@ namespace LicenseHeaderManager.Headers
       {
         if (item.FileCount == 1)
         {
-          string fileName = item.FileNames[0];
-          if (Path.GetExtension(fileName).ToLower() == Cextension)
+          string fileName = null;
+          try
+          {
+            fileName = item.FileNames[0];
+          }
+          catch (ArgumentOutOfRangeException) { }
+          if (fileName != null && Path.GetExtension (fileName).ToLower () == Cextension)
             yield return fileName;
         }
       }

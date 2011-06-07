@@ -9,18 +9,21 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="10"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <CheckBox Name="useRequiredKeywords" IsChecked="{Binding UseRequiredKeywords}" Content="{x:Static lh:Resources.UseRequiredKeywords}" Margin="2" Grid.Row="0"/>
-        <lho:InteropTextBox x:Name="requiredKeywords" Text="{Binding RequiredKeywords, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=useRequiredKeywords, Path=IsChecked}" Margin="2" Grid.Row="1" ToolTip="{x:Static lh:Resources.RequiredKeywordsTooltip}" />
+        <CheckBox Name="insertInNewFiles" IsChecked="{Binding InsertInNewFiles}" Content="{x:Static lh:Resources.InsertInNewFiles}" Margin="2" Grid.Row="0"/>
+        
+        <CheckBox Name="useRequiredKeywords" IsChecked="{Binding UseRequiredKeywords}" Content="{x:Static lh:Resources.UseRequiredKeywords}" Margin="2" Grid.Row="1"/>
+        <lho:InteropTextBox x:Name="requiredKeywords" Text="{Binding RequiredKeywords, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ElementName=useRequiredKeywords, Path=IsChecked}" Margin="2" Grid.Row="2" ToolTip="{x:Static lh:Resources.RequiredKeywordsTooltip}" />
 
-        <TextBlock Text="{x:Static lh:Resources.ChainedCommands}" Margin="2,4" Grid.Row="3" Grid.Column="0" TextWrapping="Wrap"/>
+        <TextBlock Text="{x:Static lh:Resources.LinkedCommands}" Margin="2,4" Grid.Row="4" Grid.Column="0" TextWrapping="Wrap"/>
 
-        <ListBox Name="grid" HorizontalContentAlignment="Stretch" Grid.Row="4" AlternationCount="2" SelectionChanged="OnSelectionChanged">
+        <ListBox Name="grid" HorizontalContentAlignment="Stretch" Grid.Row="5" AlternationCount="2" SelectionChanged="OnSelectionChanged">
             <ListBox.ItemContainerStyle>
                 <Style>
                     <Setter Property="Control.Background" Value="White"/>
@@ -53,7 +56,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="5">
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="6">
             <Button Name="add" Content="{x:Static lh:Resources.Add}" Click="Add" Width="50" Margin="2"  HorizontalAlignment="Right"/>
             <Button Name="edit" Content="{x:Static lh:Resources.Edit}" Click="Edit" Width="50" Margin="2"  HorizontalAlignment="Right"/>
             <Button Name="remove" Content="{x:Static lh:Resources.Remove}" Click="Remove" Width="50" Margin="2" HorizontalAlignment="Right"/>

@@ -144,9 +144,6 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <data name="ChainedCommands" xml:space="preserve">
-    <value>You can chain the 'Add License Header' command to other commands so that it is automatically executed before/after them.</value>
-  </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit...</value>
   </data>
@@ -166,7 +163,7 @@
     <value>An error occured while parsing the file {0}.\nMake sure the comment syntax is correct.</value>
   </data>
   <data name="Error_LanguageInvalid" xml:space="preserve">
-    <value>Please provide at least an extension and line comment or begin- and end indicators.</value>
+    <value>Please provide at least an extension and either a line comment or begin and end comment tags.</value>
   </data>
   <data name="Error_LanguageNotFound" xml:space="preserve">
     <value>No comment definitions found for {0} files.\nDo you want to add them to the configuration?</value>
@@ -189,8 +186,14 @@
   <data name="Extensions" xml:space="preserve">
     <value>Extensions</value>
   </data>
+  <data name="InsertInNewFiles" xml:space="preserve">
+    <value>Automatically insert license headers in new files</value>
+  </data>
   <data name="LineComment" xml:space="preserve">
     <value>Line</value>
+  </data>
+  <data name="LinkedCommands" xml:space="preserve">
+    <value>You can link the 'Add License Header' command to other commands so that it is automatically executed before or after them.</value>
   </data>
   <data name="Ok" xml:space="preserve">
     <value>Ok</value>
@@ -199,7 +202,7 @@
     <value>Remove</value>
   </data>
   <data name="RequiredKeywordsTooltip" xml:space="preserve">
-    <value>You can specify a list of keywords sepearated by commas.</value>
+    <value>You can specify a list of keywords separated by commas.</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search:</value>
