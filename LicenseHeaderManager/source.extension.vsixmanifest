@@ -2,12 +2,13 @@
 <Vsix xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
   <Identifier Id="4c570677-8476-4d33-bd0c-da36c89287c8">
     <Name>License Header Manager</Name>
-    <Author>Rubicon</Author>
-    <Version>0.9.2</Version>
-    <Description xml:space="preserve">An extension for automatically inserting license information file headers.</Description>
+    <Author>rubicon informationstechnologie gmbh</Author>
+    <Version>1.0</Version>
+    <Description xml:space="preserve">An extension for adding license headers to source code files.</Description>
     <Locale>1033</Locale>
     <MoreInfoUrl>http://licensemanager.codeplex.com</MoreInfoUrl>
-    <GettingStartedGuide>http://licensemanager.codeplex.com/documentation</GettingStartedGuide>
+    <License>license.txt</License>
+    <GettingStartedGuide>http://licensemanager.codeplex.com/wikipage?title=Getting%20started</GettingStartedGuide>
     <Icon>Icon.png</Icon>
     <PreviewImage>Preview.png</PreviewImage>
     <InstalledByMsi>false</InstalledByMsi>

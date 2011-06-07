@@ -1,9 +1,9 @@
 ﻿extensions: designer.cs
 extensions: .cs
-//Sample license text. (c) rubicon
+//Sample license text.
 extensions: .aspx .ascx
 <%-- 
-Sample license text. (c) rubicon
+Sample license text.
 --%>
 extensions: .vb
-'Sample license text. (c) rubicon
+'Sample license text.
