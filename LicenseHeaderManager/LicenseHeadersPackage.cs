@@ -453,15 +453,26 @@ namespace LicenseHeaderManager
       if (item.Kind != Constants.vsProjectItemKindPhysicalFile)
         return CreateDocumentResult.NoPhyiscalFile;
 
+      //don't insert license header information in license header definitions
       if (item.Name.EndsWith (LicenseHeader.Cextension))
         return CreateDocumentResult.LicenseHeaderDocument;
 
-      item.Open (Constants.vsViewKindTextView);
+      //try to open the document as a text document
+      try
+      {
+        if (!item.IsOpen["{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}"])
+          item.Open (Constants.vsViewKindTextView);
+      }
+      catch (COMException)
+      {
+        return CreateDocumentResult.NoTextDocument;
+      }
 
       var textDocument = item.Document.Object ("TextDocument") as TextDocument;
       if (textDocument == null)
         return CreateDocumentResult.NoTextDocument;
       
+      //try to find a comment definitions for the language of the document
       var languagePage = (LanguagesPage) GetDialogPage (typeof (LanguagesPage));
       var extensions = from l in languagePage.Languages
                        from e in l.Extensions
@@ -495,6 +506,7 @@ namespace LicenseHeaderManager
       else
         language = extensions.First ().Language;
 
+      //get the required keywords from the options page
       var optionsPage = (OptionsPage) GetDialogPage (typeof (OptionsPage));
 
       document = new Document (

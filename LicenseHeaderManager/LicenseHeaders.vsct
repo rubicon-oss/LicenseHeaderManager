@@ -43,7 +43,7 @@
          group as the part of a menu contained between two lines. The parent of a group 
          must be a menu. -->
     <Groups>
-      <Group guid="guidLicenseHeadersCmdSet" id="EditMenuGroup" priority="0x0300">
+      <Group guid="guidLicenseHeadersCmdSet" id="EditMenuGroup" priority="0xFFFF">
         <Parent guid="guidStdEditor" id="IDM_VS_EDITOR_ADVANCED_MENU"/>
       </Group>
 
