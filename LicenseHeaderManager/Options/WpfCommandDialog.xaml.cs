@@ -77,12 +77,16 @@ namespace LicenseHeaderManager.Options
           View.Refresh ();
 
         //select the currently attached command
-        var selected = allCommands.Item (command.Guid, command.Id);
-        if (selected != null)
+        try
         {
-          commands.SelectedItem = selected;
-          commands.ScrollIntoView (selected);
+          var selected = allCommands.Item (command.Guid, command.Id);
+          if (selected != null)
+          {
+            commands.SelectedItem = selected;
+            commands.ScrollIntoView (selected);
+          }
         }
+        catch (ArgumentException) { }
       };
     }
 

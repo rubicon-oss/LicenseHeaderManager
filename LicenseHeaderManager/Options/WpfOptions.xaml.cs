@@ -17,7 +17,7 @@ using System.Windows.Input;
 
 namespace LicenseHeaderManager.Options
 {
-  public partial class WpfOptions : System.Windows.Controls.UserControl
+  public partial class WpfOptions : UserControl
   {
     public OptionsPage Page { get; set; }
 

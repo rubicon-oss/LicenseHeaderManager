@@ -129,7 +129,7 @@
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="110" xml:space="preserve">
-    <value>LicenseHeaders</value>
+    <value>License Header Manager</value>
   </data>
   <data name="112" xml:space="preserve">
     <value>An extension for automatically inserting license information file headers.</value>

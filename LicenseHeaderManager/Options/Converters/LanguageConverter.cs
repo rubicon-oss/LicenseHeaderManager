@@ -33,18 +33,27 @@ namespace LicenseHeaderManager.Options.Converters
 
     public override string ToXml (IEnumerable<Language> languages)
     {
-      var xml = from l in languages
-                select new XElement (c_language,
-                  new XElement (c_extensions,
-                    from e in l.Extensions
-                    select new XElement (c_extension, e)),
-                  new XAttribute (c_linecomment, l.LineComment),
-                  new XAttribute (c_beginComment, l.BeginComment),
-                  new XAttribute (c_endComment, l.EndComment),
-                  new XAttribute (c_beginRegion, l.BeginRegion),
-                  new XAttribute (c_endRegion, l.EndRegion));
+      try
+      {
+        var xml = from l in languages
+                  select new XElement (
+                      c_language,
+                      new XElement (
+                          c_extensions,
+                          from e in l.Extensions
+                          select new XElement (c_extension, e)),
+                      new XAttribute (c_linecomment, l.LineComment ?? string.Empty),
+                      new XAttribute (c_beginComment, l.BeginComment ?? string.Empty),
+                      new XAttribute (c_endComment, l.EndComment ?? string.Empty),
+                      new XAttribute (c_beginRegion, l.BeginRegion ?? string.Empty),
+                      new XAttribute (c_endRegion, l.EndRegion ?? string.Empty));
 
-      return new XElement (c_languages, xml).ToString ();
+        return new XElement (c_languages, xml).ToString ();
+      }
+      catch (Exception)
+      {
+        return new XElement (c_languages).ToString ();
+      }
     }
 
     public override IEnumerable<Language> FromXml (string xml)

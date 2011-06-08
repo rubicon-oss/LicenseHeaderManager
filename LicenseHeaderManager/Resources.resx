@@ -189,14 +189,17 @@
   <data name="InsertInNewFiles" xml:space="preserve">
     <value>Automatically insert license headers in new files</value>
   </data>
-  <data name="LineComment" xml:space="preserve">
+  <data name="Line" xml:space="preserve">
     <value>Line</value>
+  </data>
+  <data name="LineComment" xml:space="preserve">
+    <value>Line Comment</value>
   </data>
   <data name="LinkedCommands" xml:space="preserve">
     <value>You can link the 'Add License Header' command to other commands so that it is automatically executed before or after them.</value>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
+    <value>OK</value>
   </data>
   <data name="Remove" xml:space="preserve">
     <value>Remove</value>

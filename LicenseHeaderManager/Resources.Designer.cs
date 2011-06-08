@@ -279,6 +279,15 @@ namespace LicenseHeaderManager {
         /// <summary>
         ///   Looks up a localized string similar to Line.
         /// </summary>
+        public static string Line {
+            get {
+                return ResourceManager.GetString("Line", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line Comment.
+        /// </summary>
         public static string LineComment {
             get {
                 return ResourceManager.GetString("LineComment", resourceCulture);
@@ -295,7 +304,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ok.
+        ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string Ok {
             get {

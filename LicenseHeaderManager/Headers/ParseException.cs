@@ -15,10 +15,9 @@ using System;
 
 namespace LicenseHeaderManager.Headers
 {
+  [Serializable]
   public class ParseException : Exception
   {
-    public ParseException () : base(Resources.Error_InvalidLicenseHeader)
-    {
-    }
+    public ParseException () : base(string.Format(Resources.Error_InvalidLicenseHeader, string.Empty)) { }
   }
 }

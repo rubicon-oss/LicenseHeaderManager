@@ -38,7 +38,7 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Name="firstColumn" Text="{x:Static lh:Resources.Extensions}" Grid.Column="0" TextAlignment="Center" Margin="2"/>
-            <TextBlock Text="{x:Static lh:Resources.LineComment}" Grid.Column="1" Margin="2"/>
+            <TextBlock Text="{x:Static lh:Resources.Line}" Grid.Column="1" Margin="2"/>
             <TextBlock Text="{x:Static lh:Resources.Begin}" Grid.Column="2" Margin="2"/>
             <TextBlock Text="{x:Static lh:Resources.End}" Grid.Column="3" Margin="2"/>
         </Grid>

@@ -11,6 +11,7 @@
 // FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 #endregion
+
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -40,9 +41,9 @@ namespace LicenseHeaderManager.Options
 
     private void Add (object sender, RoutedEventArgs e)
     {
-      var dialog = new WpfLanguageDialog();
-      dialog.Language = new Language();
-      bool? result = dialog.ShowDialog();
+      var dialog = new WpfLanguageDialog ();
+      dialog.Language = new Language ();
+      bool? result = dialog.ShowDialog ();
       if (result.HasValue && result.Value)
         _page.Languages.Add (dialog.Language);
     }
