@@ -12,6 +12,7 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 #endregion
 using EnvDTE;
+using System.ComponentModel;
 
 namespace LicenseHeaderManager.Options
 {
@@ -21,13 +22,45 @@ namespace LicenseHeaderManager.Options
     After
   }
 
-  public class LinkedCommand
+  public class LinkedCommand : INotifyPropertyChanged
   {
-    public string Name { get; set; }
     public string Guid { get; set; }
     public int Id { get; set; }
-    public ExecutionTime ExecutionTime { get; set; }
-
     public CommandEvents Events { get; set; }
+
+    private string _name;
+    public string Name
+    {
+      get { return _name; }
+      set {
+        if (value != _name)
+        {
+          _name = value;
+          OnPropertyChanged ("Name");
+        }
+      }
+    }
+
+    private ExecutionTime _executionTime;
+    public ExecutionTime ExecutionTime
+    {
+      get { return _executionTime; }
+      set
+      {
+        if (value != _executionTime)
+        {
+          _executionTime = value;
+          OnPropertyChanged ("ExecutionTime");
+        }
+      }
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    private void OnPropertyChanged (string propertyName)
+    {
+      if (PropertyChanged != null)
+        PropertyChanged (this, new PropertyChangedEventArgs (propertyName));
+    }
   }
 }
