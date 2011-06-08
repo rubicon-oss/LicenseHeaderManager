@@ -95,8 +95,9 @@ namespace LicenseHeaderManager.Headers
         int firstNewLine = _text.IndexOf (Environment.NewLine, start, _position - start);
         if (firstNewLine >= 0)
         {
+          int afterFirstNewLine = firstNewLine + Environment.NewLine.Length;
           int nextNewLine = _text.IndexOf (
-              Environment.NewLine, firstNewLine + Environment.NewLine.Length, _position - firstNewLine + Environment.NewLine.Length);
+              Environment.NewLine, afterFirstNewLine, _position - afterFirstNewLine);
           
           //more than one NewLine (= at least one empty line)
           if (nextNewLine > 0)
