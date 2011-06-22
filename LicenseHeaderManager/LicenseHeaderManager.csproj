@@ -115,7 +115,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CreateDocumentResult.cs" />
+    <Compile Include="Headers\CreateDocumentResult.cs" />
     <Compile Include="Headers\Document.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="Headers\LicenseHeader.cs" />
@@ -175,6 +175,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Options\WpfHost.resx">
       <DependentUpon>WpfHost.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

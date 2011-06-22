@@ -210,6 +210,9 @@
   <data name="Search" xml:space="preserve">
     <value>Search:</value>
   </data>
+  <data name="UpdatingFiles" xml:space="preserve">
+    <value>Updating files...</value>
+  </data>
   <data name="UseRequiredKeywords" xml:space="preserve">
     <value>Only remove comments containing at least one of the keywords below</value>
   </data>

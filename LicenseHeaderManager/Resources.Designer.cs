@@ -340,6 +340,15 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Updating files....
+        /// </summary>
+        public static string UpdatingFiles {
+            get {
+                return ResourceManager.GetString("UpdatingFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only remove comments containing at least one of the keywords below.
         /// </summary>
         public static string UseRequiredKeywords {

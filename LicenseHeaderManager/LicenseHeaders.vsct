@@ -51,6 +51,14 @@
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE"/>
       </Group>
 
+      <Group guid="guidLicenseHeadersCmdSet" id="ProjectItemMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
+      </Group>
+
+      <Group guid="guidLicenseHeadersCmdSet" id="FolderMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_FOLDERNODE"/>
+      </Group>
+
       <Group guid="guidLicenseHeadersCmdSet" id="ProjectSubMenuGroup1" priority="0x0100">
         <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenu"/>
       </Group>
@@ -62,12 +70,36 @@
       <Group guid="guidLicenseHeadersCmdSet" id="ProjectSubMenuGroup3" priority="0x0300">
         <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenu"/>
       </Group>
+
+      <Group guid="guidLicenseHeadersCmdSet" id="ProjectItemSubMenuGroup" priority="0x0100">
+        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectItemSubMenu"/>
+      </Group>
+
+      <Group guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup" priority="0x0100">
+        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenu"/>
+      </Group>
       
     </Groups>
 
     <Menus>
       <Menu guid="guidLicenseHeadersCmdSet" id="ProjectSubMenu" priority="0x0100">
         <Parent guid="guidLicenseHeadersCmdSet" id="ProjectMenuGroup"/>
+        <Strings>
+          <ButtonText>License Headers</ButtonText>
+          <CommandName>License Headers</CommandName>
+        </Strings>
+      </Menu>
+      
+      <Menu guid="guidLicenseHeadersCmdSet" id="ProjectItemSubMenu" priority="0x0100">
+        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectItemMenuGroup"/>
+        <Strings>
+          <ButtonText>License Headers</ButtonText>
+          <CommandName>License Headers</CommandName>
+        </Strings>
+      </Menu>
+
+      <Menu guid="guidLicenseHeadersCmdSet" id="FolderSubMenu" priority="0x0100">
+        <Parent guid="guidLicenseHeadersCmdSet" id="FolderMenuGroup"/>
         <Strings>
           <ButtonText>License Headers</ButtonText>
           <CommandName>License Headers</CommandName>
@@ -107,6 +139,50 @@
         <Strings>
           <CommandName>RemoveLicenseHeader</CommandName>
           <ButtonText>Remove License Header</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLicenseHeadersCmdSet" id="AddLicenseHeaderToProjectItem" priority="0x0100" type="Button" >
+        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectItemSubMenuGroup" />
+        <Icon guid="guidImages" id="bmpAddLicenseHeader" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <CommandName>AddLicenseHeader</CommandName>
+          <ButtonText>Add License Header</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLicenseHeadersCmdSet" id="RemoveLicenseHeaderFromProjectItem" priority="0x0200" type="Button">
+        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectItemSubMenuGroup" />
+        <Icon guid="guidImages" id="bmpRemoveLicenseHeader" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <CommandName>RemoveLicenseHeader</CommandName>
+          <ButtonText>Remove License Header</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLicenseHeadersCmdSet" id="AddLicenseHeadersToAllFiles" priority="0x0100" type="Button" >
+        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup" />
+        <Icon guid="guidImages" id="bmpAddLicenseHeadersToAllFiles" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <CommandName>AddLicenseHeadersToAllFiles</CommandName>
+          <ButtonText>Add License Headers to All Files</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLicenseHeadersCmdSet" id="RemoveLicenseHeadersFromAllFiles" priority="0x0200" type="Button">
+        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup" />
+        <Icon guid="guidImages" id="bmpRemoveLicenseHeadersFromAllFiles" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <CommandName>RemoveLicenseHeadersFromAllFiles</CommandName>
+          <ButtonText>Remove License Headers from All Files</ButtonText>
         </Strings>
       </Button>
 
@@ -185,8 +261,14 @@
       <IDSymbol name="ProjectSubMenuGroup1" value="0x1003" />
       <IDSymbol name="ProjectSubMenuGroup2" value="0x1004" />
       <IDSymbol name="ProjectSubMenuGroup3" value="0x1005" />
+      <IDSymbol name="ProjectItemMenuGroup" value="0x1006" />
+      <IDSymbol name="ProjectItemSubMenuGroup" value="0x1007" />
+      <IDSymbol name="FolderMenuGroup" value="0x1008" />
+      <IDSymbol name="FolderSubMenuGroup" value="0x1009" />
 
       <IDSymbol name="ProjectSubMenu" value="0x2001"/>
+      <IDSymbol name="ProjectItemSubMenu" value="0x2002"/>
+      <IDSymbol name="FolderSubMenu" value="0x2003"/>
       
       <IDSymbol name="LicenseHeaderOptions" value="0x0001" />
       <IDSymbol name="AddLicenseHeader" value="0x0002" />
@@ -195,6 +277,8 @@
       <IDSymbol name="RemoveLicenseHeadersFromAllFiles" value="0x0005" />
       <IDSymbol name="AddLicenseHeaderDefinitionFile" value="0x0006" />
       <IDSymbol name="AddExistingLicenseHeaderDefinitionFile" value="0x0007" />
+      <IDSymbol name="AddLicenseHeaderToProjectItem" value="0x0008" />
+      <IDSymbol name="RemoveLicenseHeaderFromProjectItem" value="0x0009" />
     </GuidSymbol>
       
     <GuidSymbol name="guidImages" value="{d52c5a04-6352-4a9c-8d55-990945d89fe8}" >
