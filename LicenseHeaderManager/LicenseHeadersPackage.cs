@@ -283,18 +283,30 @@ namespace LicenseHeaderManager
       return null;
     }
 
+    /// <summary>
+    /// Executes a command asynchronously.
+    /// </summary>
+    private void PostExecCommand (Guid guid, uint id, object argument)
+    {
+      IVsUIShell shell = (IVsUIShell) GetService (typeof (SVsUIShell));
+      shell.PostExecCommand (ref guid,
+                            id,
+                            (uint) vsCommandExecOption.vsCommandExecOptionDoDefault,
+                            ref argument);
+    }
+
     #endregion
 
     #region event handlers
 
     private void BeforeExecuted (string guid, int id, object customIn, object customOut, ref bool cancelDefault)
     {
-      _addLicenseHeaderCommand.Invoke();
+      _addLicenseHeaderCommand.Invoke (false);
     }
 
     private void AfterExecuted (string guid, int id, object customIn, object customOut)
     {
-      _addLicenseHeaderCommand.Invoke();
+      _addLicenseHeaderCommand.Invoke (false);
     }
 
     private void CommandsChanged (object sender, NotifyCollectionChangedEventArgs e)
@@ -346,11 +358,7 @@ namespace LicenseHeaderManager
         uint id = PkgCmdIDList.cmdIdAddLicenseHeaderToProjectItem;
         object arg = item;
 
-        IVsUIShell shell = (IVsUIShell) GetService (typeof (SVsUIShell));
-        shell.PostExecCommand (ref guid,
-                              id,
-                              (uint) vsCommandExecOption.vsCommandExecOptionDoDefault,
-                              ref arg);  
+        PostExecCommand (guid, id, arg);
       }
     }
 
@@ -360,7 +368,9 @@ namespace LicenseHeaderManager
 
     private void AddLicenseHeaderCallback (object sender, EventArgs e)
     {
-      RemoveOrReplaceHeader (false);
+      OleMenuCmdEventArgs args = e as OleMenuCmdEventArgs;
+      bool calledByUser = args == null || (args.InValue is bool && (bool) args.InValue);
+      RemoveOrReplaceHeader (false, calledByUser);
     }
 
     private void RemoveLicenseHeaderCallback (object sender, EventArgs e)
@@ -373,16 +383,22 @@ namespace LicenseHeaderManager
       OleMenuCmdEventArgs args = e as OleMenuCmdEventArgs;
       if (args != null)
       {
-        ProjectItem item = args.InValue as ProjectItem ?? GetSolutionExplorerItem() as ProjectItem;
+        ProjectItem item = args.InValue as ProjectItem;
+        bool calledByUser = item == null;
+        if (calledByUser)
+          item = GetSolutionExplorerItem() as ProjectItem;
         if (item != null && item.Kind == Constants.vsProjectItemKindPhysicalFile && Path.GetExtension (item.Name) != LicenseHeader.Cextension)
         {
           var headers = LicenseHeader.GetLicenseHeaders (item.ContainingProject);
           if (headers.Count == 0)
           {
-            string message = Resources.Error_NoHeaderDefinition.Replace (@"\n", "\n");
-            if (MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No)
-                == MessageBoxResult.Yes)
-              AddLicenseHeaderDefinitionFile ();
+            if (calledByUser)
+            {
+              string message = Resources.Error_NoHeaderDefinition.Replace (@"\n", "\n");
+              if (MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No)
+                  == MessageBoxResult.Yes)
+                AddLicenseHeaderDefinitionFile();
+            }
           }
           else
             RemoveOrReplaceHeaderRecursive (item, headers);
@@ -501,14 +517,15 @@ namespace LicenseHeaderManager
     /// Removes or replaces the header of the active project item.
     /// </summary>
     /// <param name="removeOnly">Specifies whether the header should only be removed or if a new one should be inserted instead.</param>
-    private void RemoveOrReplaceHeader (bool removeOnly)
+    /// <param name="calledbyUser">Specifies whether the command was called by the user (as opposed to automatically by a linked command or by ItemAdded)</param>
+    private void RemoveOrReplaceHeader (bool removeOnly, bool calledbyUser = true)
     {
       var item = GetActiveProjectItem();
 
       if (item != null)
       {
         var headers = removeOnly ? null : LicenseHeader.GetLicenseHeaders (item.ContainingProject);
-        RemoveOrReplaceHeader (item, headers);
+        RemoveOrReplaceHeader (item, headers, calledbyUser);
       }
     }
 
@@ -517,14 +534,15 @@ namespace LicenseHeaderManager
     /// </summary>
     /// <param name="item">The project item.</param>
     /// <param name="headers">A dictionary of headers using the file extension as key and the header as value or null if headers should only be removed.</param>
-    private void RemoveOrReplaceHeader (ProjectItem item, IDictionary<string, string[]> headers)
+    /// <param name="calledbyUser">Specifies whether the command was called by the user (as opposed to automatically by a linked command or by ItemAdded)</param>
+    private void RemoveOrReplaceHeader (ProjectItem item, IDictionary<string, string[]> headers, bool calledbyUser = true)
     {
-      string message;
-
       try
       {
         Document document;
         CreateDocumentResult result = TryCreateDocument (item, out document, headers);
+        string message;
+
         switch (result)
         {
           case CreateDocumentResult.DocumentCreated:
@@ -547,13 +565,13 @@ namespace LicenseHeaderManager
             break;
           case CreateDocumentResult.LanguageNotFound:
             message = string.Format (Resources.Error_LanguageNotFound, Path.GetExtension (item.Name)).Replace (@"\n", "\n");
-            if (MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No)
+            if (calledbyUser && MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No)
                 == MessageBoxResult.Yes)
               ShowOptionPage (typeof (LanguagesPage));
             break;
           case CreateDocumentResult.NoHeaderFound:
             message = string.Format (Resources.Error_NoHeaderFound, Path.GetExtension (item.Name)).Replace (@"\n", "\n");
-            if (MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No)
+            if (calledbyUser && MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No)
                 == MessageBoxResult.Yes)
               AddLicenseHeaderDefinitionFile();
             break;
@@ -572,16 +590,15 @@ namespace LicenseHeaderManager
     /// <param name="headers">A dictionary of headers using the file extension as key and the header as value or null if headers should only be removed.</param>
     private void RemoveOrReplaceHeaderRecursive (ProjectItem item, IDictionary<string, string[]> headers)
     {
-      string message;
-
       bool isOpen = item.IsOpen[Constants.vsViewKindAny];
       bool isSaved = item.Saved;
 
       Document document;
       if (TryCreateDocument (item, out document, headers) == CreateDocumentResult.DocumentCreated)
       {
+        string message;
         bool replace = true;
-
+        
         if (!document.ValidateHeader())
         {
           string extension = Path.GetExtension (item.Name);
