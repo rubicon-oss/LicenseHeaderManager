@@ -18,6 +18,9 @@ namespace LicenseHeaderManager.Headers
   [Serializable]
   public class ParseException : Exception
   {
-    public ParseException () : base(string.Format(Resources.Error_InvalidLicenseHeader, string.Empty)) { }
+    public ParseException ()
+        : base (string.Format (Resources.Error_InvalidLicenseHeader, string.Empty))
+    {
+    }
   }
 }
