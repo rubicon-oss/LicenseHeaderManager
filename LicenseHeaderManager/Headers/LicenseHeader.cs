@@ -46,7 +46,7 @@ namespace LicenseHeaderManager.Headers
           {
             fileName = item.FileNames[0];
           }
-          catch (ArgumentOutOfRangeException) { }
+          catch (Exception) { }
           if (fileName != null && Path.GetExtension (fileName).ToLower () == Cextension)
             yield return fileName;
         }

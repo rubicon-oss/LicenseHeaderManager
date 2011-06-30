@@ -74,7 +74,7 @@ namespace LicenseHeaderManager
     {
     }
 
-    private const string c_version = "1.1.0";
+    private const string c_version = "1.2.0";
 
     private const string c_licenseHeaders = "License Header Manager";
     private const string c_general = "General";
@@ -344,9 +344,13 @@ namespace LicenseHeaderManager
       {
         Guid guid = GuidList.guidLicenseHeadersCmdSet;
         uint id = PkgCmdIDList.cmdIdAddLicenseHeaderToProjectItem;
+        object arg = item;
 
-        OleMenuCommandService mcs = GetService (typeof (IMenuCommandService)) as OleMenuCommandService;
-        mcs.GlobalInvoke (new CommandID (guid, (int) id), item);
+        IVsUIShell shell = (IVsUIShell) GetService (typeof (SVsUIShell));
+        shell.PostExecCommand (ref guid,
+                              id,
+                              (uint) vsCommandExecOption.vsCommandExecOptionDoDefault,
+                              ref arg);  
       }
     }
 
@@ -370,7 +374,7 @@ namespace LicenseHeaderManager
       if (args != null)
       {
         ProjectItem item = args.InValue as ProjectItem ?? GetSolutionExplorerItem() as ProjectItem;
-        if (item != null && Path.GetExtension (item.Name) != LicenseHeader.Cextension)
+        if (item != null && item.Kind == Constants.vsProjectItemKindPhysicalFile && Path.GetExtension (item.Name) != LicenseHeader.Cextension)
         {
           var headers = LicenseHeader.GetLicenseHeaders (item.ContainingProject);
           if (headers.Count == 0)
