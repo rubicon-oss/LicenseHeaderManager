@@ -74,14 +74,16 @@ namespace LicenseHeaderManager
     {
     }
 
-    private const string c_version = "1.1.1";
+    private const string c_version = "1.1.2";
 
     private const string c_licenseHeaders = "License Header Manager";
     private const string c_general = "General";
     private const string c_languages = "Languages";
 
     private DTE2 _dte;
-    private ProjectItemsEvents _events;
+    
+    private ProjectItemsEvents _projectItemEvents;
+    private CommandEvents _commandEvents;
 
     private OleMenuCommand _addLicenseHeaderCommand;
     private OleMenuCommand _removeLicenseHeaderCommand;
@@ -133,8 +135,8 @@ namespace LicenseHeaderManager
       var events = _dte.Events as Events2;
       if (events != null)
       {
-        _events = events.ProjectItemsEvents; //we need to keep a reference, otherwise the object is garbage collected and the event won't be fired
-        _events.ItemAdded += ItemAdded;
+        _projectItemEvents = events.ProjectItemsEvents; //we need to keep a reference, otherwise the object is garbage collected and the event won't be fired
+        _projectItemEvents.ItemAdded += ItemAdded;
       }
 
       //register event handlers for linked commands
@@ -148,15 +150,19 @@ namespace LicenseHeaderManager
           switch (command.ExecutionTime)
           {
             case ExecutionTime.Before:
-              command.Events.BeforeExecute += BeforeExecuted;
+              command.Events.BeforeExecute += BeforeLinkedCommandExecuted;
               break;
             case ExecutionTime.After:
-              command.Events.AfterExecute += AfterExecuted;
+              command.Events.AfterExecute += AfterLinkedCommandExecuted;
               break;
           }
         }
 
         page.LinkedCommandsChanged += CommandsChanged;
+
+        //register global event handler for ItemAdded
+        _commandEvents = _dte.Events.CommandEvents;
+        _commandEvents.BeforeExecute += BeforeAnyCommandExecuted;
       }
     }
 
@@ -299,12 +305,12 @@ namespace LicenseHeaderManager
 
     #region event handlers
 
-    private void BeforeExecuted (string guid, int id, object customIn, object customOut, ref bool cancelDefault)
+    private void BeforeLinkedCommandExecuted (string guid, int id, object customIn, object customOut, ref bool cancelDefault)
     {
       _addLicenseHeaderCommand.Invoke (false);
     }
 
-    private void AfterExecuted (string guid, int id, object customIn, object customOut)
+    private void AfterLinkedCommandExecuted (string guid, int id, object customIn, object customOut)
     {
       _addLicenseHeaderCommand.Invoke (false);
     }
@@ -321,10 +327,10 @@ namespace LicenseHeaderManager
           switch (command.ExecutionTime)
           {
             case ExecutionTime.Before:
-              command.Events.BeforeExecute -= BeforeExecuted;
+              command.Events.BeforeExecute -= BeforeLinkedCommandExecuted;
               break;
             case ExecutionTime.After:
-              command.Events.AfterExecute -= AfterExecuted;
+              command.Events.AfterExecute -= AfterLinkedCommandExecuted;
               break;
           }
         }
@@ -339,28 +345,58 @@ namespace LicenseHeaderManager
           switch (command.ExecutionTime)
           {
             case ExecutionTime.Before:
-              command.Events.BeforeExecute += BeforeExecuted;
+              command.Events.BeforeExecute += BeforeLinkedCommandExecuted;
               break;
             case ExecutionTime.After:
-              command.Events.AfterExecute += AfterExecuted;
+              command.Events.AfterExecute += AfterLinkedCommandExecuted;
               break;
           }
         }
       }
     }
 
+    #region insert headers in new files
+
+    private string _currentCommandGuid;
+    private int _currentCommandId;
+    private CommandEvents _currentCommandEvents;
+    private ProjectItem _addedItem;
+
+    private void BeforeAnyCommandExecuted (string guid, int id, object customIn, object customOut, ref bool cancelDefault)
+    {
+      //Save the current command in case it adds a new item to the project.
+      _currentCommandGuid = guid;
+      _currentCommandId = id;
+    }
+
     private void ItemAdded (ProjectItem item)
     {
+      //An item was added. Check if we should insert a header automatically.
       var page = (OptionsPage) GetDialogPage (typeof (OptionsPage));
       if (page != null && page.InsertInNewFiles && item != null)
       {
-        Guid guid = GuidList.guidLicenseHeadersCmdSet;
-        uint id = PkgCmdIDList.cmdIdAddLicenseHeaderToProjectItem;
-        object arg = item;
-
-        PostExecCommand (guid, id, arg);
+        //Normally the header should be inserted here, but that might interfere with the command
+        //currently being executed, so we wait until it is finished.
+        _currentCommandEvents = _dte.Events.CommandEvents[_currentCommandGuid, _currentCommandId];
+        _currentCommandEvents.AfterExecute += FinishedAddingItem;
+        _addedItem = item;
       }
+      else
+        _addedItem = null;
     }
+
+    private void FinishedAddingItem (string guid, int id, object customIn, object customOut)
+    {
+      //Now we can finally insert the header into the new item.
+      if (_addedItem != null)
+      {
+        PostExecCommand (GuidList.guidLicenseHeadersCmdSet, PkgCmdIDList.cmdIdAddLicenseHeaderToProjectItem, _addedItem);
+        _addedItem = null;
+      }
+      _currentCommandEvents.AfterExecute -= FinishedAddingItem;
+    }
+
+    #endregion
 
     #endregion
 
