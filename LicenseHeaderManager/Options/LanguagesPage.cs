@@ -50,7 +50,7 @@ namespace LicenseHeaderManager.Options
       {
         //add SkipExpression for XML-based languages to replicate the previous hardcoded skipping of XML declarations
         var regex = @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?(\n|\r\n|\r)";
-        var extensions = new[] {".htm", ".html", ".xhtml", ".xml", ".xaml", ".resx" };
+        var extensions = new[] {".htm", ".html", ".xhtml", ".xml", ".resx" };
         Language language;
         foreach (var extension in extensions)
         {
