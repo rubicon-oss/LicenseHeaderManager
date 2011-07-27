@@ -16,12 +16,14 @@ using System.Collections.Generic;
 using System.Linq;
 using EnvDTE;
 using Language = LicenseHeaderManager.Options.Language;
+using System.Text.RegularExpressions;
 
 namespace LicenseHeaderManager.Headers
 {
   internal class Document
   {
     private readonly string _header;
+    private readonly Language _language;
     private readonly IEnumerable<string> _keywords;
 
     private readonly TextDocument _document;
@@ -36,6 +38,7 @@ namespace LicenseHeaderManager.Headers
         _header = string.Join (Environment.NewLine, header);
       _keywords = keywords;
 
+      _language = language;
       _parser = new Parser (language.LineComment, language.BeginComment, language.EndComment, language.BeginRegion, language.EndRegion);
     }
 
@@ -69,9 +72,9 @@ namespace LicenseHeaderManager.Headers
 
     public void ReplaceHeaderIfNecessary ()
     {
-      var xml = GetXmlDeclaration();
-      if (!string.IsNullOrEmpty (xml))
-        RemoveHeader (xml);
+      var skippedText = SkipText();
+      if (!string.IsNullOrEmpty (skippedText))
+        RemoveHeader (skippedText);
 
       string existingHeader = GetExistingHeader();
 
@@ -83,19 +86,19 @@ namespace LicenseHeaderManager.Headers
       else
         RemoveHeader (existingHeader);
 
-      if (!string.IsNullOrEmpty (xml))
-        AddHeader (xml, false);
+      if (!string.IsNullOrEmpty (skippedText))
+        AddHeader (skippedText, true);
     }
 
-    private string GetXmlDeclaration ()
+    private string SkipText ()
     {
-      //If it's an xml document, the xml declaration must be the first thing in the file. 
-      //Luckily we can use the same logic we use for finding comments to look for this
-      //special tag and temporarily remove it so that the rest works as usual.
-
-      return new Parser (null, "<?", "?>", null, null).Parse (GetText());
-
-      //Don't forget to add the tag again after modifying the file though!
+      if (string.IsNullOrEmpty (_language.SkipExpression))
+        return null;
+      var match = Regex.Match (GetText (), _language.SkipExpression, RegexOptions.IgnoreCase);
+      if (match.Success && match.Index == 0)
+        return match.Value;
+      else
+        return null;
     }
 
     private void ReplaceHeader (string existingHeader, string newHeader)
@@ -142,10 +145,12 @@ namespace LicenseHeaderManager.Headers
       //CharRight always treats NewLines as single characters, so if that's not true in the current environment we need to take care of it
       if (Environment.NewLine.Length > 1)
       {
-        //count the NewLines in the header
-        int count = -1;
-        for (int index = 0; index >= 0; index = header.IndexOf (Environment.NewLine, index + Environment.NewLine.Length))
-          count++;
+        ////count the NewLines in the header
+        //int count = -1;
+        //for (int index = 0; index >= 0; index = header.IndexOf (Environment.NewLine, index + Environment.NewLine.Length))
+        //  count++;
+
+        int count = Regex.Matches (header, Environment.NewLine).Count;
 
         end.CharLeft (count * (Environment.NewLine.Length - 1));
       }

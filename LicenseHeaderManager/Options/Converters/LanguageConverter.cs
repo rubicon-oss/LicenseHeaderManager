@@ -30,6 +30,7 @@ namespace LicenseHeaderManager.Options.Converters
     private const string c_endComment = "EndComment";
     private const string c_beginRegion = "BeginRegion";
     private const string c_endRegion = "EndRegion";
+    private const string c_skipExpression = "SkipExpression";
 
     public override string ToXml (IEnumerable<Language> languages)
     {
@@ -46,7 +47,8 @@ namespace LicenseHeaderManager.Options.Converters
                       new XAttribute (c_beginComment, l.BeginComment ?? string.Empty),
                       new XAttribute (c_endComment, l.EndComment ?? string.Empty),
                       new XAttribute (c_beginRegion, l.BeginRegion ?? string.Empty),
-                      new XAttribute (c_endRegion, l.EndRegion ?? string.Empty));
+                      new XAttribute (c_endRegion, l.EndRegion ?? string.Empty),
+                      new XAttribute (c_skipExpression, l.SkipExpression ?? string.Empty));
 
         return new XElement (c_languages, xml).ToString ();
       }
@@ -70,7 +72,8 @@ namespace LicenseHeaderManager.Options.Converters
                                  BeginComment = GetAttributeValue (l, c_beginComment),
                                  EndComment = GetAttributeValue (l, c_endComment),
                                  BeginRegion = GetAttributeValue (l, c_beginRegion),
-                                 EndRegion = GetAttributeValue (l, c_endRegion)
+                                 EndRegion = GetAttributeValue (l, c_endRegion),
+                                 SkipExpression = GetAttributeValue(l, c_skipExpression)
                                };
         return new ObservableCollection<Language> (languages);
       }

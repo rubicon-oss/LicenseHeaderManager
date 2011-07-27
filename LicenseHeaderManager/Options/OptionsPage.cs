@@ -35,6 +35,7 @@ namespace LicenseHeaderManager.Options
     public Commands Commands { get { return Dte.Commands; } }
 
     //serialized properties
+    public string Version { get; set; }
     public bool InsertInNewFiles { get; set; }
     public bool UseRequiredKeywords { get; set; }
     public string RequiredKeywords { get; set; }
@@ -72,7 +73,7 @@ namespace LicenseHeaderManager.Options
       ResetSettings ();
     }
 
-    public override void ResetSettings ()
+    public override sealed void ResetSettings ()
     {
       InsertInNewFiles = false;
       UseRequiredKeywords = true;
@@ -81,6 +82,11 @@ namespace LicenseHeaderManager.Options
       base.ResetSettings ();
     }
 
+    public override void LoadSettingsFromStorage ()
+    {
+      base.LoadSettingsFromStorage ();
+      Version = LicenseHeadersPackage.CVersion;
+    }
 
     [Browsable (false)]
     [DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]

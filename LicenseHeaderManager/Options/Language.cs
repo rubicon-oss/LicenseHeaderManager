@@ -26,6 +26,7 @@ namespace LicenseHeaderManager.Options
     public string EndComment { get; set; }
     public string BeginRegion { get; set; }
     public string EndRegion { get; set; }
+    public string SkipExpression { get; set; }
 
     public bool IsValid
     {
@@ -47,7 +48,7 @@ namespace LicenseHeaderManager.Options
 
     public object Clone ()
     {
-      return new Language () { Extensions = Extensions.ToList (), LineComment = LineComment, BeginComment = BeginComment, EndComment = EndComment, BeginRegion = BeginRegion, EndRegion = EndRegion };
+      return new Language () { Extensions = Extensions.ToList (), LineComment = LineComment, BeginComment = BeginComment, EndComment = EndComment, BeginRegion = BeginRegion, EndRegion = EndRegion, SkipExpression = SkipExpression };
     }
 
     public void NormalizeExtensions ()

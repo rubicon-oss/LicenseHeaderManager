@@ -12,6 +12,7 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 #endregion
 using System.Windows;
+using System.Windows.Controls;
 
 namespace LicenseHeaderManager.Options
 {
@@ -26,6 +27,7 @@ namespace LicenseHeaderManager.Options
     public WpfLanguageDialog ()
     {
       InitializeComponent ();
+      skipExpression.ToolTip = LicenseHeaderManager.Resources.SkipExpressionHelp.Replace (@"\n", "\n");
     }
 
     private void OnClick (object sender, RoutedEventArgs e)

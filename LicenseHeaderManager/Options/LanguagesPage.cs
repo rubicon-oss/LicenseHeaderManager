@@ -14,6 +14,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using LicenseHeaderManager.Options.Converters;
@@ -26,6 +27,8 @@ namespace LicenseHeaderManager.Options
   public class LanguagesPage : DialogPage
   {
     //serialized property
+    public string Version { get; set; }
+
     [TypeConverter(typeof(LanguageConverter))]
     [DesignerSerializationVisibility (DesignerSerializationVisibility.Visible)]
     public ObservableCollection<Language> Languages { get; set;}
@@ -35,7 +38,39 @@ namespace LicenseHeaderManager.Options
       ResetSettings ();
     }
 
-    public override void ResetSettings ()
+    public override void LoadSettingsFromStorage ()
+    {
+      base.LoadSettingsFromStorage ();
+      Update_1_1_3 ();
+    }
+
+    private void Update_1_1_3 ()
+    {
+      if (string.IsNullOrEmpty (Version))
+      {
+        //add SkipExpression for XML-based languages to replicate the previous hardcoded skipping of XML declarations
+        var regex = @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?(\n|\r\n|\r)";
+        var extensions = new[] {".htm", ".html", ".xhtml", ".xml", ".xaml", ".resx" };
+        Language language;
+        foreach (var extension in extensions)
+        {
+          language = Languages.FirstOrDefault (l => l.Extensions.Contains (extension));
+          if (language != null && String.IsNullOrEmpty (language.SkipExpression))
+            language.SkipExpression = regex;
+        }
+
+        //add SkipExpression for JavaScript
+        language = Languages.FirstOrDefault (l => l.Extensions.Contains (".js"));
+        if (language != null && String.IsNullOrEmpty (language.SkipExpression))
+          language.SkipExpression = "/// *<reference.*/>";
+
+        MessageBox.Show (Resources.Upgrate_1_1_3.Replace(@"\n", "\n"), "Upgrade");
+
+        Version = "1.1.3";
+      }
+    }
+
+    public override sealed void ResetSettings ()
     {
       Languages = new ObservableCollection<Language> ()
       {
@@ -43,9 +78,9 @@ namespace LicenseHeaderManager.Options
         new Language() { Extensions = new[] { ".c", ".cpp", ".cxx", ".h", ".hpp" }, LineComment = "//", BeginComment = "/*", EndComment = "*/"},
         new Language() { Extensions = new[] { ".vb", ".designer.vb", ".xaml.vb" }, LineComment = "'", BeginRegion = "#Region", EndRegion = "End Region" },
         new Language() { Extensions = new[] { ".aspx", ".ascx", }, BeginComment = "<%--", EndComment = "--%>" },
-        new Language() { Extensions = new[] { ".htm", ".html", ".xhtml", ".xml", ".xaml", ".resx" }, BeginComment = "<!--", EndComment = "-->" },
+        new Language() { Extensions = new[] { ".htm", ".html", ".xhtml", ".xml", ".xaml", ".resx" }, BeginComment = "<!--", EndComment = "-->", SkipExpression = @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?(\n|\r\n|\r)" },
         new Language() { Extensions = new[] { ".css" }, BeginComment = "/*", EndComment = "*/" },
-        new Language() { Extensions = new[] { ".js" }, LineComment = "//", BeginComment = "/*", EndComment = "*/" }
+        new Language() { Extensions = new[] { ".js" }, LineComment = "//", BeginComment = "/*", EndComment = "*/", SkipExpression = "/// *<reference.*/>"}
       };
       base.ResetSettings ();
     }
