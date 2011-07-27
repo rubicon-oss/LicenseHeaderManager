@@ -159,6 +159,9 @@
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>
+  <data name="Error_CreatingFile" xml:space="preserve">
+    <value>The file could not be created.</value>
+  </data>
   <data name="Error_InvalidLicenseHeader" xml:space="preserve">
     <value>An error occured while parsing the file {0}.\nMake sure the comment syntax is correct.</value>
   </data>

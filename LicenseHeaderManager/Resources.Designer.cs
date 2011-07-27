@@ -187,6 +187,15 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The file could not be created..
+        /// </summary>
+        public static string Error_CreatingFile {
+            get {
+                return ResourceManager.GetString("Error_CreatingFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occured while parsing the file {0}.\nMake sure the comment syntax is correct..
         /// </summary>
         public static string Error_InvalidLicenseHeader {

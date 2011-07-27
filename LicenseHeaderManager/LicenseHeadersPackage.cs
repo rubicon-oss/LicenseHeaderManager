@@ -773,14 +773,22 @@ namespace LicenseHeaderManager
         var fileName = LicenseHeader.GetNewFileName (project);
         var item = _dte.ItemOperations.AddNewItem ("General\\Text File", fileName);
 
-        using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream (typeof (LicenseHeadersPackage), "default.licenseheader"))
-        {
+        if (item.Document != null)
+        {          
           var text = item.Document.Object ("TextDocument") as TextDocument;
           if (text != null)
           {
-            text.CreateEditPoint().Insert (new StreamReader (resource).ReadToEnd());
-            item.Save();
+            using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream (typeof (LicenseHeadersPackage), "default.licenseheader"))
+            {
+              text.CreateEditPoint().Insert (new StreamReader (resource).ReadToEnd());
+              item.Save ();
+            }
           }
+        }
+        else
+        {
+          string message = string.Format (Resources.Error_CreatingFile).Replace (@"\n", "\n");
+          MessageBox.Show (message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
         }
       }
     }
