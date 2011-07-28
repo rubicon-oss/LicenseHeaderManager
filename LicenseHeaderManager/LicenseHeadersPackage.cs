@@ -74,7 +74,7 @@ namespace LicenseHeaderManager
     {
     }
 
-    public const string CVersion = "1.1.3";
+    public const string CVersion = "1.1.4";
 
     private const string c_licenseHeaders = "License Header Manager";
     private const string c_general = "General";

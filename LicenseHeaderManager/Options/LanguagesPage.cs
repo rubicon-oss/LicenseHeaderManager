@@ -26,6 +26,9 @@ namespace LicenseHeaderManager.Options
   [Guid ("D1B5984C-1693-4F26-891E-0BA3BF5760B4")]
   public class LanguagesPage : DialogPage
   {
+    private bool _saveRequired;
+    private string _oldVersion;
+
     //serialized property
     public string Version { get; set; }
 
@@ -36,38 +39,6 @@ namespace LicenseHeaderManager.Options
     public LanguagesPage ()
     {
       ResetSettings ();
-    }
-
-    public override void LoadSettingsFromStorage ()
-    {
-      base.LoadSettingsFromStorage ();
-      Update_1_1_3 ();
-    }
-
-    private void Update_1_1_3 ()
-    {
-      if (string.IsNullOrEmpty (Version))
-      {
-        //add SkipExpression for XML-based languages to replicate the previous hardcoded skipping of XML declarations
-        var regex = @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?(\n|\r\n|\r)";
-        var extensions = new[] {".htm", ".html", ".xhtml", ".xml", ".resx" };
-        Language language;
-        foreach (var extension in extensions)
-        {
-          language = Languages.FirstOrDefault (l => l.Extensions.Contains (extension));
-          if (language != null && String.IsNullOrEmpty (language.SkipExpression))
-            language.SkipExpression = regex;
-        }
-
-        //add SkipExpression for JavaScript
-        language = Languages.FirstOrDefault (l => l.Extensions.Contains (".js"));
-        if (language != null && String.IsNullOrEmpty (language.SkipExpression))
-          language.SkipExpression = "/// *<reference.*/>";
-
-        MessageBox.Show (Resources.Upgrate_1_1_3.Replace(@"\n", "\n"), "Upgrade");
-
-        Version = "1.1.3";
-      }
     }
 
     public override sealed void ResetSettings ()
@@ -95,5 +66,69 @@ namespace LicenseHeaderManager.Options
         return host;
       }
     }
+
+    public override void LoadSettingsFromStorage ()
+    {
+      base.LoadSettingsFromStorage ();
+      
+      _oldVersion = Version;
+      _saveRequired = false;
+
+      Update_1_1_3 ();
+      Update_1_1_4 ();
+
+      if (_saveRequired)
+        SaveSettingsToStorage ();
+    }
+
+    #region version updates
+
+    private void AddDefaultSkipExpressions ()
+    {
+      //add SkipExpression for XML-based languages to replicate the previous hardcoded skipping of XML declarations
+      var regex = @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?(\n|\r\n|\r)";
+      var extensions = new[] { ".htm", ".html", ".xhtml", ".xml", ".resx" };
+      Language language;
+      foreach (var extension in extensions)
+      {
+        language = Languages.FirstOrDefault (l => l.Extensions.Contains (extension));
+        if (language != null && String.IsNullOrEmpty (language.SkipExpression))
+          language.SkipExpression = regex;
+      }
+
+      //add SkipExpression for JavaScript
+      language = Languages.FirstOrDefault (l => l.Extensions.Contains (".js"));
+      if (language != null && String.IsNullOrEmpty (language.SkipExpression))
+        language.SkipExpression = "/// *<reference.*/>";
+
+      MessageBox.Show (Resources.Upgrate_1_1_3.Replace (@"\n", "\n"), "Upgrade");
+    }
+
+    private void Update_1_1_3 ()
+    {
+      if (string.IsNullOrEmpty (_oldVersion))
+      {
+        AddDefaultSkipExpressions ();
+        Version = "1.1.3";
+        _saveRequired = true;
+      }
+    }
+
+    private void Update_1_1_4 ()
+    {
+      if (_oldVersion == "1.1.3")
+      {
+        AddDefaultSkipExpressions ();
+        _saveRequired = true;
+      }
+
+      if (Version != "1.1.4")
+      {
+        Version = "1.1.4";
+        _saveRequired = true;
+      }
+    }
+
+    #endregion
   }
 }
