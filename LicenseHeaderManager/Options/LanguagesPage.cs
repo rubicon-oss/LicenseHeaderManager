@@ -76,7 +76,7 @@ namespace LicenseHeaderManager.Options
 
       Update_1_1_3 ();
       Update_1_1_4 ();
-      Update_2_0_0 ();
+      Update_1_2_0 ();
 
       if (_saveRequired)
         SaveSettingsToStorage ();
@@ -130,11 +130,11 @@ namespace LicenseHeaderManager.Options
       }
     }
 
-    private void Update_2_0_0 ()
+    private void Update_1_2_0 ()
     {
-      if (Version != "2.0.0")
+      if (Version != "1.2.0")
       {
-        Version = "2.0.0";
+        Version = "1.2.0";
         _saveRequired = true;
       }
     }
