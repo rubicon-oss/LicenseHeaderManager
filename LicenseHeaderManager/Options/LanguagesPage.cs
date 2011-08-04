@@ -1,5 +1,5 @@
 ﻿#region copyright
-// Copyright (c) 2011 rubicon informationstechnologie gmbh
+// Copyright (c) 2011 rubicon IT GmbH
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
@@ -76,6 +76,7 @@ namespace LicenseHeaderManager.Options
 
       Update_1_1_3 ();
       Update_1_1_4 ();
+      Update_2_0_0 ();
 
       if (_saveRequired)
         SaveSettingsToStorage ();
@@ -125,6 +126,15 @@ namespace LicenseHeaderManager.Options
       if (Version != "1.1.4")
       {
         Version = "1.1.4";
+        _saveRequired = true;
+      }
+    }
+
+    private void Update_2_0_0 ()
+    {
+      if (Version != "2.0.0")
+      {
+        Version = "2.0.0";
         _saveRequired = true;
       }
     }

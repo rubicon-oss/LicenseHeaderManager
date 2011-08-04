@@ -1,5 +1,5 @@
 ﻿#region copyright
-// Copyright (c) 2011 rubicon informationstechnologie gmbh
+// Copyright (c) 2011 rubicon IT GmbH
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
@@ -22,9 +22,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle ("License Header Manager")]
 [assembly: AssemblyDescription ("Visual Studio extension for adding license headers to source code files.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany ("rubicon informationstechnologie gmbh")]
+[assembly: AssemblyCompany ("rubicon IT GmbH")]
 [assembly: AssemblyProduct ("License Header Manager")]
-[assembly: AssemblyCopyright ("(c) 2011 rubicon informationstechnologie gmbh, www.rubicon.eu")]
+[assembly: AssemblyCopyright ("(c) 2011 rubicon IT GmbH, www.rubicon.eu")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]   
 [assembly: ComVisible(false)]     
@@ -41,8 +41,8 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion ("1.1.4.0")]
-[assembly: AssemblyFileVersion ("1.1.4.0")]
+[assembly: AssemblyVersion ("2.0.0.0")]
+[assembly: AssemblyFileVersion ("2.0.0.0")]
 
 
 
