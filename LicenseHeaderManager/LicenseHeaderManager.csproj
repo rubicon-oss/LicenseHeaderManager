@@ -118,6 +118,8 @@
     <Compile Include="Headers\CreateDocumentResult.cs" />
     <Compile Include="Headers\Document.cs" />
     <Compile Include="Guids.cs" />
+    <Compile Include="Headers\DocumentHeader.cs" />
+    <Compile Include="Headers\DocumentHeaderProperty.cs" />
     <Compile Include="Headers\LicenseHeader.cs" />
     <Compile Include="Headers\ParseException.cs" />
     <Compile Include="Headers\Parser.cs" />

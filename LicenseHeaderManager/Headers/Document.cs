@@ -22,20 +22,18 @@ namespace LicenseHeaderManager.Headers
 {
   internal class Document
   {
-    private readonly string _header;
+    private readonly DocumentHeader _header;
     private readonly Language _language;
     private readonly IEnumerable<string> _keywords;
 
     private readonly TextDocument _document;
     private readonly Parser _parser;
 
-    public Document (TextDocument document, Language language, string[] header, IEnumerable<string> keywords = null)
+    public Document (TextDocument document, Language language, string[] lines, IEnumerable<string> keywords = null)
     {
       _document = document;
-      if (header == null)
-        _header = null;
-      else
-        _header = string.Join (Environment.NewLine, header);
+      
+      _header = new DocumentHeader(document, lines);
       _keywords = keywords;
 
       _language = language;
@@ -44,10 +42,10 @@ namespace LicenseHeaderManager.Headers
 
     public bool ValidateHeader ()
     {
-      if (_header == null)
+      if (_header.IsEmpty)
         return true;
       else
-        return LicenseHeader.Validate (_header, _parser);
+        return LicenseHeader.Validate(_header.Text, _parser);
     }
 
     private string GetText (TextPoint start, TextPoint end)
@@ -78,10 +76,10 @@ namespace LicenseHeaderManager.Headers
 
       string existingHeader = GetExistingHeader();
 
-      if (_header != null)
+      if (!_header.IsEmpty)
       {
-        if (existingHeader != _header)
-          ReplaceHeader (existingHeader, _header);
+          if (existingHeader != _header.Text)
+              ReplaceHeader(existingHeader, _header.Text);
       }
       else
         RemoveHeader (existingHeader);
