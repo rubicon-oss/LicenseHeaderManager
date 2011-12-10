@@ -11,23 +11,30 @@ namespace LicenseHeaderManager.Headers
   {
     private readonly TextDocument _document;
     private readonly string _text;
+    private readonly FileInfo _fileInfo;
     private readonly IEnumerable<DocumentHeaderProperty> _properties;
 
-    public DocumentHeader(TextDocument document, string[] rawLines)
+    public DocumentHeader(TextDocument document, string[] rawLines, IEnumerable<DocumentHeaderProperty> properties)
     {
+      if (document == null) throw new ArgumentNullException("document");
+      if (properties == null) throw new ArgumentNullException("properties");
+
       _document = document;
-      _properties = CreateProperties();
+      _properties = properties;
+
+      _fileInfo = CreateFileInfo();
       _text = CreateText(rawLines);
     }
 
-    private IEnumerable<DocumentHeaderProperty> CreateProperties()
+    private FileInfo CreateFileInfo()
     {
-      List<DocumentHeaderProperty> properties = new List<DocumentHeaderProperty>()
+      string pathToDocument = _document.Parent.FullName;
+
+      if (File.Exists(pathToDocument))
       {
-        new DocumentHeaderProperty("%FullFileName%", fi => fi.FullName),
-        new DocumentHeaderProperty("%FileName%", fi => fi.Name),
-      };
-      return properties;
+        return new FileInfo(pathToDocument);
+      }
+      return null;
     }
 
     private string CreateText(string[] rawLines)
@@ -48,12 +55,11 @@ namespace LicenseHeaderManager.Headers
 
       string finalText = rawText;
 
-      if (File.Exists(pathToDocument))
+      foreach (DocumentHeaderProperty property in _properties)
       {
-        FileInfo fileInfo = new FileInfo(pathToDocument);
-        foreach (DocumentHeaderProperty property in _properties)
+        if (property.CanCreateValue(this))
         {
-          finalText = finalText.Replace(property.Token, property.GetValue(fileInfo));
+          finalText = finalText.Replace(property.Token, property.CreateValue(this));
         }
       }
 
@@ -63,6 +69,11 @@ namespace LicenseHeaderManager.Headers
     public bool IsEmpty
     {
       get { return _text == null; }
+    }
+
+    public FileInfo FileInfo
+    {
+      get { return _fileInfo; }
     }
 
     public string Text

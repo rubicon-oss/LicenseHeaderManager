@@ -33,7 +33,7 @@ namespace LicenseHeaderManager.Headers
     {
       _document = document;
       
-      _header = new DocumentHeader(document, lines);
+      _header = new DocumentHeader(document, lines, new DocumentHeaderProperties());
       _keywords = keywords;
 
       _language = language;

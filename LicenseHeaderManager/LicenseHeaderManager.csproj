@@ -119,6 +119,7 @@
     <Compile Include="Headers\Document.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="Headers\DocumentHeader.cs" />
+    <Compile Include="Headers\DocumentHeaderProperties.cs" />
     <Compile Include="Headers\DocumentHeaderProperty.cs" />
     <Compile Include="Headers\LicenseHeader.cs" />
     <Compile Include="Headers\ParseException.cs" />
@@ -181,7 +182,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="default.licenseheader" />
+    <Content Include="Default.licenseheader">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="LicenseHeaderManager.licenseheader" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
