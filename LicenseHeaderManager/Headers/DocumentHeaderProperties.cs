@@ -37,6 +37,22 @@ namespace LicenseHeaderManager.Headers
           documentHeader => documentHeader.FileInfo != null, 
           documentHeader => documentHeader.FileInfo.Name),
         new DocumentHeaderProperty(
+          "%CreationYear%", 
+          documentHeader => documentHeader.FileInfo != null, 
+          documentHeader => documentHeader.FileInfo.CreationTime.Year.ToString()),
+        new DocumentHeaderProperty(
+          "%CreationMonth%", 
+          documentHeader => documentHeader.FileInfo != null, 
+          documentHeader => documentHeader.FileInfo.CreationTime.Month.ToString()),
+        new DocumentHeaderProperty(
+          "%CreationDay%", 
+          documentHeader => documentHeader.FileInfo != null, 
+          documentHeader => documentHeader.FileInfo.CreationTime.Day.ToString()),
+        new DocumentHeaderProperty(
+          "%CreationTime%", 
+          documentHeader => documentHeader.FileInfo != null, 
+          documentHeader => documentHeader.FileInfo.CreationTime.ToShortTimeString()),
+        new DocumentHeaderProperty(
           "%CurrentYear%", 
           documentHeader => true, 
           documentHeader => DateTime.Now.Year.ToString()),
@@ -48,6 +64,14 @@ namespace LicenseHeaderManager.Headers
           "%CurrentDay%", 
           documentHeader => true, 
           documentHeader => DateTime.Now.Day.ToString()),
+        new DocumentHeaderProperty(
+          "%CurrentTime%", 
+          documentHeader => true, 
+          documentHeader => DateTime.Now.ToShortTimeString()),
+        new DocumentHeaderProperty(
+          "%UserName%", 
+          documentHeader => true, 
+          documentHeader => Environment.UserName),
       };
       return properties;
     }
