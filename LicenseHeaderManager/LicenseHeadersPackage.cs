@@ -770,25 +770,13 @@ namespace LicenseHeaderManager
 
       if (project != null)
       {
-        var fileName = LicenseHeader.GetNewFileName(project);
-        var item = _dte.ItemOperations.AddNewItem("General\\Text File", fileName);
+        string defaultLicenseHeaderFilePath = GetDefaultLicenseHeaderPath();
+        ProjectItem newProjectItem = project.ProjectItems.AddFromFileCopy(defaultLicenseHeaderFilePath);
 
-        if (item.Document != null)
+        if (newProjectItem != null)
         {
-          var text = item.Document.Object("TextDocument") as TextDocument;
-          if (text != null)
-          {
-            Assembly assembly = typeof(LicenseHeadersPackage).Assembly;
-            string assemblyDirectoryPath = Directory.GetParent(assembly.Location).FullName;
-
-            string defaultLicenseHeaderFilePath = Path.Combine(assemblyDirectoryPath, "Default.licenseheader");
-
-            using (FileStream fileStream = new FileStream(defaultLicenseHeaderFilePath, FileMode.Open, FileAccess.Read))
-            {
-              text.CreateEditPoint().Insert(new StreamReader(fileStream).ReadToEnd());
-              item.Save();
-            }
-          }
+          var fileName = LicenseHeader.GetNewFileName(project);
+          newProjectItem.Name = fileName;
         }
         else
         {
@@ -796,6 +784,14 @@ namespace LicenseHeaderManager
           MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
         }
       }
+    }
+
+    private string GetDefaultLicenseHeaderPath()
+    {
+      Assembly assembly = typeof(LicenseHeadersPackage).Assembly;
+      string assemblyDirectoryPath = Directory.GetParent(assembly.Location).FullName;
+
+      return Path.Combine(assemblyDirectoryPath, "Default.licenseheader");
     }
   }
 }
