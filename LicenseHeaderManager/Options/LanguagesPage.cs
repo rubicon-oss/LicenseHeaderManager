@@ -12,25 +12,21 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 #endregion
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using LicenseHeaderManager.Options.Converters;
-using Microsoft.VisualStudio.Shell;
 
 namespace LicenseHeaderManager.Options
 {
   [ClassInterface (ClassInterfaceType.AutoDual)]
   [Guid ("D1B5984C-1693-4F26-891E-0BA3BF5760B4")]
-  public class LanguagesPage : DialogPage
+  public class LanguagesPage : VersionedDialogPage
   {
-    private bool _saveRequired;
-    private string _oldVersion;
-
-    //serialized property
-    public string Version { get; set; }
+    //serialized properties
 
     [TypeConverter(typeof(LanguageConverter))]
     [DesignerSerializationVisibility (DesignerSerializationVisibility.Visible)]
@@ -43,15 +39,15 @@ namespace LicenseHeaderManager.Options
 
     public override sealed void ResetSettings ()
     {
-      Languages = new ObservableCollection<Language> ()
+      Languages = new ObservableCollection<Language>
       {
-        new Language() { Extensions = new[] { ".cs", ".designer.cs", ".xaml.cs", "aspx.cs", "ascx.cs"}, LineComment = "//", BeginComment = "/*", EndComment = "*/", BeginRegion = "#region", EndRegion = "#endregion"},
-        new Language() { Extensions = new[] { ".c", ".cpp", ".cxx", ".h", ".hpp" }, LineComment = "//", BeginComment = "/*", EndComment = "*/"},
-        new Language() { Extensions = new[] { ".vb", ".designer.vb", ".xaml.vb" }, LineComment = "'", BeginRegion = "#Region", EndRegion = "End Region" },
-        new Language() { Extensions = new[] { ".aspx", ".ascx", }, BeginComment = "<%--", EndComment = "--%>" },
-        new Language() { Extensions = new[] { ".htm", ".html", ".xhtml", ".xml", ".xaml", ".resx" }, BeginComment = "<!--", EndComment = "-->", SkipExpression = @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?(\n|\r\n|\r)" },
-        new Language() { Extensions = new[] { ".css" }, BeginComment = "/*", EndComment = "*/" },
-        new Language() { Extensions = new[] { ".js" }, LineComment = "//", BeginComment = "/*", EndComment = "*/", SkipExpression = "/// *<reference.*/>"}
+        new Language { Extensions = new[] { ".cs", ".designer.cs", ".xaml.cs", "aspx.cs", "ascx.cs"}, LineComment = "//", BeginComment = "/*", EndComment = "*/", BeginRegion = "#region", EndRegion = "#endregion"},
+        new Language { Extensions = new[] { ".c", ".cpp", ".cxx", ".h", ".hpp" }, LineComment = "//", BeginComment = "/*", EndComment = "*/"},
+        new Language { Extensions = new[] { ".vb", ".designer.vb", ".xaml.vb" }, LineComment = "'", BeginRegion = "#Region", EndRegion = "End Region" },
+        new Language { Extensions = new[] { ".aspx", ".ascx", }, BeginComment = "<%--", EndComment = "--%>" },
+        new Language { Extensions = new[] { ".htm", ".html", ".xhtml", ".xml", ".xaml", ".resx" }, BeginComment = "<!--", EndComment = "-->", SkipExpression = @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?(\n|\r\n|\r)" },
+        new Language { Extensions = new[] { ".css" }, BeginComment = "/*", EndComment = "*/" },
+        new Language { Extensions = new[] { ".js" }, LineComment = "//", BeginComment = "/*", EndComment = "*/", SkipExpression = "/// *<reference.*/>"}
       };
       base.ResetSettings ();
     }
@@ -67,22 +63,11 @@ namespace LicenseHeaderManager.Options
       }
     }
 
-    public override void LoadSettingsFromStorage ()
-    {
-      base.LoadSettingsFromStorage ();
-      
-      _oldVersion = Version;
-      _saveRequired = false;
-
-      Update_1_1_3 ();
-      Update_1_1_4 ();
-      Update_1_2_0 ();
-
-      if (_saveRequired)
-        SaveSettingsToStorage ();
-    }
-
     #region version updates
+    protected override IEnumerable<UpdateStep> GetVersionUpdateSteps ()
+    {
+      yield return new UpdateStep (new Version (1, 1, 4), AddDefaultSkipExpressions);
+    }
 
     private void AddDefaultSkipExpressions ()
     {
@@ -104,41 +89,6 @@ namespace LicenseHeaderManager.Options
 
       MessageBox.Show (Resources.Upgrate_1_1_3.Replace (@"\n", "\n"), "Upgrade");
     }
-
-    private void Update_1_1_3 ()
-    {
-      if (string.IsNullOrEmpty (_oldVersion))
-      {
-        AddDefaultSkipExpressions ();
-        Version = "1.1.3";
-        _saveRequired = true;
-      }
-    }
-
-    private void Update_1_1_4 ()
-    {
-      if (_oldVersion == "1.1.3")
-      {
-        AddDefaultSkipExpressions ();
-        _saveRequired = true;
-      }
-
-      if (Version != "1.1.4")
-      {
-        Version = "1.1.4";
-        _saveRequired = true;
-      }
-    }
-
-    private void Update_1_2_0 ()
-    {
-      if (Version != "1.2.0")
-      {
-        Version = "1.2.0";
-        _saveRequired = true;
-      }
-    }
-
     #endregion
   }
 }

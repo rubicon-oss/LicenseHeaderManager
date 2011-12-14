@@ -11,7 +11,7 @@
 // FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 #endregion
-using System;
+
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -20,13 +20,12 @@ using System.Windows.Forms;
 using EnvDTE;
 using EnvDTE80;
 using LicenseHeaderManager.Options.Converters;
-using Microsoft.VisualStudio.Shell;
 
 namespace LicenseHeaderManager.Options
 {
   [ClassInterface (ClassInterfaceType.AutoDual)]
   [Guid ("EB6F9B18-D203-43E3-8033-35AD9BEFC70D")]
-  public class OptionsPage : DialogPage
+  public class OptionsPage : VersionedDialogPage
   {
     public event NotifyCollectionChangedEventHandler LinkedCommandsChanged;
 
@@ -35,7 +34,6 @@ namespace LicenseHeaderManager.Options
     public Commands Commands { get { return Dte.Commands; } }
 
     //serialized properties
-    public string Version { get; set; }
     public bool InsertInNewFiles { get; set; }
     public bool UseRequiredKeywords { get; set; }
     public string RequiredKeywords { get; set; }
@@ -80,12 +78,6 @@ namespace LicenseHeaderManager.Options
       RequiredKeywords = "license, copyright, (c)";
       LinkedCommands = new ObservableCollection<LinkedCommand> ();
       base.ResetSettings ();
-    }
-
-    public override void LoadSettingsFromStorage ()
-    {
-      base.LoadSettingsFromStorage ();
-      Version = LicenseHeadersPackage.CVersion;
     }
 
     [Browsable (false)]

@@ -121,10 +121,14 @@
     <Compile Include="Headers\LicenseHeader.cs" />
     <Compile Include="Headers\ParseException.cs" />
     <Compile Include="Headers\Parser.cs" />
+    <Compile Include="Options\VersionedDialogPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Options\LinkedCommand.cs" />
     <Compile Include="Options\Converters\LinkedCommandConverter.cs" />
     <Compile Include="Options\Converters\ExtensionConverter.cs" />
     <Compile Include="Options\Converters\XmlTypeConverter.cs" />
+    <Compile Include="Options\UpdateStep.cs" />
     <Compile Include="Options\WpfLanguageDialog.xaml.cs">
       <DependentUpon>WpfLanguageDialog.xaml</DependentUpon>
     </Compile>
