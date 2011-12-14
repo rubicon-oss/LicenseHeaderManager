@@ -16,6 +16,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using LicenseHeaderManager.Options.Converters;
@@ -43,7 +45,7 @@ namespace LicenseHeaderManager.Options
       {
         new Language { Extensions = new[] { ".cs", ".designer.cs", ".xaml.cs", "aspx.cs", "ascx.cs"}, LineComment = "//", BeginComment = "/*", EndComment = "*/", BeginRegion = "#region", EndRegion = "#endregion"},
         new Language { Extensions = new[] { ".c", ".cpp", ".cxx", ".h", ".hpp" }, LineComment = "//", BeginComment = "/*", EndComment = "*/"},
-        new Language { Extensions = new[] { ".vb", ".designer.vb", ".xaml.vb" }, LineComment = "'", BeginRegion = "#Region", EndRegion = "End Region" },
+        new Language { Extensions = new[] { ".vb", ".designer.vb", ".xaml.vb" }, LineComment = "'", BeginRegion = "#Region", EndRegion = "#End Region" },
         new Language { Extensions = new[] { ".aspx", ".ascx", }, BeginComment = "<%--", EndComment = "--%>" },
         new Language { Extensions = new[] { ".htm", ".html", ".xhtml", ".xml", ".xaml", ".resx" }, BeginComment = "<!--", EndComment = "-->", SkipExpression = @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?(\n|\r\n|\r)" },
         new Language { Extensions = new[] { ".css" }, BeginComment = "/*", EndComment = "*/" },
@@ -66,29 +68,66 @@ namespace LicenseHeaderManager.Options
     #region version updates
     protected override IEnumerable<UpdateStep> GetVersionUpdateSteps ()
     {
-      yield return new UpdateStep (new Version (1, 1, 4), AddDefaultSkipExpressions);
+      yield return new UpdateStep (new Version (1, 1, 4), AddDefaultSkipExpressions_1_1_4);
+      yield return new UpdateStep (new Version (1, 2, 1), AddDefaultRegionSettings_1_2_1);
     }
 
-    private void AddDefaultSkipExpressions ()
+    private void AddDefaultSkipExpressions_1_1_4 ()
     {
       //add SkipExpression for XML-based languages to replicate the previous hardcoded skipping of XML declarations
-      var regex = @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?(\n|\r\n|\r)";
-      var extensions = new[] { ".htm", ".html", ".xhtml", ".xml", ".resx" };
-      Language language;
+      UpdateLanguages (
+          new[] {".htm", ".html", ".xhtml", ".xml", ".resx"},
+          l => UpdateIfNullOrEmpty(l, lang => lang.SkipExpression, @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?(\n|\r\n|\r)"));
+      
+      //add SkipExpression for JavaScript
+      UpdateLanguages (
+          new[] { ".js" }, 
+          l => UpdateIfNullOrEmpty (l, lang => lang.SkipExpression, "/// *<reference.*/>"));
+
+      MessageBox.Show (Resources.Update_1_1_3.Replace (@"\n", "\n"), "Update");
+    }
+
+    private void UpdateIfNullOrEmpty(Language l, Expression<Func<Language, string>> propertyAccessExpression, string value)
+    {
+      var property = (PropertyInfo) ((MemberExpression) propertyAccessExpression.Body).Member;
+      if (string.IsNullOrEmpty ((string) property.GetValue (l, null)))
+        property.SetValue (l, value, null);
+    }
+
+    private void AddDefaultRegionSettings_1_2_1 ()
+    {
+      //add regions for CS files
+      UpdateLanguages (
+          new[] {".cs", ".designer.cs", ".xaml.cs", "aspx.cs", "ascx.cs"},
+          l =>
+          {
+            UpdateIfNullOrEmpty (l, lang => lang.BeginRegion, "#region");
+            UpdateIfNullOrEmpty (l, lang => lang.EndRegion, "#endregion");
+          });
+
+      //add regions for VB files
+      UpdateLanguages (
+          new[] { ".vb", ".designer.vb", ".xaml.vb" },
+          l =>
+          {
+            UpdateIfNullOrEmpty (l, lang => lang.BeginRegion, "#Region");
+            if (string.IsNullOrEmpty (l.EndRegion) || l.EndRegion == "End Region")
+              l.EndRegion = "#End Region";
+          });
+
+      MessageBox.Show (Resources.Update_Generic.Replace (@"\n", "\n"), "Update");
+    }
+
+    private void UpdateLanguages (IEnumerable<string> extensions, Action<Language> updateAction)
+    {
       foreach (var extension in extensions)
       {
-        language = Languages.FirstOrDefault (l => l.Extensions.Contains (extension));
-        if (language != null && String.IsNullOrEmpty (language.SkipExpression))
-          language.SkipExpression = regex;
+        var language = Languages.FirstOrDefault (l => l.Extensions.Contains (extension));
+        if (language != null)
+          updateAction (language);
       }
-
-      //add SkipExpression for JavaScript
-      language = Languages.FirstOrDefault (l => l.Extensions.Contains (".js"));
-      if (language != null && String.IsNullOrEmpty (language.SkipExpression))
-        language.SkipExpression = "/// *<reference.*/>";
-
-      MessageBox.Show (Resources.Upgrate_1_1_3.Replace (@"\n", "\n"), "Upgrade");
     }
+
     #endregion
   }
 }

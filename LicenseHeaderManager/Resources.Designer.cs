@@ -376,20 +376,29 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to License Header Manager automatically updated its configuration.\n\nPlease check your language settings if they were modified\nbefore the update.\n\nIf you added any XML-based languages, you might need to add\na SkipExpression..
+        /// </summary>
+        public static string Update_1_1_3 {
+            get {
+                return ResourceManager.GetString("Update_1_1_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License Header Manager automatically updated its configuration.\n\nPlease check your language settings if they were modified\nbefore the update..
+        /// </summary>
+        public static string Update_Generic {
+            get {
+                return ResourceManager.GetString("Update_Generic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Updating files....
         /// </summary>
         public static string UpdatingFiles {
             get {
                 return ResourceManager.GetString("UpdatingFiles", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to License Header Manager automatically upgraded its configuration.\n\nPlease check your language settings if they have been modified\nbefore the upgrade.\n\nIf you added any XML-based languages, you might need to add\na SkipExpression..
-        /// </summary>
-        public static string Upgrate_1_1_3 {
-            get {
-                return ResourceManager.GetString("Upgrate_1_1_3", resourceCulture);
             }
         }
         
