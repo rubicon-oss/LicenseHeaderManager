@@ -30,14 +30,14 @@ namespace LicenseHeaderManager.Options
       base.LoadSettingsFromStorage();
 
       bool saveRequired = false;
-      foreach (var updateStep in GetVersionUpdateSteps ())
+      foreach (var updateStep in GetVersionUpdateSteps())
         saveRequired |= Update (updateStep);
 
       if (Version != LicenseHeadersPackage.CVersion)
         saveRequired |= Update (new UpdateStep (System.Version.Parse (LicenseHeadersPackage.CVersion)));
 
       Trace.Assert (Version == LicenseHeadersPackage.CVersion, "Settings update to " + LicenseHeadersPackage.CVersion + " didn't work.");
-        
+
       if (saveRequired)
         SaveSettingsToStorage();
     }
