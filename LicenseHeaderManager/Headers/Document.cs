@@ -22,20 +22,18 @@ namespace LicenseHeaderManager.Headers
 {
   internal class Document
   {
-    private readonly string _header;
+    private readonly DocumentHeader _header;
     private readonly Language _language;
     private readonly IEnumerable<string> _keywords;
 
     private readonly TextDocument _document;
     private readonly Parser _parser;
 
-    public Document (TextDocument document, Language language, string[] header, IEnumerable<string> keywords = null)
+    public Document (TextDocument document, Language language, string[] lines, IEnumerable<string> keywords = null)
     {
       _document = document;
-      if (header == null)
-        _header = null;
-      else
-        _header = string.Join (Environment.NewLine, header);
+
+      _header = new DocumentHeader (document, lines, new DocumentHeaderProperties ());
       _keywords = keywords;
 
       _language = language;
@@ -44,27 +42,27 @@ namespace LicenseHeaderManager.Headers
 
     public bool ValidateHeader ()
     {
-      if (_header == null)
+      if (_header.IsEmpty)
         return true;
       else
-        return LicenseHeader.Validate (_header, _parser);
+        return LicenseHeader.Validate (_header.Text, _parser);
     }
 
     private string GetText (TextPoint start, TextPoint end)
     {
-      return _document.CreateEditPoint(start).GetText (end);
+      return _document.CreateEditPoint (start).GetText (end);
     }
 
-    private string GetText()
+    private string GetText ()
     {
       return GetText (_document.StartPoint, _document.EndPoint);
     }
 
     private string GetExistingHeader ()
     {
-      string header = _parser.Parse (GetText());
+      string header = _parser.Parse (GetText ());
 
-      if (_keywords == null || _keywords.Any (k => header.ToLower().Contains (k.ToLower())))
+      if (_keywords == null || _keywords.Any (k => header.ToLower ().Contains (k.ToLower ())))
         return header;
       else
         return string.Empty;
@@ -72,16 +70,16 @@ namespace LicenseHeaderManager.Headers
 
     public void ReplaceHeaderIfNecessary ()
     {
-      var skippedText = SkipText();
+      var skippedText = SkipText ();
       if (!string.IsNullOrEmpty (skippedText))
         RemoveHeader (skippedText);
 
-      string existingHeader = GetExistingHeader();
+      string existingHeader = GetExistingHeader ();
 
-      if (_header != null)
+      if (!_header.IsEmpty)
       {
-        if (existingHeader != _header)
-          ReplaceHeader (existingHeader, _header);
+        if (existingHeader != _header.Text)
+          ReplaceHeader (existingHeader, _header.Text);
       }
       else
         RemoveHeader (existingHeader);
@@ -124,7 +122,7 @@ namespace LicenseHeaderManager.Headers
               //if there's a comment right at the beginning of the file,
               //we need to add an empty line so that the comment doesn't
               //become a part of the header
-              if (!string.IsNullOrEmpty (_parser.Parse (GetText())))
+              if (!string.IsNullOrEmpty (_parser.Parse (GetText ())))
                 header += Environment.NewLine;
             }
           }
@@ -135,7 +133,7 @@ namespace LicenseHeaderManager.Headers
       }
     }
 
-    private EditPoint EndOfHeader(string header, TextPoint start = null)
+    private EditPoint EndOfHeader (string header, TextPoint start = null)
     {
       if (start == null)
         start = _document.CreateEditPoint (_document.StartPoint);
@@ -164,7 +162,7 @@ namespace LicenseHeaderManager.Headers
       {
         var start = _document.CreateEditPoint (_document.StartPoint);
         var end = EndOfHeader (header, _document.StartPoint);
-        
+
         start.Delete (end);
       }
     }

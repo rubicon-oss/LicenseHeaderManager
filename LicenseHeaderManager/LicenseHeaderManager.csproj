@@ -118,9 +118,15 @@
     <Compile Include="Headers\CreateDocumentResult.cs" />
     <Compile Include="Headers\Document.cs" />
     <Compile Include="Guids.cs" />
+    <Compile Include="Headers\DocumentHeader.cs" />
+    <Compile Include="Headers\DocumentHeaderProperties.cs" />
+    <Compile Include="Headers\DocumentHeaderProperty.cs" />
     <Compile Include="Headers\LicenseHeader.cs" />
     <Compile Include="Headers\ParseException.cs" />
     <Compile Include="Headers\Parser.cs" />
+    <Compile Include="Options\DefaultLicenseHeaderPage .cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Options\VersionedDialogPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -129,6 +135,9 @@
     <Compile Include="Options\Converters\ExtensionConverter.cs" />
     <Compile Include="Options\Converters\XmlTypeConverter.cs" />
     <Compile Include="Options\UpdateStep.cs" />
+    <Compile Include="Options\WpfDefaultLicenseHeader.xaml.cs">
+      <DependentUpon>WpfDefaultLicenseHeader.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Options\WpfLanguageDialog.xaml.cs">
       <DependentUpon>WpfLanguageDialog.xaml</DependentUpon>
     </Compile>
@@ -203,6 +212,10 @@
     <None Include="Resources\Images.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Options\WpfDefaultLicenseHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Options\WpfLanguageDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

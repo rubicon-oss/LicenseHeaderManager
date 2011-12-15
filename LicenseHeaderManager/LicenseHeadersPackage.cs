@@ -57,8 +57,10 @@ namespace LicenseHeaderManager
   [ProvideMenuResource ("Menus.ctmenu", 1)]
   [ProvideOptionPage (typeof (OptionsPage), c_licenseHeaders, c_general, 0, 0, true)]
   [ProvideOptionPage (typeof (LanguagesPage), c_licenseHeaders, c_languages, 0, 0, true)]
+  [ProvideOptionPage (typeof (DefaultLicenseHeaderPage), c_licenseHeaders, c_defaultLicenseHeader, 0, 0, true)]
   [ProvideProfile (typeof (OptionsPage), c_licenseHeaders, c_general, 0, 0, true)]
   [ProvideProfile (typeof (LanguagesPage), c_licenseHeaders, c_languages, 0, 0, true)]
+  [ProvideProfile (typeof (DefaultLicenseHeaderPage), c_licenseHeaders, c_defaultLicenseHeader, 0, 0, true)]
   [ProvideAutoLoad (VSConstants.UICONTEXT.SolutionOpening_string)]
   [Guid (GuidList.guidLicenseHeadersPkgString)]
   public sealed class LicenseHeadersPackage : Package
@@ -79,9 +81,10 @@ namespace LicenseHeaderManager
     private const string c_licenseHeaders = "License Header Manager";
     private const string c_general = "General";
     private const string c_languages = "Languages";
+    private const string c_defaultLicenseHeader = "Default Header";
 
     private DTE2 _dte;
-    
+
     private ProjectItemsEvents _projectItemEvents;
     private CommandEvents _commandEvents;
 
@@ -98,7 +101,7 @@ namespace LicenseHeaderManager
     /// Used to keep track of the user selection when he is trying to insert invalid headers into all files,
     /// so that the warning is only displayed once per file extension.
     /// </summary>
-    private IDictionary<string, bool> _extensionsWithInvalidHeaders = new Dictionary<string, bool>();
+    private IDictionary<string, bool> _extensionsWithInvalidHeaders = new Dictionary<string, bool> ();
 
     /// <summary>
     /// Initialization of the package; this method is called right after the package is sited, so this is the 
@@ -106,7 +109,7 @@ namespace LicenseHeaderManager
     /// </summary>
     protected override void Initialize ()
     {
-      base.Initialize();
+      base.Initialize ();
 
       _dte = GetService (typeof (DTE)) as DTE2;
 
@@ -125,7 +128,7 @@ namespace LicenseHeaderManager
         _addLicenseHeadersToAllFilesCommand = RegisterCommand (mcs, PkgCmdIDList.cmdIdAddLicenseHeadersToAllFiles, AddLicenseHeadersToAllFilesCallback);
         _removeLicenseHeadersFromAllFilesCommand = RegisterCommand (mcs, PkgCmdIDList.cmdIdRemoveLicenseHeadersFromAllFiles, RemoveLicenseHeadersFromAllFilesCallback);
         _addLicenseHeadersToAllFilesCommand.BeforeQueryStatus += QueryAllFilesCommandStatus;
-        
+
         RegisterCommand (mcs, PkgCmdIDList.cmdIdAddLicenseHeaderDefinitionFile, AddLicenseHeaderDefinitionFileCallback);
         RegisterCommand (mcs, PkgCmdIDList.cmdIdAddExistingLicenseHeaderDefinitionFile, AddExistingLicenseHeaderDefinitionFileCallback);
         RegisterCommand (mcs, PkgCmdIDList.cmdIdLicenseHeaderOptions, LicenseHeaderOptionsCallback);
@@ -140,7 +143,7 @@ namespace LicenseHeaderManager
       }
 
       //register event handlers for linked commands
-      var page = (OptionsPage) GetDialogPage (typeof (OptionsPage));
+      var page = (OptionsPage)GetDialogPage (typeof (OptionsPage));
       if (page != null)
       {
         foreach (var command in page.LinkedCommands)
@@ -168,7 +171,7 @@ namespace LicenseHeaderManager
 
     private OleMenuCommand RegisterCommand (OleMenuCommandService service, uint id, EventHandler handler)
     {
-      var commandId = new CommandID (GuidList.guidLicenseHeadersCmdSet, (int) id);
+      var commandId = new CommandID (GuidList.guidLicenseHeadersCmdSet, (int)id);
       var command = new OleMenuCommand (handler, commandId);
       service.AddCommand (command);
       return command;
@@ -181,7 +184,7 @@ namespace LicenseHeaderManager
     {
       bool visible = false;
 
-      var item = GetActiveProjectItem();
+      var item = GetActiveProjectItem ();
       if (item != null)
       {
         if (item.Kind == Constants.vsProjectItemKindPhysicalFile)
@@ -203,15 +206,15 @@ namespace LicenseHeaderManager
     private void QueryProjectItemCommandStatus (object sender, EventArgs e)
     {
       bool visible = false;
-      
-      ProjectItem item = GetSolutionExplorerItem() as ProjectItem;
+
+      ProjectItem item = GetSolutionExplorerItem () as ProjectItem;
 
       if (item != null && item.Kind == Constants.vsProjectItemKindPhysicalFile)
       {
-          Document document;
-          visible = TryCreateDocument (item, out document) == CreateDocumentResult.DocumentCreated;
+        Document document;
+        visible = TryCreateDocument (item, out document) == CreateDocumentResult.DocumentCreated;
       }
-      
+
       _addLicenseHeaderToProjectItemCommand.Visible = visible;
       _removeLicenseHeaderFromProjectItemCommand.Visible = visible;
     }
@@ -274,7 +277,7 @@ namespace LicenseHeaderManager
       uint projectItemId;
 
       IVsMultiItemSelect mis;
-      IVsMonitorSelection monitorSelection = (IVsMonitorSelection) GetGlobalService (typeof (SVsShellMonitorSelection));
+      IVsMonitorSelection monitorSelection = (IVsMonitorSelection)GetGlobalService (typeof (SVsShellMonitorSelection));
 
       monitorSelection.GetCurrentSelection (out hierarchyPtr, out projectItemId, out mis, out selectionContainerPtr);
       IVsHierarchy hierarchy = Marshal.GetTypedObjectForIUnknown (hierarchyPtr, typeof (IVsHierarchy)) as IVsHierarchy;
@@ -282,7 +285,7 @@ namespace LicenseHeaderManager
       if (hierarchy != null)
       {
         object item;
-        hierarchy.GetProperty (projectItemId, (int) __VSHPROPID.VSHPROPID_ExtObject, out item);
+        hierarchy.GetProperty (projectItemId, (int)__VSHPROPID.VSHPROPID_ExtObject, out item);
         return item;
       }
 
@@ -294,14 +297,14 @@ namespace LicenseHeaderManager
     /// </summary>
     private void PostExecCommand (Guid guid, uint id, object argument)
     {
-      IVsUIShell shell = (IVsUIShell) GetService (typeof (SVsUIShell));
+      IVsUIShell shell = (IVsUIShell)GetService (typeof (SVsUIShell));
       shell.PostExecCommand (ref guid,
                             id,
-                            (uint) vsCommandExecOption.vsCommandExecOptionDoDefault,
+                            (uint)vsCommandExecOption.vsCommandExecOptionDoDefault,
                             ref argument);
     }
 
-    #endregion
+  #endregion
 
     #region event handlers
 
@@ -372,7 +375,7 @@ namespace LicenseHeaderManager
     private void ItemAdded (ProjectItem item)
     {
       //An item was added. Check if we should insert a header automatically.
-      var page = (OptionsPage) GetDialogPage (typeof (OptionsPage));
+      var page = (OptionsPage)GetDialogPage (typeof (OptionsPage));
       if (page != null && page.InsertInNewFiles && item != null)
       {
         //Normally the header should be inserted here, but that might interfere with the command
@@ -405,7 +408,7 @@ namespace LicenseHeaderManager
     private void AddLicenseHeaderCallback (object sender, EventArgs e)
     {
       OleMenuCmdEventArgs args = e as OleMenuCmdEventArgs;
-      bool calledByUser = args == null || (args.InValue is bool && (bool) args.InValue);
+      bool calledByUser = args == null || (args.InValue is bool && (bool)args.InValue);
       RemoveOrReplaceHeader (false, calledByUser);
     }
 
@@ -422,7 +425,7 @@ namespace LicenseHeaderManager
         ProjectItem item = args.InValue as ProjectItem;
         bool calledByUser = item == null;
         if (calledByUser)
-          item = GetSolutionExplorerItem() as ProjectItem;
+          item = GetSolutionExplorerItem () as ProjectItem;
         if (item != null && item.Kind == Constants.vsProjectItemKindPhysicalFile && Path.GetExtension (item.Name) != LicenseHeader.Cextension)
         {
           var headers = LicenseHeader.GetLicenseHeaders (item.ContainingProject);
@@ -433,7 +436,7 @@ namespace LicenseHeaderManager
               string message = Resources.Error_NoHeaderDefinition.Replace (@"\n", "\n");
               if (MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No)
                   == MessageBoxResult.Yes)
-                AddLicenseHeaderDefinitionFile();
+                AddLicenseHeaderDefinitionFile ();
             }
           }
           else
@@ -447,7 +450,7 @@ namespace LicenseHeaderManager
       OleMenuCmdEventArgs args = e as OleMenuCmdEventArgs;
       if (args != null)
       {
-        ProjectItem item = args.InValue as ProjectItem ?? GetSolutionExplorerItem() as ProjectItem;
+        ProjectItem item = args.InValue as ProjectItem ?? GetSolutionExplorerItem () as ProjectItem;
         if (item != null && Path.GetExtension (item.Name) != LicenseHeader.Cextension)
           RemoveOrReplaceHeaderRecursive (item, null);
       }
@@ -455,7 +458,7 @@ namespace LicenseHeaderManager
 
     private void AddLicenseHeadersToAllFilesCallback (object sender, EventArgs e)
     {
-      var obj = GetSolutionExplorerItem();
+      var obj = GetSolutionExplorerItem ();
       var project = obj as Project;
       var item = obj as ProjectItem;
 
@@ -468,14 +471,14 @@ namespace LicenseHeaderManager
           string message = Resources.Error_NoHeaderDefinition.Replace (@"\n", "\n");
           if (MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No)
               == MessageBoxResult.Yes)
-            AddLicenseHeaderDefinitionFile();
+            AddLicenseHeaderDefinitionFile ();
         }
         else
         {
-          IVsStatusbar statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
+          IVsStatusbar statusBar = (IVsStatusbar)GetService (typeof (SVsStatusbar));
           statusBar.SetText (Resources.UpdatingFiles);
 
-          _extensionsWithInvalidHeaders.Clear();
+          _extensionsWithInvalidHeaders.Clear ();
           if (project != null)
           {
             foreach (ProjectItem i in project.ProjectItems)
@@ -493,16 +496,16 @@ namespace LicenseHeaderManager
 
     private void RemoveLicenseHeadersFromAllFilesCallback (object sender, EventArgs e)
     {
-      var obj = GetSolutionExplorerItem();
+      var obj = GetSolutionExplorerItem ();
       var project = obj as Project;
       var item = obj as ProjectItem;
 
       if (project != null || item != null)
       {
-        IVsStatusbar statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
+        IVsStatusbar statusBar = (IVsStatusbar)GetService (typeof (SVsStatusbar));
         statusBar.SetText (Resources.UpdatingFiles);
 
-        _extensionsWithInvalidHeaders.Clear();
+        _extensionsWithInvalidHeaders.Clear ();
         if (project != null)
         {
           foreach (ProjectItem i in project.ProjectItems)
@@ -520,15 +523,15 @@ namespace LicenseHeaderManager
 
     private void AddLicenseHeaderDefinitionFileCallback (object sender, EventArgs e)
     {
-      AddLicenseHeaderDefinitionFile();
+      AddLicenseHeaderDefinitionFile ();
     }
 
     private void AddExistingLicenseHeaderDefinitionFileCallback (object sender, EventArgs e)
     {
-      var project = GetSolutionExplorerItem() as Project;
+      var project = GetSolutionExplorerItem () as Project;
       if (project != null)
       {
-        FileDialog dialog = new OpenFileDialog();
+        FileDialog dialog = new OpenFileDialog ();
         dialog.CheckFileExists = true;
         dialog.CheckPathExists = true;
         dialog.DefaultExt = LicenseHeader.Cextension;
@@ -536,7 +539,7 @@ namespace LicenseHeaderManager
         dialog.Filter = "License Header Definitions|*" + LicenseHeader.Cextension;
         dialog.InitialDirectory = Path.GetDirectoryName (project.FileName);
 
-        bool? result = dialog.ShowDialog();
+        bool? result = dialog.ShowDialog ();
         if (result.HasValue && result.Value)
           project.ProjectItems.AddFromFile (dialog.FileName);
       }
@@ -556,7 +559,7 @@ namespace LicenseHeaderManager
     /// <param name="calledbyUser">Specifies whether the command was called by the user (as opposed to automatically by a linked command or by ItemAdded)</param>
     private void RemoveOrReplaceHeader (bool removeOnly, bool calledbyUser = true)
     {
-      var item = GetActiveProjectItem();
+      var item = GetActiveProjectItem ();
 
       if (item != null)
       {
@@ -582,7 +585,7 @@ namespace LicenseHeaderManager
         switch (result)
         {
           case CreateDocumentResult.DocumentCreated:
-            if (!document.ValidateHeader())
+            if (!document.ValidateHeader ())
             {
               message = string.Format (Resources.Warning_InvalidLicenseHeader, Path.GetExtension (item.Name)).Replace (@"\n", "\n");
               if (MessageBox.Show (message, Resources.Warning, MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No)
@@ -591,7 +594,7 @@ namespace LicenseHeaderManager
             }
             try
             {
-              document.ReplaceHeaderIfNecessary();
+              document.ReplaceHeaderIfNecessary ();
             }
             catch (ParseException)
             {
@@ -609,7 +612,7 @@ namespace LicenseHeaderManager
             message = string.Format (Resources.Error_NoHeaderFound, Path.GetExtension (item.Name)).Replace (@"\n", "\n");
             if (calledbyUser && MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No)
                 == MessageBoxResult.Yes)
-              AddLicenseHeaderDefinitionFile();
+              AddLicenseHeaderDefinitionFile ();
             break;
         }
       }
@@ -634,8 +637,8 @@ namespace LicenseHeaderManager
       {
         string message;
         bool replace = true;
-        
-        if (!document.ValidateHeader())
+
+        if (!document.ValidateHeader ())
         {
           string extension = Path.GetExtension (item.Name);
           if (!_extensionsWithInvalidHeaders.TryGetValue (extension, out replace))
@@ -651,7 +654,7 @@ namespace LicenseHeaderManager
         {
           try
           {
-            document.ReplaceHeaderIfNecessary();
+            document.ReplaceHeaderIfNecessary ();
           }
           catch (ParseException)
           {
@@ -663,7 +666,7 @@ namespace LicenseHeaderManager
         if (isOpen)
         {
           if (isSaved)
-            item.Save();
+            item.Save ();
         }
         else
           item.Document.Close (vsSaveChanges.vsSaveChangesYes);
@@ -706,15 +709,15 @@ namespace LicenseHeaderManager
         return CreateDocumentResult.NoTextDocument;
 
       //try to find a comment definitions for the language of the document
-      var languagePage = (LanguagesPage) GetDialogPage (typeof (LanguagesPage));
+      var languagePage = (LanguagesPage)GetDialogPage (typeof (LanguagesPage));
       var extensions = from l in languagePage.Languages
                        from e in l.Extensions
-                       where item.Name.ToLower().EndsWith (e)
+                       where item.Name.ToLower ().EndsWith (e)
                        orderby e.Length descending
                        // ".designer.cs" has a higher priority then ".cs" for example
                        select new { Extension = e, Language = l };
 
-      if (!extensions.Any())
+      if (!extensions.Any ())
         return CreateDocumentResult.LanguageNotFound;
 
       Language language = null;
@@ -738,17 +741,17 @@ namespace LicenseHeaderManager
           return CreateDocumentResult.NoHeaderFound;
       }
       else
-        language = extensions.First().Language;
+        language = extensions.First ().Language;
 
       //get the required keywords from the options page
-      var optionsPage = (OptionsPage) GetDialogPage (typeof (OptionsPage));
+      var optionsPage = (OptionsPage)GetDialogPage (typeof (OptionsPage));
 
       document = new Document (
           textDocument,
           language,
           header,
           optionsPage.UseRequiredKeywords
-              ? optionsPage.RequiredKeywords.Split (new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select (k => k.Trim())
+              ? optionsPage.RequiredKeywords.Split (new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select (k => k.Trim ())
               : null);
 
       return CreateDocumentResult.DocumentCreated;
@@ -759,7 +762,7 @@ namespace LicenseHeaderManager
     /// </summary>
     private void AddLicenseHeaderDefinitionFile ()
     {
-      var obj = GetSolutionExplorerItem();
+      var obj = GetSolutionExplorerItem ();
       var project = obj as Project;
       if (project == null)
       {
@@ -770,20 +773,16 @@ namespace LicenseHeaderManager
 
       if (project != null)
       {
-        var fileName = LicenseHeader.GetNewFileName (project);
-        var item = _dte.ItemOperations.AddNewItem ("General\\Text File", fileName);
+        string tempFilePath = Path.GetTempFileName ();
+        DefaultLicenseHeaderPage page = (DefaultLicenseHeaderPage)GetDialogPage (typeof (DefaultLicenseHeaderPage));
+        File.WriteAllText (tempFilePath, page.LicenseHeaderFileText);
 
-        if (item.Document != null)
-        {          
-          var text = item.Document.Object ("TextDocument") as TextDocument;
-          if (text != null)
-          {
-            using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream (typeof (LicenseHeadersPackage), "default.licenseheader"))
-            {
-              text.CreateEditPoint().Insert (new StreamReader (resource).ReadToEnd());
-              item.Save ();
-            }
-          }
+        ProjectItem newProjectItem = project.ProjectItems.AddFromFileCopy (tempFilePath);
+
+        if (newProjectItem != null)
+        {
+          var fileName = LicenseHeader.GetNewFileName (project);
+          newProjectItem.Name = fileName;
         }
         else
         {
