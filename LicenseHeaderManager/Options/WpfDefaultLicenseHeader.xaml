@@ -6,7 +6,8 @@
              xmlns:lho="clr-namespace:LicenseHeaderManager.Options"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-  <StackPanel>
+  <DockPanel>
+    <Label DockPanel.Dock="Top">Default text for new license header definitions:</Label>
     <lho:InteropTextBox x:Name="defaultText" Text="{Binding LicenseHeaderFileText, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Stretch" />
-  </StackPanel>
+  </DockPanel>
 </UserControl>

@@ -779,6 +779,8 @@ namespace LicenseHeaderManager
 
         ProjectItem newProjectItem = project.ProjectItems.AddFromFileCopy (tempFilePath);
 
+        File.Delete(tempFilePath);
+
         if (newProjectItem != null)
         {
           var fileName = LicenseHeader.GetNewFileName (project);
