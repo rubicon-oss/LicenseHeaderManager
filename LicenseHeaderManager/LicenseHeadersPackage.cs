@@ -143,7 +143,7 @@ namespace LicenseHeaderManager
       }
 
       //register event handlers for linked commands
-      var page = (OptionsPage)GetDialogPage (typeof (OptionsPage));
+      var page = (OptionsPage) GetDialogPage (typeof (OptionsPage));
       if (page != null)
       {
         foreach (var command in page.LinkedCommands)
@@ -171,7 +171,7 @@ namespace LicenseHeaderManager
 
     private OleMenuCommand RegisterCommand (OleMenuCommandService service, uint id, EventHandler handler)
     {
-      var commandId = new CommandID (GuidList.guidLicenseHeadersCmdSet, (int)id);
+      var commandId = new CommandID (GuidList.guidLicenseHeadersCmdSet, (int) id);
       var command = new OleMenuCommand (handler, commandId);
       service.AddCommand (command);
       return command;
@@ -277,7 +277,7 @@ namespace LicenseHeaderManager
       uint projectItemId;
 
       IVsMultiItemSelect mis;
-      IVsMonitorSelection monitorSelection = (IVsMonitorSelection)GetGlobalService (typeof (SVsShellMonitorSelection));
+      IVsMonitorSelection monitorSelection = (IVsMonitorSelection) GetGlobalService (typeof (SVsShellMonitorSelection));
 
       monitorSelection.GetCurrentSelection (out hierarchyPtr, out projectItemId, out mis, out selectionContainerPtr);
       IVsHierarchy hierarchy = Marshal.GetTypedObjectForIUnknown (hierarchyPtr, typeof (IVsHierarchy)) as IVsHierarchy;
@@ -285,7 +285,7 @@ namespace LicenseHeaderManager
       if (hierarchy != null)
       {
         object item;
-        hierarchy.GetProperty (projectItemId, (int)__VSHPROPID.VSHPROPID_ExtObject, out item);
+        hierarchy.GetProperty (projectItemId, (int) __VSHPROPID.VSHPROPID_ExtObject, out item);
         return item;
       }
 
@@ -297,10 +297,10 @@ namespace LicenseHeaderManager
     /// </summary>
     private void PostExecCommand (Guid guid, uint id, object argument)
     {
-      IVsUIShell shell = (IVsUIShell)GetService (typeof (SVsUIShell));
+      IVsUIShell shell = (IVsUIShell) GetService (typeof (SVsUIShell));
       shell.PostExecCommand (ref guid,
                             id,
-                            (uint)vsCommandExecOption.vsCommandExecOptionDoDefault,
+                            (uint) vsCommandExecOption.vsCommandExecOptionDoDefault,
                             ref argument);
     }
 
@@ -375,7 +375,7 @@ namespace LicenseHeaderManager
     private void ItemAdded (ProjectItem item)
     {
       //An item was added. Check if we should insert a header automatically.
-      var page = (OptionsPage)GetDialogPage (typeof (OptionsPage));
+      var page = (OptionsPage) GetDialogPage (typeof (OptionsPage));
       if (page != null && page.InsertInNewFiles && item != null)
       {
         //Normally the header should be inserted here, but that might interfere with the command
@@ -408,7 +408,7 @@ namespace LicenseHeaderManager
     private void AddLicenseHeaderCallback (object sender, EventArgs e)
     {
       OleMenuCmdEventArgs args = e as OleMenuCmdEventArgs;
-      bool calledByUser = args == null || (args.InValue is bool && (bool)args.InValue);
+      bool calledByUser = args == null || (args.InValue is bool && (bool) args.InValue);
       RemoveOrReplaceHeader (false, calledByUser);
     }
 
@@ -475,7 +475,7 @@ namespace LicenseHeaderManager
         }
         else
         {
-          IVsStatusbar statusBar = (IVsStatusbar)GetService (typeof (SVsStatusbar));
+          IVsStatusbar statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
           statusBar.SetText (Resources.UpdatingFiles);
 
           _extensionsWithInvalidHeaders.Clear ();
@@ -502,7 +502,7 @@ namespace LicenseHeaderManager
 
       if (project != null || item != null)
       {
-        IVsStatusbar statusBar = (IVsStatusbar)GetService (typeof (SVsStatusbar));
+        IVsStatusbar statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
         statusBar.SetText (Resources.UpdatingFiles);
 
         _extensionsWithInvalidHeaders.Clear ();
@@ -709,7 +709,7 @@ namespace LicenseHeaderManager
         return CreateDocumentResult.NoTextDocument;
 
       //try to find a comment definitions for the language of the document
-      var languagePage = (LanguagesPage)GetDialogPage (typeof (LanguagesPage));
+      var languagePage = (LanguagesPage) GetDialogPage (typeof (LanguagesPage));
       var extensions = from l in languagePage.Languages
                        from e in l.Extensions
                        where item.Name.ToLower ().EndsWith (e)
@@ -744,7 +744,7 @@ namespace LicenseHeaderManager
         language = extensions.First ().Language;
 
       //get the required keywords from the options page
-      var optionsPage = (OptionsPage)GetDialogPage (typeof (OptionsPage));
+      var optionsPage = (OptionsPage) GetDialogPage (typeof (OptionsPage));
 
       document = new Document (
           textDocument,
@@ -774,12 +774,12 @@ namespace LicenseHeaderManager
       if (project != null)
       {
         string tempFilePath = Path.GetTempFileName ();
-        DefaultLicenseHeaderPage page = (DefaultLicenseHeaderPage)GetDialogPage (typeof (DefaultLicenseHeaderPage));
+        DefaultLicenseHeaderPage page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
         File.WriteAllText (tempFilePath, page.LicenseHeaderFileText);
 
         ProjectItem newProjectItem = project.ProjectItems.AddFromFileCopy (tempFilePath);
 
-        File.Delete(tempFilePath);
+        File.Delete (tempFilePath);
 
         if (newProjectItem != null)
         {
