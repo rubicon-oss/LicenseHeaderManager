@@ -1,0 +1,17 @@
+﻿<Window x:Class="LicenseHeaderManager.Options.WpfEditDefaultLicenseHeaderDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:lh="clr-namespace:LicenseHeaderManager"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+            Title="{x:Static lh:Resources.WpfDefaultLicenseHeaderDialogTitle}">
+    <DockPanel>
+        <WrapPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Grid.Row="7" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+            <Button TabIndex="1" Name="ok" Content="{x:Static lh:Resources.Ok}" Margin="2" Width="50" IsDefault="True" Click="OKButtonClick"/>
+            <Button TabIndex="2" Name="cancel" Content="{x:Static lh:Resources.Cancel}" Margin="2" Width="50" IsCancel="True" />
+        </WrapPanel>
+        <TextBox x:Name="defaultText" DockPanel.Dock="Top" TabIndex="0" Text="{Binding LicenseHeaderFileText, UpdateSourceTrigger=Explicit}" HorizontalContentAlignment="Stretch" AcceptsReturn="True" AcceptsTab="True" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" />
+    </DockPanel>
+</Window>

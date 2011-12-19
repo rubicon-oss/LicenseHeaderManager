@@ -20,9 +20,10 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
   <DockPanel>
-    <Label DockPanel.Dock="Top">
-        <TextBlock Text="{x:Static lh:Resources.FileHeaderTextLabel}" TextWrapping="Wrap"/>
-    </Label>
-    <TextBox x:Name="defaultText" Text="{Binding LicenseHeaderFileText, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Stretch" />
+        <Label DockPanel.Dock="Top" TabIndex="0">
+            <TextBlock Text="{x:Static lh:Resources.FileHeaderTextLabel}" TextWrapping="Wrap" />
+        </Label>
+        <Button DockPanel.Dock="Bottom" TabIndex="2" Content="{x:Static lh:Resources.FileHeaderTextEditButton}" Width="50" Click="EditButton_Click" HorizontalAlignment="Right" />
+        <TextBox x:Name="defaultText" TabIndex="1" Text="{Binding LicenseHeaderFileText, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Stretch" IsReadOnly="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
   </DockPanel>
 </UserControl>

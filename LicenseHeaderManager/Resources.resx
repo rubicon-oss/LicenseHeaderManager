@@ -189,6 +189,9 @@
   <data name="Extensions" xml:space="preserve">
     <value>Extensions</value>
   </data>
+  <data name="FileHeaderTextEditButton" xml:space="preserve">
+    <value>Edit...</value>
+  </data>
   <data name="FileHeaderTextLabel" xml:space="preserve">
     <value>Text for new license header definitions</value>
   </data>
@@ -245,6 +248,9 @@
   </data>
   <data name="Warning_InvalidLicenseHeader" xml:space="preserve">
     <value>The header definition for {0} files contains non-comment text.\nIf you insert this header, you will not be able to remove or replace the header automatically!\nDo you really want to add this header to the file?</value>
+  </data>
+  <data name="WpfDefaultLicenseHeaderDialogTitle" xml:space="preserve">
+    <value>Edit Default Header Definition</value>
   </data>
   <data name="WpfLanguageDialogTitle" xml:space="preserve">
     <value>Edit Language</value>

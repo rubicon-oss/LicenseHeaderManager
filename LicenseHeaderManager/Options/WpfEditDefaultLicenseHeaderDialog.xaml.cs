@@ -12,33 +12,32 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 #endregion
 
+using System.Windows;
 using System.Windows.Controls;
 
 namespace LicenseHeaderManager.Options
 {
   /// <summary>
-  /// Interaction logic for WpfDefaultLicenseHeader.xaml
+  /// Interaction logic for WpfDefaultLicenseHeaderDialog.xaml
   /// </summary>
-  public partial class WpfDefaultLicenseHeader : UserControl
+  public partial class WpfEditDefaultLicenseHeaderDialog : Window
   {
-    private readonly DefaultLicenseHeaderPage _page;
-
-    public WpfDefaultLicenseHeader (DefaultLicenseHeaderPage page)
+    public WpfEditDefaultLicenseHeaderDialog (DefaultLicenseHeaderPage page)
       : this ()
     {
-      _page = page;
-      DataContext = _page;
+      DataContext = page;
     }
 
-    public WpfDefaultLicenseHeader ()
+    public WpfEditDefaultLicenseHeaderDialog ()
     {
       InitializeComponent ();
     }
 
-    private void EditButton_Click (object sender, System.Windows.RoutedEventArgs e)
+    private void OKButtonClick (object sender, RoutedEventArgs e)
     {
-      var dialog = new WpfEditDefaultLicenseHeaderDialog (_page);
-      dialog.ShowDialog();
+      var bindingExpression = defaultText.GetBindingExpression (TextBox.TextProperty);
+      bindingExpression.UpdateSource();
+      DialogResult = true;
     }
   }
 }

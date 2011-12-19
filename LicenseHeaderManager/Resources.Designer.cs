@@ -277,6 +277,15 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit....
+        /// </summary>
+        public static string FileHeaderTextEditButton {
+            get {
+                return ResourceManager.GetString("FileHeaderTextEditButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Text for new license header definitions.
         /// </summary>
         public static string FileHeaderTextLabel {
@@ -444,6 +453,15 @@ namespace LicenseHeaderManager {
         public static string Warning_InvalidLicenseHeader {
             get {
                 return ResourceManager.GetString("Warning_InvalidLicenseHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Default Header Definition.
+        /// </summary>
+        public static string WpfDefaultLicenseHeaderDialogTitle {
+            get {
+                return ResourceManager.GetString("WpfDefaultLicenseHeaderDialogTitle", resourceCulture);
             }
         }
         

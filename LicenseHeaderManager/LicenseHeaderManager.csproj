@@ -124,6 +124,9 @@
     <Compile Include="Headers\LicenseHeader.cs" />
     <Compile Include="Headers\ParseException.cs" />
     <Compile Include="Headers\Parser.cs" />
+    <Compile Include="Options\WpfEditDefaultLicenseHeaderDialog.xaml.cs">
+      <DependentUpon>WpfEditDefaultLicenseHeaderDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Options\DefaultLicenseHeaderPage .cs">
       <SubType>Component</SubType>
     </Compile>
@@ -211,6 +214,10 @@
     <None Include="Resources\Images.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Options\WpfEditDefaultLicenseHeaderDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Options\WpfDefaultLicenseHeader.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
