@@ -16,11 +16,14 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:lho="clr-namespace:LicenseHeaderManager.Options"
+             xmlns:lho="clr-namespace:LicenseHeaderManager.Options" 
+             xmlns:lh="clr-namespace:LicenseHeaderManager"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
   <DockPanel>
-    <Label DockPanel.Dock="Top">Default text for new license header definitions:</Label>
+    <Label DockPanel.Dock="Top">
+        <TextBlock Text="{x:Static lh:Resources.FileHeaderTextLabel}" TextWrapping="Wrap"/>
+    </Label>
     <lho:InteropTextBox x:Name="defaultText" Text="{Binding LicenseHeaderFileText, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Stretch" />
   </DockPanel>
 </UserControl>

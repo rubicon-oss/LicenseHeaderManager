@@ -68,7 +68,7 @@ namespace LicenseHeaderManager.Options
         InitializeFromResource ();
       }
 
-      MessageBox.Show (Resources.Update_Generic.Replace (@"\n", "\n"), "Update");
+      MessageBox.Show (Resources.Update_DefaultLicenseHeader_1_2_1.Replace (@"\n", "\n"), "Update");
     }
 
     private void InitializeFromResource ()

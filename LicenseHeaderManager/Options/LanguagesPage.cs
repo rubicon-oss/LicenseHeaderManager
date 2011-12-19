@@ -115,7 +115,7 @@ namespace LicenseHeaderManager.Options
               l.EndRegion = "#End Region";
           });
 
-      MessageBox.Show (Resources.Update_Generic.Replace (@"\n", "\n"), "Update");
+      MessageBox.Show (Resources.Update_RegionSettings_1_2_1.Replace (@"\n", "\n"), "Update");
     }
 
     private void UpdateLanguages (IEnumerable<string> extensions, Action<Language> updateAction)

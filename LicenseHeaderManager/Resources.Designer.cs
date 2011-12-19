@@ -277,6 +277,15 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Text for new license header definitions.
+        /// </summary>
+        public static string FileHeaderTextLabel {
+            get {
+                return ResourceManager.GetString("FileHeaderTextLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Help.
         /// </summary>
         public static string Help {
@@ -376,7 +385,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to License Header Manager automatically updated its configuration.\n\nPlease check your language settings if they were modified\nbefore the update.\n\nIf you added any XML-based languages, you might need to add\na SkipExpression..
+        ///   Looks up a localized string similar to License Header Manager has automatically updated its configuration to add SkipExpressions.\n\nPlease check your language settings if they were modified\nbefore the update.\n\nIf you added any XML-based languages, you might need to add\na SkipExpression..
         /// </summary>
         public static string Update_1_1_3 {
             get {
@@ -385,11 +394,20 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to License Header Manager automatically updated its configuration.\n\nPlease check your language settings if they were modified\nbefore the update..
+        ///   Looks up a localized string similar to License Header Manager has automatically updated its configuration\nto include settings for the default license header definition file..
         /// </summary>
-        public static string Update_Generic {
+        public static string Update_DefaultLicenseHeader_1_2_1 {
             get {
-                return ResourceManager.GetString("Update_Generic", resourceCulture);
+                return ResourceManager.GetString("Update_DefaultLicenseHeader_1_2_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License Header Manager has automatically updated its configuration\nto fix the settings for C# and VB.NET regions.\n\nPlease check your language settings if they were modified\nbefore the update..
+        /// </summary>
+        public static string Update_RegionSettings_1_2_1 {
+            get {
+                return ResourceManager.GetString("Update_RegionSettings_1_2_1", resourceCulture);
             }
         }
         
@@ -426,6 +444,15 @@ namespace LicenseHeaderManager {
         public static string Warning_InvalidLicenseHeader {
             get {
                 return ResourceManager.GetString("Warning_InvalidLicenseHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Language.
+        /// </summary>
+        public static string WpfLanguageDialogTitle {
+            get {
+                return ResourceManager.GetString("WpfLanguageDialogTitle", resourceCulture);
             }
         }
     }

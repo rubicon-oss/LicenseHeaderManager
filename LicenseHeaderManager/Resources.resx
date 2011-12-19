@@ -189,6 +189,9 @@
   <data name="Extensions" xml:space="preserve">
     <value>Extensions</value>
   </data>
+  <data name="FileHeaderTextLabel" xml:space="preserve">
+    <value>Text for new license header definitions</value>
+  </data>
   <data name="Help" xml:space="preserve">
     <value>Help</value>
   </data>
@@ -223,10 +226,13 @@
     <value>Some languages require special instructions at the very beginning of the file.\nXML-based languages need the &lt;?xml ... ?&gt; declaration for example. You can\ndefine a Regular Expression that identifies these instructions here so that the\nlicense header comment can be inserted after them, leaving the file valid.\n\nSee the online documentation on http://licensemanager.codeplex.com/\nfor more detailed information.</value>
   </data>
   <data name="Update_1_1_3" xml:space="preserve">
-    <value>License Header Manager automatically updated its configuration.\n\nPlease check your language settings if they were modified\nbefore the update.\n\nIf you added any XML-based languages, you might need to add\na SkipExpression.</value>
+    <value>License Header Manager has automatically updated its configuration to add SkipExpressions.\n\nPlease check your language settings if they were modified\nbefore the update.\n\nIf you added any XML-based languages, you might need to add\na SkipExpression.</value>
   </data>
-  <data name="Update_Generic" xml:space="preserve">
-    <value>License Header Manager automatically updated its configuration.\n\nPlease check your language settings if they were modified\nbefore the update.</value>
+  <data name="Update_DefaultLicenseHeader_1_2_1" xml:space="preserve">
+    <value>License Header Manager has automatically updated its configuration\nto include settings for the default license header definition file.</value>
+  </data>
+  <data name="Update_RegionSettings_1_2_1" xml:space="preserve">
+    <value>License Header Manager has automatically updated its configuration\nto fix the settings for C# and VB.NET regions.\n\nPlease check your language settings if they were modified\nbefore the update.</value>
   </data>
   <data name="UpdatingFiles" xml:space="preserve">
     <value>Updating files...</value>
@@ -239,5 +245,8 @@
   </data>
   <data name="Warning_InvalidLicenseHeader" xml:space="preserve">
     <value>The header definition for {0} files contains non-comment text.\nIf you insert this header, you will not be able to remove or replace the header automatically!\nDo you really want to add this header to the file?</value>
+  </data>
+  <data name="WpfLanguageDialogTitle" xml:space="preserve">
+    <value>Edit Language</value>
   </data>
 </root>
