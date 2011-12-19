@@ -145,7 +145,6 @@
     <Compile Include="Options\OptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Options\InteropTextBox.cs" />
     <Compile Include="Options\Language.cs" />
     <Compile Include="Options\LanguagesPage.cs">
       <SubType>Component</SubType>
