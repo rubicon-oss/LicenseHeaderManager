@@ -138,20 +138,11 @@ namespace LicenseHeaderManager.Headers
       if (start == null)
         start = _document.CreateEditPoint (_document.StartPoint);
       var end = _document.CreateEditPoint (start);
-      end.CharRight (header.Length);
 
-      //CharRight always treats NewLines as single characters, so if that's not true in the current environment we need to take care of it
-      if (Environment.NewLine.Length > 1)
-      {
-        ////count the NewLines in the header
-        //int count = -1;
-        //for (int index = 0; index >= 0; index = header.IndexOf (Environment.NewLine, index + Environment.NewLine.Length))
-        //  count++;
-
-        int count = Regex.Matches (header, Environment.NewLine).Count;
-
-        end.CharLeft (count * (Environment.NewLine.Length - 1));
-      }
+      // CharRight always treats NewLines as single cursor steps, so if the current environment has longer newLines, we need to take care of that
+      // when calculating the cursor steps.
+      var headerLengthInCursorSteps = header.Replace (Environment.NewLine, " ").Length;
+      end.CharRight (headerLengthInCursorSteps);
 
       return end;
     }
