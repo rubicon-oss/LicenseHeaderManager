@@ -1,0 +1,18 @@
+extensions: designer.cs
+extensions: .cs
+//Sample license text.
+//%FullFileName% expands to the full file name (including directory path),
+//%FileName% expands to the file name,
+//%CreationYear%, %CreationMonth%, %CreationDay%, %CreationTime% expand to the respective file creation DateTime properties (time is in short time format),
+//%CurrentYear%, %CurrentMonth%, %CurrentDay%, %CurrentTime% expand to the respective current DateTime properties (time is in short time format),
+//%UserName% expands to the name of the current user.
+extensions: .aspx .ascx
+<%-- 
+Sample license text.
+--%>
+extensions: .vb
+'Sample license text. 
+extensions: .xml .htm
+<!-- Test license -->
+extensions: .js
+// Test license

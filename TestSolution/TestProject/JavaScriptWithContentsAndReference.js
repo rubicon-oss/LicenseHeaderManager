@@ -1,0 +1,3 @@
+﻿/// <reference bla/>
+void Hoo()
+{ }
