@@ -47,9 +47,9 @@ namespace LicenseHeaderManager.Options
         new Language { Extensions = new[] { ".c", ".cpp", ".cxx", ".h", ".hpp" }, LineComment = "//", BeginComment = "/*", EndComment = "*/"},
         new Language { Extensions = new[] { ".vb", ".designer.vb", ".xaml.vb" }, LineComment = "'", BeginRegion = "#Region", EndRegion = "#End Region" },
         new Language { Extensions = new[] { ".aspx", ".ascx", }, BeginComment = "<%--", EndComment = "--%>" },
-        new Language { Extensions = new[] { ".htm", ".html", ".xhtml", ".xml", ".xaml", ".resx" }, BeginComment = "<!--", EndComment = "-->", SkipExpression = @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?(\n|\r\n|\r)" },
+        new Language { Extensions = new[] { ".htm", ".html", ".xhtml", ".xml", ".xaml", ".resx" }, BeginComment = "<!--", EndComment = "-->", SkipExpression = @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?( |\t)*(\n|\r\n|\r)?" },
         new Language { Extensions = new[] { ".css" }, BeginComment = "/*", EndComment = "*/" },
-        new Language { Extensions = new[] { ".js" }, LineComment = "//", BeginComment = "/*", EndComment = "*/", SkipExpression = "/// *<reference.*/>"}
+        new Language { Extensions = new[] { ".js" }, LineComment = "//", BeginComment = "/*", EndComment = "*/", SkipExpression = @"/// *<reference.*/>( |\t)*(\n|\r\n|\r)?"}
       };
       base.ResetSettings ();
     }
@@ -70,6 +70,7 @@ namespace LicenseHeaderManager.Options
     {
       yield return new UpdateStep (new Version (1, 1, 4), AddDefaultSkipExpressions_1_1_4);
       yield return new UpdateStep (new Version (1, 2, 1), AddDefaultRegionSettings_1_2_1);
+      yield return new UpdateStep (new Version (1, 2, 2), AdjustDefaultXmlSkipExpression_1_2_2);
     }
 
     private void AddDefaultSkipExpressions_1_1_4 ()
@@ -85,13 +86,6 @@ namespace LicenseHeaderManager.Options
           l => UpdateIfNullOrEmpty (l, lang => lang.SkipExpression, "/// *<reference.*/>"));
 
       MessageBox.Show (Resources.Update_1_1_3.Replace (@"\n", "\n"), "Update");
-    }
-
-    private void UpdateIfNullOrEmpty(Language l, Expression<Func<Language, string>> propertyAccessExpression, string value)
-    {
-      var property = (PropertyInfo) ((MemberExpression) propertyAccessExpression.Body).Member;
-      if (string.IsNullOrEmpty ((string) property.GetValue (l, null)))
-        property.SetValue (l, value, null);
     }
 
     private void AddDefaultRegionSettings_1_2_1 ()
@@ -117,6 +111,45 @@ namespace LicenseHeaderManager.Options
 
       MessageBox.Show (Resources.Update_RegionSettings_1_2_1.Replace (@"\n", "\n"), "Update");
     }
+
+    private void AdjustDefaultXmlSkipExpression_1_2_2 ()
+    {
+      bool updated = false;
+      // SkipExpression for XML-based languages was suboptimal, it didn't work for nearly empty files 
+      UpdateLanguages (
+          new[] { ".htm", ".html", ".xhtml", ".xml", ".resx" },
+          l =>
+          {
+            if (l.SkipExpression == @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?(\n|\r\n|\r)")
+            {
+              l.SkipExpression = @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?( |\t)*(\n|\r\n|\r)?";
+              updated = true;
+            }
+          });
+
+      // SkipExpression for JS-based languages was suboptimal, it didn't work for nearly empty files 
+      UpdateLanguages (
+          new[] { ".js" },
+          l =>
+          {
+            if (l.SkipExpression == @"/// *<reference.*/>")
+            {
+              l.SkipExpression = @"/// *<reference.*/>( |\t)*(\n|\r\n|\r)?";
+              updated = true;
+            }
+          });
+
+      if (updated)
+        MessageBox.Show (Resources.Update_SkipExpressions_1_2_2.Replace (@"\n", "\n"), "Update");
+    }
+
+    private void UpdateIfNullOrEmpty (Language l, Expression<Func<Language, string>> propertyAccessExpression, string value)
+    {
+      var property = (PropertyInfo) ((MemberExpression) propertyAccessExpression.Body).Member;
+      if (string.IsNullOrEmpty ((string) property.GetValue (l, null)))
+        property.SetValue (l, value, null);
+    }
+
 
     private void UpdateLanguages (IEnumerable<string> extensions, Action<Language> updateAction)
     {

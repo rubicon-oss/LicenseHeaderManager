@@ -421,6 +421,15 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to License Header Manager has automatically updated its configuration\nto fix a problem with the SkipExpressions for XML, HTML (and similar), and JS files.\n\nPlease check your language settings if they were modified\nbefore the update..
+        /// </summary>
+        public static string Update_SkipExpressions_1_2_2 {
+            get {
+                return ResourceManager.GetString("Update_SkipExpressions_1_2_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Updating files....
         /// </summary>
         public static string UpdatingFiles {

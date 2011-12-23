@@ -237,6 +237,9 @@
   <data name="Update_RegionSettings_1_2_1" xml:space="preserve">
     <value>License Header Manager has automatically updated its configuration\nto fix the settings for C# and VB.NET regions.\n\nPlease check your language settings if they were modified\nbefore the update.</value>
   </data>
+  <data name="Update_SkipExpressions_1_2_2" xml:space="preserve">
+    <value>License Header Manager has automatically updated its configuration\nto fix a problem with the SkipExpressions for XML, HTML (and similar), and JS files.\n\nPlease check your language settings if they were modified\nbefore the update.</value>
+  </data>
   <data name="UpdatingFiles" xml:space="preserve">
     <value>Updating files...</value>
   </data>
