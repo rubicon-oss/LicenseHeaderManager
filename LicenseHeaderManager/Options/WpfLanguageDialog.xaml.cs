@@ -12,7 +12,6 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 #endregion
 using System.Windows;
-using System.Windows.Controls;
 
 namespace LicenseHeaderManager.Options
 {
@@ -30,26 +29,18 @@ namespace LicenseHeaderManager.Options
       skipExpression.ToolTip = LicenseHeaderManager.Resources.SkipExpressionHelp.Replace (@"\n", "\n");
     }
 
-    private void OnClick (object sender, RoutedEventArgs e)
+    private void OkButton_Click (object sender, RoutedEventArgs e)
     {
-      if (sender == cancel)
+      if (Language != null)
       {
-        DialogResult = false;
-        Close();
-      }
-      else if (sender == ok)
-      {
-        if (Language != null)
+        if (Language.IsValid)
         {
-          if (Language.IsValid)
-          {
-            Language.NormalizeExtensions ();
-            DialogResult = true;
-            Close();
-          }
-          else
-            MessageBox.Show (LicenseHeaderManager.Resources.Error_LanguageInvalid, LicenseHeaderManager.Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
+          Language.NormalizeExtensions ();
+          DialogResult = true;
+          Close();
         }
+        else
+          MessageBox.Show (LicenseHeaderManager.Resources.Error_LanguageInvalid, LicenseHeaderManager.Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
       }
     }
   }

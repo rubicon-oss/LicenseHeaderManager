@@ -90,26 +90,18 @@ namespace LicenseHeaderManager.Options
       };
     }
 
-    private void OnClick (object sender, RoutedEventArgs e)
+    private void OkButton_Click (object sender, RoutedEventArgs e)
     {
-      if (sender == cancel)
+      var command = commands.SelectedItem as Command;
+      if (command != null)
       {
-        DialogResult = false;
-        Close ();
-      }
-      else if (sender == ok)
-      {
-        var command = commands.SelectedItem as Command;
-        if (command != null)
-        {
-          Command.Name = command.Name;
-          Command.ExecutionTime = before.IsChecked.Value ? ExecutionTime.Before : ExecutionTime.After;
-          Command.Guid = command.Guid;
-          Command.Id = command.ID;
+        Command.Name = command.Name;
+        Command.ExecutionTime = before.IsChecked.Value ? ExecutionTime.Before : ExecutionTime.After;
+        Command.Guid = command.Guid;
+        Command.Id = command.ID;
           
-          DialogResult = true;
-          Close ();
-        }
+        DialogResult = true;
+        Close ();
       }
     }
 

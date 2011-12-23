@@ -41,8 +41,8 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
         <RadioButton Name="after" GroupName="ExecutionTime" Content="{x:Static lh:Resources.AfterCommand}" Grid.Row="4" Grid.ColumnSpan="2" Margin="2"/>
 
         <WrapPanel Orientation="Horizontal" Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Right">
-            <Button TabIndex="5" Name="ok" Content="{x:Static lh:Resources.Ok}" Margin="2" Width="50" Click="OnClick" IsEnabled="False"/>
-            <Button TabIndex="6" Name="cancel" Content="{x:Static lh:Resources.Cancel}" Margin="2" Width="50" Click="OnClick"/>
+            <Button TabIndex="5" Name="ok" Content="{x:Static lh:Resources.Ok}" Margin="2" Width="50" Click="OkButton_Click" IsEnabled="False" IsDefault="True"/>
+            <Button TabIndex="6" Name="cancel" Content="{x:Static lh:Resources.Cancel}" Margin="2" Width="50" IsCancel="True" />
         </WrapPanel>
     </Grid>
 </Window>
