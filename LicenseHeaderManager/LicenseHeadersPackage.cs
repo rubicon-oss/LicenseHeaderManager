@@ -419,28 +419,21 @@ namespace LicenseHeaderManager
 
     private void AddLicenseHeaderToProjectItemCallback (object sender, EventArgs e)
     {
-      OleMenuCmdEventArgs args = e as OleMenuCmdEventArgs;
+      var args = e as OleMenuCmdEventArgs;
       if (args != null)
       {
-        ProjectItem item = args.InValue as ProjectItem;
+        var item = args.InValue as ProjectItem;
         bool calledByUser = item == null;
         if (calledByUser)
           item = GetSolutionExplorerItem () as ProjectItem;
         if (item != null && item.Kind == Constants.vsProjectItemKindPhysicalFile && Path.GetExtension (item.Name) != LicenseHeader.Cextension)
         {
-          var headers = LicenseHeader.GetLicenseHeaders (item.ContainingProject);
+          var containingProject = item.ContainingProject;
+          var headers = GetLicenseHeaders (containingProject, calledByUser);
           if (headers.Count == 0)
-          {
-            if (calledByUser)
-            {
-              string message = Resources.Error_NoHeaderDefinition.Replace (@"\n", "\n");
-              if (MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No)
-                  == MessageBoxResult.Yes)
-                AddLicenseHeaderDefinitionFile ();
-            }
-          }
-          else
-            RemoveOrReplaceHeaderRecursive (item, headers);
+            return;
+
+          RemoveOrReplaceHeaderRecursive (item, headers);
         }
       }
     }
@@ -464,33 +457,26 @@ namespace LicenseHeaderManager
 
       if (project != null || item != null)
       {
-        var headers = LicenseHeader.GetLicenseHeaders (project ?? item.ContainingProject);
-
+        var containingProject = project ?? item.ContainingProject;
+        var headers = GetLicenseHeaders (containingProject, true);
         if (headers.Count == 0)
+          return;
+
+        var statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
+        statusBar.SetText (Resources.UpdatingFiles);
+
+        _extensionsWithInvalidHeaders.Clear();
+        if (project != null)
         {
-          string message = Resources.Error_NoHeaderDefinition.Replace (@"\n", "\n");
-          if (MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No)
-              == MessageBoxResult.Yes)
-            AddLicenseHeaderDefinitionFile ();
+          foreach (ProjectItem i in project.ProjectItems)
+            RemoveOrReplaceHeaderRecursive (i, headers);
         }
         else
         {
-          IVsStatusbar statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
-          statusBar.SetText (Resources.UpdatingFiles);
-
-          _extensionsWithInvalidHeaders.Clear ();
-          if (project != null)
-          {
-            foreach (ProjectItem i in project.ProjectItems)
-              RemoveOrReplaceHeaderRecursive (i, headers);
-          }
-          else
-          {
-            foreach (ProjectItem i in item.ProjectItems)
-              RemoveOrReplaceHeaderRecursive (i, headers);
-          }
-          statusBar.SetText (String.Empty);
+          foreach (ProjectItem i in item.ProjectItems)
+            RemoveOrReplaceHeaderRecursive (i, headers);
         }
+        statusBar.SetText (String.Empty);
       }
     }
 
@@ -551,6 +537,23 @@ namespace LicenseHeaderManager
     }
 
     #endregion
+
+    private IDictionary<string, string[]> GetLicenseHeaders (Project project, bool shouldAddIfNoneFound)
+    {
+      var headers = LicenseHeader.GetLicenseHeaders (project);
+      if (headers.Count != 0 || !shouldAddIfNoneFound)
+        return headers;
+
+      string message = Resources.Error_NoHeaderDefinition.Replace (@"\n", "\n");
+      var messageBoxResult = MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+      if (messageBoxResult != MessageBoxResult.Yes)
+        return headers;
+
+      if (!AddLicenseHeaderDefinitionFile ())
+        return headers;
+
+      return LicenseHeader.GetLicenseHeaders (project);
+    }
 
     /// <summary>
     /// Removes or replaces the header of the active project item.
@@ -760,7 +763,7 @@ namespace LicenseHeaderManager
     /// <summary>
     /// Adds a new License Header Definition file to the active project.
     /// </summary>
-    private void AddLicenseHeaderDefinitionFile ()
+    private bool AddLicenseHeaderDefinitionFile ()
     {
       var obj = GetSolutionExplorerItem ();
       var project = obj as Project;
@@ -771,26 +774,28 @@ namespace LicenseHeaderManager
           project = item.ContainingProject;
       }
 
-      if (project != null)
+      if (project == null)
+        return false;
+      
+      string tempFilePath = Path.GetTempFileName();
+      DefaultLicenseHeaderPage page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
+      File.WriteAllText (tempFilePath, page.LicenseHeaderFileText);
+
+      ProjectItem newProjectItem = project.ProjectItems.AddFromFileCopy (tempFilePath);
+
+      File.Delete (tempFilePath);
+
+      if (newProjectItem != null)
       {
-        string tempFilePath = Path.GetTempFileName ();
-        DefaultLicenseHeaderPage page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
-        File.WriteAllText (tempFilePath, page.LicenseHeaderFileText);
-
-        ProjectItem newProjectItem = project.ProjectItems.AddFromFileCopy (tempFilePath);
-
-        File.Delete (tempFilePath);
-
-        if (newProjectItem != null)
-        {
-          var fileName = LicenseHeader.GetNewFileName (project);
-          newProjectItem.Name = fileName;
-        }
-        else
-        {
-          string message = string.Format (Resources.Error_CreatingFile).Replace (@"\n", "\n");
-          MessageBox.Show (message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-        }
+        var fileName = LicenseHeader.GetNewFileName (project);
+        newProjectItem.Name = fileName;
+        return true;
+      }
+      else
+      {
+        string message = string.Format (Resources.Error_CreatingFile).Replace (@"\n", "\n");
+        MessageBox.Show (message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+        return false;
       }
     }
   }
