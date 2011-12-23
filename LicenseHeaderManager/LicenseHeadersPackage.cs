@@ -415,7 +415,8 @@ namespace LicenseHeaderManager
       if (item != null)
       {
         var headers = GetLicenseHeaders (item.ContainingProject, calledByUser);
-        RemoveOrReplaceHeader (item, headers, calledByUser);
+        if (headers.Count != 0)
+          RemoveOrReplaceHeader (item, headers, calledByUser);
       }
     }
 
