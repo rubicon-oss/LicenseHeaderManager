@@ -408,13 +408,26 @@ namespace LicenseHeaderManager
     private void AddLicenseHeaderCallback (object sender, EventArgs e)
     {
       OleMenuCmdEventArgs args = e as OleMenuCmdEventArgs;
+      // TODO: This code doesn't seem to work: When invoking the command from the menu, calledByUser is still false.
       bool calledByUser = args == null || (args.InValue is bool && (bool) args.InValue);
-      RemoveOrReplaceHeader (false, calledByUser);
+      var item = GetActiveProjectItem ();
+
+      if (item != null)
+      {
+        var headers = GetLicenseHeaders (item.ContainingProject, calledByUser);
+        RemoveOrReplaceHeader (item, headers, calledByUser);
+      }
     }
 
     private void RemoveLicenseHeaderCallback (object sender, EventArgs e)
     {
-      RemoveOrReplaceHeader (true);
+      var item = GetActiveProjectItem ();
+
+      if (item != null)
+      {
+        IDictionary<string, string[]> headers = null;
+        RemoveOrReplaceHeader (item, headers, true);
+      }
     }
 
     private void AddLicenseHeaderToProjectItemCallback (object sender, EventArgs e)
@@ -553,22 +566,6 @@ namespace LicenseHeaderManager
         return headers;
 
       return LicenseHeader.GetLicenseHeaders (project);
-    }
-
-    /// <summary>
-    /// Removes or replaces the header of the active project item.
-    /// </summary>
-    /// <param name="removeOnly">Specifies whether the header should only be removed or if a new one should be inserted instead.</param>
-    /// <param name="calledbyUser">Specifies whether the command was called by the user (as opposed to automatically by a linked command or by ItemAdded)</param>
-    private void RemoveOrReplaceHeader (bool removeOnly, bool calledbyUser = true)
-    {
-      var item = GetActiveProjectItem ();
-
-      if (item != null)
-      {
-        var headers = removeOnly ? null : LicenseHeader.GetLicenseHeaders (item.ContainingProject);
-        RemoveOrReplaceHeader (item, headers, calledbyUser);
-      }
     }
 
     /// <summary>
