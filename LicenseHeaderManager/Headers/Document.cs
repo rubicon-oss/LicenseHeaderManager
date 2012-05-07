@@ -111,19 +111,20 @@ namespace LicenseHeaderManager.Headers
       {
         if (appendLineBreak)
         {
-          header += Environment.NewLine;
+          var newLine = NewLineManager.DetectLineEnd (header);
+          header += newLine;
 
           if (withEmptyLineIfNecessary)
           {
             //if the header ends with an empty line, there's no need to insert one
-            int lastNewLine = header.LastIndexOf (Environment.NewLine, header.Length - Environment.NewLine.Length);
+            int lastNewLine = header.LastIndexOf (newLine, header.Length - newLine.Length);
             if (lastNewLine < 0 || !string.IsNullOrWhiteSpace (header.Substring (lastNewLine, header.Length - lastNewLine)))
             {
               //if there's a comment right at the beginning of the file,
               //we need to add an empty line so that the comment doesn't
               //become a part of the header
               if (!string.IsNullOrEmpty (_parser.Parse (GetText ())))
-                header += Environment.NewLine;
+                header += newLine;
             }
           }
         }

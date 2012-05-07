@@ -21,10 +21,12 @@ namespace LicenseHeaderManager.Headers
   {
     private bool _started;
     private int _position;
+    private string _newEnd;
     private Stack<int> _regionStarts;
 
     private string _text;
 
+    public string NewLine { get { return _newEnd; } }
     public string LineComment { get; private set; }
     public string BeginComment { get; private set; }
     public string EndComment { get; private set; }
@@ -48,10 +50,10 @@ namespace LicenseHeaderManager.Headers
     {
       Contract.Requires (text != null);
 
+      _newEnd = NewLineManager.DetectLineEnd (text);
       _started = false;
       _position = 0;
       _text = text;
-
       _regionStarts = new Stack<int> ();
 
       for (string token = GetToken (); HandleToken (token); token = GetToken ()) { }
@@ -92,12 +94,11 @@ namespace LicenseHeaderManager.Headers
       //if the header has already started and we're not in an open region, check if there was more than one NewLine
       if (_started && _regionStarts.Count == 0)
       {
-        int firstNewLine = _text.IndexOf (Environment.NewLine, start, _position - start);
+        int firstNewLine = _text.IndexOf (_newEnd, start, _position - start);
         if (firstNewLine >= 0)
         {
-          int afterFirstNewLine = firstNewLine + Environment.NewLine.Length;
-          int nextNewLine = _text.IndexOf (
-              Environment.NewLine, afterFirstNewLine, _position - afterFirstNewLine);
+          int afterFirstNewLine = firstNewLine + _newEnd.Length;
+          int nextNewLine = _text.IndexOf (_newEnd, afterFirstNewLine, _position - afterFirstNewLine);
           
           //more than one NewLine (= at least one empty line)
           if (nextNewLine > 0)
@@ -119,7 +120,8 @@ namespace LicenseHeaderManager.Headers
           _started = true;
 
         //proceed to end of line
-        _position = _text.IndexOf (Environment.NewLine, _position - token.Length + LineComment.Length);
+
+        _position = _text.IndexOf (_newEnd, _position - token.Length + LineComment.Length);
         if (_position < 0)
           _position = _text.Length; //end of file
           
@@ -147,7 +149,7 @@ namespace LicenseHeaderManager.Headers
 
         _regionStarts.Push(_position - BeginRegion.Length);
 
-        _position = _text.IndexOf (Environment.NewLine, _position);
+        _position = _text.IndexOf (_newEnd, _position);
         if (_position < 0)
           _position = _text.Length; //end of file
 
@@ -164,7 +166,7 @@ namespace LicenseHeaderManager.Headers
 
         _regionStarts.Pop ();
 
-        _position = _text.IndexOf (Environment.NewLine, _position);
+        _position = _text.IndexOf (_newEnd, _position);
         if (_position < 0)
           _position = _text.Length; //end of file
 

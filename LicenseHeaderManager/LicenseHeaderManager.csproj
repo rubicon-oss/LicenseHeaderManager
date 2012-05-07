@@ -122,6 +122,7 @@
     <Compile Include="Headers\DocumentHeaderProperties.cs" />
     <Compile Include="Headers\DocumentHeaderProperty.cs" />
     <Compile Include="Headers\LicenseHeader.cs" />
+    <Compile Include="Headers\NewLineManager.cs" />
     <Compile Include="Headers\ParseException.cs" />
     <Compile Include="Headers\Parser.cs" />
     <Compile Include="Options\WpfEditDefaultLicenseHeaderDialog.xaml.cs">
@@ -176,6 +177,7 @@
     <Compile Include="Options\WpfCommandDialog.xaml.cs">
       <DependentUpon>WpfCommandDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
