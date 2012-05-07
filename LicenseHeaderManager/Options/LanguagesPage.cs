@@ -153,8 +153,8 @@ namespace LicenseHeaderManager.Options
       UpdateLanguages(new[] {".xml"}, (l) =>
                                         {
                                           l.Extensions = l.Extensions.Concat(new[] {".config", ".xsd"});
-                                          MessageBox.Show (Resources.Update_1_3_1.Replace (@"\n", "\n"), "Update");
                                         });
+      MessageBox.Show (Resources.Update_1_3_1.Replace (@"\n", "\n"), "Update");
     }
 
     private void UpdateIfNullOrEmpty (Language l, Expression<Func<Language, string>> propertyAccessExpression, string value)
