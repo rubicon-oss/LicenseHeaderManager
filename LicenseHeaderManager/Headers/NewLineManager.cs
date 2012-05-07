@@ -8,6 +8,11 @@ namespace LicenseHeaderManager.Headers
 {
   public class NewLineManager
   {
+    public static string ReplaceAllLineEnds(string inputText, string newLineEnd)
+    {
+      return inputText.Replace ("\r\n", "\n").Replace ("\r", "\n").Replace ("\n", newLineEnd);
+    }
+
     public static string DetectLineEnd(string inputText)
     {
       var onlyNewLine = inputText.CountOccurrence ("\n");

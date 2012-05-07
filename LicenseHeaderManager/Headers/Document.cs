@@ -109,10 +109,11 @@ namespace LicenseHeaderManager.Headers
     {
       if (!string.IsNullOrEmpty (header))
       {
+        var newLine = NewLineManager.DetectLineEnd (header);
+        header += newLine;
+
         if (appendLineBreak)
         {
-          var newLine = NewLineManager.DetectLineEnd (header);
-          header += newLine;
 
           if (withEmptyLineIfNecessary)
           {
@@ -127,10 +128,10 @@ namespace LicenseHeaderManager.Headers
                 header += newLine;
             }
           }
-        }
 
-        var start = _document.CreateEditPoint (_document.StartPoint);
-        start.Insert (header);
+          var start = _document.CreateEditPoint (_document.StartPoint);
+          start.Insert (NewLineManager.ReplaceAllLineEnds (header, _parser.NewLine));
+        }
       }
     }
 
