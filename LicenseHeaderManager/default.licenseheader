@@ -7,3 +7,7 @@ Sample license text.
 --%>
 extensions: .vb
 'Sample license text.
+extensions:  .xml .config .xsd
+<!--
+Sample license text.
+-->

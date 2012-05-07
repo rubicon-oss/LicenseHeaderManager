@@ -47,7 +47,7 @@ namespace LicenseHeaderManager.Options
         new Language { Extensions = new[] { ".c", ".cpp", ".cxx", ".h", ".hpp" }, LineComment = "//", BeginComment = "/*", EndComment = "*/"},
         new Language { Extensions = new[] { ".vb", ".designer.vb", ".xaml.vb" }, LineComment = "'", BeginRegion = "#Region", EndRegion = "#End Region" },
         new Language { Extensions = new[] { ".aspx", ".ascx", }, BeginComment = "<%--", EndComment = "--%>" },
-        new Language { Extensions = new[] { ".htm", ".html", ".xhtml", ".xml", ".xaml", ".resx" }, BeginComment = "<!--", EndComment = "-->", SkipExpression = @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?( |\t)*(\n|\r\n|\r)?" },
+        new Language { Extensions = new[] { ".htm", ".html", ".xhtml", ".xml", ".xaml", ".resx", ".config", ".xsd" }, BeginComment = "<!--", EndComment = "-->", SkipExpression = @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?( |\t)*(\n|\r\n|\r)?" },
         new Language { Extensions = new[] { ".css" }, BeginComment = "/*", EndComment = "*/" },
         new Language { Extensions = new[] { ".js" }, LineComment = "//", BeginComment = "/*", EndComment = "*/", SkipExpression = @"/// *<reference.*/>( |\t)*(\n|\r\n|\r)?"}
       };
@@ -71,6 +71,7 @@ namespace LicenseHeaderManager.Options
       yield return new UpdateStep (new Version (1, 1, 4), AddDefaultSkipExpressions_1_1_4);
       yield return new UpdateStep (new Version (1, 2, 1), AddDefaultRegionSettings_1_2_1);
       yield return new UpdateStep (new Version (1, 2, 2), AdjustDefaultXmlSkipExpression_1_2_2);
+      yield return new UpdateStep( new Version (1, 3, 1), AddXmlXsd_1_3_1);
     }
 
     private void AddDefaultSkipExpressions_1_1_4 ()
@@ -143,13 +144,17 @@ namespace LicenseHeaderManager.Options
         MessageBox.Show (Resources.Update_SkipExpressions_1_2_2.Replace (@"\n", "\n"), "Update");
     }
 
+    private void AddXmlXsd_1_3_1 ()
+    {
+      UpdateLanguages(new[] {".xml"}, (l) => l.Extensions = l.Extensions.Concat(new[] {".config", ".xsd"}));
+    }
+
     private void UpdateIfNullOrEmpty (Language l, Expression<Func<Language, string>> propertyAccessExpression, string value)
     {
       var property = (PropertyInfo) ((MemberExpression) propertyAccessExpression.Body).Member;
       if (string.IsNullOrEmpty ((string) property.GetValue (l, null)))
         property.SetValue (l, value, null);
     }
-
 
     private void UpdateLanguages (IEnumerable<string> extensions, Action<Language> updateAction)
     {
