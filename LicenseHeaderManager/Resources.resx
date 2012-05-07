@@ -231,6 +231,9 @@
   <data name="Update_1_1_3" xml:space="preserve">
     <value>License Header Manager has automatically updated its configuration to add SkipExpressions.\n\nPlease check your language settings if they were modified\nbefore the update.\n\nIf you added any XML-based languages, you might need to add\na SkipExpression.</value>
   </data>
+  <data name="Update_1_3_1" xml:space="preserve">
+    <value>License Header Manager has automatically updated its configuration to add .config and .xsd.\n\nPlease check your language settings if they were modified\nbefore the update.</value>
+  </data>
   <data name="Update_DefaultLicenseHeader_1_2_1" xml:space="preserve">
     <value>License Header Manager has automatically updated its configuration\nto include settings for the default license header definition file.</value>
   </data>

@@ -146,7 +146,15 @@ namespace LicenseHeaderManager.Options
 
     private void AddXmlXsd_1_3_1 ()
     {
-      UpdateLanguages(new[] {".xml"}, (l) => l.Extensions = l.Extensions.Concat(new[] {".config", ".xsd"}));
+      //Already definded by user
+      if (Languages.Any (x => x.Extensions.Contains (".config") || x.Extensions.Contains (".xsd")))
+        return;
+      //Add a default rule for config/xsd
+      UpdateLanguages(new[] {".xml"}, (l) =>
+                                        {
+                                          l.Extensions = l.Extensions.Concat(new[] {".config", ".xsd"});
+                                          MessageBox.Show (Resources.Update_1_3_1.Replace (@"\n", "\n"), "Update");
+                                        });
     }
 
     private void UpdateIfNullOrEmpty (Language l, Expression<Func<Language, string>> propertyAccessExpression, string value)
