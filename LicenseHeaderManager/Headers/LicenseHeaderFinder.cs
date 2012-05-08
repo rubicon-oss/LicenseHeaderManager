@@ -7,8 +7,16 @@ using EnvDTE;
 
 namespace LicenseHeaderManager.Headers
 {
+  /// <summary>
+  /// Class for finding the nearest license header file for a ProjectItem or a Project
+  /// </summary>
   public class LicenseHeaderFinder
   {
+    /// <summary>
+    /// Lookup the license header file within a project or a projectitem, if there is no onw on this level, moving up to next level.
+    /// </summary>
+    /// <param name="projectOrItem">An oject which is either is a project or a projectitem</param>
+    /// <returns>A dictionary, which contains the extensions and the corresponding lines</returns>
     public static IDictionary<string, string[]> GetHeaderRecursive (object projectOrItem)
     {
       var parentAsProject = projectOrItem as Project;
@@ -18,9 +26,15 @@ namespace LicenseHeaderManager.Headers
       var parentAsProjectItem = projectOrItem as ProjectItem;
       if (parentAsProjectItem != null)
         return GetHeadersRecursive (parentAsProjectItem); //Lookup in the item above
+
       return null;
     }
-    
+
+    /// <summary>
+    /// Lookup the license header file within a project , if there is no onw on this level, moving up to next level.
+    /// </summary>
+    /// <param name="projectItem"></param>
+    /// <returns>A dictionary, which contains the extensions and the corresponding lines</returns>
     public static IDictionary<string, string[]> GetHeadersRecursive (ProjectItem projectItem)
     {
       //Check for License-file within this level
@@ -31,6 +45,11 @@ namespace LicenseHeaderManager.Headers
       return GetHeaderRecursive (projectItem.Collection.Parent);
     }
 
+    /// <summary>
+    /// Lookup the license header file within this projectItem.
+    /// </summary>
+    /// <param name="projectItem"></param>
+    /// <returns>A dictionary, which contains the extensions and the corresponding lines</returns>
     public static IDictionary<string, string[]> GetHeaders (ProjectItem projectItem)
     {
       //Check for License-file within this level
@@ -52,6 +71,8 @@ namespace LicenseHeaderManager.Headers
       return definition;
     }
 
+    #region HelperMethods
+    
     private static Dictionary<string, string[]> LoadLicenseHeaderDefinition (string headerFile)
     {
       if (string.IsNullOrEmpty (headerFile))
@@ -113,6 +134,7 @@ namespace LicenseHeaderManager.Headers
       }
       return string.Empty;
     }
+    #endregion
 
   }
 }

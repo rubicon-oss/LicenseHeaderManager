@@ -406,7 +406,7 @@ namespace LicenseHeaderManager
     {
       if (item != null)
       {
-        var headers = LicenseHeaderFinder.GetHeaderRecursive (item.ContainingProject);
+        var headers = LicenseHeaderFinder.GetHeaderRecursive (item);
         if (headers != null)
         {
           RemoveOrReplaceHeader (item, headers, calledByUser);
