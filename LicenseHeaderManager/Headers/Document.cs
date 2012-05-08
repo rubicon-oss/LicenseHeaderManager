@@ -29,11 +29,11 @@ namespace LicenseHeaderManager.Headers
     private readonly TextDocument _document;
     private readonly Parser _parser;
 
-    public Document (TextDocument document, Language language, string[] lines, IEnumerable<string> keywords = null)
+    public Document (TextDocument document, Language language, string[] lines, ProjectItem projectItem, IEnumerable<string> keywords = null)
     {
       _document = document;
 
-      _header = new DocumentHeader (document, lines, new DocumentHeaderProperties ());
+      _header = new DocumentHeader (document, lines, new DocumentHeaderProperties (projectItem));
       _keywords = keywords;
 
       _language = language;

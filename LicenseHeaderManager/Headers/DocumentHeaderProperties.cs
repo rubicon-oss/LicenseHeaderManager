@@ -13,8 +13,10 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using EnvDTE;
 
 namespace LicenseHeaderManager.Headers
 {
@@ -22,9 +24,9 @@ namespace LicenseHeaderManager.Headers
   {
     private readonly IEnumerable<DocumentHeaderProperty> _properties;
 
-    public DocumentHeaderProperties ()
+    public DocumentHeaderProperties (ProjectItem projectItem)
     {
-      _properties = CreateProperties ();
+      _properties = CreateProperties (projectItem);
     }
 
     public IEnumerator<DocumentHeaderProperty> GetEnumerator ()
@@ -37,7 +39,7 @@ namespace LicenseHeaderManager.Headers
       return GetEnumerator ();
     }
 
-    private IEnumerable<DocumentHeaderProperty> CreateProperties ()
+    private IEnumerable<DocumentHeaderProperty> CreateProperties (ProjectItem projectItem)
     {
       List<DocumentHeaderProperty> properties = new List<DocumentHeaderProperty> ()
       {
@@ -85,8 +87,36 @@ namespace LicenseHeaderManager.Headers
           "%UserName%", 
           documentHeader => true, 
           documentHeader => Environment.UserName),
+        new DocumentHeaderProperty(
+          "%Project%", 
+          documentHeader => projectItem != null && projectItem.ContainingProject != null, 
+          documentHeader => projectItem.ContainingProject.Name),
+        new DocumentHeaderProperty(
+          "%Namespace%", 
+          documentHeader => documentHeader.FileInfo != null, 
+          documentHeader => LookupNameSpaceInText(documentHeader.FileInfo.FullName)),
       };
       return properties;
+    }
+
+    private const string NamespaceKeyword = "namespace";
+    private static string LookupNameSpaceInText (string fullFileName)
+    {
+      //Searching for first occurent "namespace .." and the first following "{"
+
+      var text = File.ReadAllText(fullFileName);
+      var startingNamespaceIdx = text.IndexOf (NamespaceKeyword) + NamespaceKeyword.Length;
+
+      if (startingNamespaceIdx < 0)
+        return string.Empty;
+
+      var endingNamespaceIdx = text.IndexOf ("{", startingNamespaceIdx);
+      if (endingNamespaceIdx < 0)
+        return string.Empty;
+
+      var line = text.Substring(startingNamespaceIdx, endingNamespaceIdx - startingNamespaceIdx);
+      line = line.Trim();
+      return line;
     }
   }
 }
