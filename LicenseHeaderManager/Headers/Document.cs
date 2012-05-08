@@ -28,6 +28,7 @@ namespace LicenseHeaderManager.Headers
 
     private readonly TextDocument _document;
     private readonly CommentParser _commentParser;
+    private readonly string _lineEndingInDocument;
 
     public Document (TextDocument document, Language language, string[] lines, ProjectItem projectItem, IEnumerable<string> keywords = null)
     {
@@ -37,6 +38,8 @@ namespace LicenseHeaderManager.Headers
       _keywords = keywords;
 
       _language = language;
+      
+      _lineEndingInDocument = NewLineManager.DetectMostFrequentLineEnd (GetText ());
       _commentParser = new CommentParser (language.LineComment, language.BeginComment, language.EndComment, language.BeginRegion, language.EndRegion);
     }
 
@@ -130,9 +133,7 @@ namespace LicenseHeaderManager.Headers
           }
 
           var start = _document.CreateEditPoint (_document.StartPoint);
-
-          var lineEndingInDocument = NewLineManager.DetectMostFrequentLineEnd (GetText());
-          start.Insert (NewLineManager.ReplaceAllLineEnds (header, lineEndingInDocument));
+          start.Insert (NewLineManager.ReplaceAllLineEnds (header, _lineEndingInDocument));
         }
       }
     }
@@ -143,9 +144,8 @@ namespace LicenseHeaderManager.Headers
         start = _document.CreateEditPoint (_document.StartPoint);
       var end = _document.CreateEditPoint (start);
 
-      // CharRight always treats NewLines as single cursor steps, so if the current environment has longer newLines, we need to take care of that
-      // when calculating the cursor steps.
-      var headerLengthInCursorSteps = header.Replace (Environment.NewLine, " ").Length;
+      var headerNewLine = NewLineManager.DetectMostFrequentLineEnd (header);
+      var headerLengthInCursorSteps = header.Replace (headerNewLine, " ").Length;
       end.CharRight (headerLengthInCursorSteps);
 
       return end;
