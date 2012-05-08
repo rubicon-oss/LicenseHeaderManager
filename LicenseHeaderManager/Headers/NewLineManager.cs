@@ -13,6 +13,7 @@ namespace LicenseHeaderManager.Headers
     private const string CR = "\r";
     private const string LF = "\n";
     private const string CRLF = "\r\n";
+    private static readonly string[] _allLineEndings = new[] { CR, LF, CRLF };
 
     /// <summary>
     /// Replaces all LineEnds (CR,LF,CR+LF) in a string with the given newLineEnd
@@ -30,18 +31,32 @@ namespace LicenseHeaderManager.Headers
       return inputText.Replace (CRLF, LF).Replace (CR, LF).Replace (LF, newLineEnd);
     }
 
-    public static int NextLineEndPosition(string inputText)
-    {
-      return NextLineEndPosition (inputText, 0, inputText.Length);
-    }
-
+    /// <summary>
+    /// Returns the position of the next line ending
+    /// </summary>
+    /// <param name="inputText">The text which is parsed</param>
+    /// <param name="startIndex">Offset within the given string</param>
+    /// <returns>The position of the next line ending, if none exists -1</returns>
     public static int NextLineEndPosition (string inputText, int startIndex)
     {
+      if (inputText == null)
+        throw new ArgumentNullException ("inputText");
+
       return NextLineEndPosition (inputText, startIndex, inputText.Length - startIndex);
     }
 
+    /// <summary>
+    /// Returns the position of the next line ending
+    /// </summary>
+    /// <param name="inputText">The text which is parsed</param>
+    /// <param name="startIndex">Offset within the given string</param>
+    /// <param name="count">The amount of characters to scan</param>
+    /// <returns>The position of the next line ending, if none exists -1</returns>
     public static int NextLineEndPosition (string inputText, int startIndex, int count)
     {
+      if (inputText == null)
+        throw new ArgumentNullException ("inputText");
+
       var lineEndInformations = NextLineEndPositionInformation (inputText, startIndex, count);
       if (lineEndInformations == null)
         return -1;
@@ -55,6 +70,9 @@ namespace LicenseHeaderManager.Headers
     /// <returns>Information about the line endings</returns>
     public static LineEndInformation NextLineEndPositionInformation (string inputText)
     {
+      if (inputText == null)
+        throw new ArgumentNullException ("inputText");
+
       return NextLineEndPositionInformation (inputText, 0);
     }
 
@@ -66,6 +84,9 @@ namespace LicenseHeaderManager.Headers
     /// <returns>Information about the line endings</returns>
     public static LineEndInformation NextLineEndPositionInformation (string inputText, int startIndex)
     {
+      if (inputText == null)
+        throw new ArgumentNullException ("inputText");
+
       return NextLineEndPositionInformation (inputText, startIndex, inputText.Length - startIndex);
     }
 
@@ -78,6 +99,9 @@ namespace LicenseHeaderManager.Headers
     /// <returns>Information about the line endings</returns>
     public static LineEndInformation NextLineEndPositionInformation (string inputText, int startIndex, int count)
     {
+      if (inputText == null)
+        throw new ArgumentNullException ("inputText");
+
       var ends = new[]
                  {
                    new LineEndInformation(inputText.IndexOf (CR, startIndex, count), CR),
@@ -96,21 +120,22 @@ namespace LicenseHeaderManager.Headers
     /// <returns>The most frequent line end (CR,LF,CR+LF)</returns>
     public static string DetectMostFrequentLineEnd(string inputText)
     {
-      if(inputText == null)
-        throw new ArgumentNullException("inputText");
+      if (inputText == null)
+        throw new ArgumentNullException ("inputText");
 
-      var numberOfLFs = inputText.CountOccurrence (LF);
-      var numberOfCRs = inputText.CountOccurrence (CR);
-      var numberOfCRLFs = inputText.CountOccurrence (CRLF);
+      var lineEndStatistics = _allLineEndings.Select (
+          le =>
+          new
+          {
+            LineEnding = le,
+            LineEndingLength = le.Length,
+            Count = le == CRLF ?
+              inputText.CountOccurrence (le) :
+              inputText.Replace (CRLF, "").CountOccurrence (le)
+          });
 
-      if (numberOfCRLFs >= numberOfLFs && numberOfCRLFs >= numberOfCRs)
-        return CRLF;
-
-      if (numberOfLFs > numberOfCRs)
-        return LF;
-
-      Trace.Assert (numberOfCRs >= numberOfLFs);
-      return CR;
+      var mostFrequentLineEnding = lineEndStatistics.OrderByDescending (x => x.Count).ThenByDescending (x => x.LineEndingLength).First ();
+      return mostFrequentLineEnding.LineEnding;
     }
   }
 }
