@@ -408,15 +408,22 @@ namespace LicenseHeaderManager
     private void AddLicenseHeaderCallback (object sender, EventArgs e)
     {
       OleMenuCmdEventArgs args = e as OleMenuCmdEventArgs;
-      // TODO: This code doesn't seem to work: When invoking the command from the menu, calledByUser is still false.
       bool calledByUser = args == null || (args.InValue is bool && (bool) args.InValue);
       var item = GetActiveProjectItem ();
 
       if (item != null)
       {
-        var headers = GetLicenseHeaders (item.ContainingProject, calledByUser);
-        if (headers.Count != 0)
+        var headers = LicenseHeaderFinder.GetHeaderRecursive (item.ContainingProject);
+        if (headers != null)
+        {
           RemoveOrReplaceHeader (item, headers, calledByUser);
+        }
+        else
+        {
+          var page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
+          if(LicenseHeader.ShowQuestionForAddingLicenseHeaderFile (item.ContainingProject, page))
+            AddLicenseHeaderCallback(sender, e);
+        }
       }
     }
 
@@ -440,14 +447,20 @@ namespace LicenseHeaderManager
         bool calledByUser = item == null;
         if (calledByUser)
           item = GetSolutionExplorerItem () as ProjectItem;
+
         if (item != null && item.Kind == Constants.vsProjectItemKindPhysicalFile && Path.GetExtension (item.Name) != LicenseHeader.Cextension)
         {
-          var containingProject = item.ContainingProject;
-          var headers = GetLicenseHeaders (containingProject, calledByUser);
-          if (headers.Count == 0)
-            return;
-
-          RemoveOrReplaceHeaderRecursive (item, headers);
+          var headers = LicenseHeaderFinder.GetHeaderRecursive (item);
+          if (headers != null)
+          {
+            RemoveOrReplaceHeaderRecursive (item, headers);
+          }
+          else
+          {
+            var page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
+            if (LicenseHeader.ShowQuestionForAddingLicenseHeaderFile (item.ContainingProject, page))
+              AddLicenseHeaderToProjectItemCallback (sender, e);
+          }
         }
       }
     }
@@ -459,7 +472,7 @@ namespace LicenseHeaderManager
       {
         ProjectItem item = args.InValue as ProjectItem ?? GetSolutionExplorerItem () as ProjectItem;
         if (item != null && Path.GetExtension (item.Name) != LicenseHeader.Cextension)
-          RemoveOrReplaceHeaderRecursive (item, null);
+          RemoveOrReplaceHeaderRecursive (item, null, false);
       }
     }
 
@@ -471,28 +484,27 @@ namespace LicenseHeaderManager
 
       if (project != null || item != null)
       {
-        var containingProject = project ?? item.ContainingProject;
-        var headers = GetLicenseHeaders (containingProject, true);
-        if (headers.Count == 0)
-          return;
-
         var statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
         statusBar.SetText (Resources.UpdatingFiles);
 
         _extensionsWithInvalidHeaders.Clear();
+
         if (project != null)
         {
+          var headers = LicenseHeaderFinder.GetHeaders (project);
           foreach (ProjectItem i in project.ProjectItems)
             RemoveOrReplaceHeaderRecursive (i, headers);
         }
         else
         {
+          var headers = LicenseHeaderFinder.GetHeadersRecursive (item);
           foreach (ProjectItem i in item.ProjectItems)
             RemoveOrReplaceHeaderRecursive (i, headers);
         }
         statusBar.SetText (String.Empty);
       }
     }
+
 
     private void RemoveLicenseHeadersFromAllFilesCallback (object sender, EventArgs e)
     {
@@ -509,12 +521,12 @@ namespace LicenseHeaderManager
         if (project != null)
         {
           foreach (ProjectItem i in project.ProjectItems)
-            RemoveOrReplaceHeaderRecursive (i, null);
+            RemoveOrReplaceHeaderRecursive (i, null, false);
         }
         else
         {
           foreach (ProjectItem i in item.ProjectItems)
-            RemoveOrReplaceHeaderRecursive (i, null);
+            RemoveOrReplaceHeaderRecursive (i, null, false);
         }
 
         statusBar.SetText (String.Empty);
@@ -523,7 +535,18 @@ namespace LicenseHeaderManager
 
     private void AddLicenseHeaderDefinitionFileCallback (object sender, EventArgs e)
     {
-      AddLicenseHeaderDefinitionFile ();
+      var page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
+      var solutionItem = GetSolutionExplorerItem();
+      var project = solutionItem as Project;
+      if (project == null)
+      {
+        var projectItem = solutionItem as ProjectItem;
+        if (projectItem != null)
+          project = projectItem.ContainingProject;
+      }
+
+      if(project != null)
+        LicenseHeader.ShowQuestionForAddingLicenseHeaderFile(project, page);
     }
 
     private void AddExistingLicenseHeaderDefinitionFileCallback (object sender, EventArgs e)
@@ -552,22 +575,6 @@ namespace LicenseHeaderManager
 
     #endregion
 
-    private IDictionary<string, string[]> GetLicenseHeaders (Project project, bool shouldAddIfNoneFound)
-    {
-      var headers = LicenseHeader.GetLicenseHeaders (project);
-      if (headers.Count != 0 || !shouldAddIfNoneFound)
-        return headers;
-
-      string message = Resources.Error_NoHeaderDefinition.Replace (@"\n", "\n");
-      var messageBoxResult = MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
-      if (messageBoxResult != MessageBoxResult.Yes)
-        return headers;
-
-      if (!AddLicenseHeaderDefinitionFile ())
-        return headers;
-
-      return LicenseHeader.GetLicenseHeaders (project);
-    }
 
     /// <summary>
     /// Removes or replaces the header of a given project item.
@@ -610,10 +617,11 @@ namespace LicenseHeaderManager
               ShowOptionPage (typeof (LanguagesPage));
             break;
           case CreateDocumentResult.NoHeaderFound:
-            message = string.Format (Resources.Error_NoHeaderFound, Path.GetExtension (item.Name)).Replace (@"\n", "\n");
-            if (calledbyUser && MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No)
-                == MessageBoxResult.Yes)
-              AddLicenseHeaderDefinitionFile ();
+            if (calledbyUser)
+            {
+              var page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
+              LicenseHeader.ShowQuestionForAddingLicenseHeaderFile (item.ContainingProject, page);
+            }
             break;
         }
       }
@@ -628,7 +636,8 @@ namespace LicenseHeaderManager
     /// </summary>
     /// <param name="item">The project item.</param>
     /// <param name="headers">A dictionary of headers using the file extension as key and the header as value or null if headers should only be removed.</param>
-    private void RemoveOrReplaceHeaderRecursive (ProjectItem item, IDictionary<string, string[]> headers)
+    /// <param name="searchForLicenseHeaders"></param>
+    private void RemoveOrReplaceHeaderRecursive (ProjectItem item, IDictionary<string, string[]> headers, bool searchForLicenseHeaders = true)
     {
       bool isOpen = item.IsOpen[Constants.vsViewKindAny];
       bool isSaved = item.Saved;
@@ -672,8 +681,13 @@ namespace LicenseHeaderManager
         else
           item.Document.Close (vsSaveChanges.vsSaveChangesYes);
       }
+
+      var childHeaders = headers;
+      if(searchForLicenseHeaders)
+        childHeaders = LicenseHeaderFinder.GetHeaders (item) ?? headers;
+
       foreach (ProjectItem child in item.ProjectItems)
-        RemoveOrReplaceHeaderRecursive (child, headers);
+        RemoveOrReplaceHeaderRecursive (child, childHeaders, searchForLicenseHeaders);
     }
 
     /// <summary>
@@ -757,45 +771,6 @@ namespace LicenseHeaderManager
               : null);
 
       return CreateDocumentResult.DocumentCreated;
-    }
-
-    /// <summary>
-    /// Adds a new License Header Definition file to the active project.
-    /// </summary>
-    private bool AddLicenseHeaderDefinitionFile ()
-    {
-      var obj = GetSolutionExplorerItem ();
-      var project = obj as Project;
-      if (project == null)
-      {
-        var item = obj as ProjectItem;
-        if (item != null)
-          project = item.ContainingProject;
-      }
-
-      if (project == null)
-        return false;
-      
-      string tempFilePath = Path.GetTempFileName();
-      DefaultLicenseHeaderPage page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
-      File.WriteAllText (tempFilePath, page.LicenseHeaderFileText);
-
-      ProjectItem newProjectItem = project.ProjectItems.AddFromFileCopy (tempFilePath);
-
-      File.Delete (tempFilePath);
-
-      if (newProjectItem != null)
-      {
-        var fileName = LicenseHeader.GetNewFileName (project);
-        newProjectItem.Name = fileName;
-        return true;
-      }
-      else
-      {
-        string message = string.Format (Resources.Error_CreatingFile).Replace (@"\n", "\n");
-        MessageBox.Show (message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-        return false;
-      }
     }
   }
 }

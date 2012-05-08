@@ -41,6 +41,9 @@ namespace LicenseHeaderManager.Headers
 
     private IEnumerable<DocumentHeaderProperty> CreateProperties (ProjectItem projectItem)
     {
+      if (projectItem == null)
+        throw new ArgumentNullException ("projectItem");
+
       List<DocumentHeaderProperty> properties = new List<DocumentHeaderProperty> ()
       {
         new DocumentHeaderProperty(
@@ -89,14 +92,12 @@ namespace LicenseHeaderManager.Headers
           documentHeader => Environment.UserName),
         new DocumentHeaderProperty(
           "%Project%", 
-          documentHeader => projectItem != null && projectItem.ContainingProject != null, 
+          documentHeader => projectItem.ContainingProject != null, 
           documentHeader => projectItem.ContainingProject.Name),
         new DocumentHeaderProperty(
           "%Namespace%", 
           documentHeader => 
-            projectItem != null && 
             projectItem.FileCodeModel != null &&
-            projectItem.FileCodeModel.CodeElements != null &&
             projectItem.FileCodeModel.CodeElements.Cast<CodeElement>().Any (ce => ce.Kind == vsCMElement.vsCMElementNamespace), 
           documentHeader => projectItem.FileCodeModel.CodeElements.Cast<CodeElement>().First (ce => ce.Kind == vsCMElement.vsCMElementNamespace).Name)
       };

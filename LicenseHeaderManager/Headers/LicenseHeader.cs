@@ -16,13 +16,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using EnvDTE;
+using LicenseHeaderManager.Options;
 
 namespace LicenseHeaderManager.Headers
 {
   public static class LicenseHeader
   {
-    private const string c_keyword = "extensions:";
+    public const string c_keyword = "extensions:";
     public const string Cextension = ".licenseheader";
 
     public static string GetNewFileName (Project project)
@@ -35,33 +37,62 @@ namespace LicenseHeaderManager.Headers
       return fileName;
     }
 
-    public static IEnumerable<string> GetLicenseHeaderDefinitions (Project project)
+    public static bool ShowQuestionForAddingLicenseHeaderFile (Project activeProject, DefaultLicenseHeaderPage page)
     {
-      foreach (ProjectItem item in project.ProjectItems)
+      /*
+      var obj = GetSolutionExplorerItem ();
+      var project = obj as Project;
+      if (project == null)
       {
-        if (item.FileCount == 1)
-        {
-          string fileName = null;
-          try
-          {
-            fileName = item.FileNames[0];
-          }
-          catch (Exception) { }
-          if (fileName != null && Path.GetExtension (fileName).ToLower () == Cextension)
-            yield return fileName;
-        }
+        var item = obj as ProjectItem;
+        if (item != null)
+          project = item.ContainingProject;
+      }
+      */
+      string message = Resources.Error_NoHeaderDefinition.Replace (@"\n", "\n");
+      var messageBoxResult = MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+      if (messageBoxResult != MessageBoxResult.Yes)
+        return false;
+      return AddLicenseHeaderDefinitionFileToProject(activeProject, page);
+    }
+
+
+    /// <summary>
+    /// Adds a new License Header Definition file to the active project.
+    /// </summary>
+    private static bool AddLicenseHeaderDefinitionFileToProject (Project activeProject, DefaultLicenseHeaderPage page)
+    {
+      if (activeProject == null)
+        return false;
+
+      string tempFilePath = Path.GetTempFileName ();
+      //DefaultLicenseHeaderPage page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
+      File.WriteAllText (tempFilePath, page.LicenseHeaderFileText);
+
+      ProjectItem newProjectItem = activeProject.ProjectItems.AddFromFileCopy (tempFilePath);
+
+      File.Delete (tempFilePath);
+
+      if (newProjectItem != null)
+      {
+        var fileName = LicenseHeader.GetNewFileName (activeProject);
+        newProjectItem.Name = fileName;
+        return true;
+      }
+      else
+      {
+        string message = string.Format (Resources.Error_CreatingFile).Replace (@"\n", "\n");
+        MessageBox.Show (message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+        return false;
       }
     }
 
-    public static IDictionary<string, string[]> GetLicenseHeaders (Project project)
+    public static string AddDot (string extension)
     {
-      IDictionary<string, string[]> headers = new Dictionary<string, string[]> ();
-      
-      var definitions = GetLicenseHeaderDefinitions (project);
-      foreach (var definition in definitions)
-        AddHeaders (headers, definition);
-
-      return headers;
+      if (extension.StartsWith ("."))
+        return extension;
+      else
+        return "." + extension;
     }
 
     public static bool Validate (string header, CommentParser commentParser)
@@ -75,43 +106,6 @@ namespace LicenseHeaderManager.Headers
       {
         return false;
       }
-    }
-
-    private static void AddHeaders (IDictionary<string, string[]> headers, string definition)
-    {
-      IEnumerable<string> extensions = null;
-      IList<string> header = new List<string> ();
-      
-      foreach (var line in File.ReadAllLines (definition, Encoding.Default))
-      {
-        if (line.StartsWith (c_keyword))
-        {
-          if (extensions != null)
-          {
-            var array = header.ToArray ();
-            foreach (var extension in extensions)
-              headers[extension] = array;
-          }
-          extensions = line.Substring (c_keyword.Length).Split (new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select (AddDot);
-          header.Clear ();
-        }
-        else
-          header.Add (line);
-      }
-      if (extensions != null)
-      {
-        var array = header.ToArray ();
-        foreach (var extension in extensions)
-          headers[extension] = array;
-      }
-    }
-
-    public static string AddDot (string extension)
-    {
-      if (extension.StartsWith("."))
-        return extension;
-      else
-        return "." + extension;
     }
   }
 }
