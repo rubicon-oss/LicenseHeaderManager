@@ -93,30 +93,14 @@ namespace LicenseHeaderManager.Headers
           documentHeader => projectItem.ContainingProject.Name),
         new DocumentHeaderProperty(
           "%Namespace%", 
-          documentHeader => documentHeader.FileInfo != null, 
-          documentHeader => LookupNameSpaceInText(documentHeader.FileInfo.FullName)),
+          documentHeader => 
+            projectItem != null && 
+            projectItem.FileCodeModel != null &&
+            projectItem.FileCodeModel.CodeElements != null &&
+            projectItem.FileCodeModel.CodeElements.Cast<CodeElement>().Any (ce => ce.Kind == vsCMElement.vsCMElementNamespace), 
+          documentHeader => projectItem.FileCodeModel.CodeElements.Cast<CodeElement>().First (ce => ce.Kind == vsCMElement.vsCMElementNamespace).Name)
       };
       return properties;
-    }
-
-    private const string NamespaceKeyword = "namespace";
-    private static string LookupNameSpaceInText (string fullFileName)
-    {
-      //Searching for first occurent "namespace .." and the first following "{"
-
-      var text = File.ReadAllText(fullFileName);
-      var startingNamespaceIdx = text.IndexOf (NamespaceKeyword) + NamespaceKeyword.Length;
-
-      if (startingNamespaceIdx < 0)
-        return string.Empty;
-
-      var endingNamespaceIdx = text.IndexOf ("{", startingNamespaceIdx);
-      if (endingNamespaceIdx < 0)
-        return string.Empty;
-
-      var line = text.Substring(startingNamespaceIdx, endingNamespaceIdx - startingNamespaceIdx);
-      line = line.Trim();
-      return line;
     }
   }
 }
