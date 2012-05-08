@@ -398,10 +398,8 @@ namespace LicenseHeaderManager
 
     private void AddLicenseHeaderCallback (object sender, EventArgs e)
     {
-      OleMenuCmdEventArgs args = e as OleMenuCmdEventArgs;
-      bool calledByUser = args == null || (args.InValue is bool && (bool) args.InValue);
       var item = GetActiveProjectItem ();
-      AddLicenseHeaderToItem (item, calledByUser);
+      AddLicenseHeaderToItem (item, true);
     }
 
     private void AddLicenseHeaderToItem (ProjectItem item, bool calledByUser)
@@ -416,7 +414,7 @@ namespace LicenseHeaderManager
         else
         {
           var page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
-          if(LicenseHeader.ShowQuestionForAddingLicenseHeaderFile (item.ContainingProject, page))
+          if (calledByUser && LicenseHeader.ShowQuestionForAddingLicenseHeaderFile (item.ContainingProject, page))
             AddLicenseHeaderToItem (item, calledByUser);
         }
       }
