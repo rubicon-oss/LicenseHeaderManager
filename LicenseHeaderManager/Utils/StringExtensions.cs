@@ -9,6 +9,11 @@ namespace LicenseHeaderManager.Utils
   {
     internal static int CountOccurrence(this string inputString, string searchString)
     {
+      if (inputString == null)
+        throw new ArgumentNullException ("inputString");
+      if (string.IsNullOrEmpty(searchString))
+        throw new ArgumentNullException ("searchString");
+
       int idx = 0;
       int count = 0;
       while ((idx = inputString.IndexOf (searchString, idx)) != -1)
