@@ -21,11 +21,11 @@ namespace LicenseHeaderManager.Headers
     {
       var parentAsProject = projectOrItem as Project;
       if (parentAsProject != null)
-        return GetHeaders (parentAsProject); //We are on the top --> load project License file if it exists
+        return GetHeader (parentAsProject); //We are on the top --> load project License file if it exists
 
       var parentAsProjectItem = projectOrItem as ProjectItem;
       if (parentAsProjectItem != null)
-        return GetHeadersRecursive (parentAsProjectItem); //Lookup in the item above
+        return GetHeaderRecursive (parentAsProjectItem); //Lookup in the item above
 
       return null;
     }
@@ -35,7 +35,7 @@ namespace LicenseHeaderManager.Headers
     /// </summary>
     /// <param name="projectItem"></param>
     /// <returns>A dictionary, which contains the extensions and the corresponding lines</returns>
-    public static IDictionary<string, string[]> GetHeadersRecursive (ProjectItem projectItem)
+    public static IDictionary<string, string[]> GetHeaderRecursive (ProjectItem projectItem)
     {
       //Check for License-file within this level
       var headerFile = GetLicenseHeaderDefinitions (projectItem.ProjectItems);
@@ -50,7 +50,7 @@ namespace LicenseHeaderManager.Headers
     /// </summary>
     /// <param name="projectItem"></param>
     /// <returns>A dictionary, which contains the extensions and the corresponding lines</returns>
-    public static IDictionary<string, string[]> GetHeaders (ProjectItem projectItem)
+    public static IDictionary<string, string[]> GetHeader (ProjectItem projectItem)
     {
       //Check for License-file within this level
       var headerFile = GetLicenseHeaderDefinitions (projectItem.ProjectItems);
@@ -64,7 +64,7 @@ namespace LicenseHeaderManager.Headers
     /// </summary>
     /// <param name="project">The project which is scanned for the License header file</param>
     /// <returns>A dictionary, which contains the extensions and the corresponding lines</returns>
-    public static IDictionary<string, string[]> GetHeaders (Project project)
+    public static IDictionary<string, string[]> GetHeader (Project project)
     {
       var headerFile = GetLicenseHeaderDefinitions (project.ProjectItems);
       var definition = LoadLicenseHeaderDefinition (headerFile);

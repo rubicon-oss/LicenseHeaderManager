@@ -101,7 +101,7 @@ namespace LicenseHeaderManager
     /// Used to keep track of the user selection when he is trying to insert invalid headers into all files,
     /// so that the warning is only displayed once per file extension.
     /// </summary>
-    private IDictionary<string, bool> _extensionsWithInvalidHeaders = new Dictionary<string, bool> ();
+    private readonly IDictionary<string, bool> _extensionsWithInvalidHeaders = new Dictionary<string, bool> ();
 
     /// <summary>
     /// Initialization of the package; this method is called right after the package is sited, so this is the 
@@ -480,13 +480,13 @@ namespace LicenseHeaderManager
         IDictionary<string, string[]> headers = null;
         if (project != null)
         {
-          headers = LicenseHeaderFinder.GetHeaders (project);
+          headers = LicenseHeaderFinder.GetHeader (project);
           foreach (ProjectItem i in project.ProjectItems)
             countSubLicenseHeadersFound = RemoveOrReplaceHeaderRecursive (i, headers);
         }
         else
         {
-          headers = LicenseHeaderFinder.GetHeadersRecursive (item);
+          headers = LicenseHeaderFinder.GetHeaderRecursive (item);
           foreach (ProjectItem i in item.ProjectItems)
             countSubLicenseHeadersFound = RemoveOrReplaceHeaderRecursive (i, headers);
         }
@@ -684,7 +684,7 @@ namespace LicenseHeaderManager
       var childHeaders = headers;
       if (searchForLicenseHeaders)
       {
-        childHeaders = LicenseHeaderFinder.GetHeaders (item);
+        childHeaders = LicenseHeaderFinder.GetHeader (item);
         if(childHeaders != null)
           headersFound++;
         else
