@@ -109,7 +109,7 @@ namespace LicenseHeaderManager.Headers
                    new LineEndInformation(inputText.IndexOf (CRLF, startIndex, count), CRLF),
                  };
 
-      var nearestLineEnd = ends.Where (lineEnd => lineEnd.Index != -1).OrderBy (x => x.Index).OrderByDescending(x => x.LineEndLenght);
+      var nearestLineEnd = ends.Where (lineEnd => lineEnd.Index >= 0).OrderBy (x => x.Index).ThenByDescending(x => x.LineEndLenght);
       return nearestLineEnd.FirstOrDefault ();
     }
 
@@ -129,9 +129,10 @@ namespace LicenseHeaderManager.Headers
           {
             LineEnding = le,
             LineEndingLength = le.Length,
-            Count = le == CRLF ?
+            Count = 
+              le == CRLF ?
               inputText.CountOccurrence (le) :
-              inputText.Replace (CRLF, "").CountOccurrence (le)
+              inputText.Replace (CRLF, "").CountOccurrence (le) //To avoid that in an \r\n the \r is counted..
           });
 
       var mostFrequentLineEnding = lineEndStatistics.OrderByDescending (x => x.Count).ThenByDescending (x => x.LineEndingLength).First ();
