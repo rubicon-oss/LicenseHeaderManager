@@ -39,16 +39,6 @@ namespace LicenseHeaderManager.Headers
 
     public static bool ShowQuestionForAddingLicenseHeaderFile (Project activeProject, DefaultLicenseHeaderPage page)
     {
-      /*
-      var obj = GetSolutionExplorerItem ();
-      var project = obj as Project;
-      if (project == null)
-      {
-        var item = obj as ProjectItem;
-        if (item != null)
-          project = item.ContainingProject;
-      }
-      */
       string message = Resources.Error_NoHeaderDefinition.Replace (@"\n", "\n");
       var messageBoxResult = MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
       if (messageBoxResult != MessageBoxResult.Yes)
@@ -68,7 +58,7 @@ namespace LicenseHeaderManager.Headers
       string tempFilePath = Path.GetTempFileName ();
       //DefaultLicenseHeaderPage page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
       File.WriteAllText (tempFilePath, page.LicenseHeaderFileText);
-
+      
       ProjectItem newProjectItem = activeProject.ProjectItems.AddFromFileCopy (tempFilePath);
 
       File.Delete (tempFilePath);
