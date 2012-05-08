@@ -64,11 +64,11 @@ namespace LicenseHeaderManager.Headers
       return headers;
     }
 
-    public static bool Validate (string header, Parser parser)
+    public static bool Validate (string header, CommentParser commentParser)
     {
       try
       {
-        var result = parser.Parse (header);
+        var result = commentParser.Parse (header);
         return result == header;
       }
       catch (ParseException)

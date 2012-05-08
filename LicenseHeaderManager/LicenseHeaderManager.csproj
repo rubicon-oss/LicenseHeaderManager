@@ -122,9 +122,10 @@
     <Compile Include="Headers\DocumentHeaderProperties.cs" />
     <Compile Include="Headers\DocumentHeaderProperty.cs" />
     <Compile Include="Headers\LicenseHeader.cs" />
+    <Compile Include="Headers\LineEndInformation.cs" />
     <Compile Include="Headers\NewLineManager.cs" />
     <Compile Include="Headers\ParseException.cs" />
-    <Compile Include="Headers\Parser.cs" />
+    <Compile Include="Headers\CommentParser.cs" />
     <Compile Include="Options\WpfEditDefaultLicenseHeaderDialog.xaml.cs">
       <DependentUpon>WpfEditDefaultLicenseHeaderDialog.xaml</DependentUpon>
     </Compile>

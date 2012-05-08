@@ -18,7 +18,7 @@ using NUnit.Framework;
 namespace LicenseHeaderManager.Test
 {
   [TestFixture]
-  public class ParserTests
+  public class CommentParserTests
   {
 
     private void Test(string[] header, string[] text)
@@ -29,14 +29,14 @@ namespace LicenseHeaderManager.Test
       if (header.Length > 0 && text.Length > 0)
         headerString += Environment.NewLine;
 
-      var parser = new Parser ("//", "/*", "*/", "#region", "#endregion");
+      var parser = new CommentParser ("//", "/*", "*/", "#region", "#endregion");
       Assert.AreEqual (headerString, parser.Parse (headerString + textString));
     }
 
     private void TestError (string[] text)
     {
       string textString = string.Join (Environment.NewLine, text);
-      var parser = new Parser ("//", "/*", "*/", "#region", "#endregion");
+      var parser = new CommentParser ("//", "/*", "*/", "#region", "#endregion");
       Assert.Throws<ParseException>(() => parser.Parse (textString));
     }
 

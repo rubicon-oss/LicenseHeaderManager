@@ -27,7 +27,7 @@ namespace LicenseHeaderManager.Headers
     private readonly IEnumerable<string> _keywords;
 
     private readonly TextDocument _document;
-    private readonly Parser _parser;
+    private readonly CommentParser _commentParser;
 
     public Document (TextDocument document, Language language, string[] lines, ProjectItem projectItem, IEnumerable<string> keywords = null)
     {
@@ -37,7 +37,7 @@ namespace LicenseHeaderManager.Headers
       _keywords = keywords;
 
       _language = language;
-      _parser = new Parser (language.LineComment, language.BeginComment, language.EndComment, language.BeginRegion, language.EndRegion);
+      _commentParser = new CommentParser (language.LineComment, language.BeginComment, language.EndComment, language.BeginRegion, language.EndRegion);
     }
 
     public bool ValidateHeader ()
@@ -45,7 +45,7 @@ namespace LicenseHeaderManager.Headers
       if (_header.IsEmpty)
         return true;
       else
-        return LicenseHeader.Validate (_header.Text, _parser);
+        return LicenseHeader.Validate (_header.Text, _commentParser);
     }
 
     private string GetText (TextPoint start, TextPoint end)
@@ -60,7 +60,7 @@ namespace LicenseHeaderManager.Headers
 
     private string GetExistingHeader ()
     {
-      string header = _parser.Parse (GetText ());
+      string header = _commentParser.Parse (GetText ());
 
       if (_keywords == null || _keywords.Any (k => header.ToLower ().Contains (k.ToLower ())))
         return header;
@@ -109,7 +109,7 @@ namespace LicenseHeaderManager.Headers
     {
       if (!string.IsNullOrEmpty (header))
       {
-        var newLine = NewLineManager.DetectLineEnd (header);
+        var newLine = NewLineManager.DetectMostFrequentLineEnd (header);
         header += newLine;
 
         if (appendLineBreak)
@@ -124,13 +124,15 @@ namespace LicenseHeaderManager.Headers
               //if there's a comment right at the beginning of the file,
               //we need to add an empty line so that the comment doesn't
               //become a part of the header
-              if (!string.IsNullOrEmpty (_parser.Parse (GetText ())))
+              if (!string.IsNullOrEmpty (_commentParser.Parse (GetText ())))
                 header += newLine;
             }
           }
 
           var start = _document.CreateEditPoint (_document.StartPoint);
-          start.Insert (NewLineManager.ReplaceAllLineEnds (header, _parser.NewLine));
+
+          var lineEndingInDocument = NewLineManager.DetectMostFrequentLineEnd (GetText());
+          start.Insert (NewLineManager.ReplaceAllLineEnds (header, lineEndingInDocument));
         }
       }
     }

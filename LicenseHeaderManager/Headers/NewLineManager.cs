@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using LicenseHeaderManager.Utils;
+using System.Diagnostics;
 
 namespace LicenseHeaderManager.Headers
 {
+  /// <summary>
+  /// Detects the most common line ending (CR, LF, CR+LF) in a string and provides functionality to replace line endings.
+  /// </summary>
   public class NewLineManager
   {
     private const string CR = "\r";
@@ -28,34 +30,87 @@ namespace LicenseHeaderManager.Headers
       return inputText.Replace (CRLF, LF).Replace (CR, LF).Replace (LF, newLineEnd);
     }
 
+    public static int NextLineEndPosition(string inputText)
+    {
+      return NextLineEndPosition (inputText, 0, inputText.Length);
+    }
+
+    public static int NextLineEndPosition (string inputText, int startIndex)
+    {
+      return NextLineEndPosition (inputText, startIndex, inputText.Length - startIndex);
+    }
+
+    public static int NextLineEndPosition (string inputText, int startIndex, int count)
+    {
+      var lineEndInformations = NextLineEndPositionInformation (inputText, startIndex, count);
+      if (lineEndInformations == null)
+        return -1;
+      return lineEndInformations.Index;
+    }
+
+    /// <summary>
+    /// Return the information about the nearest line ending
+    /// </summary>
+    /// <param name="inputText"></param>
+    /// <returns>Information about the line endings</returns>
+    public static LineEndInformation NextLineEndPositionInformation (string inputText)
+    {
+      return NextLineEndPositionInformation (inputText, 0);
+    }
+
+    /// <summary>
+    /// Return the information about the nearest line ending
+    /// </summary>
+    /// <param name="inputText">The parsed input text</param>
+    /// <param name="startIndex">The offset to begin the search</param>
+    /// <returns>Information about the line endings</returns>
+    public static LineEndInformation NextLineEndPositionInformation (string inputText, int startIndex)
+    {
+      return NextLineEndPositionInformation (inputText, startIndex, inputText.Length - startIndex);
+    }
+
+    /// <summary>
+    /// Return the information about the nearest line ending
+    /// </summary>
+    /// <param name="inputText">The parsed input text</param>
+    /// <param name="startIndex">The offset to begin the search</param>
+    /// <param name="count">The amount of characters to check</param>
+    /// <returns>Information about the line endings</returns>
+    public static LineEndInformation NextLineEndPositionInformation (string inputText, int startIndex, int count)
+    {
+      var ends = new[]
+                 {
+                   new LineEndInformation(inputText.IndexOf (CR, startIndex, count), CR),
+                   new LineEndInformation(inputText.IndexOf (LF, startIndex, count), LF),
+                   new LineEndInformation(inputText.IndexOf (CRLF, startIndex, count), CRLF),
+                 };
+
+      var nearestLineEnd = ends.Where (lineEnd => lineEnd.Index != -1).OrderBy (x => x.Index).OrderByDescending(x => x.LineEndLenght);
+      return nearestLineEnd.FirstOrDefault ();
+    }
+
     /// <summary>
     /// Detects the most frequent LineEnd (CR,LF,CR+LF) in a string
     /// </summary>
     /// <param name="inputText">The input test which is parsed</param>
     /// <returns>The most frequent line end (CR,LF,CR+LF)</returns>
-    public static string DetectLineEnd(string inputText)
+    public static string DetectMostFrequentLineEnd(string inputText)
     {
       if(inputText == null)
         throw new ArgumentNullException("inputText");
 
-      var onlyNewLine = inputText.CountOccurrence (LF);
-      var onlyCarriageReturn = inputText.CountOccurrence (CR);
+      var numberOfLFs = inputText.CountOccurrence (LF);
+      var numberOfCRs = inputText.CountOccurrence (CR);
+      var numberOfCRLFs = inputText.CountOccurrence (CRLF);
 
-      if (onlyNewLine == onlyCarriageReturn) //\n and \r occur equals
+      if (numberOfCRLFs >= numberOfLFs && numberOfCRLFs >= numberOfCRs)
         return CRLF;
 
-      var fullNewLine = inputText.CountOccurrence (CRLF);
-
-      if (fullNewLine > onlyNewLine && fullNewLine > onlyCarriageReturn) //CRCL is occuring more frequently
-        return CRLF;
-
-      if (onlyNewLine > onlyCarriageReturn)
+      if (numberOfLFs > numberOfCRs)
         return LF;
 
-      if (onlyCarriageReturn > onlyNewLine)
-        return CR;
-
-      return Environment.NewLine;
+      Trace.Assert (numberOfCRs >= numberOfLFs);
+      return CR;
     }
   }
 }

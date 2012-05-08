@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using LicenseHeaderManager.Headers;
 using NUnit.Framework;
 
@@ -11,24 +8,24 @@ namespace LicenseHeaderManager.Test
   public class LineManagerTest
   {
     [Test]
-    public void CheckRandN ()
+    public void DetectLineEnd_CRLF ()
     {
       string text = "test\r\ntest";
-      Assert.AreEqual ("\r\n", NewLineManager.DetectLineEnd (text));
+      Assert.AreEqual ("\r\n", NewLineManager.DetectMostFrequentLineEnd (text));
     }
 
     [Test]
-    public void CheckOnlyN ()
+    public void DetectLineEnd_OnlyLF ()
     {
       string text = "test\ntest";
-      Assert.AreEqual ("\n", NewLineManager.DetectLineEnd (text));
+      Assert.AreEqual ("\n", NewLineManager.DetectMostFrequentLineEnd (text));
     }
 
     [Test]
-    public void CheckOnlyR ()
+    public void DetectLineEnd_OnlyCR ()
     {
       string text = "test\rtest";
-      Assert.AreEqual ("\r", NewLineManager.DetectLineEnd (text));
+      Assert.AreEqual ("\r", NewLineManager.DetectMostFrequentLineEnd (text));
     }
   }
 }

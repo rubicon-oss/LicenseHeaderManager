@@ -17,23 +17,24 @@ using System.Diagnostics.Contracts;
 
 namespace LicenseHeaderManager.Headers
 {
-  public class Parser
+  /// <summary>
+  /// Detects a comment block at the beginning of a text block and returns it (if any).
+  /// </summary>
+  public class CommentParser
   {
     private bool _started;
     private int _position;
-    private string _newEnd;
     private Stack<int> _regionStarts;
 
     private string _text;
 
-    public string NewLine { get { return _newEnd; } }
     public string LineComment { get; private set; }
     public string BeginComment { get; private set; }
     public string EndComment { get; private set; }
     public string BeginRegion { get; private set; }
     public string EndRegion { get; private set; }
 
-    public Parser (string lineComment, string beginComment, string endComment, string beginRegion, string endRegion)
+    public CommentParser (string lineComment, string beginComment, string endComment, string beginRegion, string endRegion)
     {
       Contract.Requires (string.IsNullOrWhiteSpace (beginComment) == string.IsNullOrWhiteSpace (endComment));
       Contract.Requires (string.IsNullOrWhiteSpace (beginRegion) == string.IsNullOrWhiteSpace (endRegion));
@@ -50,7 +51,6 @@ namespace LicenseHeaderManager.Headers
     {
       Contract.Requires (text != null);
 
-      _newEnd = NewLineManager.DetectLineEnd (text);
       _started = false;
       _position = 0;
       _text = text;
@@ -94,12 +94,11 @@ namespace LicenseHeaderManager.Headers
       //if the header has already started and we're not in an open region, check if there was more than one NewLine
       if (_started && _regionStarts.Count == 0)
       {
-        int firstNewLine = _text.IndexOf (_newEnd, start, _position - start);
-        if (firstNewLine >= 0)
+        var firstNewLine = NewLineManager.NextLineEndPositionInformation (_text, start, _position - start);
+        if (firstNewLine != null)
         {
-          int afterFirstNewLine = firstNewLine + _newEnd.Length;
-          int nextNewLine = _text.IndexOf (_newEnd, afterFirstNewLine, _position - afterFirstNewLine);
-          
+          int afterFirstNewLine = firstNewLine.Index + firstNewLine.LineEndLenght;
+          int nextNewLine = NewLineManager.NextLineEndPosition (_text, afterFirstNewLine, _position - afterFirstNewLine);
           //more than one NewLine (= at least one empty line)
           if (nextNewLine > 0)
             return true;
@@ -120,8 +119,7 @@ namespace LicenseHeaderManager.Headers
           _started = true;
 
         //proceed to end of line
-
-        _position = _text.IndexOf (_newEnd, _position - token.Length + LineComment.Length);
+        _position = NewLineManager.NextLineEndPosition (_text, _position - token.Length + LineComment.Length);
         if (_position < 0)
           _position = _text.Length; //end of file
           
@@ -149,7 +147,8 @@ namespace LicenseHeaderManager.Headers
 
         _regionStarts.Push(_position - BeginRegion.Length);
 
-        _position = _text.IndexOf (_newEnd, _position);
+
+        _position = NewLineManager.NextLineEndPosition (_text, _position);
         if (_position < 0)
           _position = _text.Length; //end of file
 
@@ -166,7 +165,7 @@ namespace LicenseHeaderManager.Headers
 
         _regionStarts.Pop ();
 
-        _position = _text.IndexOf (_newEnd, _position);
+        _position = NewLineManager.NextLineEndPosition (_text, _position);
         if (_position < 0)
           _position = _text.Length; //end of file
 
