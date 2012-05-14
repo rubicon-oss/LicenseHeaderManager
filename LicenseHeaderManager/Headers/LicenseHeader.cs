@@ -58,14 +58,14 @@ namespace LicenseHeaderManager.Headers
       string tempFilePath = Path.GetTempFileName ();
       //DefaultLicenseHeaderPage page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
       File.WriteAllText (tempFilePath, page.LicenseHeaderFileText);
-      
-      ProjectItem newProjectItem = activeProject.ProjectItems.AddFromFileCopy (tempFilePath);
+
+      var fileName = LicenseHeader.GetNewFileName (activeProject);
+      ProjectItem newProjectItem = activeProject.ProjectItems.AddFromTemplate (tempFilePath, fileName);
 
       File.Delete (tempFilePath);
 
       if (newProjectItem != null)
       {
-        var fileName = LicenseHeader.GetNewFileName (activeProject);
         newProjectItem.Name = fileName;
         return true;
       }

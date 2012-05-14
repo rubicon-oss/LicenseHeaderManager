@@ -674,7 +674,7 @@ namespace LicenseHeaderManager
         if (isOpen)
         {
           if (isSaved)
-            item.Save ();
+            item.Document.Save();
         }
         else
           item.Document.Close (vsSaveChanges.vsSaveChangesYes);

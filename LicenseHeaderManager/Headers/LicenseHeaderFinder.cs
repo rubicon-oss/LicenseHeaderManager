@@ -71,7 +71,7 @@ namespace LicenseHeaderManager.Headers
       return definition;
     }
 
-    #region HelperMethods
+    #region Helper Methods
     
     private static Dictionary<string, string[]> LoadLicenseHeaderDefinition (string headerFile)
     {
