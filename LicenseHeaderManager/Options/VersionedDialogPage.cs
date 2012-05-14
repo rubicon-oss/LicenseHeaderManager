@@ -33,10 +33,10 @@ namespace LicenseHeaderManager.Options
       foreach (var updateStep in GetVersionUpdateSteps())
         saveRequired |= Update (updateStep);
 
-      if (Version != LicenseHeadersPackage.CVersion)
-        saveRequired |= Update (new UpdateStep (System.Version.Parse (LicenseHeadersPackage.CVersion)));
+      if (Version != LicenseHeadersPackage.Version)
+        saveRequired |= Update (new UpdateStep (System.Version.Parse (LicenseHeadersPackage.Version)));
 
-      Trace.Assert (Version == LicenseHeadersPackage.CVersion, "Settings update to " + LicenseHeadersPackage.CVersion + " didn't work.");
+      Trace.Assert (Version == LicenseHeadersPackage.Version, "Settings update to " + LicenseHeadersPackage.Version + " didn't work.");
 
       if (saveRequired)
         SaveSettingsToStorage();

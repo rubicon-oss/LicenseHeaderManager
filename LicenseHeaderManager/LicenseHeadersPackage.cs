@@ -52,7 +52,7 @@ namespace LicenseHeaderManager
   [PackageRegistration (UseManagedResourcesOnly = true)]
   // This attribute is used to register the informations needed to show the this package
   // in the Help/About dialog of Visual Studio.
-  [InstalledProductRegistration ("#110", "#112", CVersion, IconResourceID = 400)]
+  [InstalledProductRegistration ("#110", "#112", Version, IconResourceID = 400)]
   // This attribute is needed to let the shell know that this package exposes some menus.
   [ProvideMenuResource ("Menus.ctmenu", 1)]
   [ProvideOptionPage (typeof (OptionsPage), c_licenseHeaders, c_general, 0, 0, true)]
@@ -76,7 +76,7 @@ namespace LicenseHeaderManager
     {
     }
 
-    public const string CVersion = "1.3.1";
+    public const string Version = "1.3.1";
 
     private const string c_licenseHeaders = "License Header Manager";
     private const string c_general = "General";
@@ -432,7 +432,7 @@ namespace LicenseHeaderManager
         if (calledByUser)
           item = GetSolutionExplorerItem () as ProjectItem;
 
-        if (item != null && item.Kind == Constants.vsProjectItemKindPhysicalFile && Path.GetExtension (item.Name) != LicenseHeader.Cextension)
+        if (item != null && item.Kind == Constants.vsProjectItemKindPhysicalFile && Path.GetExtension (item.Name) != LicenseHeader.Extension)
         {
           AddLicenseHeaderToItem (item, calledByUser);
         }
@@ -456,7 +456,7 @@ namespace LicenseHeaderManager
       if (args != null)
       {
         ProjectItem item = args.InValue as ProjectItem ?? GetSolutionExplorerItem () as ProjectItem;
-        if (item != null && Path.GetExtension (item.Name) != LicenseHeader.Cextension)
+        if (item != null && Path.GetExtension (item.Name) != LicenseHeader.Extension)
           _licenseReplacer.RemoveOrReplaceHeaderRecursive (item, null, false);
       }
     }
@@ -555,9 +555,9 @@ namespace LicenseHeaderManager
         FileDialog dialog = new OpenFileDialog ();
         dialog.CheckFileExists = true;
         dialog.CheckPathExists = true;
-        dialog.DefaultExt = LicenseHeader.Cextension;
+        dialog.DefaultExt = LicenseHeader.Extension;
         dialog.DereferenceLinks = true;
-        dialog.Filter = "License Header Definitions|*" + LicenseHeader.Cextension;
+        dialog.Filter = "License Header Definitions|*" + LicenseHeader.Extension;
         dialog.InitialDirectory = Path.GetDirectoryName (project.FileName);
 
         bool? result = dialog.ShowDialog ();

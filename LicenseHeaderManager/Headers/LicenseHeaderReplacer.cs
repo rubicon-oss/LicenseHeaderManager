@@ -170,7 +170,7 @@ namespace LicenseHeaderManager.Headers
         return CreateDocumentResult.NoPhyiscalFile;
 
       //don't insert license header information in license header definitions
-      if (item.Name.EndsWith (LicenseHeader.Cextension))
+      if (item.Name.EndsWith (LicenseHeader.Extension))
         return CreateDocumentResult.LicenseHeaderDocument;
 
       //try to open the document as a text document

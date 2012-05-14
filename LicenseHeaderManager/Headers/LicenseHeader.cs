@@ -24,15 +24,15 @@ namespace LicenseHeaderManager.Headers
 {
   public static class LicenseHeader
   {
-    public const string c_keyword = "extensions:";
-    public const string Cextension = ".licenseheader";
+    public const string Keyword = "extensions:";
+    public const string Extension = ".licenseheader";
 
     public static string GetNewFileName (Project project)
     {
       string directory = Path.GetDirectoryName (project.FileName);
-      string fileName = project.Name + Cextension;
+      string fileName = project.Name + Extension;
       for (int i = 2; File.Exists (Path.Combine (directory, fileName)); i++)
-        fileName = project.Name + i + Cextension;
+        fileName = project.Name + i + Extension;
 
       return fileName;
     }
