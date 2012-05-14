@@ -81,7 +81,7 @@ namespace LicenseHeaderManager.Headers
 
       if (!_header.IsEmpty)
       {
-        if (existingHeader != _header.Text)
+        if (existingHeader.TrimEnd() != _header.Text)
           ReplaceHeader (existingHeader, _header.Text);
       }
       else
@@ -157,7 +157,6 @@ namespace LicenseHeaderManager.Headers
       {
         var start = _document.CreateEditPoint (_document.StartPoint);
         var end = EndOfHeader (header, _document.StartPoint);
-
         start.Delete (end);
       }
     }
