@@ -258,6 +258,7 @@ namespace LicenseHeaderManager
       }
     }
 
+    private bool _isCalledByLinkedCommand = false;
     private object GetSolutionExplorerItem ()
     {
       IntPtr hierarchyPtr, selectionContainerPtr;
@@ -297,12 +298,16 @@ namespace LicenseHeaderManager
 
     private void BeforeLinkedCommandExecuted (string guid, int id, object customIn, object customOut, ref bool cancelDefault)
     {
+      _isCalledByLinkedCommand = true;
       _addLicenseHeaderCommand.Invoke (false);
+      _isCalledByLinkedCommand = false;
     }
 
     private void AfterLinkedCommandExecuted (string guid, int id, object customIn, object customOut)
     {
+      _isCalledByLinkedCommand = true;
       _addLicenseHeaderCommand.Invoke (false);
+      _isCalledByLinkedCommand = false;
     }
 
     private void CommandsChanged (object sender, NotifyCollectionChangedEventArgs e)
@@ -395,7 +400,7 @@ namespace LicenseHeaderManager
     private void AddLicenseHeaderCallback (object sender, EventArgs e)
     {
       var item = GetActiveProjectItem ();
-      AddLicenseHeaderToItem (item, true);
+      AddLicenseHeaderToItem (item, !_isCalledByLinkedCommand);
     }
 
     private void AddLicenseHeaderToItem (ProjectItem item, bool calledByUser)
@@ -423,13 +428,12 @@ namespace LicenseHeaderManager
       if (args != null)
       {
         var item = args.InValue as ProjectItem;
-        bool calledByUser = item == null;
-        if (calledByUser)
+        if (item == null)
           item = GetSolutionExplorerItem () as ProjectItem;
 
         if (item != null && item.Kind == Constants.vsProjectItemKindPhysicalFile && Path.GetExtension (item.Name) != LicenseHeader.Extension)
         {
-          AddLicenseHeaderToItem (item, calledByUser);
+          AddLicenseHeaderToItem (item, !_isCalledByLinkedCommand);
         }
       }
     }
