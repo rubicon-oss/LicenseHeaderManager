@@ -97,8 +97,8 @@ namespace LicenseHeaderManager
     private OleMenuCommand _addLicenseHeadersToAllFilesCommand;
     private OleMenuCommand _removeLicenseHeadersFromAllFilesCommand;
 
-    
-    private LicenseHeaderReplacer _licenseReplacer = new LicenseHeaderReplacer();
+
+    private LicenseHeaderReplacer _licenseReplacer;
     /// <summary>
     /// Initialization of the package; this method is called right after the package is sited, so this is the 
     /// place where you can put all the initilaization code that rely on services provided by VisualStudio.
@@ -106,7 +106,7 @@ namespace LicenseHeaderManager
     protected override void Initialize ()
     {
       base.Initialize ();
-
+      _licenseReplacer = new LicenseHeaderReplacer (this);
       _dte = GetService (typeof (DTE)) as DTE2;
 
       //register commands

@@ -123,6 +123,7 @@
     <Compile Include="Headers\DocumentHeaderProperty.cs" />
     <Compile Include="Headers\LicenseHeaderFinder.cs" />
     <Compile Include="Headers\LicenseHeader.cs" />
+    <Compile Include="Headers\LicenseHeaderReplacer.cs" />
     <Compile Include="Headers\LineEndInformation.cs" />
     <Compile Include="Headers\NewLineManager.cs" />
     <Compile Include="Headers\ParseException.cs" />
