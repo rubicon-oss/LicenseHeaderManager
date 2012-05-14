@@ -63,7 +63,7 @@ namespace LicenseHeaderManager
   [ProvideProfile (typeof (DefaultLicenseHeaderPage), c_licenseHeaders, c_defaultLicenseHeader, 0, 0, true)]
   [ProvideAutoLoad (VSConstants.UICONTEXT.SolutionOpening_string)]
   [Guid (GuidList.guidLicenseHeadersPkgString)]
-  public sealed class LicenseHeadersPackage : Package
+  public sealed class LicenseHeadersPackage : Package, ILicenseHeaderExtension
   {
     /// <summary>
     /// Default constructor of the package.
@@ -98,7 +98,7 @@ namespace LicenseHeaderManager
     private OleMenuCommand _removeLicenseHeadersFromAllFilesCommand;
 
 
-    private LicenseHeaderReplacer _licenseReplacer;
+    private LicenseHeaderReplacer _licenseReplacer = new LicenseHeaderReplacer();
     /// <summary>
     /// Initialization of the package; this method is called right after the package is sited, so this is the 
     /// place where you can put all the initilaization code that rely on services provided by VisualStudio.
@@ -106,7 +106,6 @@ namespace LicenseHeaderManager
     protected override void Initialize ()
     {
       base.Initialize ();
-      _licenseReplacer = new LicenseHeaderReplacer (this);
       _dte = GetService (typeof (DTE)) as DTE2;
 
       //register commands
@@ -256,11 +255,6 @@ namespace LicenseHeaderManager
       {
         return null;
       }
-    }
-
-    public DialogPage GetDialog (Type dialogPageType)
-    {
-      return GetDialogPage (dialogPageType);
     }
 
     private object GetSolutionExplorerItem ()
@@ -573,5 +567,25 @@ namespace LicenseHeaderManager
 
     #endregion
 
+
+    public void ShowLanguagesPage ()
+    {
+      ShowOptionPage (typeof (LanguagesPage));
+    }
+
+    public DefaultLicenseHeaderPage GetDefaultLicenseHeaderPage ()
+    {
+      return (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
+    }
+
+    public LanguagesPage GetLanguagesPage ()
+    {
+      return (LanguagesPage) GetDialogPage (typeof (LanguagesPage));
+    }
+
+    public OptionsPage GetOptionsPage ()
+    {
+      return (OptionsPage) GetDialogPage (typeof (OptionsPage));
+    }
   }
 }

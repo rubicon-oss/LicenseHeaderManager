@@ -19,14 +19,7 @@ namespace LicenseHeaderManager.Headers
     /// so that the warning is only displayed once per file extension.
     /// </summary>
     private readonly IDictionary<string, bool> _extensionsWithInvalidHeaders = new Dictionary<string, bool> ();
-    private readonly LicenseHeadersPackage _vsPackage;
-
-    public LicenseHeaderReplacer (LicenseHeadersPackage vsPackage)
-    {
-      _vsPackage = vsPackage;
-    }
-
-
+    
     public void ResetExtensionsWithInvalidHeaders()
     {
       _extensionsWithInvalidHeaders.Clear();
@@ -38,7 +31,7 @@ namespace LicenseHeaderManager.Headers
     /// <param name="item">The project item.</param>
     /// <param name="headers">A dictionary of headers using the file extension as key and the header as value or null if headers should only be removed.</param>
     /// <param name="calledbyUser">Specifies whether the command was called by the user (as opposed to automatically by a linked command or by ItemAdded)</param>
-    public void RemoveOrReplaceHeader (ProjectItem item, IDictionary<string, string[]> headers, bool calledbyUser = true)
+    public void RemoveOrReplaceHeader (ILicenseHeaderExtension licenseHeaderExtension, ProjectItem item, IDictionary<string, string[]> headers, bool calledbyUser = true)
     {
       try
       {
@@ -70,12 +63,12 @@ namespace LicenseHeaderManager.Headers
             message = string.Format (Resources.Error_LanguageNotFound, Path.GetExtension (item.Name)).Replace (@"\n", "\n");
             if (calledbyUser && MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No)
                 == MessageBoxResult.Yes)
-              _vsPackage.ShowOptionPage (typeof (LanguagesPage));
+              licenseHeaderExtension.ShowLanguagesPage();
             break;
           case CreateDocumentResult.NoHeaderFound:
             if (calledbyUser)
             {
-              var page = (DefaultLicenseHeaderPage) _vsPackage.GetDialog (typeof (DefaultLicenseHeaderPage));
+              var page = licenseHeaderExtension.GetDefaultLicenseHeaderPage();
               LicenseHeader.ShowQuestionForAddingLicenseHeaderFile (item.ContainingProject, page);
             }
             break;
@@ -162,7 +155,7 @@ namespace LicenseHeaderManager.Headers
     /// <param name="document">The document which was created or null if an error occured (see return value).</param>
     /// <param name="headers">A dictionary of headers using the file extension as key and the header as value or null if headers should only be removed.</param>
     /// <returns>A value indicating the result of the operation. Document will be null unless DocumentCreated is returned.</returns>
-    public CreateDocumentResult TryCreateDocument (ProjectItem item, out Document document, IDictionary<string, string[]> headers = null)
+    public CreateDocumentResult TryCreateDocument (ILicenseHeaderExtension licenseHeaderExtension ,ProjectItem item, out Document document, IDictionary<string, string[]> headers = null)
     {
       document = null;
 
@@ -189,7 +182,7 @@ namespace LicenseHeaderManager.Headers
         return CreateDocumentResult.NoTextDocument;
 
       //try to find a comment definitions for the language of the document
-      var languagePage = (LanguagesPage) _vsPackage.GetDialog (typeof (LanguagesPage));
+      var languagePage = licenseHeaderExtension.GetLanaugagesPage();
       var extensions = from l in languagePage.Languages
                        from e in l.Extensions
                        where item.Name.ToLower ().EndsWith (e)
@@ -224,7 +217,7 @@ namespace LicenseHeaderManager.Headers
         language = extensions.First ().Language;
 
       //get the required keywords from the options page
-      var optionsPage = (OptionsPage) _vsPackage.GetDialog (typeof (OptionsPage));
+      var optionsPage = licenseHeaderExtension.GetOptionsPage();
 
       document = new Document (
           textDocument,
