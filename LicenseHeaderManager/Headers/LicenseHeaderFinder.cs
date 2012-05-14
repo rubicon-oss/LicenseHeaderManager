@@ -73,22 +73,22 @@ namespace LicenseHeaderManager.Headers
 
     #region Helper Methods
     
-    private static Dictionary<string, string[]> LoadLicenseHeaderDefinition (string headerFile)
+    private static Dictionary<string, string[]> LoadLicenseHeaderDefinition (string headerFilePath)
     {
-      if (string.IsNullOrEmpty (headerFile))
+      if (string.IsNullOrEmpty (headerFilePath))
         return null;
       var headers = new Dictionary<string, string[]> ();
-      AddHeaders (headers, headerFile);
+      AddHeaders (headers, headerFilePath);
       return headers;
     }
 
-    private static void AddHeaders (IDictionary<string, string[]> headers, string definition)
+    private static void AddHeaders (IDictionary<string, string[]> headers, string headerFilePath)
     {
       IEnumerable<string> extensions = null;
       IList<string> header = new List<string> ();
-      foreach (var line in File.ReadAllLines (definition, Encoding.Default))
+      foreach (var line in File.ReadAllLines (headerFilePath))
       {
-        if (line.StartsWith (LicenseHeader.c_keyword))
+        if (line.StartsWith (LicenseHeader.Keyword))
         {
           if (extensions != null)
           {
@@ -96,7 +96,7 @@ namespace LicenseHeaderManager.Headers
             foreach (var extension in extensions)
               headers[extension] = array;
           }
-          extensions = line.Substring (LicenseHeader.c_keyword.Length).Split (new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select (LicenseHeader.AddDot);
+          extensions = line.Substring (LicenseHeader.Keyword.Length).Split (new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select (LicenseHeader.AddDot);
           header.Clear ();
         }
         else
@@ -128,7 +128,7 @@ namespace LicenseHeaderManager.Headers
           {
           }
 
-          if (fileName != null && Path.GetExtension (fileName).ToLower () == LicenseHeader.Cextension)
+          if (fileName != null && Path.GetExtension (fileName).ToLower () == LicenseHeader.Extension)
             return fileName;
         }
       }
