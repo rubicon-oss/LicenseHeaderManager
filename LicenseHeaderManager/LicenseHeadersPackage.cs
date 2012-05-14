@@ -298,12 +298,15 @@ namespace LicenseHeaderManager
 
     private void BeforeLinkedCommandExecuted (string guid, int id, object customIn, object customOut, ref bool cancelDefault)
     {
-      _isCalledByLinkedCommand = true;
-      _addLicenseHeaderCommand.Invoke (false);
-      _isCalledByLinkedCommand = false;
+      InvokeAddLicenseHeaderCommandFromLinkedCmd ();
     }
 
     private void AfterLinkedCommandExecuted (string guid, int id, object customIn, object customOut)
+    {
+      InvokeAddLicenseHeaderCommandFromLinkedCmd();
+    }
+
+    private void InvokeAddLicenseHeaderCommandFromLinkedCmd()
     {
       _isCalledByLinkedCommand = true;
       _addLicenseHeaderCommand.Invoke (false);
