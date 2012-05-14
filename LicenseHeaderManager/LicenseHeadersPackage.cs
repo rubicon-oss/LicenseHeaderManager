@@ -97,12 +97,8 @@ namespace LicenseHeaderManager
     private OleMenuCommand _addLicenseHeadersToAllFilesCommand;
     private OleMenuCommand _removeLicenseHeadersFromAllFilesCommand;
 
-    /// <summary>
-    /// Used to keep track of the user selection when he is trying to insert invalid headers into all files,
-    /// so that the warning is only displayed once per file extension.
-    /// </summary>
-    private readonly IDictionary<string, bool> _extensionsWithInvalidHeaders = new Dictionary<string, bool> ();
-
+    
+    private LicenseHeaderReplacer _licenseReplacer = new LicenseHeaderReplacer();
     /// <summary>
     /// Initialization of the package; this method is called right after the package is sited, so this is the 
     /// place where you can put all the initilaization code that rely on services provided by VisualStudio.
@@ -190,7 +186,7 @@ namespace LicenseHeaderManager
         if (item.Kind == Constants.vsProjectItemKindPhysicalFile)
         {
           Document document;
-          visible = TryCreateDocument (item, out document) == CreateDocumentResult.DocumentCreated;
+          visible = _licenseReplacer.TryCreateDocument (item, out document) == CreateDocumentResult.DocumentCreated;
         }
         else
           visible = true;
@@ -212,7 +208,7 @@ namespace LicenseHeaderManager
       if (item != null && item.Kind == Constants.vsProjectItemKindPhysicalFile)
       {
         Document document;
-        visible = TryCreateDocument (item, out document) == CreateDocumentResult.DocumentCreated;
+        visible = _licenseReplacer.TryCreateDocument (item, out document) == CreateDocumentResult.DocumentCreated;
       }
 
       _addLicenseHeaderToProjectItemCommand.Visible = visible;
@@ -233,7 +229,7 @@ namespace LicenseHeaderManager
         if (item.Kind == Constants.vsProjectItemKindPhysicalFile)
         {
           Document document;
-          visible = TryCreateDocument (item, out document) == CreateDocumentResult.DocumentCreated;
+          visible = _licenseReplacer.TryCreateDocument (item, out document) == CreateDocumentResult.DocumentCreated;
         }
       }
       else
@@ -260,6 +256,11 @@ namespace LicenseHeaderManager
       {
         return null;
       }
+    }
+
+    public DialogPage GetDialog (Type dialogPageType)
+    {
+      return GetDialogPage (dialogPageType);
     }
 
     private object GetSolutionExplorerItem ()
@@ -409,13 +410,13 @@ namespace LicenseHeaderManager
         var headers = LicenseHeaderFinder.GetHeaderRecursive (item);
         if (headers != null)
         {
-          RemoveOrReplaceHeader (item, headers, calledByUser);
+          _licenseReplacer.RemoveOrReplaceHeader (item, headers, calledByUser);
         }
         else
         {
           var page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
           if (calledByUser && LicenseHeader.ShowQuestionForAddingLicenseHeaderFile (item.ContainingProject, page))
-            AddLicenseHeaderToItem (item, calledByUser);
+            AddLicenseHeaderToItem (item, true);
         }
       }
     }
@@ -445,7 +446,7 @@ namespace LicenseHeaderManager
       if (item != null)
       {
         IDictionary<string, string[]> headers = null;
-        RemoveOrReplaceHeader (item, headers, true);
+        _licenseReplacer.RemoveOrReplaceHeader (item, headers, true);
       }
     }
 
@@ -456,7 +457,7 @@ namespace LicenseHeaderManager
       {
         ProjectItem item = args.InValue as ProjectItem ?? GetSolutionExplorerItem () as ProjectItem;
         if (item != null && Path.GetExtension (item.Name) != LicenseHeader.Cextension)
-          RemoveOrReplaceHeaderRecursive (item, null, false);
+          _licenseReplacer.RemoveOrReplaceHeaderRecursive (item, null, false);
       }
     }
 
@@ -476,19 +477,19 @@ namespace LicenseHeaderManager
         var statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
         statusBar.SetText (Resources.UpdatingFiles);
 
-        _extensionsWithInvalidHeaders.Clear ();
+        _licenseReplacer.ResetExtensionsWithInvalidHeaders ();
         IDictionary<string, string[]> headers = null;
         if (project != null)
         {
           headers = LicenseHeaderFinder.GetHeader (project);
           foreach (ProjectItem i in project.ProjectItems)
-            countSubLicenseHeadersFound = RemoveOrReplaceHeaderRecursive (i, headers);
+            countSubLicenseHeadersFound = _licenseReplacer.RemoveOrReplaceHeaderRecursive (i, headers);
         }
         else
         {
           headers = LicenseHeaderFinder.GetHeaderRecursive (item);
           foreach (ProjectItem i in item.ProjectItems)
-            countSubLicenseHeadersFound = RemoveOrReplaceHeaderRecursive (i, headers);
+            countSubLicenseHeadersFound = _licenseReplacer.RemoveOrReplaceHeaderRecursive (i, headers);
         }
 
         statusBar.SetText (String.Empty);
@@ -513,17 +514,17 @@ namespace LicenseHeaderManager
       {
         IVsStatusbar statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
         statusBar.SetText (Resources.UpdatingFiles);
-
-        _extensionsWithInvalidHeaders.Clear ();
+        
+        _licenseReplacer.ResetExtensionsWithInvalidHeaders ();
         if (project != null)
         {
           foreach (ProjectItem i in project.ProjectItems)
-            RemoveOrReplaceHeaderRecursive (i, null, false);
+            _licenseReplacer.RemoveOrReplaceHeaderRecursive (i, null, false);
         }
         else
         {
           foreach (ProjectItem i in item.ProjectItems)
-            RemoveOrReplaceHeaderRecursive (i, null, false);
+            _licenseReplacer.RemoveOrReplaceHeaderRecursive (i, null, false);
         }
 
         statusBar.SetText (String.Empty);
@@ -572,211 +573,5 @@ namespace LicenseHeaderManager
 
     #endregion
 
-
-    /// <summary>
-    /// Removes or replaces the header of a given project item.
-    /// </summary>
-    /// <param name="item">The project item.</param>
-    /// <param name="headers">A dictionary of headers using the file extension as key and the header as value or null if headers should only be removed.</param>
-    /// <param name="calledbyUser">Specifies whether the command was called by the user (as opposed to automatically by a linked command or by ItemAdded)</param>
-    private void RemoveOrReplaceHeader (ProjectItem item, IDictionary<string, string[]> headers, bool calledbyUser = true)
-    {
-      try
-      {
-        Document document;
-        CreateDocumentResult result = TryCreateDocument (item, out document, headers);
-        string message;
-
-        switch (result)
-        {
-          case CreateDocumentResult.DocumentCreated:
-            if (!document.ValidateHeader ())
-            {
-              message = string.Format (Resources.Warning_InvalidLicenseHeader, Path.GetExtension (item.Name)).Replace (@"\n", "\n");
-              if (MessageBox.Show (message, Resources.Warning, MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No)
-                  == MessageBoxResult.No)
-                break;
-            }
-            try
-            {
-              document.ReplaceHeaderIfNecessary ();
-            }
-            catch (ParseException)
-            {
-              message = string.Format (Resources.Error_InvalidLicenseHeader, item.Name).Replace (@"\n", "\n");
-              MessageBox.Show (message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            break;
-          case CreateDocumentResult.LanguageNotFound:
-            message = string.Format (Resources.Error_LanguageNotFound, Path.GetExtension (item.Name)).Replace (@"\n", "\n");
-            if (calledbyUser && MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No)
-                == MessageBoxResult.Yes)
-              ShowOptionPage (typeof (LanguagesPage));
-            break;
-          case CreateDocumentResult.NoHeaderFound:
-            if (calledbyUser)
-            {
-              var page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
-              LicenseHeader.ShowQuestionForAddingLicenseHeaderFile (item.ContainingProject, page);
-            }
-            break;
-        }
-      }
-      catch (ArgumentException ex)
-      {
-        MessageBox.Show (ex.Message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
-      }
-    }
-
-    /// <summary>
-    /// Removes or replaces the header of a given project item and all of its child items.
-    /// </summary>
-    /// <param name="item">The project item.</param>
-    /// <param name="headers">A dictionary of headers using the file extension as key and the header as value or null if headers should only be removed.</param>
-    /// <param name="searchForLicenseHeaders"></param>
-    private int RemoveOrReplaceHeaderRecursive (ProjectItem item, IDictionary<string, string[]> headers, bool searchForLicenseHeaders = true)
-    {
-      int headersFound = 0;
-      bool isOpen = item.IsOpen[Constants.vsViewKindAny];
-      bool isSaved = item.Saved;
-
-      Document document;
-      if (TryCreateDocument (item, out document, headers) == CreateDocumentResult.DocumentCreated)
-      {
-        string message;
-        bool replace = true;
-
-        if (!document.ValidateHeader ())
-        {
-          string extension = Path.GetExtension (item.Name);
-          if (!_extensionsWithInvalidHeaders.TryGetValue (extension, out replace))
-          {
-            message = string.Format (Resources.Warning_InvalidLicenseHeader, extension).Replace (@"\n", "\n");
-            replace = MessageBox.Show (message, Resources.Warning, MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No)
-                      == MessageBoxResult.Yes;
-            _extensionsWithInvalidHeaders[extension] = replace;
-          }
-        }
-
-        if (replace)
-        {
-          try
-          {
-            document.ReplaceHeaderIfNecessary ();
-          }
-          catch (ParseException)
-          {
-            message = string.Format (Resources.Error_InvalidLicenseHeader, item.Name).Replace (@"\n", "\n");
-            MessageBox.Show (message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-          }
-        }
-
-        if (isOpen)
-        {
-          if (isSaved)
-            item.Document.Save();
-        }
-        else
-          item.Document.Close (vsSaveChanges.vsSaveChangesYes);
-      }
-
-      
-      var childHeaders = headers;
-      if (searchForLicenseHeaders)
-      {
-        childHeaders = LicenseHeaderFinder.GetHeader (item);
-        if(childHeaders != null)
-          headersFound++;
-        else
-          childHeaders = headers;
-      }
-
-      foreach (ProjectItem child in item.ProjectItems)
-        headersFound += RemoveOrReplaceHeaderRecursive (child, childHeaders, searchForLicenseHeaders);
-      return headersFound;
-    }
-
-    /// <summary>
-    /// Tries to open a given project item as a Document which can be used to add or remove headers.
-    /// </summary>
-    /// <param name="item">The project item.</param>
-    /// <param name="document">The document which was created or null if an error occured (see return value).</param>
-    /// <param name="headers">A dictionary of headers using the file extension as key and the header as value or null if headers should only be removed.</param>
-    /// <returns>A value indicating the result of the operation. Document will be null unless DocumentCreated is returned.</returns>
-    private CreateDocumentResult TryCreateDocument (ProjectItem item, out Document document, IDictionary<string, string[]> headers = null)
-    {
-      document = null;
-
-      if (item.Kind != Constants.vsProjectItemKindPhysicalFile)
-        return CreateDocumentResult.NoPhyiscalFile;
-
-      //don't insert license header information in license header definitions
-      if (item.Name.EndsWith (LicenseHeader.Cextension))
-        return CreateDocumentResult.LicenseHeaderDocument;
-
-      //try to open the document as a text document
-      try
-      {
-        if (!item.IsOpen["{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}"])
-          item.Open (Constants.vsViewKindTextView);
-      }
-      catch (COMException)
-      {
-        return CreateDocumentResult.NoTextDocument;
-      }
-
-      var textDocument = item.Document.Object ("TextDocument") as TextDocument;
-      if (textDocument == null)
-        return CreateDocumentResult.NoTextDocument;
-
-      //try to find a comment definitions for the language of the document
-      var languagePage = (LanguagesPage) GetDialogPage (typeof (LanguagesPage));
-      var extensions = from l in languagePage.Languages
-                       from e in l.Extensions
-                       where item.Name.ToLower ().EndsWith (e)
-                       orderby e.Length descending
-                       // ".designer.cs" has a higher priority then ".cs" for example
-                       select new { Extension = e, Language = l };
-
-      if (!extensions.Any ())
-        return CreateDocumentResult.LanguageNotFound;
-
-      Language language = null;
-
-      string[] header = null;
-
-      //if headers is null, we only want to remove the existing headers and thus don't need to find the right header
-      if (headers != null)
-      {
-        //try to find a header for each of the languages (if there's no header for ".designer.cs", use the one for ".cs" files)
-        foreach (var extension in extensions)
-        {
-          if (headers.TryGetValue (extension.Extension, out header))
-          {
-            language = extension.Language;
-            break;
-          }
-        }
-
-        if (header == null)
-          return CreateDocumentResult.NoHeaderFound;
-      }
-      else
-        language = extensions.First ().Language;
-
-      //get the required keywords from the options page
-      var optionsPage = (OptionsPage) GetDialogPage (typeof (OptionsPage));
-
-      document = new Document (
-          textDocument,
-          language,
-          header,
-          item,
-          optionsPage.UseRequiredKeywords
-              ? optionsPage.RequiredKeywords.Split (new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select (k => k.Trim ())
-              : null);
-
-      return CreateDocumentResult.DocumentCreated;
-    }
   }
 }
