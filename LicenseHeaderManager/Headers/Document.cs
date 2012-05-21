@@ -34,13 +34,27 @@ namespace LicenseHeaderManager.Headers
     {
       _document = document;
 
-      _header = new DocumentHeader (document, lines, new DocumentHeaderProperties (projectItem));
+      _lineEndingInDocument = NewLineManager.DetectMostFrequentLineEnd (GetText ());
+
+
+      string inputText = CreateInputText(lines);
+      _header = new DocumentHeader (document, inputText, new DocumentHeaderProperties (projectItem));
       _keywords = keywords;
 
       _language = language;
       
-      _lineEndingInDocument = NewLineManager.DetectMostFrequentLineEnd (GetText ());
       _commentParser = new CommentParser (language.LineComment, language.BeginComment, language.EndComment, language.BeginRegion, language.EndRegion);
+    }
+
+    private string CreateInputText (string[] lines)
+    {
+      if (lines == null)
+        return null;
+
+      var inputText = string.Join (_lineEndingInDocument, lines);
+      if (!inputText.EndsWith (_lineEndingInDocument))
+        inputText += _lineEndingInDocument;
+      return inputText;
     }
 
     public bool ValidateHeader ()
@@ -81,14 +95,14 @@ namespace LicenseHeaderManager.Headers
 
       if (!_header.IsEmpty)
       {
-        if (existingHeader.TrimEnd() != _header.Text)
-          ReplaceHeader (existingHeader, _header.Text);
+        if (existingHeader != _header.Text)
+          ReplaceHeader (existingHeader, PrepareHeader(_header.Text));
       }
       else
         RemoveHeader (existingHeader);
 
       if (!string.IsNullOrEmpty (skippedText))
-        AddHeader (skippedText, true);
+        AddHeader (PrepareHeader(skippedText));
     }
 
     private string SkipText ()
@@ -108,34 +122,35 @@ namespace LicenseHeaderManager.Headers
       AddHeader (newHeader);
     }
 
-    private void AddHeader (string header, bool appendLineBreak = true, bool withEmptyLineIfNecessary = true)
+    private void AddHeader (string header)
     {
       if (!string.IsNullOrEmpty (header))
       {
-        var newLine = NewLineManager.DetectMostFrequentLineEnd (header);
-        header += newLine;
-
-        if (appendLineBreak)
-        {
-
-          if (withEmptyLineIfNecessary)
-          {
-            //if the header ends with an empty line, there's no need to insert one
-            int lastNewLine = header.LastIndexOf (newLine, header.Length - newLine.Length);
-            if (lastNewLine < 0 || !string.IsNullOrWhiteSpace (header.Substring (lastNewLine, header.Length - lastNewLine)))
-            {
-              //if there's a comment right at the beginning of the file,
-              //we need to add an empty line so that the comment doesn't
-              //become a part of the header
-              if (!string.IsNullOrEmpty (_commentParser.Parse (GetText ())))
-                header += newLine;
-            }
-          }
-
-          var start = _document.CreateEditPoint (_document.StartPoint);
-          start.Insert (NewLineManager.ReplaceAllLineEnds (header, _lineEndingInDocument));
-        }
+        var start = _document.CreateEditPoint (_document.StartPoint);
+        start.Insert (header);
       }
+    }
+
+    private string PrepareHeader(string header)
+    {
+      var headerWithNewLine = header;
+      var newLine = NewLineManager.DetectMostFrequentLineEnd (headerWithNewLine);
+      //if the header ends with an empty line, there's no need to insert one
+      if (!headerWithNewLine.EndsWith (newLine))
+        headerWithNewLine += newLine;
+
+      headerWithNewLine = NewLineManager.ReplaceAllLineEnds (headerWithNewLine, _lineEndingInDocument);
+      int lastNewLine = headerWithNewLine.LastIndexOf (newLine, header.Length - newLine.Length);
+      if (lastNewLine < 0 || !string.IsNullOrWhiteSpace (header.Substring (lastNewLine, header.Length - lastNewLine)))
+      {
+        //if there's a comment right at the beginning of the file,
+        //we need to add an empty line so that the comment doesn't
+        //become a part of the header
+        if (!string.IsNullOrEmpty (_commentParser.Parse (GetText())))
+          headerWithNewLine += newLine;
+      }
+
+      return headerWithNewLine;
     }
 
     private EditPoint EndOfHeader (string header, TextPoint start = null)
