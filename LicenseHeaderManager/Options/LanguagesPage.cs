@@ -71,7 +71,7 @@ namespace LicenseHeaderManager.Options
       yield return new UpdateStep (new Version (1, 1, 4), AddDefaultSkipExpressions_1_1_4);
       yield return new UpdateStep (new Version (1, 2, 1), AddDefaultRegionSettings_1_2_1);
       yield return new UpdateStep (new Version (1, 2, 2), AdjustDefaultXmlSkipExpression_1_2_2);
-      yield return new UpdateStep( new Version (1, 3, 1), AddXmlXsd_1_3_1);
+      yield return new UpdateStep( new Version (1, 3, 2), AddXmlXsd_1_3_2);
     }
 
     private void AddDefaultSkipExpressions_1_1_4 ()
@@ -144,7 +144,7 @@ namespace LicenseHeaderManager.Options
         MessageBox.Show (Resources.Update_SkipExpressions_1_2_2.Replace (@"\n", "\n"), "Update");
     }
 
-    private void AddXmlXsd_1_3_1 ()
+    private void AddXmlXsd_1_3_2 ()
     {
       //Add a default rule for config/xsd
       if (AddExtensionToExistingExtension ("xml", ".config") || AddExtensionToExistingExtension ("xml", ".xsd"))
@@ -156,7 +156,7 @@ namespace LicenseHeaderManager.Options
       if (Languages.Any (x => x.Extensions.Contains (newExtension)))
         return false;
 
-      UpdateLanguages (new[] { existingExtension }, l => { l.Extensions = l.Extensions.Concat (new[] { newExtension }); });
+      UpdateLanguages (new[] { existingExtension }, l => { l.Extensions = l.Extensions.Concat (new[] { newExtension }).ToList(); });
       return true;
     }
 

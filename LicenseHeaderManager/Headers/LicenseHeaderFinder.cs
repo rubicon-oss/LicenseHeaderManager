@@ -114,6 +114,8 @@ namespace LicenseHeaderManager.Headers
 
     private static string GetLicenseHeaderDefinitions (ProjectItems projectItems)
     {
+      if (projectItems == null)
+        return null;
       foreach (ProjectItem item in projectItems)
       {
         if (item.FileCount == 1)
