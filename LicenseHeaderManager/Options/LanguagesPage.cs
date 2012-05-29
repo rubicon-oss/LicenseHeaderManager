@@ -147,7 +147,12 @@ namespace LicenseHeaderManager.Options
     private void AddXmlXsd_1_3_2 ()
     {
       //Add a default rule for config/xsd
-      if (AddExtensionToExistingExtension ("xml", ".config") || AddExtensionToExistingExtension ("xml", ".xsd"))
+      bool added = false;
+
+      added |= AddExtensionToExistingExtension (".xml", ".config");
+      added |= AddExtensionToExistingExtension (".xml", ".xsd");
+
+      if (added)
         MessageBox.Show (Resources.Update_1_3_1.Replace (@"\n", "\n"), "Update");
     }
 
@@ -156,7 +161,7 @@ namespace LicenseHeaderManager.Options
       if (Languages.Any (x => x.Extensions.Contains (newExtension)))
         return false;
 
-      UpdateLanguages (new[] { existingExtension }, l => { l.Extensions = l.Extensions.Concat (new[] { newExtension }).ToList(); });
+      UpdateLanguages (new[] { existingExtension }, l => { l.Extensions = l.Extensions.Concat (new[] { newExtension }); });
       return true;
     }
 
