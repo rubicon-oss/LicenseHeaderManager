@@ -26,7 +26,6 @@ namespace LicenseHeaderManager.Headers
     private readonly string _text;
     private readonly FileInfo _fileInfo;
     private readonly IEnumerable<DocumentHeaderProperty> _properties;
-    private readonly string _newLine;
 
     public DocumentHeader(TextDocument document, string text, IEnumerable<DocumentHeaderProperty> properties)
     {
@@ -58,19 +57,13 @@ namespace LicenseHeaderManager.Headers
         return null;
       }
 
-      string finalText = CreateFinalText (inputText);
-      return finalText;
-    }
-
-    private string CreateFinalText(string rawText)
-    {
-      string finalText = rawText;
+      string finalText = inputText;
 
       foreach (DocumentHeaderProperty property in _properties)
       {
-        if (property.CanCreateValue(this))
+        if (property.CanCreateValue (this))
         {
-          finalText = finalText.Replace(property.Token, property.CreateValue(this));
+          finalText = finalText.Replace (property.Token, property.CreateValue (this));
         }
       }
 
