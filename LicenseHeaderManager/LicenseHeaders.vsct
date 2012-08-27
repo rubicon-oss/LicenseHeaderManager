@@ -78,6 +78,18 @@
       <Group guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup" priority="0x0100">
         <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenu"/>
       </Group>
+
+      <Group guid="guidLicenseHeadersCmdSet" id="FolderMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_WEBFOLDER"/>
+      </Group>
+
+      <Group guid="guidLicenseHeadersCmdSet" id="ProjectItemMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_WEBITEMNODE"/>
+      </Group>
+
+      <Group guid="guidLicenseHeadersCmdSet" id="ProjectMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_WEBPROJECT"/>
+      </Group>
       
     </Groups>
 

@@ -388,7 +388,11 @@ namespace LicenseHeaderManager
       //Now we can finally insert the header into the new item.
       if (_addedItem != null)
       {
-        PostExecCommand (GuidList.guidLicenseHeadersCmdSet, PkgCmdIDList.cmdIdAddLicenseHeaderToProjectItem, _addedItem);
+        var headers = LicenseHeaderFinder.GetHeaderRecursive (_addedItem);
+        if (headers != null)
+        {
+          _licenseReplacer.RemoveOrReplaceHeader (_addedItem, headers, false);
+        }
         _addedItem = null;
       }
       _currentCommandEvents.AfterExecute -= FinishedAddingItem;
@@ -546,7 +550,7 @@ namespace LicenseHeaderManager
       }
 
       if(project != null)
-        LicenseHeader.ShowQuestionForAddingLicenseHeaderFile(project, page);
+        LicenseHeader.AddLicenseHeaderDefinitionFileToProject (project, page);
     }
 
     private void AddExistingLicenseHeaderDefinitionFileCallback (object sender, EventArgs e)

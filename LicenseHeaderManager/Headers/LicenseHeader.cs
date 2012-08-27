@@ -29,12 +29,14 @@ namespace LicenseHeaderManager.Headers
 
     public static string GetNewFileName (Project project)
     {
-      string directory = Path.GetDirectoryName (project.FileName);
-      string fileName = project.Name + Extension;
-      for (int i = 2; File.Exists (Path.Combine (directory, fileName)); i++)
-        fileName = project.Name + i + Extension;
+      var directory = Path.GetDirectoryName (project.FileName);
+      var projectName = directory.Substring (directory.LastIndexOf ('\\') + 1);
+      var filename = Path.Combine (directory, projectName) + Extension;
 
-      return fileName;
+      for (var i = 2; File.Exists(filename); i++)
+        filename = Path.Combine (directory, projectName) + i + Extension;
+
+      return filename;
     }
 
     public static bool ShowQuestionForAddingLicenseHeaderFile (Project activeProject, DefaultLicenseHeaderPage page)
@@ -50,23 +52,17 @@ namespace LicenseHeaderManager.Headers
     /// <summary>
     /// Adds a new License Header Definition file to the active project.
     /// </summary>
-    private static bool AddLicenseHeaderDefinitionFileToProject (Project activeProject, DefaultLicenseHeaderPage page)
+    public static bool AddLicenseHeaderDefinitionFileToProject (Project activeProject, DefaultLicenseHeaderPage page)
     {
       if (activeProject == null)
         return false;
 
-      string tempFilePath = Path.GetTempFileName ();
-      //DefaultLicenseHeaderPage page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
-      File.WriteAllText (tempFilePath, page.LicenseHeaderFileText);
-
-      var fileName = LicenseHeader.GetNewFileName (activeProject);
-      ProjectItem newProjectItem = activeProject.ProjectItems.AddFromTemplate (tempFilePath, fileName);
-
-      File.Delete (tempFilePath);
+      var fileName = GetNewFileName (activeProject);
+      File.WriteAllText (fileName, page.LicenseHeaderFileText);
+      var newProjectItem = activeProject.ProjectItems.AddFromFile (fileName);
 
       if (newProjectItem != null)
       {
-        newProjectItem.Name = fileName;
         return true;
       }
       else

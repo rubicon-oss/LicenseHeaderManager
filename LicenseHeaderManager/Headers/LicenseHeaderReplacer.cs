@@ -1,4 +1,17 @@
-﻿using System;
+﻿#region copyright
+// Copyright (c) 2011 rubicon IT GmbH
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
+// to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+// and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+// FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+// WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+#endregion
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -96,11 +109,13 @@ namespace LicenseHeaderManager.Headers
     {
       int headersFound = 0;
       bool isOpen = item.IsOpen[Constants.vsViewKindAny];
-      bool isSaved = item.Saved;
 
       Document document;
       if (TryCreateDocument (item, out document, headers) == CreateDocumentResult.DocumentCreated)
       {
+        // item.Saved is not implemented for web_folders, therefore this check must be after the TryCreateDocument
+        bool isSaved = item.Saved;
+
         string message;
         bool replace = true;
 
@@ -137,20 +152,22 @@ namespace LicenseHeaderManager.Headers
         else
           item.Document.Close (vsSaveChanges.vsSaveChangesYes);
       }
-
-
-      var childHeaders = headers;
-      if (searchForLicenseHeaders)
+      
+      if (item.ProjectItems != null)
       {
-        childHeaders = LicenseHeaderFinder.GetHeader (item);
-        if (childHeaders != null)
-          headersFound++;
-        else
-          childHeaders = headers;
-      }
+        var childHeaders = headers;
+        if (searchForLicenseHeaders)
+        {
+          childHeaders = LicenseHeaderFinder.GetHeader (item.ProjectItems);
+          if (childHeaders != null)
+            headersFound++;
+          else
+            childHeaders = headers;
+        }
 
-      foreach (ProjectItem child in item.ProjectItems)
-        headersFound += RemoveOrReplaceHeaderRecursive (child, childHeaders, searchForLicenseHeaders);
+        foreach (ProjectItem child in item.ProjectItems)
+          headersFound += RemoveOrReplaceHeaderRecursive (child, childHeaders, searchForLicenseHeaders);
+      }
       return headersFound;
     }
 
@@ -175,7 +192,7 @@ namespace LicenseHeaderManager.Headers
       //try to open the document as a text document
       try
       {
-        if (!item.IsOpen["{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}"])
+        if (!item.IsOpen[Constants.vsViewKindTextView])
           item.Open (Constants.vsViewKindTextView);
       }
       catch (COMException)
@@ -183,7 +200,11 @@ namespace LicenseHeaderManager.Headers
         return CreateDocumentResult.NoTextDocument;
       }
 
-      var textDocument = item.Document.Object ("TextDocument") as TextDocument;
+      var itemDocument = item.Document;
+      if (itemDocument == null)
+        return CreateDocumentResult.NoPhyiscalFile;
+
+      var textDocument = itemDocument.Object ("TextDocument") as TextDocument;
       if (textDocument == null)
         return CreateDocumentResult.NoTextDocument;
 

@@ -46,14 +46,14 @@ namespace LicenseHeaderManager.Headers
     }
 
     /// <summary>
-    /// Lookup the license header file within this projectItem.
+    /// Lookup the license header file within the given projectItems.
     /// </summary>
-    /// <param name="projectItem"></param>
+    /// <param name="projectItems"></param>
     /// <returns>A dictionary, which contains the extensions and the corresponding lines</returns>
-    public static IDictionary<string, string[]> GetHeader (ProjectItem projectItem)
+    public static IDictionary<string, string[]> GetHeader (ProjectItems projectItems)
     {
       //Check for License-file within this level
-      var headerFile = GetLicenseHeaderDefinitions (projectItem.ProjectItems);
+      var headerFile = GetLicenseHeaderDefinitions (projectItems);
       if (!string.IsNullOrEmpty (headerFile))
         return LoadLicenseHeaderDefinition (headerFile); //Found a License header file on this level
       return null;
