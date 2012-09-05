@@ -237,7 +237,7 @@ namespace LicenseHeaderManager.Headers
           }
         }
 
-        if (header == null)
+        if (header == null || header.All (string.IsNullOrWhiteSpace))
           return CreateDocumentResult.NoHeaderFound;
       }
       else
