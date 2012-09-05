@@ -108,6 +108,7 @@ namespace LicenseHeaderManager
       base.Initialize ();
       _licenseReplacer = new LicenseHeaderReplacer (this);
       _dte = GetService (typeof (DTE)) as DTE2;
+      _addedItems = new Stack<ProjectItem>();
 
       //register commands
       OleMenuCommandService mcs = GetService (typeof (IMenuCommandService)) as OleMenuCommandService;
@@ -358,7 +359,7 @@ namespace LicenseHeaderManager
     private string _currentCommandGuid;
     private int _currentCommandId;
     private CommandEvents _currentCommandEvents;
-    private ProjectItem _addedItem;
+    private Stack<ProjectItem> _addedItems;
 
     private void BeforeAnyCommandExecuted (string guid, int id, object customIn, object customOut, ref bool cancelDefault)
     {
@@ -377,25 +378,22 @@ namespace LicenseHeaderManager
         //currently being executed, so we wait until it is finished.
         _currentCommandEvents = _dte.Events.CommandEvents[_currentCommandGuid, _currentCommandId];
         _currentCommandEvents.AfterExecute += FinishedAddingItem;
-        _addedItem = item;
+        _addedItems.Push (item);
       }
-      else
-        _addedItem = null;
     }
 
     private void FinishedAddingItem (string guid, int id, object customIn, object customOut)
     {
       //Now we can finally insert the header into the new item.
-      if (_addedItem != null)
+
+      while (_addedItems.Count > 0)
       {
-        var headers = LicenseHeaderFinder.GetHeaderRecursive (_addedItem);
+        var item = _addedItems.Pop ();
+        var headers = LicenseHeaderFinder.GetHeaderRecursive (item);
         if (headers != null)
-        {
-          _licenseReplacer.RemoveOrReplaceHeader (_addedItem, headers, false);
-        }
-        _addedItem = null;
+          _licenseReplacer.RemoveOrReplaceHeader (item, headers, false);
       }
-      _currentCommandEvents.AfterExecute -= FinishedAddingItem;
+      _currentCommandEvents.AfterExecute -= FinishedAddingItem; // TODO: multiple add, single remove?
     }
 
     #endregion
