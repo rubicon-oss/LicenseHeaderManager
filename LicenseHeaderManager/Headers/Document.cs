@@ -159,8 +159,7 @@ namespace LicenseHeaderManager.Headers
         start = _document.CreateEditPoint (_document.StartPoint);
       var end = _document.CreateEditPoint (start);
 
-      var headerNewLine = NewLineManager.DetectMostFrequentLineEnd (header);
-      var headerLengthInCursorSteps = header.Replace (headerNewLine, " ").Length;
+      var headerLengthInCursorSteps = NewLineManager.ReplaceAllLineEnds(header, " ").Length;
       end.CharRight (headerLengthInCursorSteps);
 
       return end;
