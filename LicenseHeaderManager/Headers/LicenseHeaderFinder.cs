@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using EnvDTE;
 
 namespace LicenseHeaderManager.Headers
@@ -86,8 +87,11 @@ namespace LicenseHeaderManager.Headers
     {
       IEnumerable<string> extensions = null;
       IList<string> header = new List<string> ();
-      foreach (var line in File.ReadAllLines (headerFilePath))
+
+      var streamreader = new StreamReader (headerFilePath, true);
+      while (!streamreader.EndOfStream)
       {
+        var line = streamreader.ReadLine ();
         if (line.StartsWith (LicenseHeader.Keyword))
         {
           if (extensions != null)
