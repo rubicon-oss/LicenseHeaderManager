@@ -63,6 +63,8 @@ namespace LicenseHeaderManager.Headers
 
       if (newProjectItem != null)
       {
+        var window = newProjectItem.Open (Constants.vsViewKindCode);
+        window.Activate();
         return true;
       }
       else
