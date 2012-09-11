@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using EnvDTE;
 using System.IO;
 
@@ -63,7 +64,8 @@ namespace LicenseHeaderManager.Headers
       {
         if (property.CanCreateValue (this))
         {
-          finalText = finalText.Replace (property.Token, property.CreateValue (this));
+          var regex = new Regex (property.Token, RegexOptions.IgnoreCase);
+          finalText = regex.Replace (finalText, property.CreateValue (this));
         }
       }
 
