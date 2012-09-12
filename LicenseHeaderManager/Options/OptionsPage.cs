@@ -25,7 +25,7 @@ namespace LicenseHeaderManager.Options
 {
   [ClassInterface (ClassInterfaceType.AutoDual)]
   [Guid ("EB6F9B18-D203-43E3-8033-35AD9BEFC70D")]
-  public class OptionsPage : VersionedDialogPage
+  public class OptionsPage : VersionedDialogPage, IOptionsPage
   {
     public event NotifyCollectionChangedEventHandler LinkedCommandsChanged;
 

@@ -12,6 +12,6 @@ namespace LicenseHeaderManager
 
     DefaultLicenseHeaderPage DefaultLicenseHeaderPage { get; }
     LanguagesPage LanguagesPage { get; }
-    OptionsPage OptionsPage { get; }
+    IOptionsPage OptionsPage { get; }
   }
 }

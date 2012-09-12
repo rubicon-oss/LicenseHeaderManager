@@ -593,7 +593,7 @@ namespace LicenseHeaderManager
       get { return (LanguagesPage) GetDialogPage (typeof (LanguagesPage)); }
     }
 
-    public OptionsPage OptionsPage
+    public IOptionsPage OptionsPage
     {
       get { return (OptionsPage) GetDialogPage (typeof (OptionsPage)); }
     }
