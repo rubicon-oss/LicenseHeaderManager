@@ -10,8 +10,8 @@ namespace LicenseHeaderManager
   {
     void ShowLanguagesPage ();
 
-    DefaultLicenseHeaderPage GetDefaultLicenseHeaderPage ();
-    LanguagesPage GetLanguagesPage ();
-    OptionsPage GetOptionsPage ();
+    DefaultLicenseHeaderPage DefaultLicenseHeaderPage { get; }
+    LanguagesPage LanguagesPage { get; }
+    OptionsPage OptionsPage { get; }
   }
 }

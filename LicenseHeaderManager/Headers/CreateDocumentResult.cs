@@ -13,7 +13,7 @@
 #endregion
 namespace LicenseHeaderManager.Headers
 {
-  enum CreateDocumentResult
+  public enum CreateDocumentResult
   {
     DocumentCreated,
     NoPhyiscalFile,

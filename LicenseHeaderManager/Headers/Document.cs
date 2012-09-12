@@ -20,7 +20,7 @@ using System.Text.RegularExpressions;
 
 namespace LicenseHeaderManager.Headers
 {
-  internal class Document
+  public class Document
   {
     private readonly DocumentHeader _header;
     private readonly Language _language;

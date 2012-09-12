@@ -74,7 +74,7 @@ namespace LicenseHeaderManager.Headers
           case CreateDocumentResult.NoHeaderFound:
             if (calledbyUser)
             {
-              var page = _licenseHeaderExtension.GetDefaultLicenseHeaderPage ();
+              var page = _licenseHeaderExtension.DefaultLicenseHeaderPage;
               LicenseHeader.ShowQuestionForAddingLicenseHeaderFile (item.ContainingProject, page);
             }
             break;
@@ -196,7 +196,7 @@ namespace LicenseHeaderManager.Headers
         return CreateDocumentResult.NoTextDocument;
 
       //try to find a comment definitions for the language of the document
-      var languagePage = _licenseHeaderExtension.GetLanguagesPage ();
+      var languagePage = _licenseHeaderExtension.LanguagesPage;
 
       var language = languagePage.Languages
           .Where (x => x.Extensions.Any (y => item.Name.EndsWith (y, StringComparison.OrdinalIgnoreCase)))
@@ -223,7 +223,7 @@ namespace LicenseHeaderManager.Headers
       }
 
       //get the required keywords from the options page
-      var optionsPage = _licenseHeaderExtension.GetOptionsPage();
+      var optionsPage = _licenseHeaderExtension.OptionsPage;
 
       document = new Document (
           textDocument,

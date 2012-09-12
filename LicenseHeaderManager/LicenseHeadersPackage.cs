@@ -583,19 +583,19 @@ namespace LicenseHeaderManager
       ShowOptionPage (typeof (LanguagesPage));
     }
 
-    public DefaultLicenseHeaderPage GetDefaultLicenseHeaderPage ()
+    public DefaultLicenseHeaderPage DefaultLicenseHeaderPage
     {
-      return (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
+      get { return (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage)); }
     }
 
-    public LanguagesPage GetLanguagesPage ()
+    public LanguagesPage LanguagesPage
     {
-      return (LanguagesPage) GetDialogPage (typeof (LanguagesPage));
+      get { return (LanguagesPage) GetDialogPage (typeof (LanguagesPage)); }
     }
 
-    public OptionsPage GetOptionsPage ()
+    public OptionsPage OptionsPage
     {
-      return (OptionsPage) GetDialogPage (typeof (OptionsPage));
+      get { return (OptionsPage) GetDialogPage (typeof (OptionsPage)); }
     }
   }
 }
