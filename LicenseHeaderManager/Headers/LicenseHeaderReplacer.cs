@@ -1,17 +1,4 @@
-﻿#region copyright
-// Copyright (c) 2011 rubicon IT GmbH
-
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
-// to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-// The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-// FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-// WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
-#endregion
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,7 +12,7 @@ using Language = LicenseHeaderManager.Options.Language;
 
 namespace LicenseHeaderManager.Headers
 {
-  class LicenseHeaderReplacer
+  public class LicenseHeaderReplacer
   {
     /// <summary>
     /// Used to keep track of the user selection when he is trying to insert invalid headers into all files,
@@ -210,41 +197,33 @@ namespace LicenseHeaderManager.Headers
 
       //try to find a comment definitions for the language of the document
       var languagePage = _licenseHeaderExtension.GetLanguagesPage ();
-      var extensions = from l in languagePage.Languages
-                       from e in l.Extensions
-                       where item.Name.ToLower ().EndsWith (e)
-                       orderby e.Length descending
-                       // ".designer.cs" has a higher priority then ".cs" for example
-                       select new { Extension = e, Language = l };
 
-      if (!extensions.Any ())
+      var language = languagePage.Languages
+          .Where (x => x.Extensions.Any (y => item.Name.EndsWith (y, StringComparison.OrdinalIgnoreCase)))
+          .FirstOrDefault();
+
+      if (language == null)
         return CreateDocumentResult.LanguageNotFound;
 
-      Language language = null;
-
       string[] header = null;
-
-      //if headers is null, we only want to remove the existing headers and thus don't need to find the right header
       if (headers != null)
       {
-        //try to find a header for each of the languages (if there's no header for ".designer.cs", use the one for ".cs" files)
-        foreach (var extension in extensions)
-        {
-          if (headers.TryGetValue (extension.Extension, out header))
-          {
-            language = extension.Language;
-            break;
-          }
-        }
+        var extension = headers.Keys
+            .OrderBy (x => -x.Length)
+            .Where (x => item.Name.EndsWith (x, StringComparison.OrdinalIgnoreCase))
+            .FirstOrDefault();
 
-        if (header == null || header.All (string.IsNullOrWhiteSpace))
+        if (extension == null)
+          return CreateDocumentResult.LanguageNotFound;
+
+        header = headers[extension];
+
+        if (header.All (string.IsNullOrWhiteSpace))
           return CreateDocumentResult.NoHeaderFound;
       }
-      else
-        language = extensions.First ().Language;
 
       //get the required keywords from the options page
-      var optionsPage = _licenseHeaderExtension.GetOptionsPage ();
+      var optionsPage = _licenseHeaderExtension.GetOptionsPage();
 
       document = new Document (
           textDocument,
@@ -252,7 +231,7 @@ namespace LicenseHeaderManager.Headers
           header,
           item,
           optionsPage.UseRequiredKeywords
-              ? optionsPage.RequiredKeywords.Split (new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select (k => k.Trim ())
+              ? optionsPage.RequiredKeywords.Split (new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select (k => k.Trim())
               : null);
 
       return CreateDocumentResult.DocumentCreated;
