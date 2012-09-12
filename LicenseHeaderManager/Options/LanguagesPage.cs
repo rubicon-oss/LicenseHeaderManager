@@ -72,6 +72,17 @@ namespace LicenseHeaderManager.Options
       yield return new UpdateStep (new Version (1, 2, 1), AddDefaultRegionSettings_1_2_1);
       yield return new UpdateStep (new Version (1, 2, 2), AdjustDefaultXmlSkipExpression_1_2_2);
       yield return new UpdateStep( new Version (1, 3, 2), AddXmlXsd_1_3_2);
+      yield return new UpdateStep( new Version (1, 3, 6), ReduceToBaseExtensions_1_3_6);
+    }
+
+    private void ReduceToBaseExtensions_1_3_6 ()
+    {
+      UpdateLanguages (
+          new[] { ".cs" },
+          l => l.Extensions = new[] { ".cs" });
+      UpdateLanguages (
+          new[] { ".vb" },
+          l => l.Extensions = new[] { ".vb" });
     }
 
     private void AddDefaultSkipExpressions_1_1_4 ()
