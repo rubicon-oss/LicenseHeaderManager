@@ -6,11 +6,7 @@ namespace LicenseHeaderManager.Options
 {
   public interface IOptionsPage
   {
-    bool UseRequiredKeywords { get; set; }
-    string RequiredKeywords { get; set; }
-
-    [TypeConverter (typeof (LinkedCommandConverter))]
-    [DesignerSerializationVisibility (DesignerSerializationVisibility.Visible)]
-    ObservableCollection<LinkedCommand> LinkedCommands { get; set; }
+    bool UseRequiredKeywords { get; }
+    string RequiredKeywords { get; }
   }
 }

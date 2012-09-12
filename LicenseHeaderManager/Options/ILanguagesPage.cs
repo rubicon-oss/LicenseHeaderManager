@@ -6,8 +6,6 @@ namespace LicenseHeaderManager.Options
 {
   public interface ILanguagesPage
   {
-    [TypeConverter (typeof (LanguageConverter))]
-    [DesignerSerializationVisibility (DesignerSerializationVisibility.Visible)]
     ObservableCollection<Language> Languages { get; set; }
   }
 }

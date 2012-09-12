@@ -583,7 +583,7 @@ namespace LicenseHeaderManager
       ShowOptionPage (typeof (LanguagesPage));
     }
 
-    public DefaultLicenseHeaderPage DefaultLicenseHeaderPage
+    public IDefaultLicenseHeaderPage DefaultLicenseHeaderPage
     {
       get { return (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage)); }
     }

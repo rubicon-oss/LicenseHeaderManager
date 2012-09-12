@@ -129,6 +129,7 @@
     <Compile Include="Headers\ParseException.cs" />
     <Compile Include="Headers\CommentParser.cs" />
     <Compile Include="ILicenseHeaderExtension.cs" />
+    <Compile Include="Options\IDefaultLicenseHeaderPage.cs" />
     <Compile Include="Options\ILanguagesPage.cs" />
     <Compile Include="Options\IOptionsPage.cs" />
     <Compile Include="Options\WpfEditDefaultLicenseHeaderDialog.xaml.cs">

@@ -39,7 +39,7 @@ namespace LicenseHeaderManager.Headers
       return filename;
     }
 
-    public static bool ShowQuestionForAddingLicenseHeaderFile (Project activeProject, DefaultLicenseHeaderPage page)
+    public static bool ShowQuestionForAddingLicenseHeaderFile (Project activeProject, IDefaultLicenseHeaderPage page)
     {
       string message = Resources.Error_NoHeaderDefinition.Replace (@"\n", "\n");
       var messageBoxResult = MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
@@ -52,7 +52,7 @@ namespace LicenseHeaderManager.Headers
     /// <summary>
     /// Adds a new License Header Definition file to the active project.
     /// </summary>
-    public static bool AddLicenseHeaderDefinitionFileToProject (Project activeProject, DefaultLicenseHeaderPage page)
+    public static bool AddLicenseHeaderDefinitionFileToProject (Project activeProject, IDefaultLicenseHeaderPage page)
     {
       if (activeProject == null)
         return false;
