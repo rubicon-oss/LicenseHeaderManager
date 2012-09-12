@@ -588,7 +588,7 @@ namespace LicenseHeaderManager
       get { return (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage)); }
     }
 
-    public LanguagesPage LanguagesPage
+    public ILanguagesPage LanguagesPage
     {
       get { return (LanguagesPage) GetDialogPage (typeof (LanguagesPage)); }
     }

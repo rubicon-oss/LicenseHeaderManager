@@ -11,7 +11,7 @@ namespace LicenseHeaderManager
     void ShowLanguagesPage ();
 
     DefaultLicenseHeaderPage DefaultLicenseHeaderPage { get; }
-    LanguagesPage LanguagesPage { get; }
+    ILanguagesPage LanguagesPage { get; }
     IOptionsPage OptionsPage { get; }
   }
 }

@@ -4,13 +4,10 @@ using LicenseHeaderManager.Options.Converters;
 
 namespace LicenseHeaderManager.Options
 {
-  public interface IOptionsPage
+  public interface ILanguagesPage
   {
-    bool UseRequiredKeywords { get; set; }
-    string RequiredKeywords { get; set; }
-
-    [TypeConverter (typeof (LinkedCommandConverter))]
+    [TypeConverter (typeof (LanguageConverter))]
     [DesignerSerializationVisibility (DesignerSerializationVisibility.Visible)]
-    ObservableCollection<LinkedCommand> LinkedCommands { get; set; }
+    ObservableCollection<Language> Languages { get; set; }
   }
 }

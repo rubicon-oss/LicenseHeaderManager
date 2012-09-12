@@ -19,9 +19,9 @@ namespace LicenseHeaderManager.Options
 {
   public partial class WpfLanguages : UserControl
   {
-    private LanguagesPage _page;
+    private ILanguagesPage _page;
 
-    public WpfLanguages (LanguagesPage page)
+    public WpfLanguages (ILanguagesPage page)
         : this()
     {
       _page = page;

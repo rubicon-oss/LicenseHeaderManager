@@ -26,7 +26,7 @@ namespace LicenseHeaderManager.Options
 {
   [ClassInterface (ClassInterfaceType.AutoDual)]
   [Guid ("D1B5984C-1693-4F26-891E-0BA3BF5760B4")]
-  public class LanguagesPage : VersionedDialogPage
+  public class LanguagesPage : VersionedDialogPage, ILanguagesPage
   {
     //serialized properties
 
