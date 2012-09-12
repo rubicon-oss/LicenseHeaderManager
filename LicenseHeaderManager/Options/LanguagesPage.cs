@@ -32,7 +32,7 @@ namespace LicenseHeaderManager.Options
 
     [TypeConverter(typeof(LanguageConverter))]
     [DesignerSerializationVisibility (DesignerSerializationVisibility.Visible)]
-    public ObservableCollection<Language> Languages { get; set;}
+    public IList<Language> Languages { get; set;}
 
     public LanguagesPage ()
     {

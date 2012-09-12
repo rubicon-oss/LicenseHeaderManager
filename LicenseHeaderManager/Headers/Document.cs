@@ -22,13 +22,12 @@ namespace LicenseHeaderManager.Headers
 {
   public class Document
   {
-    private readonly DocumentHeader _header;
-    private readonly Language _language;
-    private readonly IEnumerable<string> _keywords;
-
-    private readonly TextDocument _document;
-    private readonly CommentParser _commentParser;
-    private readonly string _lineEndingInDocument;
+    internal readonly DocumentHeader _header;
+    internal readonly Language _language;
+    internal readonly IEnumerable<string> _keywords;
+    internal readonly TextDocument _document;
+    internal readonly CommentParser _commentParser;
+    internal readonly string _lineEndingInDocument;
 
     public Document (TextDocument document, Language language, string[] lines, ProjectItem projectItem, IEnumerable<string> keywords = null)
     {

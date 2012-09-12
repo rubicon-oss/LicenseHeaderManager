@@ -1,4 +1,5 @@
-﻿using System;
+﻿//Sample license text.
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,7 +21,8 @@ namespace LicenseHeaderManager.Headers
     /// </summary>
     private readonly IDictionary<string, bool> _extensionsWithInvalidHeaders = new Dictionary<string, bool> ();
 
-    private ILicenseHeaderExtension _licenseHeaderExtension;
+    private readonly ILicenseHeaderExtension _licenseHeaderExtension;
+
     public LicenseHeaderReplacer(ILicenseHeaderExtension licenseHeaderExtension)
     {
       _licenseHeaderExtension = licenseHeaderExtension;
@@ -169,10 +171,9 @@ namespace LicenseHeaderManager.Headers
     {
       document = null;
 
-      if (item.Kind != Constants.vsProjectItemKindPhysicalFile)
+      if (item.Kind != Constants.vsProjectItemKindPhysicalFile || item.Document == null || item.Document.Object ("TextDocument") == null)
         return CreateDocumentResult.NoPhyiscalFile;
 
-      //don't insert license header information in license header definitions
       if (item.Name.EndsWith (LicenseHeader.Extension))
         return CreateDocumentResult.LicenseHeaderDocument;
 
