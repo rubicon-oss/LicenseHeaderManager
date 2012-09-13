@@ -77,12 +77,19 @@ namespace LicenseHeaderManager.Options
 
     private void ReduceToBaseExtensions_1_3_6 ()
     {
-      UpdateLanguages (
-          new[] { ".cs" },
-          l => l.Extensions = new[] { ".cs" });
-      UpdateLanguages (
-          new[] { ".vb" },
-          l => l.Extensions = new[] { ".vb" });
+      try
+      {
+        UpdateLanguages (
+            new[] { ".cs" },
+            l => l.Extensions = new[] { ".cs" });
+        UpdateLanguages (
+            new[] { ".vb" },
+            l => l.Extensions = new[] { ".vb" });
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show (ex.Message);
+      }
     }
 
     private void AddDefaultSkipExpressions_1_1_4 ()
