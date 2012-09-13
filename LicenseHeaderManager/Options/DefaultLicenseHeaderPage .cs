@@ -21,7 +21,7 @@ namespace LicenseHeaderManager.Options
       ResetSettings ();
     }
 
-    public string LicenseHeaderFileText { get; private set; }
+    public string LicenseHeaderFileText { get; set; }
 
     public override void ResetSettings ()
     {

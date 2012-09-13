@@ -5,6 +5,6 @@ namespace LicenseHeaderManager.Options
 {
   public interface IDefaultLicenseHeaderPage
   {
-    string LicenseHeaderFileText { get; }
+    string LicenseHeaderFileText { get; set; }
   }
 }
