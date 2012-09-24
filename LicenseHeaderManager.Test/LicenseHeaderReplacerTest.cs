@@ -135,7 +135,7 @@ namespace LicenseHeaderManager.Test
 
         var result = _replacer.TryCreateDocument (_projectItem, out _document, headers);
 
-        Assert.That (result, Is.EqualTo (CreateDocumentResult.NoHeaderFound));
+        Assert.That (result, Is.EqualTo (CreateDocumentResult.EmptyHeader));
       }
 
       [Test]

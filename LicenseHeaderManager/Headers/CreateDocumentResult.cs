@@ -20,6 +20,7 @@ namespace LicenseHeaderManager.Headers
     NoTextDocument,
     LanguageNotFound,
     NoHeaderFound,
-    LicenseHeaderDocument
+    LicenseHeaderDocument,
+    EmptyHeader
   }
 }

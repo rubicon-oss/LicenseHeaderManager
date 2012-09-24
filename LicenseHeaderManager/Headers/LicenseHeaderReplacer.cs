@@ -73,6 +73,8 @@ namespace LicenseHeaderManager.Headers
                 == MessageBoxResult.Yes)
               _licenseHeaderExtension.ShowLanguagesPage ();
             break;
+          case CreateDocumentResult.EmptyHeader:
+            break;
           case CreateDocumentResult.NoHeaderFound:
             if (calledbyUser)
             {
@@ -204,12 +206,12 @@ namespace LicenseHeaderManager.Headers
             .FirstOrDefault();
 
         if (extension == null)
-          return CreateDocumentResult.LanguageNotFound;
+          return CreateDocumentResult.NoHeaderFound;
 
         header = headers[extension];
 
-        if (header.All (string.IsNullOrWhiteSpace))
-          return CreateDocumentResult.NoHeaderFound;
+        if (header.All (string.IsNullOrEmpty))
+          return CreateDocumentResult.EmptyHeader;
       }
 
       var optionsPage = _licenseHeaderExtension.OptionsPage;
