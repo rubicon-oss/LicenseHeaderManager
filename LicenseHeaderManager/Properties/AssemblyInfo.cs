@@ -42,8 +42,8 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion ("1.3.6.0")]
-[assembly: AssemblyFileVersion ("1.3.6.0")]
+[assembly: AssemblyVersion ("1.3.7.0")]
+[assembly: AssemblyFileVersion ("1.3.7.0")]
 
 [assembly: InternalsVisibleTo ("LicenseHeaderManager.Test, PublicKey=0024000004800000940000000602000000240000525341310004000001000100A51863EC92C8300AC3838C02FC45700305E1D0C531FC50BB69386935BBE857706DFCAF2025F9B7D88FBF232E68308DB5D131D04FED6D1B5F628D9F62BEE787A4B59232A12F2D8A9524CA0B598203C75C3F3F348A5F9DC26516C8275DE7B665126EDB9CD8627BAC1F4EC69AA98F16912B8F604BD1BDF07EDF008CE165436031B6")]
 
