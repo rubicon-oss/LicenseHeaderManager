@@ -393,7 +393,7 @@ namespace LicenseHeaderManager
         if (headers != null)
           _licenseReplacer.RemoveOrReplaceHeader (item, headers, false);
       }
-      _currentCommandEvents.AfterExecute -= FinishedAddingItem; // TODO: multiple add, single remove?
+      _currentCommandEvents.AfterExecute -= FinishedAddingItem;
     }
 
     #endregion
