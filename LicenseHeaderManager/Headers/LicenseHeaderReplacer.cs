@@ -143,7 +143,7 @@ namespace LicenseHeaderManager.Headers
         else
           item.Document.Close (vsSaveChanges.vsSaveChangesYes);
       }
-      
+
       if (item.ProjectItems != null)
       {
         var childHeaders = headers;
@@ -173,7 +173,7 @@ namespace LicenseHeaderManager.Headers
     {
       document = null;
 
-      if (item.Kind != Constants.vsProjectItemKindPhysicalFile || item.Document == null || item.Document.Object ("TextDocument") == null)
+      if (item.Kind != Constants.vsProjectItemKindPhysicalFile)
         return CreateDocumentResult.NoPhyiscalFile;
 
       if (item.Name.EndsWith (LicenseHeader.Extension))
@@ -190,6 +190,14 @@ namespace LicenseHeaderManager.Headers
         return CreateDocumentResult.NoTextDocument;
       }
 
+      var itemDocument = item.Document;
+      if (item.Document == null)
+        return CreateDocumentResult.NoPhyiscalFile;
+
+      var textDocument = itemDocument.Object ("TextDocument") as TextDocument;
+      if (textDocument == null)
+        return CreateDocumentResult.NoTextDocument;
+
       var language = _licenseHeaderExtension.LanguagesPage.Languages
           .Where (x => x.Extensions.Any (y => item.Name.EndsWith (y, StringComparison.OrdinalIgnoreCase)))
           .FirstOrDefault();
@@ -201,7 +209,7 @@ namespace LicenseHeaderManager.Headers
       if (headers != null)
       {
         var extension = headers.Keys
-            .OrderBy (x => -x.Length)
+            .OrderByDescending (x => x.Length)
             .Where (x => item.Name.EndsWith (x, StringComparison.OrdinalIgnoreCase))
             .FirstOrDefault();
 
@@ -215,8 +223,6 @@ namespace LicenseHeaderManager.Headers
       }
 
       var optionsPage = _licenseHeaderExtension.OptionsPage;
-      var itemDocument = item.Document;
-      var textDocument = itemDocument.Object ("TextDocument") as TextDocument;
 
       document = new Document (
           textDocument,
