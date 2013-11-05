@@ -179,6 +179,13 @@ namespace LicenseHeaderManager.Headers
       if (item.Name.EndsWith (LicenseHeader.Extension))
         return CreateDocumentResult.LicenseHeaderDocument;
 
+      var language = _licenseHeaderExtension.LanguagesPage.Languages
+          .Where(x => x.Extensions.Any(y => item.Name.EndsWith(y, StringComparison.OrdinalIgnoreCase)))
+          .FirstOrDefault();
+
+      if (language == null)
+          return CreateDocumentResult.LanguageNotFound;
+
       //try to open the document as a text document
       try
       {
@@ -198,12 +205,6 @@ namespace LicenseHeaderManager.Headers
       if (textDocument == null)
         return CreateDocumentResult.NoTextDocument;
 
-      var language = _licenseHeaderExtension.LanguagesPage.Languages
-          .Where (x => x.Extensions.Any (y => item.Name.EndsWith (y, StringComparison.OrdinalIgnoreCase)))
-          .FirstOrDefault();
-
-      if (language == null)
-        return CreateDocumentResult.LanguageNotFound;
 
       string[] header = null;
       if (headers != null)

@@ -52,30 +52,39 @@ namespace LicenseHeaderManager.Test
       }
 
       [Test]
-      public void NoPhysicalFile_Document ()
-      {
-        _projectItem.Expect (x => x.Kind).Return (Constants.vsProjectItemKindPhysicalFile);
-        _projectItem.Expect (x => x.Document).Return(null);
-
-        var result = _replacer.TryCreateDocument (_projectItem, out _document);
-
-        Assert.That (result, Is.EqualTo (CreateDocumentResult.NoPhyiscalFile));
-      }
-
-      [Test]
       public void IgnoreLicenseHeaderFile ()
       {
-        var textDocument = MockRepository.GenerateMock<TextDocument> ();
-
-        var documentMock = MockRepository.GenerateMock<EnvDTE.Document> ();
-        documentMock.Expect (x => x.Object ("TextDocument")).Return (textDocument);
         _projectItem.Expect (x => x.Kind).Return (Constants.vsProjectItemKindPhysicalFile);
-        _projectItem.Expect (x => x.Document).Return (documentMock);
         _projectItem.Expect (x => x.Name).Return ("test.licenseheader");
 
         var result = _replacer.TryCreateDocument (_projectItem, out _document);
 
         Assert.That (result, Is.EqualTo (CreateDocumentResult.LicenseHeaderDocument));
+      }
+
+      [Test]
+      public void LanguageNotFound ()
+      {
+        _projectItem.Expect(x => x.Kind).Return(Constants.vsProjectItemKindPhysicalFile);
+        _projectItem.Expect(x => x.Name).Return("test.txt");
+        _languagesPage.Expect(x => x.Languages).Return(new List<Language> { new Language { Extensions = new[] { ".cs" } } });
+
+        var result = _replacer.TryCreateDocument(_projectItem, out _document);
+
+        Assert.That (result, Is.EqualTo (CreateDocumentResult.LanguageNotFound));
+      }
+
+      [Test]
+      public void NoPhysicalFile_Document ()
+      {
+        _projectItem.Expect (x => x.Kind).Return (Constants.vsProjectItemKindPhysicalFile);
+        _projectItem.Expect (x => x.Document).Return(null);
+        _projectItem.Expect(x => x.Name).Return("test.cs");
+        _languagesPage.Expect(x => x.Languages).Return(new List<Language> { new Language { Extensions = new[] { ".cs" } } });
+
+        var result = _replacer.TryCreateDocument (_projectItem, out _document);
+
+        Assert.That (result, Is.EqualTo (CreateDocumentResult.NoPhyiscalFile));
       }
 
       [Test]
@@ -85,8 +94,9 @@ namespace LicenseHeaderManager.Test
         var documentMock = MockRepository.GenerateMock<EnvDTE.Document> ();
         documentMock.Expect (x => x.Object ("TextDocument")).Return (textDocument);
         _projectItem.Expect (x => x.Kind).Return (Constants.vsProjectItemKindPhysicalFile);
-        _projectItem.Expect (x => x.Document).Return (documentMock);
-        _projectItem.Expect (x => x.Name).Return ("test.resx");
+        _projectItem.Expect(x => x.Name).Return("test.resx");
+        _languagesPage.Expect(x => x.Languages).Return(new List<Language> { new Language { Extensions = new[] { ".resx" } } });
+        _projectItem.Expect(x => x.Document).Return(documentMock);
         _projectItem.Expect (x => x.Open (Constants.vsViewKindTextView)).Throw (new COMException ());
 
         var result = _replacer.TryCreateDocument (_projectItem, out _document);
@@ -95,45 +105,18 @@ namespace LicenseHeaderManager.Test
       }
 
       [Test]
-      public void LanguageNotFound ()
-      {
-        var textDocument = MockRepository.GenerateMock<TextDocument> ();
-        var documentMock = MockRepository.GenerateMock<EnvDTE.Document> ();
-        documentMock.Expect (x => x.Object ("TextDocument")).Return (textDocument);
-        _projectItem.Expect (x => x.Kind).Return (Constants.vsProjectItemKindPhysicalFile);
-        _projectItem.Expect (x => x.Document).Return (documentMock);
-        _projectItem.Expect (x => x.Name).Return ("test.cs");
-        _languagesPage.Expect (x => x.Languages).Return (
-            new List<Language>
-            {
-                new Language { Extensions = new[] { ".txt" } }
-            });
-
-        var result = _replacer.TryCreateDocument (_projectItem, out _document);
-
-        Assert.That (result, Is.EqualTo (CreateDocumentResult.LanguageNotFound));
-      }
-
-      [Test]
       public void NoHeaderFound ()
       {
-        var textDocument = MockRepository.GenerateMock<TextDocument> ();
-        var documentMock = MockRepository.GenerateMock<EnvDTE.Document> ();
-        documentMock.Expect (x => x.Object ("TextDocument")).Return (textDocument);
-        _projectItem.Expect (x => x.Kind).Return (Constants.vsProjectItemKindPhysicalFile);
-        _projectItem.Expect (x => x.Document).Return (documentMock);
-        _projectItem.Expect (x => x.Name).Return ("test.cs");
-        _languagesPage.Expect (x => x.Languages).Return (
-            new List<Language>
-            {
-                new Language { Extensions = new[] { ".cs" } }
-            });
-        var headers = new Dictionary<string, string[]>
-                      {
-                        { ".cs", new string[0] }
-                      };
+        var textDocument = MockRepository.GenerateMock<TextDocument>();
+        var documentMock = MockRepository.GenerateMock<EnvDTE.Document>();
+        documentMock.Expect(x => x.Object("TextDocument")).Return(textDocument);
+        _projectItem.Expect(x => x.Kind).Return(Constants.vsProjectItemKindPhysicalFile);
+        _projectItem.Expect(x => x.Document).Return(documentMock);
+        _projectItem.Expect(x => x.Name).Return("test.cs");
+        _languagesPage.Expect(x => x.Languages).Return(new List<Language> { new Language { Extensions = new[] { ".cs" } } });
+        var headers = new Dictionary<string, string[]> { { ".cs", new string[0] } };
 
-        var result = _replacer.TryCreateDocument (_projectItem, out _document, headers);
+        var result = _replacer.TryCreateDocument(_projectItem, out _document, headers);
 
         Assert.That (result, Is.EqualTo (CreateDocumentResult.EmptyHeader));
       }
