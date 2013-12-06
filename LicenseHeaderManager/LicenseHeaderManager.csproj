@@ -50,6 +50,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
@@ -128,6 +129,7 @@
     <Compile Include="Headers\NewLineManager.cs" />
     <Compile Include="Headers\ParseException.cs" />
     <Compile Include="Headers\CommentParser.cs" />
+    <Compile Include="Headers\UserInfo.cs" />
     <Compile Include="ILicenseHeaderExtension.cs" />
     <Compile Include="Options\IDefaultLicenseHeaderPage.cs" />
     <Compile Include="Options\ILanguagesPage.cs" />

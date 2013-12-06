@@ -5,7 +5,8 @@ extensions: .cs
 //%FileName% expands to the file name,
 //%CreationYear%, %CreationMonth%, %CreationDay%, %CreationTime% expand to the respective file creation DateTime properties (time is in short time format),
 //%CurrentYear%, %CurrentMonth%, %CurrentDay%, %CurrentTime% expand to the respective current DateTime properties (time is in short time format),
-//%UserName% expands to the name of the current user.
+//%UserName% expands to the name (login) of the current user. Information about the current user is updated during start of Visual Studio.
+//%UserDisplayName% expands to the full name of the current user, e.g. John Smith. Information about the current user is updated during start of Visual Studio.
 extensions: .aspx .ascx
 <%-- 
 Sample license text.

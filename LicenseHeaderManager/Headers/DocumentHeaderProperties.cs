@@ -88,8 +88,12 @@ namespace LicenseHeaderManager.Headers
           documentHeader => DateTime.Now.ToShortTimeString()),
         new DocumentHeaderProperty(
           "%UserName%", 
-          documentHeader => true, 
-          documentHeader => Environment.UserName),
+          documentHeader => UserInfo.Name != null, 
+          documentHeader => UserInfo.Name),
+        new DocumentHeaderProperty(
+          "%UserDisplayName%", 
+          documentHeader => UserInfo.DisplayName != null, 
+          documentHeader => UserInfo.DisplayName),
         new DocumentHeaderProperty(
           "%Project%", 
           documentHeader => projectItem.ContainingProject != null, 
