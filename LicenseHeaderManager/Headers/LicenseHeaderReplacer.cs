@@ -183,6 +183,9 @@ namespace LicenseHeaderManager.Headers
       if (ProjectItemInspection.IsLicenseHeader(item))
         return CreateDocumentResult.LicenseHeaderDocument;
 
+      if(IsLink(item))
+        return CreateDocumentResult.LinkedFile;
+
       var language = _licenseHeaderExtension.LanguagesPage.Languages
           .Where(x => x.Extensions.Any(y => item.Name.EndsWith(y, StringComparison.OrdinalIgnoreCase)))
           .FirstOrDefault();
@@ -252,6 +255,11 @@ namespace LicenseHeaderManager.Headers
               : null);
 
       return CreateDocumentResult.DocumentCreated;
+    }
+
+    private bool IsLink (ProjectItem item)
+    {
+      return (item.Properties != null && (bool) item.Properties.Item("IsLink").Value);
     }
   }
 }

@@ -182,6 +182,43 @@ namespace LicenseHeaderManager.Test
 
         Assert.That (_document._header.Text, Is.EqualTo ("generated\r\n"));
       }
+
+      [Test]
+      public void LinkedFile()
+      {
+        _projectItem.Expect (x => x.Properties.Item ("IsLink").Value).Return (true);
+
+        var parent = MockRepository.GenerateMock<EnvDTE.Document> ();
+        parent.Expect (x => x.FullName).Return ("");
+        var editPoint = MockRepository.GenerateMock<EditPoint> ();
+        editPoint.Expect (x => x.GetText (null)).IgnoreArguments ().Return ("");
+        var textDocument = MockRepository.GenerateMock<TextDocument> ();
+        textDocument.Expect (x => x.CreateEditPoint ()).IgnoreArguments ().Return (editPoint);
+        textDocument.Expect (x => x.Parent).Return (parent);
+        var documentMock = MockRepository.GenerateMock<EnvDTE.Document> ();
+        documentMock.Expect (x => x.Object ("TextDocument")).Return (textDocument);
+        _projectItem.Expect (x => x.Kind).Return (Constants.vsProjectItemKindPhysicalFile);
+        _projectItem.Expect (x => x.Document).Return (documentMock);
+        _projectItem.Expect (x => x.Name).Return ("test.cs");
+        
+        
+        _languagesPage.Expect (x => x.Languages).Return (
+            new List<Language>
+            {
+                new Language { Extensions = new[] { ".cs" } }
+            });
+        var headers = new Dictionary<string, string[]>
+                      {
+                          { ".cs", new[] { "//" } }
+                      };
+
+
+
+        
+        var result = _replacer.TryCreateDocument (_projectItem, out _document);
+
+        Assert.That (result, Is.EqualTo (CreateDocumentResult.LinkedFile));
+      }
     }
   }
 }

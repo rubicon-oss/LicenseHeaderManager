@@ -18,6 +18,7 @@ namespace LicenseHeaderManager.Headers
     DocumentCreated,
     NoPhysicalFile,
     NoTextDocument,
+    LinkedFile,
     LanguageNotFound,
     NoHeaderFound,
     LicenseHeaderDocument,
