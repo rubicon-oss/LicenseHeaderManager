@@ -32,7 +32,7 @@ namespace LicenseHeaderManager.Options.Converters
       if (strings == null)
         return value;
 
-      return string.Join (Separator, strings);
+      return string.Join (Separator, strings) + Separator;
     }
 
     public object ConvertBack (object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
