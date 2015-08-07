@@ -458,5 +458,25 @@ namespace LicenseHeaderManager.Test
 
       Test (header, text);
     }
+
+
+    [Test]
+    public void TestEndRegionWithSpace()
+    {
+      var header = new[]
+      {
+        "#Region ",
+        "//This is a comment.",
+        "#End Region"
+      };
+
+      string headerString = string.Join (Environment.NewLine, header);
+      
+      headerString += Environment.NewLine;
+
+      var parser = new CommentParser ("//", "/*", "*/", "#Region", "#End Region");
+      Assert.AreEqual (headerString, parser.Parse (headerString));
+      
+    }
   }
 }

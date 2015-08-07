@@ -171,6 +171,28 @@ namespace LicenseHeaderManager.Headers
 
         return true;
       }
+      else if (EndRegion != null && EndRegion.Contains(token))
+      {
+        string firstPart = token;
+        token = GetToken();
+
+        if ((firstPart + " " + token) == EndRegion)
+        {
+          if (!_started)
+            _started = true;
+
+          if (_regionStarts.Count == 0)
+            throw new ParseException ();
+
+          _regionStarts.Pop ();
+        }
+
+        _position = NewLineManager.NextLineEndPosition (_text, _position);
+        if (_position < 0)
+          _position = _text.Length; //end of file
+
+        return true;
+      }
 
       else
       {
