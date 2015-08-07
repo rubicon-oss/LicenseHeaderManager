@@ -48,7 +48,7 @@ namespace LicenseHeaderManager.Test
 
         var result = _replacer.TryCreateDocument (_projectItem, out _document);
 
-        Assert.That (result, Is.EqualTo (CreateDocumentResult.NoPhyiscalFile));
+        Assert.That (result, Is.EqualTo (CreateDocumentResult.NoPhysicalFile));
       }
 
       [Test]
@@ -84,7 +84,7 @@ namespace LicenseHeaderManager.Test
 
         var result = _replacer.TryCreateDocument (_projectItem, out _document);
 
-        Assert.That (result, Is.EqualTo (CreateDocumentResult.NoPhyiscalFile));
+        Assert.That (result, Is.EqualTo (CreateDocumentResult.NoPhysicalFile));
       }
 
       [Test]

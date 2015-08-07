@@ -174,7 +174,7 @@ namespace LicenseHeaderManager.Headers
       document = null;
 
       if (item.Kind != Constants.vsProjectItemKindPhysicalFile)
-        return CreateDocumentResult.NoPhyiscalFile;
+        return CreateDocumentResult.NoPhysicalFile;
 
       if (item.Name.EndsWith (LicenseHeader.Extension))
         return CreateDocumentResult.LicenseHeaderDocument;
@@ -199,7 +199,7 @@ namespace LicenseHeaderManager.Headers
 
       var itemDocument = item.Document;
       if (item.Document == null)
-        return CreateDocumentResult.NoPhyiscalFile;
+        return CreateDocumentResult.NoPhysicalFile;
 
       var textDocument = itemDocument.Object ("TextDocument") as TextDocument;
       if (textDocument == null)

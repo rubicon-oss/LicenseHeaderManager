@@ -16,7 +16,7 @@ namespace LicenseHeaderManager.Headers
   public enum CreateDocumentResult
   {
     DocumentCreated,
-    NoPhyiscalFile,
+    NoPhysicalFile,
     NoTextDocument,
     LanguageNotFound,
     NoHeaderFound,
