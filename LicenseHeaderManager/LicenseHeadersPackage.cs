@@ -542,30 +542,61 @@ namespace LicenseHeaderManager
       {
         var projectItem = solutionItem as ProjectItem;
         if (projectItem != null)
-          project = projectItem.ContainingProject;
+          LicenseHeader.AddLicenseHeaderDefinitionFile(projectItem, page);
       }
 
       if(project != null)
-        LicenseHeader.AddLicenseHeaderDefinitionFileToProject (project, page);
+        LicenseHeader.AddLicenseHeaderDefinitionFile (project, page);
     }
 
     private void AddExistingLicenseHeaderDefinitionFileCallback (object sender, EventArgs e)
     {
       var project = GetSolutionExplorerItem () as Project;
+      var projectItem = GetSolutionExplorerItem () as ProjectItem;
+
+      string fileName = "";
+
       if (project != null)
       {
-        FileDialog dialog = new OpenFileDialog ();
-        dialog.CheckFileExists = true;
-        dialog.CheckPathExists = true;
-        dialog.DefaultExt = LicenseHeader.Extension;
-        dialog.DereferenceLinks = true;
-        dialog.Filter = "License Header Definitions|*" + LicenseHeader.Extension;
-        dialog.InitialDirectory = Path.GetDirectoryName (project.FileName);
-
-        bool? result = dialog.ShowDialog ();
-        if (result.HasValue && result.Value)
-          project.ProjectItems.AddFromFile (dialog.FileName);
+        fileName = project.FileName;
       }
+      else if (projectItem != null)
+      {
+        fileName = projectItem.Name;
+      }
+      else
+      {
+        return;
+      }
+
+      var licenseHeaderDefinitionFileName = OpenFileDialogForExistingFile(fileName);
+
+      if (licenseHeaderDefinitionFileName == null) return;
+
+      if (project != null)
+      {
+        project.ProjectItems.AddFromFile (licenseHeaderDefinitionFileName);
+      }
+      else if (projectItem != null)
+      {
+        projectItem.ProjectItems.AddFromFileCopy(licenseHeaderDefinitionFileName);
+      }
+    }
+
+    private string OpenFileDialogForExistingFile(string fileName)
+    {
+      FileDialog dialog = new OpenFileDialog ();
+      dialog.CheckFileExists = true;
+      dialog.CheckPathExists = true;
+      dialog.DefaultExt = LicenseHeader.Extension;
+      dialog.DereferenceLinks = true;
+      dialog.Filter = "License Header Definitions|*" + LicenseHeader.Extension;
+      dialog.InitialDirectory = Path.GetDirectoryName (fileName);
+      bool? result = dialog.ShowDialog ();
+      if (result.HasValue && result.Value)
+        return dialog.FileName;
+
+      return String.Empty;
     }
 
     private void LicenseHeaderOptionsCallback (object sender, EventArgs e)

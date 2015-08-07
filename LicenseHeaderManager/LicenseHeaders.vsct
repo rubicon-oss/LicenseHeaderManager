@@ -75,7 +75,11 @@
         <Parent guid="guidLicenseHeadersCmdSet" id="ProjectItemSubMenu" />
       </Group>
 
-      <Group guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup" priority="0x0100">
+      <Group guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup1" priority="0x0100">
+        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenu" />
+      </Group>
+
+      <Group guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup2" priority="0x0200">
         <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenu" />
       </Group>
 
@@ -177,7 +181,7 @@
       </Button>
 
       <Button guid="guidLicenseHeadersCmdSet" id="AddLicenseHeadersToAllFiles" priority="0x0100" type="Button">
-        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup" />
+        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup1" />
         <Icon guid="guidImages" id="bmpAddLicenseHeadersToAllFiles" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
@@ -188,13 +192,31 @@
       </Button>
 
       <Button guid="guidLicenseHeadersCmdSet" id="RemoveLicenseHeadersFromAllFiles" priority="0x0200" type="Button">
-        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup" />
+        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup1" />
         <Icon guid="guidImages" id="bmpRemoveLicenseHeadersFromAllFiles" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
           <CommandName>RemoveLicenseHeadersFromAllFiles</CommandName>
           <ButtonText>Remove License Headers from All Files</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLicenseHeadersCmdSet" id="AddLicenseHeaderDefinitionFile" priority="0x0100" type="Button">
+        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup2" />
+        <Icon guid="guidImages" id="bmpAddLicenseHeaderDefinitionFile" />
+        <Strings>
+          <CommandName>AddLicenseHeaderDefinitionFile</CommandName>
+          <ButtonText>Add New License Header Definition File to Folder</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLicenseHeadersCmdSet" id="AddExistingLicenseHeaderDefinitionFile" priority="0x0200" type="Button">
+        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup2" />
+        <Icon guid="guidImages" id="bmpAddExistingLicenseHeaderDefinitionFile" />
+        <Strings>
+          <CommandName>AddExistingLicenseHeaderDefinitionFile</CommandName>
+          <ButtonText>Add Existing License Header Definition File to Folder...</ButtonText>
         </Strings>
       </Button>
 
@@ -276,7 +298,8 @@
       <IDSymbol name="ProjectItemMenuGroup" value="0x1006" />
       <IDSymbol name="ProjectItemSubMenuGroup" value="0x1007" />
       <IDSymbol name="FolderMenuGroup" value="0x1008" />
-      <IDSymbol name="FolderSubMenuGroup" value="0x1009" />
+      <IDSymbol name="FolderSubMenuGroup1" value="0x1009" />
+      <IDSymbol name="FolderSubMenuGroup2" value="0x1010" />
 
       <IDSymbol name="ProjectSubMenu" value="0x2001" />
       <IDSymbol name="ProjectItemSubMenu" value="0x2002" />
