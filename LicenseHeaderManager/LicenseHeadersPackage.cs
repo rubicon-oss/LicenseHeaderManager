@@ -542,7 +542,7 @@ namespace LicenseHeaderManager
       {
         var projectItem = solutionItem as ProjectItem;
         if (projectItem != null)
-          LicenseHeader.AddLicenseHeaderDefinitionFile(projectItem, page);
+          LicenseHeader.AddLicenseHeaderDefinitionFile (projectItem, page);
       }
 
       if(project != null)
@@ -579,7 +579,7 @@ namespace LicenseHeaderManager
       }
       else if (projectItem != null)
       {
-        projectItem.ProjectItems.AddFromFileCopy(licenseHeaderDefinitionFileName);
+        projectItem.ProjectItems.AddFromFileCopy (licenseHeaderDefinitionFileName);
       }
     }
 
@@ -593,10 +593,11 @@ namespace LicenseHeaderManager
       dialog.Filter = "License Header Definitions|*" + LicenseHeader.Extension;
       dialog.InitialDirectory = Path.GetDirectoryName (fileName);
       bool? result = dialog.ShowDialog ();
+      
       if (result.HasValue && result.Value)
         return dialog.FileName;
 
-      return String.Empty;
+      return string.Empty;
     }
 
     private void LicenseHeaderOptionsCallback (object sender, EventArgs e)
