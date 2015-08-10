@@ -115,19 +115,19 @@ namespace LicenseHeaderManager.Headers
 
       if (LineComment != null && token.StartsWith(LineComment))
       {
-        SetStartedIfNotSet();
+        SetStarted();
 
         //proceed to end of line
         _position = NewLineManager.NextLineEndPosition (_text, _position - token.Length + LineComment.Length);
         
-        CheckForEndOfFile();
+        UpdatePositionIfEndOfFile();
           
         return true;
       }
 
       else if (BeginComment != null && token.StartsWith (BeginComment))
       {
-        SetStartedIfNotSet ();
+        SetStarted ();
 
         _position = _text.IndexOf (EndComment, _position - token.Length + BeginComment.Length);
         if (_position < 0)
@@ -140,21 +140,21 @@ namespace LicenseHeaderManager.Headers
 
       else if (BeginRegion != null && token == BeginRegion)
       {
-        SetStartedIfNotSet ();
+        SetStarted ();
 
         _regionStarts.Push(_position - BeginRegion.Length);
 
 
         _position = NewLineManager.NextLineEndPosition (_text, _position);
         
-        CheckForEndOfFile ();
+        UpdatePositionIfEndOfFile ();
         
         return true;
       }
 
       else if (EndRegion != null && token == EndRegion)
       {
-        SetStartedIfNotSet ();
+        SetStarted ();
 
         if (_regionStarts.Count == 0)
           throw new ParseException ();
@@ -163,14 +163,14 @@ namespace LicenseHeaderManager.Headers
 
         _position = NewLineManager.NextLineEndPosition (_text, _position);
         
-        CheckForEndOfFile ();
+        UpdatePositionIfEndOfFile ();
         
 
         return true;
       }
       else if (EndRegion != null && EndRegion.Contains(token))
       {
-        SetStartedIfNotSet ();
+        SetStarted ();
 
         string firstPart = token;
         token = GetToken();
@@ -186,7 +186,7 @@ namespace LicenseHeaderManager.Headers
 
         _position = NewLineManager.NextLineEndPosition (_text, _position);
 
-        CheckForEndOfFile ();
+        UpdatePositionIfEndOfFile ();
         
 
         return true;
@@ -199,15 +199,14 @@ namespace LicenseHeaderManager.Headers
       }
     }
 
-    private void CheckForEndOfFile()
+    private void UpdatePositionIfEndOfFile()
     {
       if (_position < 0)
         _position = _text.Length; //end of file
     }
 
-    private void SetStartedIfNotSet()
+    private void SetStarted()
     {
-      if (!_started)
         _started = true;
     }
   }
