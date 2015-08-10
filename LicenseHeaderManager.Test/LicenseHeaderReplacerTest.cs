@@ -130,8 +130,7 @@ namespace LicenseHeaderManager.Test
       [Test]
       public void DocumentCreated ()
       {
-        AddDocumentTo_projectItem("test.cs");
-
+        AddDocumentToProjectItem("test.cs", _projectItem);
         PrepareLanguagePage (".cs");
 
         var headers = new Dictionary<string, string[]>
@@ -149,8 +148,7 @@ namespace LicenseHeaderManager.Test
       [Test]
       public void UseMostSignificantExtension ()
       {
-        AddDocumentTo_projectItem ("test.generated.cs");
-
+        AddDocumentToProjectItem ("test.generated.cs", _projectItem);
         PrepareLanguagePage (".cs");
 
         var headers = new Dictionary<string, string[]>
@@ -169,8 +167,7 @@ namespace LicenseHeaderManager.Test
       {
         _projectItem.Expect (x => x.Properties.Item ("IsLink").Value).Return (true);
 
-        AddDocumentTo_projectItem("test.cs");
-
+        AddDocumentToProjectItem("test.cs", _projectItem);
         PrepareLanguagePage (".cs");
         
         var result = _replacer.TryCreateDocument (_projectItem, out _document);
@@ -178,11 +175,10 @@ namespace LicenseHeaderManager.Test
         Assert.That (result, Is.EqualTo (CreateDocumentResult.LinkedFile));
       }
 
-      private void AddDocumentTo_projectItem (string name)
+      private void AddDocumentToProjectItem (string name, ProjectItem projectItem)
       {
         var parent = MockRepository.GenerateMock<EnvDTE.Document> ();
         parent.Expect (x => x.FullName).Return ("");
-
 
         var editPoint = MockRepository.GenerateMock<EditPoint> ();
         editPoint.Expect (x => x.GetText (null)).IgnoreArguments ().Return ("");
@@ -191,12 +187,11 @@ namespace LicenseHeaderManager.Test
         textDocument.Expect (x => x.CreateEditPoint ()).IgnoreArguments ().Return (editPoint);
         textDocument.Expect (x => x.Parent).Return (parent);
 
-
         var documentMock = MockRepository.GenerateMock<EnvDTE.Document> ();
         documentMock.Expect (x => x.Object ("TextDocument")).Return (textDocument);
-        _projectItem.Expect (x => x.Kind).Return (Constants.vsProjectItemKindPhysicalFile);
-        _projectItem.Expect (x => x.Document).Return (documentMock);
-        _projectItem.Expect (x => x.Name).Return (name);
+        projectItem.Expect (x => x.Kind).Return (Constants.vsProjectItemKindPhysicalFile);
+        projectItem.Expect (x => x.Document).Return (documentMock);
+        projectItem.Expect (x => x.Name).Return (name);
       }
 
       private void PrepareLanguagePage (string fileEnding)

@@ -183,7 +183,7 @@ namespace LicenseHeaderManager.Headers
       if (ProjectItemInspection.IsLicenseHeader(item))
         return CreateDocumentResult.LicenseHeaderDocument;
 
-      if(IsLink(item))
+      if(IsLink (item))
         return CreateDocumentResult.LinkedFile;
 
       var language = _licenseHeaderExtension.LanguagesPage.Languages
