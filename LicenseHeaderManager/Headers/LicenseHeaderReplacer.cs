@@ -99,13 +99,15 @@ namespace LicenseHeaderManager.Headers
     public int RemoveOrReplaceHeaderRecursive (ProjectItem item, IDictionary<string, string[]> headers, bool searchForLicenseHeaders = true)
     {
       int headersFound = 0;
-      bool isOpen = item.IsOpen[Constants.vsViewKindAny];
-
+      
       Document document;
       if (TryCreateDocument (item, out document, headers) == CreateDocumentResult.DocumentCreated)
       {
         // item.Saved is not implemented for web_folders, therefore this check must be after the TryCreateDocument
         bool isSaved = item.Saved;
+        
+        //item.isOpen is not implemented for web_folders, therefore this check mus be after TryCreateDocument
+        bool isOpen = item.IsOpen[Constants.vsViewKindAny];
 
         string message;
         bool replace = true;
