@@ -206,7 +206,7 @@ namespace LicenseHeaderManager
 
       ProjectItem item = GetSolutionExplorerItem () as ProjectItem;
 
-      if (item != null && item.Kind == Constants.vsProjectItemKindPhysicalFile)
+      if (IsPhysicalFile(item))
       {
         Document document;
         visible = _licenseReplacer.TryCreateDocument (item, out document) == CreateDocumentResult.DocumentCreated;
@@ -214,6 +214,11 @@ namespace LicenseHeaderManager
 
       _addLicenseHeaderToProjectItemCommand.Visible = visible;
       _removeLicenseHeaderFromProjectItemCommand.Visible = visible;
+    }
+
+    private static bool IsPhysicalFile(ProjectItem item)
+    {
+      return item != null && (item.Kind == Constants.vsProjectItemKindPhysicalFile || item.Kind == "{"+GuidList.guidItemTypePhysicalFile+"}") && !IsLicenseheaderFile(item);
     }
 
     /// <summary>

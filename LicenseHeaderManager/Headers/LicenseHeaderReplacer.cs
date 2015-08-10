@@ -175,7 +175,7 @@ namespace LicenseHeaderManager.Headers
     {
       document = null;
 
-      if (item.Kind != Constants.vsProjectItemKindPhysicalFile)
+      if (item.Kind != Constants.vsProjectItemKindPhysicalFile && item.Kind != "{" + GuidList.guidItemTypePhysicalFile + "}")
         return CreateDocumentResult.NoPhysicalFile;
 
       if (item.Name.EndsWith (LicenseHeader.Extension))
