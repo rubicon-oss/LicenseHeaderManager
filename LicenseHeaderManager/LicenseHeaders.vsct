@@ -15,13 +15,13 @@
         defining some of the constants that we will use inside the file. -->
 
   <!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
-  <Extern href="stdidcmd.h"/>
+  <Extern href="stdidcmd.h" />
 
   <!--This header contains the command ids for the menus provided by the shell. -->
-  <Extern href="vsshlids.h"/>
+  <Extern href="vsshlids.h" />
 
   <!--Definition of some VSCT specific constants. In this sample we use it for the IDs inside the guidOfficeIcon group. -->
-  <Extern href="msobtnid.h"/>
+  <!--<Extern href="msobtnid.h" xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" />-->
 
 
 
@@ -44,58 +44,58 @@
          must be a menu. -->
     <Groups>
       <Group guid="guidLicenseHeadersCmdSet" id="EditMenuGroup" priority="0xFFFF">
-        <Parent guid="guidStdEditor" id="IDM_VS_EDITOR_ADVANCED_MENU"/>
+        <Parent guid="guidStdEditor" id="IDM_VS_EDITOR_ADVANCED_MENU" />
       </Group>
 
       <Group guid="guidLicenseHeadersCmdSet" id="ProjectMenuGroup" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE"/>
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE" />
       </Group>
 
       <Group guid="guidLicenseHeadersCmdSet" id="ProjectItemMenuGroup" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
       </Group>
 
       <Group guid="guidLicenseHeadersCmdSet" id="FolderMenuGroup" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_FOLDERNODE"/>
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_FOLDERNODE" />
       </Group>
 
       <Group guid="guidLicenseHeadersCmdSet" id="ProjectSubMenuGroup1" priority="0x0100">
-        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenu"/>
+        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenu" />
       </Group>
       
       <Group guid="guidLicenseHeadersCmdSet" id="ProjectSubMenuGroup2" priority="0x0200">
-        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenu"/>
+        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenu" />
       </Group>
 
       <Group guid="guidLicenseHeadersCmdSet" id="ProjectSubMenuGroup3" priority="0x0300">
-        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenu"/>
+        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenu" />
       </Group>
 
       <Group guid="guidLicenseHeadersCmdSet" id="ProjectItemSubMenuGroup" priority="0x0100">
-        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectItemSubMenu"/>
+        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectItemSubMenu" />
       </Group>
 
       <Group guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup" priority="0x0100">
-        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenu"/>
+        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenu" />
       </Group>
 
       <Group guid="guidLicenseHeadersCmdSet" id="FolderMenuGroup" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_WEBFOLDER"/>
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_WEBFOLDER" />
       </Group>
 
       <Group guid="guidLicenseHeadersCmdSet" id="ProjectItemMenuGroup" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_WEBITEMNODE"/>
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_WEBITEMNODE" />
       </Group>
 
       <Group guid="guidLicenseHeadersCmdSet" id="ProjectMenuGroup" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_WEBPROJECT"/>
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_WEBPROJECT" />
       </Group>
       
     </Groups>
 
     <Menus>
       <Menu guid="guidLicenseHeadersCmdSet" id="ProjectSubMenu" priority="0x0100">
-        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectMenuGroup"/>
+        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectMenuGroup" />
         <Strings>
           <ButtonText>License Headers</ButtonText>
           <CommandName>License Headers</CommandName>
@@ -103,7 +103,7 @@
       </Menu>
       
       <Menu guid="guidLicenseHeadersCmdSet" id="ProjectItemSubMenu" priority="0x0100">
-        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectItemMenuGroup"/>
+        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectItemMenuGroup" />
         <Strings>
           <ButtonText>License Headers</ButtonText>
           <CommandName>License Headers</CommandName>
@@ -111,7 +111,7 @@
       </Menu>
 
       <Menu guid="guidLicenseHeadersCmdSet" id="FolderSubMenu" priority="0x0100">
-        <Parent guid="guidLicenseHeadersCmdSet" id="FolderMenuGroup"/>
+        <Parent guid="guidLicenseHeadersCmdSet" id="FolderMenuGroup" />
         <Strings>
           <ButtonText>License Headers</ButtonText>
           <CommandName>License Headers</CommandName>
@@ -132,7 +132,7 @@
           If you do not want an image next to your command, remove the Icon node or set it to <Icon guid="guidOfficeIcon" id="msotcidNoIcon" /> -->
       
       
-      <Button guid="guidLicenseHeadersCmdSet" id="AddLicenseHeader" priority="0x0100" type="Button" >
+      <Button guid="guidLicenseHeadersCmdSet" id="AddLicenseHeader" priority="0x0100" type="Button">
         <Parent guid="guidLicenseHeadersCmdSet" id="EditMenuGroup" />
         <Icon guid="guidImages" id="bmpAddLicenseHeader" />
         <CommandFlag>DynamicVisibility</CommandFlag>
@@ -154,7 +154,7 @@
         </Strings>
       </Button>
 
-      <Button guid="guidLicenseHeadersCmdSet" id="AddLicenseHeaderToProjectItem" priority="0x0100" type="Button" >
+      <Button guid="guidLicenseHeadersCmdSet" id="AddLicenseHeaderToProjectItem" priority="0x0100" type="Button">
         <Parent guid="guidLicenseHeadersCmdSet" id="ProjectItemSubMenuGroup" />
         <Icon guid="guidImages" id="bmpAddLicenseHeader" />
         <CommandFlag>DynamicVisibility</CommandFlag>
@@ -176,7 +176,7 @@
         </Strings>
       </Button>
 
-      <Button guid="guidLicenseHeadersCmdSet" id="AddLicenseHeadersToAllFiles" priority="0x0100" type="Button" >
+      <Button guid="guidLicenseHeadersCmdSet" id="AddLicenseHeadersToAllFiles" priority="0x0100" type="Button">
         <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup" />
         <Icon guid="guidImages" id="bmpAddLicenseHeadersToAllFiles" />
         <CommandFlag>DynamicVisibility</CommandFlag>
@@ -251,14 +251,14 @@
             bitmap strip containing the bitmaps and then there are the numeric ids of the elements used 
             inside a button definition. An important aspect of this declaration is that the element id 
             must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
-      <Bitmap guid="guidImages" href="Resources\Images.bmp" usedList="bmpAddLicenseHeader, bmpRemoveLicenseHeader, bmpAddLicenseHeadersToAllFiles, bmpRemoveLicenseHeadersFromAllFiles, bmpAddExistingLicenseHeaderDefinitionFile, bmpAddLicenseHeaderDefinitionFile"/>
+      <Bitmap guid="guidImages" href="Resources\Images.bmp" usedList="bmpAddLicenseHeader, bmpRemoveLicenseHeader, bmpAddLicenseHeadersToAllFiles, bmpRemoveLicenseHeadersFromAllFiles, bmpAddExistingLicenseHeaderDefinitionFile, bmpAddLicenseHeaderDefinitionFile" />
 
     </Bitmaps>
  
   </Commands>
 
   <KeyBindings>
-    <KeyBinding guid="guidLicenseHeadersCmdSet" id="AddLicenseHeader" editor="guidVSStd97" key1="L" mod1="Alt"/>
+    <KeyBinding guid="guidLicenseHeadersCmdSet" id="AddLicenseHeader" editor="guidVSStd97" key1="L" mod1="Alt" />
   </KeyBindings>
 
 
@@ -278,9 +278,9 @@
       <IDSymbol name="FolderMenuGroup" value="0x1008" />
       <IDSymbol name="FolderSubMenuGroup" value="0x1009" />
 
-      <IDSymbol name="ProjectSubMenu" value="0x2001"/>
-      <IDSymbol name="ProjectItemSubMenu" value="0x2002"/>
-      <IDSymbol name="FolderSubMenu" value="0x2003"/>
+      <IDSymbol name="ProjectSubMenu" value="0x2001" />
+      <IDSymbol name="ProjectItemSubMenu" value="0x2002" />
+      <IDSymbol name="FolderSubMenu" value="0x2003" />
       
       <IDSymbol name="LicenseHeaderOptions" value="0x0001" />
       <IDSymbol name="AddLicenseHeader" value="0x0002" />
@@ -293,7 +293,7 @@
       <IDSymbol name="RemoveLicenseHeaderFromProjectItem" value="0x0009" />
     </GuidSymbol>
       
-    <GuidSymbol name="guidImages" value="{d52c5a04-6352-4a9c-8d55-990945d89fe8}" >
+    <GuidSymbol name="guidImages" value="{d52c5a04-6352-4a9c-8d55-990945d89fe8}">
       <IDSymbol name="bmpAddLicenseHeader" value="1" />
       <IDSymbol name="bmpRemoveLicenseHeader" value="2" />
       <IDSymbol name="bmpAddLicenseHeadersToAllFiles" value="3" />
