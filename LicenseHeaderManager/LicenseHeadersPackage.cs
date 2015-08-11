@@ -130,6 +130,8 @@ namespace LicenseHeaderManager
         RegisterCommand (mcs, PkgCmdIDList.cmdIdAddLicenseHeaderDefinitionFile, AddLicenseHeaderDefinitionFileCallback);
         RegisterCommand (mcs, PkgCmdIDList.cmdIdAddExistingLicenseHeaderDefinitionFile, AddExistingLicenseHeaderDefinitionFileCallback);
         RegisterCommand (mcs, PkgCmdIDList.cmdIdLicenseHeaderOptions, LicenseHeaderOptionsCallback);
+        RegisterCommand (mcs, PkgCmdIDList.cmdIdAddLicenseHeaderToAllProjects, AddLicenseHeaderToAllProjectsCallback);
+        RegisterCommand (mcs, PkgCmdIDList.cmdIdRemoveLicenseHeaderFromAllProjects, RemoveLicenseHeaderFromAllProjectsCallback);
       }
 
       //register ItemAdded event handler
@@ -164,6 +166,24 @@ namespace LicenseHeaderManager
         //register global event handler for ItemAdded
         _commandEvents = _dte.Events.CommandEvents;
         _commandEvents.BeforeExecute += BeforeAnyCommandExecuted;
+      }
+    }
+
+    private void AddLicenseHeaderToAllProjectsCallback(object sender, EventArgs e)
+    {
+      var solution = _dte.Solution;
+      foreach (Project project in solution)
+      {
+        AddLicenseHeaderToAllFiles(project);
+      }
+    }
+
+    private void RemoveLicenseHeaderFromAllProjectsCallback (object sender, EventArgs e)
+    {
+      var solution = _dte.Solution;
+      foreach (Project project in solution)
+      {
+        RemoveLicenseHeadersFromAllFiles (project);
       }
     }
 
@@ -509,6 +529,11 @@ namespace LicenseHeaderManager
     private void RemoveLicenseHeadersFromAllFilesCallback (object sender, EventArgs e)
     {
       var obj = GetSolutionExplorerItem ();
+      RemoveLicenseHeadersFromAllFiles(obj);
+    }
+
+    private void RemoveLicenseHeadersFromAllFiles(object obj)
+    {
       var project = obj as Project;
       var item = obj as ProjectItem;
 
