@@ -24,6 +24,7 @@ using EnvDTE;
 using EnvDTE80;
 using LicenseHeaderManager.Headers;
 using LicenseHeaderManager.Options;
+using LicenseHeaderManager.Utils;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -206,7 +207,7 @@ namespace LicenseHeaderManager
 
       ProjectItem item = GetSolutionExplorerItem () as ProjectItem;
 
-      if (IsPhysicalFile(item))
+      if (item != null && ProjectItemInspection.IsPhysicalFile(item))
       {
         Document document;
         visible = _licenseReplacer.TryCreateDocument (item, out document) == CreateDocumentResult.DocumentCreated;
@@ -214,11 +215,6 @@ namespace LicenseHeaderManager
 
       _addLicenseHeaderToProjectItemCommand.Visible = visible;
       _removeLicenseHeaderFromProjectItemCommand.Visible = visible;
-    }
-
-    private static bool IsPhysicalFile(ProjectItem item)
-    {
-      return item != null && (item.Kind == Constants.vsProjectItemKindPhysicalFile || item.Kind == "{"+GuidList.guidItemTypePhysicalFile+"}") && !IsLicenseheaderFile(item);
     }
 
     /// <summary>
@@ -441,7 +437,7 @@ namespace LicenseHeaderManager
         if (item == null)
           item = GetSolutionExplorerItem () as ProjectItem;
 
-        if (item != null && item.Kind == Constants.vsProjectItemKindPhysicalFile && Path.GetExtension (item.Name) != LicenseHeader.Extension)
+        if (ProjectItemInspection.IsPhysicalFile(item) && !ProjectItemInspection.IsLicenseHeader(item))
         {
           AddLicenseHeaderToItem (item, !_isCalledByLinkedCommand);
         }

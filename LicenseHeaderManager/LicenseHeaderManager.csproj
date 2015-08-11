@@ -193,6 +193,7 @@
     <Compile Include="Options\WpfCommandDialog.xaml.cs">
       <DependentUpon>WpfCommandDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\ProjectItemInspection.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
