@@ -115,21 +115,19 @@ namespace LicenseHeaderManager.Headers
 
       if (LineComment != null && token.StartsWith(LineComment))
       {
-        if (!_started)
-          _started = true;
+        SetStarted();
 
         //proceed to end of line
         _position = NewLineManager.NextLineEndPosition (_text, _position - token.Length + LineComment.Length);
-        if (_position < 0)
-          _position = _text.Length; //end of file
+        
+        UpdatePositionIfEndOfFile();
           
         return true;
       }
 
       else if (BeginComment != null && token.StartsWith (BeginComment))
       {
-        if (!_started)
-          _started = true;
+        SetStarted ();
 
         _position = _text.IndexOf (EndComment, _position - token.Length + BeginComment.Length);
         if (_position < 0)
@@ -142,23 +140,21 @@ namespace LicenseHeaderManager.Headers
 
       else if (BeginRegion != null && token == BeginRegion)
       {
-        if (!_started)
-          _started = true;
+        SetStarted ();
 
         _regionStarts.Push(_position - BeginRegion.Length);
 
 
         _position = NewLineManager.NextLineEndPosition (_text, _position);
-        if (_position < 0)
-          _position = _text.Length; //end of file
-
+        
+        UpdatePositionIfEndOfFile ();
+        
         return true;
       }
 
       else if (EndRegion != null && token == EndRegion)
       {
-        if (!_started)
-          _started = true;
+        SetStarted ();
 
         if (_regionStarts.Count == 0)
           throw new ParseException ();
@@ -166,8 +162,32 @@ namespace LicenseHeaderManager.Headers
         _regionStarts.Pop ();
 
         _position = NewLineManager.NextLineEndPosition (_text, _position);
-        if (_position < 0)
-          _position = _text.Length; //end of file
+        
+        UpdatePositionIfEndOfFile ();
+        
+
+        return true;
+      }
+      else if (EndRegion != null && EndRegion.Contains(token))
+      {
+        SetStarted ();
+
+        string firstPart = token;
+        token = GetToken();
+
+        if ((firstPart + " " + token) == EndRegion)
+        {
+
+          if (_regionStarts.Count == 0)
+            throw new ParseException ();
+
+          _regionStarts.Pop ();
+        }
+
+        _position = NewLineManager.NextLineEndPosition (_text, _position);
+
+        UpdatePositionIfEndOfFile ();
+        
 
         return true;
       }
@@ -177,6 +197,17 @@ namespace LicenseHeaderManager.Headers
         _position -= token.Length;
         return false;
       }
+    }
+
+    private void UpdatePositionIfEndOfFile()
+    {
+      if (_position < 0)
+        _position = _text.Length; //end of file
+    }
+
+    private void SetStarted()
+    {
+        _started = true;
     }
   }
 }
