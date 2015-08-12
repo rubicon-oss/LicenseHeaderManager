@@ -41,7 +41,7 @@ namespace LicenseHeaderManager.Options.Converters
       if (s == null)
         return value;
 
-      return s.Split (new[] { Separator }, StringSplitOptions.RemoveEmptyEntries);
+      return s.Split (new[] { Separator }, StringSplitOptions.None);
     }
   }
 }

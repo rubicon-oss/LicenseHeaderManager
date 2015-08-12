@@ -53,7 +53,7 @@ namespace LicenseHeaderManager.Options
 
     public void NormalizeExtensions ()
     {
-      Extensions = Extensions.Select (e => LicenseHeader.AddDot (e).ToLower ()).ToArray();
+      Extensions = Extensions.Where (e => !string.IsNullOrWhiteSpace(e)).Select(e => LicenseHeader.AddDot (e).ToLower ()).ToArray();
     }
   }
 }
