@@ -41,7 +41,7 @@ namespace LicenseHeaderManager.Headers
 
     public static bool ShowQuestionForAddingLicenseHeaderFile (Project activeProject, IDefaultLicenseHeaderPage page)
     {
-      string message = Resources.Error_NoHeaderDefinition.Replace (@"\n", "\n");
+      string message = string.Format(Resources.Error_NoHeaderDefinition, activeProject.Name).Replace (@"\n", "\n");
       var messageBoxResult = MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
       if (messageBoxResult != MessageBoxResult.Yes)
         return false;

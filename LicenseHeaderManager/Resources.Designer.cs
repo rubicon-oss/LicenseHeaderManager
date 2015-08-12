@@ -223,7 +223,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No license header definition file found in this project.\nDo you want to add a new file?.
+        ///   Looks up a localized string similar to No license header definition file found in project {0}.\nDo you want to add a new file?.
         /// </summary>
         public static string Error_NoHeaderDefinition {
             get {

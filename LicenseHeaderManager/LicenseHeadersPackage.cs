@@ -169,23 +169,7 @@ namespace LicenseHeaderManager
       }
     }
 
-    private void AddLicenseHeaderToAllProjectsCallback(object sender, EventArgs e)
-    {
-      var solution = _dte.Solution;
-      foreach (Project project in solution)
-      {
-        AddLicenseHeaderToAllFiles(project);
-      }
-    }
-
-    private void RemoveLicenseHeaderFromAllProjectsCallback (object sender, EventArgs e)
-    {
-      var solution = _dte.Solution;
-      foreach (Project project in solution)
-      {
-        RemoveLicenseHeadersFromAllFiles (project);
-      }
-    }
+    
 
     private OleMenuCommand RegisterCommand (OleMenuCommandService service, uint id, EventHandler handler)
     {
@@ -374,6 +358,8 @@ namespace LicenseHeaderManager
         }
       }
     }
+
+
 
     #region insert headers in new files
 
@@ -628,6 +614,28 @@ namespace LicenseHeaderManager
     private void LicenseHeaderOptionsCallback (object sender, EventArgs e)
     {
       ShowOptionPage (typeof (OptionsPage));
+    }
+
+    private void AddLicenseHeaderToAllProjectsCallback (object sender, EventArgs e)
+    {
+      var solution = _dte.Solution;
+      foreach (Project project in solution)
+      {
+        string solutionFolderGuid = "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}";
+        if (project.Kind != solutionFolderGuid)
+        {
+          AddLicenseHeaderToAllFiles (project);
+        }       
+      }
+    }
+
+    private void RemoveLicenseHeaderFromAllProjectsCallback (object sender, EventArgs e)
+    {
+      var solution = _dte.Solution;
+      foreach (Project project in solution)
+      {
+        RemoveLicenseHeadersFromAllFiles (project);
+      }
     }
 
     #endregion

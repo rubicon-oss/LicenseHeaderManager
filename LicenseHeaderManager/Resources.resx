@@ -172,7 +172,7 @@
     <value>No comment definitions found for {0} files.\nDo you want to add them to the configuration?</value>
   </data>
   <data name="Error_NoHeaderDefinition" xml:space="preserve">
-    <value>No license header definition file found in this project.\nDo you want to add a new file?</value>
+    <value>No license header definition file found in project {0}.\nDo you want to add a new file?</value>
   </data>
   <data name="Error_NoHeaderFound" xml:space="preserve">
     <value>This extension currently has no Header defined in the License Header Definition File\n </value>
