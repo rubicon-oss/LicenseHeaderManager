@@ -88,25 +88,27 @@ namespace LicenseHeaderManager.Headers
       IEnumerable<string> extensions = null;
       IList<string> header = new List<string> ();
 
-      var streamreader = new StreamReader (headerFilePath, true);
-      while (!streamreader.EndOfStream)
+      using (var streamreader = new StreamReader(headerFilePath, true))
       {
-        var line = streamreader.ReadLine ();
-        if (line.StartsWith (LicenseHeader.Keyword))
+        while (!streamreader.EndOfStream)
         {
-          if (extensions != null)
+          var line = streamreader.ReadLine ();
+          if (line.StartsWith (LicenseHeader.Keyword))
           {
-            var array = header.ToArray ();
-            foreach (var extension in extensions)
-              headers[extension] = array;
+            if (extensions != null)
+            {
+              var array = header.ToArray ();
+              foreach (var extension in extensions)
+                headers[extension] = array;
+            }
+            extensions = line.Substring (LicenseHeader.Keyword.Length).Split (new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select (LicenseHeader.AddDot);
+            header.Clear ();
           }
-          extensions = line.Substring (LicenseHeader.Keyword.Length).Split (new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select (LicenseHeader.AddDot);
-          header.Clear ();
-        }
-        else
-          header.Add (line);
+          else
+            header.Add (line);
+        }  
       }
-
+      
       if (extensions != null)
       {
         var array = header.ToArray ();

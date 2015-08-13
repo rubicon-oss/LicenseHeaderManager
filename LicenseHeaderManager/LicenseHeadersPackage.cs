@@ -411,19 +411,18 @@ namespace LicenseHeaderManager
 
     private void AddLicenseHeaderToItem (ProjectItem item, bool calledByUser)
     {
-      if (item != null)
+      if (item == null || IsLicenseheaderFile(item)) return;
+
+      var headers = LicenseHeaderFinder.GetHeaderRecursive (item);
+      if (headers != null)
       {
-        var headers = LicenseHeaderFinder.GetHeaderRecursive (item);
-        if (headers != null)
-        {
-          _licenseReplacer.RemoveOrReplaceHeader (item, headers, calledByUser);
-        }
-        else
-        {
-          var page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
-          if (calledByUser && LicenseHeader.ShowQuestionForAddingLicenseHeaderFile (item.ContainingProject, page))
-            AddLicenseHeaderToItem (item, true);
-        }
+        _licenseReplacer.RemoveOrReplaceHeader (item, headers, calledByUser);
+      }
+      else
+      {
+        var page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
+        if (calledByUser && LicenseHeader.ShowQuestionForAddingLicenseHeaderFile (item.ContainingProject, page))
+          AddLicenseHeaderToItem (item, true);
       }
     }
 
@@ -431,11 +430,7 @@ namespace LicenseHeaderManager
     private void AddLicenseHeaderToProjectItemCallback (object sender, EventArgs e)
     {
       var args = e as OleMenuCmdEventArgs;
-      if (args != null)
-      {
-        var item = args.InValue as ProjectItem;
-        if (item == null)
-          item = GetSolutionExplorerItem () as ProjectItem;
+      if (args == null) return;
 
         if (ProjectItemInspection.IsPhysicalFile(item) && !ProjectItemInspection.IsLicenseHeader(item))
         {
