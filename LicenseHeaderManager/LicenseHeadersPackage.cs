@@ -411,7 +411,7 @@ namespace LicenseHeaderManager
 
     private void AddLicenseHeaderToItem (ProjectItem item, bool calledByUser)
     {
-      if (item == null || IsLicenseheaderFile(item)) return;
+      if (item == null || ProjectItemInspection.IsLicenseHeader(item)) return;
 
       var headers = LicenseHeaderFinder.GetHeaderRecursive (item);
       if (headers != null)
@@ -431,11 +431,13 @@ namespace LicenseHeaderManager
     {
       var args = e as OleMenuCmdEventArgs;
       if (args == null) return;
+      var item = args.InValue as ProjectItem;
+      if(item == null)
+        item = GetSolutionExplorerItem() as ProjectItem;
 
-        if (ProjectItemInspection.IsPhysicalFile(item) && !ProjectItemInspection.IsLicenseHeader(item))
-        {
-          AddLicenseHeaderToItem (item, !_isCalledByLinkedCommand);
-        }
+      if (ProjectItemInspection.IsPhysicalFile(item) && !ProjectItemInspection.IsLicenseHeader(item))
+      {
+        AddLicenseHeaderToItem (item, !_isCalledByLinkedCommand);
       }
     }
 
