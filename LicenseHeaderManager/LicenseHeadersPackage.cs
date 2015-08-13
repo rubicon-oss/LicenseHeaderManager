@@ -558,7 +558,7 @@ namespace LicenseHeaderManager
       }
 
       if(project != null)
-        LicenseHeader.AddLicenseHeaderDefinitionFile (project, page);
+        LicenseHeader.AddLicenseHeaderDefinitionFile (project, page, true);
     }
 
     private void AddExistingLicenseHeaderDefinitionFileCallback (object sender, EventArgs e)

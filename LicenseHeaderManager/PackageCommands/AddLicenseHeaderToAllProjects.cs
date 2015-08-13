@@ -104,7 +104,7 @@ namespace LicenseHeaderManager.PackageCommands
         foreach (Project project in projectsWithoutLicenseHeader)
         {
           if (projectsWithoutLicenseHeader.Contains (project))
-            LicenseHeader.AddLicenseHeaderDefinitionFile (project, page);
+            LicenseHeader.AddLicenseHeaderDefinitionFile (project, page, false);
         }   
     }
   }
