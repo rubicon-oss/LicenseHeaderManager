@@ -232,7 +232,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No header found for {0} files.\nDo you want to add a new license header definition file to the project?.
+        ///   Looks up a localized string similar to This extension currently has no Header defined in the License Header Definition File\n .
         /// </summary>
         public static string Error_NoHeaderFound {
             get {
@@ -336,6 +336,15 @@ namespace LicenseHeaderManager {
         public static string LinkedCommands {
             get {
                 return ResourceManager.GetString("LinkedCommands", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License Header Manager.
+        /// </summary>
+        public static string NameOfThisExtension {
+            get {
+                return ResourceManager.GetString("NameOfThisExtension", resourceCulture);
             }
         }
         

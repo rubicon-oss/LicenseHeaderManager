@@ -175,7 +175,7 @@
     <value>No license header definition file found in this project.\nDo you want to add a new file?</value>
   </data>
   <data name="Error_NoHeaderFound" xml:space="preserve">
-    <value>No header found for {0} files.\nDo you want to add a new license header definition file to the project?</value>
+    <value>This extension currently has no Header defined in the License Header Definition File\n </value>
   </data>
   <data name="Error_NoLicenseHeaderFile" xml:space="preserve">
     <value>The project has no license header file.</value>
@@ -209,6 +209,9 @@
   </data>
   <data name="LinkedCommands" xml:space="preserve">
     <value>You can link the 'Add License Header' command to other commands so that it is automatically executed before or after them.</value>
+  </data>
+  <data name="NameOfThisExtension" xml:space="preserve">
+    <value>License Header Manager</value>
   </data>
   <data name="Ok" xml:space="preserve">
     <value>OK</value>

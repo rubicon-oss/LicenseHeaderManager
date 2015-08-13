@@ -79,8 +79,8 @@ namespace LicenseHeaderManager.Headers
           case CreateDocumentResult.NoHeaderFound:
             if (calledbyUser)
             {
-              var page = _licenseHeaderExtension.DefaultLicenseHeaderPage;
-              LicenseHeader.ShowQuestionForAddingLicenseHeaderFile (item.ContainingProject, page);
+              message = string.Format(Resources.Error_NoHeaderFound).Replace(@"\n", "\n");
+              MessageBox.Show(message, Resources.NameOfThisExtension, MessageBoxButton.OK, MessageBoxImage.Question);
             }
             break;
         }
