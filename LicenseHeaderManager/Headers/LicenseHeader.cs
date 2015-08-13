@@ -29,7 +29,7 @@ namespace LicenseHeaderManager.Headers
 
     public static string GetNewFileName (Project project)
     {
-      var directory = Path.GetDirectoryName (project.FileName);
+      var directory = Path.GetDirectoryName (project.FullName);
       var projectName = directory.Substring (directory.LastIndexOf ('\\') + 1);
       var filename = Path.Combine (directory, projectName) + Extension;
 
