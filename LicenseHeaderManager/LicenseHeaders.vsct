@@ -51,11 +51,11 @@
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE" />
       </Group>
 
-      <Group guid="guidLicenseHeadersCmdSet" id="ProjectItemMenuGroup" priority="0x0600">
+      <Group guid="guidLicenseHeadersCmdSet" id="ProjectItemMenuGroup" priority="0x0500">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
       </Group>
 
-      <Group guid="guidLicenseHeadersCmdSet" id="FolderMenuGroup" priority="0x0600">
+      <Group guid="guidLicenseHeadersCmdSet" id="FolderMenuGroup" priority="0x0400">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_FOLDERNODE" />
       </Group>
 
