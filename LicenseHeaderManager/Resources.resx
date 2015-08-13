@@ -171,8 +171,11 @@
   <data name="Error_LanguageNotFound" xml:space="preserve">
     <value>No comment definitions found for {0} files.\nDo you want to add them to the configuration?</value>
   </data>
+  <data name="Error_MulitpleProjectsNoLicenseHeaderFile" xml:space="preserve">
+    <value>No LicenseHeaderDefinitionFile found in following Projects:\n\n{0}\n\nDo you want to add the Default LicenseHeader Definition Files automatically?</value>
+  </data>
   <data name="Error_NoHeaderDefinition" xml:space="preserve">
-    <value>No license header definition file found in project {0}.\nDo you want to add a new file?</value>
+    <value>No LicenseHeaderDefinitionFile found in project {0}.\nDo you want to add a new file?</value>
   </data>
   <data name="Error_NoHeaderFound" xml:space="preserve">
     <value>This extension currently has no Header defined in the License Header Definition File\n </value>
@@ -200,6 +203,9 @@
   </data>
   <data name="InsertInNewFiles" xml:space="preserve">
     <value>Automatically insert license headers in new files</value>
+  </data>
+  <data name="LicenseHeaderManagerName" xml:space="preserve">
+    <value>License Header Manager</value>
   </data>
   <data name="Line" xml:space="preserve">
     <value>Line</value>

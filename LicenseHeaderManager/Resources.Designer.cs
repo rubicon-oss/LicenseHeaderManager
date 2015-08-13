@@ -223,7 +223,16 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No license header definition file found in project {0}.\nDo you want to add a new file?.
+        ///   Looks up a localized string similar to No LicenseHeaderDefinitionFile found in following Projects:\n\n{0}\n\nDo you want to add the Default LicenseHeader Definition Files automatically?.
+        /// </summary>
+        public static string Error_MulitpleProjectsNoLicenseHeaderFile {
+            get {
+                return ResourceManager.GetString("Error_MulitpleProjectsNoLicenseHeaderFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No LicenseHeaderDefinitionFile found in project {0}.\nDo you want to add a new file?.
         /// </summary>
         public static string Error_NoHeaderDefinition {
             get {
@@ -309,6 +318,15 @@ namespace LicenseHeaderManager {
         public static string InsertInNewFiles {
             get {
                 return ResourceManager.GetString("InsertInNewFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License Header Manager.
+        /// </summary>
+        public static string LicenseHeaderManagerName {
+            get {
+                return ResourceManager.GetString("LicenseHeaderManagerName", resourceCulture);
             }
         }
         

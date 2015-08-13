@@ -11,6 +11,7 @@ using LicenseHeaderManager.Options;
 using LicenseHeaderManager.Utils;
 using Microsoft.VisualStudio.Shell;
 using Language = LicenseHeaderManager.Options.Language;
+using Window = EnvDTE.Window;
 
 namespace LicenseHeaderManager.Headers
 {

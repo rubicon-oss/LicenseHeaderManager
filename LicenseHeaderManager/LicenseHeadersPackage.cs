@@ -24,6 +24,7 @@ using EnvDTE;
 using EnvDTE80;
 using LicenseHeaderManager.Headers;
 using LicenseHeaderManager.Options;
+using LicenseHeaderManager.PackageCommands;
 using LicenseHeaderManager.Utils;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
@@ -475,7 +476,7 @@ namespace LicenseHeaderManager
       AddLicenseHeaderToAllFiles (obj);
     }
 
-    private void AddLicenseHeaderToAllFiles(object obj)
+    public void AddLicenseHeaderToAllFiles(object obj)
     {
       var project = obj as Project;
       var item = obj as ProjectItem;
@@ -619,14 +620,8 @@ namespace LicenseHeaderManager
     private void AddLicenseHeaderToAllProjectsCallback (object sender, EventArgs e)
     {
       var solution = _dte.Solution;
-      foreach (Project project in solution)
-      {
-        string solutionFolderGuid = "{66A26720-8FB5-11D2-AA7E-00C04F688DDE}";
-        if (project.Kind != solutionFolderGuid)
-        {
-          AddLicenseHeaderToAllFiles (project);
-        }       
-      }
+      
+      AddLicenseHeaderToAllProjects.AddLicenseHeaderToAllProjectsCommand(solution, this);  
     }
 
     private void RemoveLicenseHeaderFromAllProjectsCallback (object sender, EventArgs e)
