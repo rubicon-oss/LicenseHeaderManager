@@ -27,16 +27,16 @@ namespace LicenseHeaderManager.Headers
     public const string Keyword = "extensions:";
     public const string Extension = ".licenseheader";
 
-    public static string GetNewFileName (Project project)
+    private static string GetNewFileName (string name)
     {
-      var directory = Path.GetDirectoryName (project.FullName);
+      var directory = Path.GetDirectoryName (name);
       var projectName = directory.Substring (directory.LastIndexOf ('\\') + 1);
-      var filename = Path.Combine (directory, projectName) + Extension;
+      var fileName = Path.Combine (directory, projectName) + Extension;
 
-      for (var i = 2; File.Exists(filename); i++)
-        filename = Path.Combine (directory, projectName) + i + Extension;
+      for (var i = 2; File.Exists(fileName); i++)
+        fileName = Path.Combine (directory, projectName) + i + Extension;
 
-      return filename;
+      return fileName;
     }
 
     public static bool ShowQuestionForAddingLicenseHeaderFile (Project activeProject, IDefaultLicenseHeaderPage page)
@@ -45,34 +45,52 @@ namespace LicenseHeaderManager.Headers
       var messageBoxResult = MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
       if (messageBoxResult != MessageBoxResult.Yes)
         return false;
-      return AddLicenseHeaderDefinitionFileToProject(activeProject, page);
+      return AddLicenseHeaderDefinitionFile(activeProject, page);
     }
 
 
     /// <summary>
     /// Adds a new License Header Definition file to the active project.
     /// </summary>
-    public static bool AddLicenseHeaderDefinitionFileToProject (Project activeProject, IDefaultLicenseHeaderPage page)
+    public static bool AddLicenseHeaderDefinitionFile (Project activeProject, IDefaultLicenseHeaderPage page)
     {
       if (activeProject == null)
         return false;
 
-      var fileName = GetNewFileName (activeProject);
+      var fileName = GetNewFileName (activeProject.FileName);
       File.WriteAllText (fileName, page.LicenseHeaderFileText);
       var newProjectItem = activeProject.ProjectItems.AddFromFile (fileName);
 
+      return OpenNewProjectItem(newProjectItem);
+    }
+
+    /// <summary>
+    /// Adds a new License Header Definition file to a folder
+    /// </summary>
+    public static bool AddLicenseHeaderDefinitionFile (ProjectItem folder, IDefaultLicenseHeaderPage page)
+    {
+      if (folder == null || folder.Kind != Constants.vsProjectItemKindPhysicalFolder)
+        return false;
+
+      var fileName = GetNewFileName (folder.Properties.Item("FullPath").Value.ToString());
+      File.WriteAllText (fileName, page.LicenseHeaderFileText);
+
+      var newProjectItem = folder.ProjectItems.AddFromFile (fileName);
+
+      return OpenNewProjectItem(newProjectItem);
+    }
+
+    private static bool OpenNewProjectItem(ProjectItem newProjectItem)
+    {
       if (newProjectItem != null)
       {
-        var window = newProjectItem.Open (Constants.vsViewKindCode);
+        var window = newProjectItem.Open(Constants.vsViewKindCode);
         window.Activate();
         return true;
       }
-      else
-      {
-        string message = string.Format (Resources.Error_CreatingFile).Replace (@"\n", "\n");
-        MessageBox.Show (message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-        return false;
-      }
+      string message = string.Format(Resources.Error_CreatingFile).Replace(@"\n", "\n");
+      MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+      return false;
     }
 
     public static string AddDot (string extension)
