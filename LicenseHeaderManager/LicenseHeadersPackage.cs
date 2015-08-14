@@ -1,4 +1,5 @@
 ﻿#region copyright
+#region copyright
 // Copyright (c) 2011 rubicon IT GmbH
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
@@ -23,6 +24,7 @@ using System.Windows;
 using EnvDTE;
 using EnvDTE80;
 using LicenseHeaderManager.Headers;
+using LicenseHeaderManager.Interfaces;
 using LicenseHeaderManager.Options;
 using LicenseHeaderManager.PackageCommands;
 using LicenseHeaderManager.Utils;
@@ -475,10 +477,10 @@ namespace LicenseHeaderManager
     private void AddLicenseHeadersToAllFilesCallback (object sender, EventArgs e)
     {
       var obj = GetSolutionExplorerItem ();
-      AddLicenseHeaderToAllFiles (obj);
+      AddLicenseHeaderToAllFiles (obj, true);
     }
 
-    public void AddLicenseHeaderToAllFiles(object obj)
+    public void AddLicenseHeaderToAllFiles(object obj, bool handleLinkedItems)
     {
       var project = obj as Project;
       var projectItem = obj as ProjectItem;
@@ -514,26 +516,32 @@ namespace LicenseHeaderManager
             countSubLicenseHeadersFound = _licenseReplacer.RemoveOrReplaceHeaderRecursive (item, headers);
         }
 
-        LinkedFileFilter linkedFileFilter = new LinkedFileFilter(_dte.Solution);
-        linkedFileFilter.Filter(linkedItems);
+        if(handleLinkedItems)
+          HandleLinkedFilesAndShowMessageBox(linkedItems);
 
-        LinkedFileHandler linkedFileHandler = new LinkedFileHandler();
-        linkedFileHandler.Handle(_licenseReplacer, linkedFileFilter);
-
-        if (linkedFileHandler.Message != string.Empty)
-        {
-          MessageBox.Show (linkedFileHandler.Message, Resources.NameOfThisExtension, MessageBoxButton.OK,
-            MessageBoxImage.Information);  
-        }
-        
         statusBar.SetText (String.Empty);
         if (countSubLicenseHeadersFound == 0 && headers == null)
         {
           //No license header found...
           var page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
           if (LicenseHeader.ShowQuestionForAddingLicenseHeaderFile (project ?? projectItem.ContainingProject, page))
-            AddLicenseHeaderToAllFiles (obj);
+            AddLicenseHeaderToAllFiles (obj, true);
         }
+      }
+    }
+
+    private void HandleLinkedFilesAndShowMessageBox(List<ProjectItem> linkedItems)
+    {
+      LinkedFileFilter linkedFileFilter = new LinkedFileFilter(_dte.Solution);
+      linkedFileFilter.Filter(linkedItems);
+
+      LinkedFileHandler linkedFileHandler = new LinkedFileHandler();
+      linkedFileHandler.Handle(_licenseReplacer, linkedFileFilter);
+
+      if (linkedFileHandler.Message != string.Empty)
+      {
+        MessageBox.Show(linkedFileHandler.Message, Resources.NameOfThisExtension, MessageBoxButton.OK,
+          MessageBoxImage.Information);
       }
     }
 
