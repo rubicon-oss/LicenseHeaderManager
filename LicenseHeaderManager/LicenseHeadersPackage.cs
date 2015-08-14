@@ -621,7 +621,8 @@ namespace LicenseHeaderManager
     {
       var solution = _dte.Solution;
       
-      AddLicenseHeaderToAllProjects.AddLicenseHeaderToAllProjectsCommand(solution, this);  
+      var addLicenseHeaderToAllProjectsCommand = new AddLicenseHeaderToAllProjectsCommand(this);
+      addLicenseHeaderToAllProjectsCommand.Execute(solution);  
     }
 
     private void RemoveLicenseHeaderFromAllProjectsCallback (object sender, EventArgs e)
