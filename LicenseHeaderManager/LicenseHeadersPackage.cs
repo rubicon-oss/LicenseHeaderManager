@@ -504,14 +504,28 @@ namespace LicenseHeaderManager
           projectItems = projectItem.ProjectItems;          
         }
 
+        List<ProjectItem> linkedItems = new List<ProjectItem>();
+
         foreach (ProjectItem item in projectItems)
         {
           if (IsLink (item))
-            UpdateOriginalFileIfPossible (item);
+            linkedItems.Add(item);
           else
             countSubLicenseHeadersFound = _licenseReplacer.RemoveOrReplaceHeaderRecursive (item, headers);
         }
 
+        LinkedFileFilter linkedFileFilter = new LinkedFileFilter(_dte.Solution);
+        linkedFileFilter.Filter(linkedItems);
+
+        LinkedFileHandler linkedFileHandler = new LinkedFileHandler();
+        linkedFileHandler.Handle(_licenseReplacer, linkedFileFilter);
+
+        if (linkedFileHandler.Message != string.Empty)
+        {
+          MessageBox.Show (linkedFileHandler.Message, Resources.NameOfThisExtension, MessageBoxButton.OK,
+            MessageBoxImage.Information);  
+        }
+        
         statusBar.SetText (String.Empty);
         if (countSubLicenseHeadersFound == 0 && headers == null)
         {
@@ -520,15 +534,6 @@ namespace LicenseHeaderManager
           if (LicenseHeader.ShowQuestionForAddingLicenseHeaderFile (project ?? projectItem.ContainingProject, page))
             AddLicenseHeaderToAllFiles (obj);
         }
-      }
-    }
-
-    private void UpdateOriginalFileIfPossible(ProjectItem projectItem)
-    {
-      var originalProjectItem = _dte.Solution.FindProjectItem(projectItem.Name);
-      if (originalProjectItem != null)
-      {
-        AddLicenseHeaderToItem(originalProjectItem, true);
       }
     }
 

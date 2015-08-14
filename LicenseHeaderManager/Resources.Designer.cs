@@ -358,6 +358,15 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We could not update following linked Files, because there is no LicenseHeader Definition File in their original Project, or the original Project is not Part of this solution.\n\n{0}.
+        /// </summary>
+        public static string LinkedFileUpdateInformation {
+            get {
+                return ResourceManager.GetString("LinkedFileUpdateInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to License Header Manager.
         /// </summary>
         public static string NameOfThisExtension {

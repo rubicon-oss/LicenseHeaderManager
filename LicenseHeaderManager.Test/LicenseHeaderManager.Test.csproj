@@ -60,6 +60,8 @@
     <Compile Include="LicenseHeaderReplacerTest.cs" />
     <Compile Include="LineManagerTest.cs" />
     <Compile Include="CommentParserTests.cs" />
+    <Compile Include="LinkedFileFilterTest.cs" />
+    <Compile Include="LinkedFileHandlerTest.cs" />
     <Compile Include="ProjectItemInspectionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

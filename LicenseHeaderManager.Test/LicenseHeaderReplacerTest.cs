@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using EnvDTE;
 using LicenseHeaderManager.Headers;
+using LicenseHeaderManager.Interfaces;
 using LicenseHeaderManager.Options;
 using NUnit.Framework;
 using Rhino.Mocks;

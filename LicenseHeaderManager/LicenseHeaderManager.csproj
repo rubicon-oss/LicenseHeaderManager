@@ -138,7 +138,8 @@
     <Compile Include="Headers\ParseException.cs" />
     <Compile Include="Headers\CommentParser.cs" />
     <Compile Include="Headers\UserInfo.cs" />
-    <Compile Include="ILicenseHeaderExtension.cs" />
+    <Compile Include="Interfaces\ILicenseHeaderExtension.cs" />
+    <Compile Include="Interfaces\ILinkedFileFilter.cs" />
     <Compile Include="Options\IDefaultLicenseHeaderPage.cs" />
     <Compile Include="Options\ILanguagesPage.cs" />
     <Compile Include="Options\IOptionsPage.cs" />
@@ -194,6 +195,8 @@
     <Compile Include="Options\WpfCommandDialog.xaml.cs">
       <DependentUpon>WpfCommandDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\LinkedFileFilter.cs" />
+    <Compile Include="Utils\LinkedFileHandler.cs" />
     <Compile Include="Utils\ProjectItemInspection.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
   </ItemGroup>
@@ -285,6 +288,7 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
   </PropertyGroup>
