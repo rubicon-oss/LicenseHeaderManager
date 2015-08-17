@@ -216,6 +216,9 @@
   <data name="LinkedCommands" xml:space="preserve">
     <value>You can link the 'Add License Header' command to other commands so that it is automatically executed before or after them.</value>
   </data>
+  <data name="LinkedFileUpdateInformation" xml:space="preserve">
+    <value>We could not update following linked Files, because there is no LicenseHeader Definition File in their original Project, or the original Project is not Part of this solution.\n\n{0}</value>
+  </data>
   <data name="NameOfThisExtension" xml:space="preserve">
     <value>License Header Manager</value>
   </data>

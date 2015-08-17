@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿//Sample license text.
 using LicenseHeaderManager.Options;
 
-namespace LicenseHeaderManager
+namespace LicenseHeaderManager.Interfaces
 {
   public interface ILicenseHeaderExtension
   {
