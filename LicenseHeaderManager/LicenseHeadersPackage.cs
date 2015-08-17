@@ -24,6 +24,7 @@ using EnvDTE;
 using EnvDTE80;
 using LicenseHeaderManager.Headers;
 using LicenseHeaderManager.Options;
+using LicenseHeaderManager.PackageCommands;
 using LicenseHeaderManager.Utils;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
@@ -130,6 +131,8 @@ namespace LicenseHeaderManager
         RegisterCommand (mcs, PkgCmdIDList.cmdIdAddLicenseHeaderDefinitionFile, AddLicenseHeaderDefinitionFileCallback);
         RegisterCommand (mcs, PkgCmdIDList.cmdIdAddExistingLicenseHeaderDefinitionFile, AddExistingLicenseHeaderDefinitionFileCallback);
         RegisterCommand (mcs, PkgCmdIDList.cmdIdLicenseHeaderOptions, LicenseHeaderOptionsCallback);
+        RegisterCommand (mcs, PkgCmdIDList.cmdIdAddLicenseHeaderToAllProjects, AddLicenseHeaderToAllProjectsCallback);
+        RegisterCommand (mcs, PkgCmdIDList.cmdIdRemoveLicenseHeaderFromAllProjects, RemoveLicenseHeaderFromAllProjectsCallback);
       }
 
       //register ItemAdded event handler
@@ -166,6 +169,8 @@ namespace LicenseHeaderManager
         _commandEvents.BeforeExecute += BeforeAnyCommandExecuted;
       }
     }
+
+    
 
     private OleMenuCommand RegisterCommand (OleMenuCommandService service, uint id, EventHandler handler)
     {
@@ -355,6 +360,8 @@ namespace LicenseHeaderManager
       }
     }
 
+
+
     #region insert headers in new files
 
     private string _currentCommandGuid;
@@ -469,7 +476,7 @@ namespace LicenseHeaderManager
       AddLicenseHeaderToAllFiles (obj);
     }
 
-    private void AddLicenseHeaderToAllFiles(object obj)
+    public void AddLicenseHeaderToAllFiles(object obj)
     {
       var project = obj as Project;
       var item = obj as ProjectItem;
@@ -509,6 +516,11 @@ namespace LicenseHeaderManager
     private void RemoveLicenseHeadersFromAllFilesCallback (object sender, EventArgs e)
     {
       var obj = GetSolutionExplorerItem ();
+      RemoveLicenseHeadersFromAllFiles(obj);
+    }
+
+    private void RemoveLicenseHeadersFromAllFiles(object obj)
+    {
       var project = obj as Project;
       var item = obj as ProjectItem;
 
@@ -546,7 +558,7 @@ namespace LicenseHeaderManager
       }
 
       if(project != null)
-        LicenseHeader.AddLicenseHeaderDefinitionFile (project, page);
+        LicenseHeader.AddLicenseHeaderDefinitionFile (project, page, true);
     }
 
     private void AddExistingLicenseHeaderDefinitionFileCallback (object sender, EventArgs e)
@@ -603,6 +615,23 @@ namespace LicenseHeaderManager
     private void LicenseHeaderOptionsCallback (object sender, EventArgs e)
     {
       ShowOptionPage (typeof (OptionsPage));
+    }
+
+    private void AddLicenseHeaderToAllProjectsCallback (object sender, EventArgs e)
+    {
+      var solution = _dte.Solution;
+      
+      var addLicenseHeaderToAllProjectsCommand = new AddLicenseHeaderToAllProjectsCommand(this);
+      addLicenseHeaderToAllProjectsCommand.Execute(solution);  
+    }
+
+    private void RemoveLicenseHeaderFromAllProjectsCallback (object sender, EventArgs e)
+    {
+      var solution = _dte.Solution;
+      foreach (Project project in solution)
+      {
+        RemoveLicenseHeadersFromAllFiles (project);
+      }
     }
 
     #endregion

@@ -41,43 +41,45 @@ namespace LicenseHeaderManager.Headers
 
     public static bool ShowQuestionForAddingLicenseHeaderFile (Project activeProject, IDefaultLicenseHeaderPage page)
     {
-      string message = Resources.Error_NoHeaderDefinition.Replace (@"\n", "\n");
+      string message = string.Format(Resources.Error_NoHeaderDefinition, activeProject.Name).Replace (@"\n", "\n");
       var messageBoxResult = MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
       if (messageBoxResult != MessageBoxResult.Yes)
         return false;
-      return AddLicenseHeaderDefinitionFile(activeProject, page);
+      AddLicenseHeaderDefinitionFile(activeProject, page, true);
+      return true;
     }
 
 
     /// <summary>
     /// Adds a new License Header Definition file to the active project.
     /// </summary>
-    public static bool AddLicenseHeaderDefinitionFile (Project activeProject, IDefaultLicenseHeaderPage page)
+    public static void AddLicenseHeaderDefinitionFile (Project activeProject, IDefaultLicenseHeaderPage page, bool openLicenseHeaderFile)
     {
       if (activeProject == null)
-        return false;
+        return;
 
       var fileName = GetNewFileName (activeProject.FileName);
       File.WriteAllText (fileName, page.LicenseHeaderFileText);
       var newProjectItem = activeProject.ProjectItems.AddFromFile (fileName);
 
-      return OpenNewProjectItem(newProjectItem);
+      if (openLicenseHeaderFile)
+        OpenNewProjectItem(newProjectItem);
     }
 
     /// <summary>
     /// Adds a new License Header Definition file to a folder
     /// </summary>
-    public static bool AddLicenseHeaderDefinitionFile (ProjectItem folder, IDefaultLicenseHeaderPage page)
+    public static void AddLicenseHeaderDefinitionFile (ProjectItem folder, IDefaultLicenseHeaderPage page)
     {
       if (folder == null || folder.Kind != Constants.vsProjectItemKindPhysicalFolder)
-        return false;
+        return;
 
       var fileName = GetNewFileName (folder.Properties.Item("FullPath").Value.ToString());
       File.WriteAllText (fileName, page.LicenseHeaderFileText);
 
       var newProjectItem = folder.ProjectItems.AddFromFile (fileName);
 
-      return OpenNewProjectItem(newProjectItem);
+      OpenNewProjectItem(newProjectItem);
     }
 
     private static bool OpenNewProjectItem(ProjectItem newProjectItem)

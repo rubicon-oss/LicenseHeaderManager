@@ -94,6 +94,14 @@
       <Group guid="guidLicenseHeadersCmdSet" id="ProjectMenuGroup" priority="0x0600">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_WEBPROJECT" />
       </Group>
+
+      <Group guid="guidLicenseHeadersCmdSet" id="SolutionMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_SOLNNODE"/>
+      </Group>
+
+      <Group guid="guidLicenseHeadersCmdSet" id="SolutionSubMenuGroup" priority="0x0100">
+        <Parent guid="guidLicenseHeadersCmdSet" id="SolutionSubMenu" />
+      </Group>
       
     </Groups>
 
@@ -116,6 +124,14 @@
 
       <Menu guid="guidLicenseHeadersCmdSet" id="FolderSubMenu" priority="0x0100">
         <Parent guid="guidLicenseHeadersCmdSet" id="FolderMenuGroup" />
+        <Strings>
+          <ButtonText>License Headers</ButtonText>
+          <CommandName>License Headers</CommandName>
+        </Strings>
+      </Menu>
+
+      <Menu guid="guidLicenseHeadersCmdSet" id="SolutionSubMenu" priority="0x0100">
+        <Parent guid="guidLicenseHeadersCmdSet" id="SolutionMenuGroup" />
         <Strings>
           <ButtonText>License Headers</ButtonText>
           <CommandName>License Headers</CommandName>
@@ -263,7 +279,25 @@
           <ButtonText>Options...</ButtonText>
         </Strings>
       </Button>
-      
+
+      <Button guid="guidLicenseHeadersCmdSet" id="AddLicenseHeadersToAllProjects" priority="0x0100" type="Button">
+        <Parent guid="guidLicenseHeadersCmdSet" id="SolutionSubMenuGroup" />
+        <Icon guid="guidImages" id="bmpAddLicenseHeadersToAllFiles" />
+        <Strings>
+          <CommandName>AddLicenseHeadersToAllProjects</CommandName>
+          <ButtonText>Add License Headers to All Projects</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLicenseHeadersCmdSet" id="RemoveLicenseHeadersFromAllProjects" priority="0x0200" type="Button">
+        <Parent guid="guidLicenseHeadersCmdSet" id="SolutionSubMenuGroup" />
+        <Icon guid="guidImages" id="bmpRemoveLicenseHeadersFromAllFiles" />
+        <Strings>
+          <CommandName>RemoveLicenseHeadersFromAllProjects</CommandName>
+          <ButtonText>Remove License Headers from All Projects</ButtonText>
+        </Strings>
+      </Button>
+
     </Buttons>
    
     <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
@@ -287,7 +321,7 @@
   <Symbols>
     <!-- This is the package guid. -->
     <GuidSymbol name="guidLicenseHeadersPkg" value="{4c570677-8476-4d33-bd0c-da36c89287c8}" />
-    
+
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidLicenseHeadersCmdSet" value="{88ce72ac-651d-4441-be9c-dc74c2dc44b6}">
       <IDSymbol name="EditMenuGroup" value="0x1001" />
@@ -300,10 +334,13 @@
       <IDSymbol name="FolderMenuGroup" value="0x1008" />
       <IDSymbol name="FolderSubMenuGroup1" value="0x1009" />
       <IDSymbol name="FolderSubMenuGroup2" value="0x1010" />
+      <IDSymbol name="SolutionMenuGroup" value="0x1012"/>
+      <IDSymbol name="SolutionSubMenuGroup" value="0x1013"/>
 
       <IDSymbol name="ProjectSubMenu" value="0x2001" />
       <IDSymbol name="ProjectItemSubMenu" value="0x2002" />
       <IDSymbol name="FolderSubMenu" value="0x2003" />
+      <IDSymbol name="SolutionSubMenu" value="0x2004" />
       
       <IDSymbol name="LicenseHeaderOptions" value="0x0001" />
       <IDSymbol name="AddLicenseHeader" value="0x0002" />
@@ -314,6 +351,8 @@
       <IDSymbol name="AddExistingLicenseHeaderDefinitionFile" value="0x0007" />
       <IDSymbol name="AddLicenseHeaderToProjectItem" value="0x0008" />
       <IDSymbol name="RemoveLicenseHeaderFromProjectItem" value="0x0009" />
+      <IDSymbol name="AddLicenseHeadersToAllProjects" value="0x0010"/>
+      <IDSymbol name="RemoveLicenseHeadersFromAllProjects" value="0x0011"/>
     </GuidSymbol>
       
     <GuidSymbol name="guidImages" value="{d52c5a04-6352-4a9c-8d55-990945d89fe8}">
@@ -324,6 +363,8 @@
       <IDSymbol name="bmpAddExistingLicenseHeaderDefinitionFile" value="5" />
       <IDSymbol name="bmpAddLicenseHeaderDefinitionFile" value="6" />
     </GuidSymbol>
+
+    
   </Symbols>
 
 </CommandTable>

@@ -123,6 +123,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PackageCommands\AddLicenseHeaderToAllProjectsCommand.cs" />
     <Compile Include="Headers\CreateDocumentResult.cs" />
     <Compile Include="Headers\Document.cs" />
     <Compile Include="Guids.cs" />

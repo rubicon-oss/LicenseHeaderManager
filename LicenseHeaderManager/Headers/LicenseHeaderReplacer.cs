@@ -11,6 +11,7 @@ using LicenseHeaderManager.Options;
 using LicenseHeaderManager.Utils;
 using Microsoft.VisualStudio.Shell;
 using Language = LicenseHeaderManager.Options.Language;
+using Window = EnvDTE.Window;
 
 namespace LicenseHeaderManager.Headers
 {
@@ -189,17 +190,30 @@ namespace LicenseHeaderManager.Headers
       if (language == null)
           return CreateDocumentResult.LanguageNotFound;
 
+      Window temp = null;
       //try to open the document as a text document
       try
       {
         if (!item.IsOpen[Constants.vsViewKindTextView])
-          item.Open (Constants.vsViewKindTextView);
+        {
+          temp = item.Open(Constants.vsViewKindTextView);
+        }
       }
       catch (COMException)
       {
         return CreateDocumentResult.NoTextDocument;
       }
+      catch (IOException)
+      {
+        return CreateDocumentResult.NoPhysicalFile;
+      }
+      finally
+      {
+        if(temp != null)
+          temp.Close();
+      }
 
+      
       var itemDocument = item.Document;
       if (item.Document == null)
         return CreateDocumentResult.NoPhysicalFile;

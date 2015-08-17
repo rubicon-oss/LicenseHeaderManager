@@ -28,5 +28,7 @@ namespace LicenseHeaderManager
       public const uint cmdIdAddExistingLicenseHeaderDefinitionFile = 0x0007;
       public const uint cmdIdAddLicenseHeaderToProjectItem = 0x0008;
       public const uint cmdIdRemoveLicenseHeaderFromProjectItem = 0x0009;
+      public const uint cmdIdAddLicenseHeaderToAllProjects = 0x0010;
+      public const uint cmdIdRemoveLicenseHeaderFromAllProjects = 0x0011;
     };
 }
