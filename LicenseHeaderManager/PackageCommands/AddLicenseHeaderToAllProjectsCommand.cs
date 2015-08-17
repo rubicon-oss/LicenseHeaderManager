@@ -115,7 +115,7 @@ namespace LicenseHeaderManager.PackageCommands
     {
       foreach (Project project in projectsInSolution)
       {
-        package.AddLicenseHeaderToAllFiles (project);
+        package.AddLicenseHeaderToAllFiles (project, false);
       }
     }
   }
