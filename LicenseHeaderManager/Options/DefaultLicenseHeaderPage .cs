@@ -60,7 +60,12 @@ namespace LicenseHeaderManager.Options
     {
       using (var resource = Assembly.GetExecutingAssembly ().GetManifestResourceStream (typeof (LicenseHeadersPackage), "default.licenseheader"))
       {
-        string text = new StreamReader (resource, Encoding.UTF8).ReadToEnd ();
+        string text;
+        using (StreamReader streamreader = new StreamReader(resource, Encoding.UTF8))
+        {
+          text = streamreader.ReadToEnd();
+        }
+
         LicenseHeaderFileText = text;
       }
     }
