@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseHeaderManager", "LicenseHeaderManager\LicenseHeaderManager.csproj", "{8E234F35-CABF-48BF-B747-3DC0EC2776C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseHeaderManager.Test", "LicenseHeaderManager.Test\LicenseHeaderManager.Test.csproj", "{F224872B-FDB9-4DA1-BEA4-0FA4F1BA3E82}"
