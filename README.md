@@ -1,5 +1,5 @@
 # LicenseHeaderManager
-https://licensemanager.codeplex.com/
+
 
 Manage license headers for your source code files in Visual Studio.
 
@@ -18,3 +18,5 @@ License Header Manager allows you to:
 Install License Header Manager from Visual Studio via Tools|Extension Manager|Online Gallery or directly from [Visual Studio Gallery](https://visualstudiogallery.msdn.microsoft.com/5647a099-77c9-4a49-91c3-94001828e99e)
 
 ReSharper user? Take a look at [this](https://github.com/rubicon-oss/LicenseHeaderManager/wiki/License-Header-Manager-and-Resharper)!
+
+Previously located at: https://licensemanager.codeplex.com/
