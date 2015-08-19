@@ -13,7 +13,7 @@ License Header Manager allows you to:
     Put your license headers in #regions
 
 
-[Start right here!](https://github.com/rubicon-oss/LicenseHeaderManager/wiki/Getting-started)
+[Start right here!](https://github.com/rubicon-oss/LicenseHeaderManager/wiki)
 
 Install License Header Manager from Visual Studio via Tools|Extension Manager|Online Gallery or directly from [Visual Studio Gallery](https://visualstudiogallery.msdn.microsoft.com/5647a099-77c9-4a49-91c3-94001828e99e)
 
