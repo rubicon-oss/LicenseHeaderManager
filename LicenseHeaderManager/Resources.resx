@@ -178,7 +178,7 @@
     <value>No LicenseHeaderDefinitionFile found in project {0}.\nDo you want to add a new file?</value>
   </data>
   <data name="Error_NoHeaderFound" xml:space="preserve">
-    <value>This extension currently has no Header defined in the License Header Definition File\n </value>
+    <value>This extension currently has no Header defined in the License Header Definition File\n  </value>
   </data>
   <data name="Error_NoLicenseHeaderFile" xml:space="preserve">
     <value>The project has no license header file.</value>
@@ -263,6 +263,9 @@
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Warning</value>
+  </data>
+  <data name="Warning_CantLinkItemInSameProject" xml:space="preserve">
+    <value>LicenseHeader Definition File already exists in this Project.It is not possible to add a Link to an Item existing in the same Project.</value>
   </data>
   <data name="Warning_InvalidLicenseHeader" xml:space="preserve">
     <value>The header definition for {0} files contains non-comment text.\nIf you insert this header, you will not be able to remove or replace the header automatically!\nDo you really want to add this header to the file?</value>
