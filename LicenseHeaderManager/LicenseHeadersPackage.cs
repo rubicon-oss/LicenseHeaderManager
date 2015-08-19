@@ -17,6 +17,7 @@ using System.Collections.Specialized;
 using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -624,14 +625,38 @@ namespace LicenseHeaderManager
       var licenseHeaderDefinitionFileName = OpenFileDialogForExistingFile(fileName);
 
       if (licenseHeaderDefinitionFileName == null) return;
-
+      
+      ProjectItem testProjectItem = null;
+      
       if (project != null)
       {
+        int fileCountBefore = project.ProjectItems.Count;
+   
         project.ProjectItems.AddFromFile (licenseHeaderDefinitionFileName);
+   
+        int fileCountAfter = project.ProjectItems.Count;
+
+        if (fileCountBefore == fileCountAfter)
+        {
+          MessageBox.Show (Resources.Warning_CantLinkItemInSameProject, Resources.NameOfThisExtension, MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
       }
       else if (projectItem != null)
       {
-        projectItem.ProjectItems.AddFromFileCopy (licenseHeaderDefinitionFileName);
+        string test = Resources.Warning_CantLinkItemInSameProject;
+        string test2 = Resources.NameOfThisExtension;
+
+        int fileCountBefore = projectItem.ProjectItems.Count;
+
+        projectItem.ProjectItems.AddFromFile (licenseHeaderDefinitionFileName);
+
+        int fileCountAfter = projectItem.ProjectItems.Count;
+
+        if (fileCountBefore == fileCountAfter)
+        {
+          MessageBox.Show (Resources.Warning_CantLinkItemInSameProject, Resources.NameOfThisExtension, MessageBoxButton.OK, MessageBoxImage.Information);
+        }
       }
     }
 
@@ -645,12 +670,14 @@ namespace LicenseHeaderManager
       dialog.Filter = "License Header Definitions|*" + LicenseHeader.Extension;
       dialog.InitialDirectory = Path.GetDirectoryName (fileName);
       bool? result = dialog.ShowDialog ();
-      
+
       if (result.HasValue && result.Value)
         return dialog.FileName;
 
       return string.Empty;
     }
+
+
 
     private void LicenseHeaderOptionsCallback (object sender, EventArgs e)
     {

@@ -241,7 +241,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This extension currently has no Header defined in the License Header Definition File\n .
+        ///   Looks up a localized string similar to This extension currently has no Header defined in the License Header Definition File\n  .
         /// </summary>
         public static string Error_NoHeaderFound {
             get {
@@ -498,6 +498,15 @@ namespace LicenseHeaderManager {
         public static string Warning {
             get {
                 return ResourceManager.GetString("Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LicenseHeader Definition File already exists in this Project.It is not possible to add a Link to an Item existing in the same Project..
+        /// </summary>
+        public static string Warning_CantLinkItemInSameProject {
+            get {
+                return ResourceManager.GetString("Warning_CantLinkItemInSameProject", resourceCulture);
             }
         }
         
