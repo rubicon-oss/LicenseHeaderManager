@@ -502,6 +502,15 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The selected LicenseHeaderDefinitionFile already exists in this project. It is not possible to add a link to an item that already exists in the project..
+        /// </summary>
+        public static string Warning_CantLinkItemInSameProject {
+            get {
+                return ResourceManager.GetString("Warning_CantLinkItemInSameProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The header definition for {0} files contains non-comment text.\nIf you insert this header, you will not be able to remove or replace the header automatically!\nDo you really want to add this header to the file?.
         /// </summary>
         public static string Warning_InvalidLicenseHeader {
