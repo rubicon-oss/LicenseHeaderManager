@@ -1,4 +1,4 @@
-# LicenseHeaderManager
+# License Header Manager for Visual Studio
 
 
 Manage license headers for your source code files in Visual Studio.
@@ -7,10 +7,10 @@ New files will automatically include the license headers defined in the current 
 
 License Header Manager allows you to:
 
-    Define license headers per Visual Studio project and per file extension
-    Share license headers between projects via "Add as Link"
-    Add, remove and replace headers at any time for one or all files
-    Put your license headers in #regions
+* Define license headers per Visual Studio project and per file extension
+* Share license headers between projects via "Add as Link"
+* Add, remove and replace headers at any time for one or all files
+* Put your license headers in #regions
 
 
 [Start right here!](https://github.com/rubicon-oss/LicenseHeaderManager/wiki)
