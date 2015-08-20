@@ -264,6 +264,9 @@
   <data name="Warning" xml:space="preserve">
     <value>Warning</value>
   </data>
+  <data name="Warning_CantLinkItemInSameProject" xml:space="preserve">
+    <value>The selected LicenseHeaderDefinitionFile already exists in this project. It is not possible to add a link to an item that already exists in the project.</value>
+  </data>
   <data name="Warning_InvalidLicenseHeader" xml:space="preserve">
     <value>The header definition for {0} files contains non-comment text.\nIf you insert this header, you will not be able to remove or replace the header automatically!\nDo you really want to add this header to the file?</value>
   </data>
