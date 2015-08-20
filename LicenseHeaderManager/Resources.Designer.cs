@@ -79,7 +79,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to after selected command.
+        ///   Looks up a localized string similar to After selected command.
         /// </summary>
         public static string AfterCommand {
             get {
@@ -97,7 +97,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to before selected command.
+        ///   Looks up a localized string similar to Before selected command.
         /// </summary>
         public static string BeforeCommand {
             get {
@@ -115,7 +115,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Begin Comment.
+        ///   Looks up a localized string similar to Begin comment.
         /// </summary>
         public static string BeginComment {
             get {
@@ -124,7 +124,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Begin Region.
+        ///   Looks up a localized string similar to Begin region.
         /// </summary>
         public static string BeginRegion {
             get {
@@ -160,7 +160,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to End Comment.
+        ///   Looks up a localized string similar to End comment.
         /// </summary>
         public static string EndComment {
             get {
@@ -169,7 +169,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to End Region.
+        ///   Looks up a localized string similar to End region.
         /// </summary>
         public static string EndRegion {
             get {
@@ -223,7 +223,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No LicenseHeaderDefinitionFile found in following Projects:\n\n{0}\n\nDo you want to add the Default LicenseHeader Definition Files automatically?.
+        ///   Looks up a localized string similar to No license header definition file found in following projects:\n\n{0}\n\nDo you want to add the default license header definition files automatically?.
         /// </summary>
         public static string Error_MulitpleProjectsNoLicenseHeaderFile {
             get {
@@ -232,7 +232,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No LicenseHeaderDefinitionFile found in project {0}.\nDo you want to add a new file?.
+        ///   Looks up a localized string similar to No license header definition file found in project {0}.\nDo you want to add a new file?.
         /// </summary>
         public static string Error_NoHeaderDefinition {
             get {
@@ -241,7 +241,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This extension currently has no Header defined in the License Header Definition File\n .
+        ///   Looks up a localized string similar to This extension currently has no header defined in the license header definition file\n .
         /// </summary>
         public static string Error_NoHeaderFound {
             get {
@@ -259,7 +259,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Execute &apos;Add License Header&apos; command.
+        ///   Looks up a localized string similar to Execute &apos;Add license header&apos; command.
         /// </summary>
         public static string Execute {
             get {
@@ -349,7 +349,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can link the &apos;Add License Header&apos; command to other commands so that it is automatically executed before or after them..
+        ///   Looks up a localized string similar to You can link the &apos;Add license header&apos; command to other commands so that it is automatically executed before or after them..
         /// </summary>
         public static string LinkedCommands {
             get {
@@ -358,7 +358,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We could not update following linked Files, because there is no LicenseHeader Definition File in their original Project, or the original Project is not Part of this solution.\n\n{0}.
+        ///   Looks up a localized string similar to We could not update following linked files, because there is no license header definition file in their original project, or the original project is not part of this solution.\n\n{0}.
         /// </summary>
         public static string LinkedFileUpdateInformation {
             get {
@@ -412,7 +412,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Skip Expression.
+        ///   Looks up a localized string similar to Skip expression.
         /// </summary>
         public static string SkipExpression {
             get {
@@ -421,7 +421,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Some languages require special instructions at the very beginning of the file.\nXML-based languages need the &lt;?xml ... ?&gt; declaration for example. You can\ndefine a Regular Expression that identifies these instructions here so that the\nlicense header comment can be inserted after them, leaving the file valid.\n\nSee the online documentation on http://licensemanager.codeplex.com/\nfor more detailed information..
+        ///   Looks up a localized string similar to Some languages require special instructions at the very beginning of the file.\nXML-based languages need the &lt;?xml ... ?&gt; declaration for example. You can\ndefine a regular expression that identifies these instructions here so that the\nlicense header comment can be inserted after them, leaving the file valid.\n\nSee the online documentation on http://licensemanager.codeplex.com/\nfor more detailed information..
         /// </summary>
         public static string SkipExpressionHelp {
             get {
@@ -502,7 +502,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The selected LicenseHeaderDefinitionFile already exists in this project. It is not possible to add a link to an item that already exists in the project..
+        ///   Looks up a localized string similar to The selected license header definition file already exists in this project. It is not possible to add a link to an item that already exists in the project..
         /// </summary>
         public static string Warning_CantLinkItemInSameProject {
             get {
@@ -520,7 +520,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Default Header Definition.
+        ///   Looks up a localized string similar to Edit default header definition.
         /// </summary>
         public static string WpfDefaultLicenseHeaderDialogTitle {
             get {
@@ -529,7 +529,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Language.
+        ///   Looks up a localized string similar to Edit language.
         /// </summary>
         public static string WpfLanguageDialogTitle {
             get {

@@ -124,22 +124,22 @@
     <value>After</value>
   </data>
   <data name="AfterCommand" xml:space="preserve">
-    <value>after selected command</value>
+    <value>After selected command</value>
   </data>
   <data name="Before" xml:space="preserve">
     <value>Before</value>
   </data>
   <data name="BeforeCommand" xml:space="preserve">
-    <value>before selected command</value>
+    <value>Before selected command</value>
   </data>
   <data name="Begin" xml:space="preserve">
     <value>Begin</value>
   </data>
   <data name="BeginComment" xml:space="preserve">
-    <value>Begin Comment</value>
+    <value>Begin comment</value>
   </data>
   <data name="BeginRegion" xml:space="preserve">
-    <value>Begin Region</value>
+    <value>Begin region</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
@@ -151,10 +151,10 @@
     <value>End</value>
   </data>
   <data name="EndComment" xml:space="preserve">
-    <value>End Comment</value>
+    <value>End comment</value>
   </data>
   <data name="EndRegion" xml:space="preserve">
-    <value>End Region</value>
+    <value>End region</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
@@ -172,19 +172,19 @@
     <value>No comment definitions found for {0} files.\nDo you want to add them to the configuration?</value>
   </data>
   <data name="Error_MulitpleProjectsNoLicenseHeaderFile" xml:space="preserve">
-    <value>No LicenseHeaderDefinitionFile found in following Projects:\n\n{0}\n\nDo you want to add the Default LicenseHeader Definition Files automatically?</value>
+    <value>No license header definition file found in following projects:\n\n{0}\n\nDo you want to add the default license header definition files automatically?</value>
   </data>
   <data name="Error_NoHeaderDefinition" xml:space="preserve">
-    <value>No LicenseHeaderDefinitionFile found in project {0}.\nDo you want to add a new file?</value>
+    <value>No license header definition file found in project {0}.\nDo you want to add a new file?</value>
   </data>
   <data name="Error_NoHeaderFound" xml:space="preserve">
-    <value>This extension currently has no Header defined in the License Header Definition File\n </value>
+    <value>This extension currently has no header defined in the license header definition file\n </value>
   </data>
   <data name="Error_NoLicenseHeaderFile" xml:space="preserve">
     <value>The project has no license header file.</value>
   </data>
   <data name="Execute" xml:space="preserve">
-    <value>Execute 'Add License Header' command</value>
+    <value>Execute 'Add license header' command</value>
   </data>
   <data name="Extension" xml:space="preserve">
     <value>Extension</value>
@@ -214,10 +214,10 @@
     <value>Line Comment</value>
   </data>
   <data name="LinkedCommands" xml:space="preserve">
-    <value>You can link the 'Add License Header' command to other commands so that it is automatically executed before or after them.</value>
+    <value>You can link the 'Add license header' command to other commands so that it is automatically executed before or after them.</value>
   </data>
   <data name="LinkedFileUpdateInformation" xml:space="preserve">
-    <value>We could not update following linked Files, because there is no LicenseHeader Definition File in their original Project, or the original Project is not Part of this solution.\n\n{0}</value>
+    <value>We could not update following linked files, because there is no license header definition file in their original project, or the original project is not part of this solution.\n\n{0}</value>
   </data>
   <data name="NameOfThisExtension" xml:space="preserve">
     <value>License Header Manager</value>
@@ -235,10 +235,10 @@
     <value>Search:</value>
   </data>
   <data name="SkipExpression" xml:space="preserve">
-    <value>Skip Expression</value>
+    <value>Skip expression</value>
   </data>
   <data name="SkipExpressionHelp" xml:space="preserve">
-    <value>Some languages require special instructions at the very beginning of the file.\nXML-based languages need the &lt;?xml ... ?&gt; declaration for example. You can\ndefine a Regular Expression that identifies these instructions here so that the\nlicense header comment can be inserted after them, leaving the file valid.\n\nSee the online documentation on http://licensemanager.codeplex.com/\nfor more detailed information.</value>
+    <value>Some languages require special instructions at the very beginning of the file.\nXML-based languages need the &lt;?xml ... ?&gt; declaration for example. You can\ndefine a regular expression that identifies these instructions here so that the\nlicense header comment can be inserted after them, leaving the file valid.\n\nSee the online documentation on http://licensemanager.codeplex.com/\nfor more detailed information.</value>
   </data>
   <data name="Update_1_1_3" xml:space="preserve">
     <value>License Header Manager has automatically updated its configuration to add SkipExpressions.\n\nPlease check your language settings if they were modified\nbefore the update.\n\nIf you added any XML-based languages, you might need to add\na SkipExpression.</value>
@@ -265,15 +265,15 @@
     <value>Warning</value>
   </data>
   <data name="Warning_CantLinkItemInSameProject" xml:space="preserve">
-    <value>The selected LicenseHeaderDefinitionFile already exists in this project. It is not possible to add a link to an item that already exists in the project.</value>
+    <value>The selected license header definition file already exists in this project. It is not possible to add a link to an item that already exists in the project.</value>
   </data>
   <data name="Warning_InvalidLicenseHeader" xml:space="preserve">
     <value>The header definition for {0} files contains non-comment text.\nIf you insert this header, you will not be able to remove or replace the header automatically!\nDo you really want to add this header to the file?</value>
   </data>
   <data name="WpfDefaultLicenseHeaderDialogTitle" xml:space="preserve">
-    <value>Edit Default Header Definition</value>
+    <value>Edit default header definition</value>
   </data>
   <data name="WpfLanguageDialogTitle" xml:space="preserve">
-    <value>Edit Language</value>
+    <value>Edit language</value>
   </data>
 </root>
