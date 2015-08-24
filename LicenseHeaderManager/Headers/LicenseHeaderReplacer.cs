@@ -265,9 +265,5 @@ namespace LicenseHeaderManager.Headers
 
       return CreateDocumentResult.DocumentCreated;
     }
-    private bool IsLink (ProjectItem item)
-    {
-      return (item.Properties != null && (bool) item.Properties.Item("IsLink").Value);
-    }
   }
 }
