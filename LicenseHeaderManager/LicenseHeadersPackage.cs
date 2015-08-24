@@ -510,7 +510,7 @@ namespace LicenseHeaderManager
 
         foreach (ProjectItem item in projectItems)
         {
-          if (IsLink (item))
+          if (ProjectItemInspection.IsLink (item))
             linkedItems.Add(item);
           else
             countSubLicenseHeadersFound = _licenseReplacer.RemoveOrReplaceHeaderRecursive (item, headers);
@@ -543,16 +543,7 @@ namespace LicenseHeaderManager
         MessageBox.Show(linkedFileHandler.Message, Resources.NameOfThisExtension, MessageBoxButton.OK,
           MessageBoxImage.Information);
       }
-    }
-
-    private bool IsLink(ProjectItem projectItem)
-    {
-      if (projectItem.Properties == null) return false;
-      
-      Property isLinkProperty = projectItem.Properties.Cast<Property>().SingleOrDefault(x => x.Name == "IsLink");
-      
-      return isLinkProperty != null && (bool)isLinkProperty.Value;
-    }
+    }   
 
     private void RemoveLicenseHeadersFromAllFilesCallback (object sender, EventArgs e)
     {

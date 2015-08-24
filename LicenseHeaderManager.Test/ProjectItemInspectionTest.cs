@@ -35,6 +35,31 @@ namespace LicenseHeaderManager.Test
       Assert.IsTrue(ProjectItemInspection.IsLicenseHeader(licenseHeader));
       Assert.IsFalse (ProjectItemInspection.IsLicenseHeader (notLicenseHeader));
     }
+
+    [Test]
+    public void TestIsLink()
+    {
+      ProjectItem linkedProjectItem = MockRepository.GenerateMock<ProjectItem>();
+      
+      Property propertyStub = MockRepository.GenerateStub<Property> ();
+      propertyStub.Value = true;
+
+      linkedProjectItem.Stub (x => x.Properties).Return (MockRepository.GenerateStub<Properties> ());
+      linkedProjectItem.Properties.Stub (x => x.Item ("IsLink")).Return (propertyStub);
+
+      Assert.IsTrue(ProjectItemInspection.IsLink(linkedProjectItem));
+    }
+
+    [Test]
+    public void TestProjectItem_WithoutIsLinkProperty()
+    {
+      ProjectItem linkedProjectItem = MockRepository.GenerateMock<ProjectItem> ();
+
+      linkedProjectItem.Stub (x => x.Properties).Return (MockRepository.GenerateStub<Properties> ());
+      linkedProjectItem.Properties.Stub(x => x.Item("IsLink")).Throw(new ArgumentException());
+
+      Assert.IsFalse(ProjectItemInspection.IsLink(linkedProjectItem));
+    }
   }
 
   

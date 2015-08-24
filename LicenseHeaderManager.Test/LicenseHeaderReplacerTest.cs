@@ -164,13 +164,17 @@ namespace LicenseHeaderManager.Test
       }
 
       [Test]
-      public void LinkedFile()
+      public void LinkedFile ()
       {
-        _projectItem.Expect (x => x.Properties.Item ("IsLink").Value).Return (true);
+        Property propertyStub = MockRepository.GenerateStub<Property> ();
+        propertyStub.Value = true;
 
-        AddDocumentToProjectItem("test.cs", _projectItem);
+        _projectItem.Stub(x => x.Properties).Return(MockRepository.GenerateStub<Properties>());
+        _projectItem.Properties.Stub(x => x.Item("IsLink")).Return(propertyStub);
+
+        AddDocumentToProjectItem ("test.cs", _projectItem);
         PrepareLanguagePage (".cs");
-        
+
         var result = _replacer.TryCreateDocument (_projectItem, out _document);
 
         Assert.That (result, Is.EqualTo (CreateDocumentResult.LinkedFile));
