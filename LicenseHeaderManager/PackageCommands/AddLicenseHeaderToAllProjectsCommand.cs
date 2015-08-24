@@ -1,5 +1,6 @@
 ﻿//Sample license text.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -7,16 +8,24 @@ using EnvDTE;
 using EnvDTE80;
 using LicenseHeaderManager.Headers;
 using LicenseHeaderManager.Options;
+using LicenseHeaderManager.Utils;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace LicenseHeaderManager.PackageCommands
 {
   public class AddLicenseHeaderToAllProjectsCommand
   {
     private LicenseHeadersPackage package;
+    private LicenseHeaderReplacer licenseReplacer;
+    private IVsStatusbar statusBar;
 
-    public AddLicenseHeaderToAllProjectsCommand(LicenseHeadersPackage package)
+    public AddLicenseHeaderToAllProjectsCommand(LicenseHeadersPackage package, IVsStatusbar statusbar)
     {
       this.package = package;
+      this.statusBar = statusbar;
+      
+      licenseReplacer = new LicenseHeaderReplacer (package);
+      
     }
 
     public void Execute(Solution solution)
@@ -27,19 +36,10 @@ namespace LicenseHeaderManager.PackageCommands
  
       var projectsWithoutLicenseHeaderFile = CheckForLicenseHeaderFileInProjects (projectsInSolution);
 
-
       if (DefinitionFilesShouldBeAdded(projectsWithoutLicenseHeaderFile))
-      {
         AddMissingLicenseHeaderFiles(projectsWithoutLicenseHeaderFile, package.DefaultLicenseHeaderPage);
-
-        AddLicenseHeaderToProjects(projectsInSolution);
-      }
-      else
-      {
-        AddLicenseHeaderToProjects(projectsInSolution
-          .Except(projectsWithoutLicenseHeaderFile)
-          .ToList()); 
-      }
+    
+      AddLicenseHeaderToProjects(projectsInSolution); 
     }
 
     private void PopulateProjectsList(Solution solution, List<Project> projectList)
@@ -113,9 +113,33 @@ namespace LicenseHeaderManager.PackageCommands
 
     private void AddLicenseHeaderToProjects (List<Project> projectsInSolution)
     {
+      int progressCount = 1;
+      int projectCount = projectsInSolution.Count();
+
       foreach (Project project in projectsInSolution)
       {
-        package.AddLicenseHeaderToAllFiles (project, false);
+        statusBar.SetText(string.Format(Resources.UpdateSolution, progressCount, projectCount));
+        AddLicenseHeaderToAllFiles(project);
+        progressCount++;
+      }
+
+      statusBar.SetText (String.Empty);
+    }
+
+    private void AddLicenseHeaderToAllFiles (object obj)
+    {
+      var project = obj as Project;
+      if (project == null) return;
+
+      licenseReplacer.ResetExtensionsWithInvalidHeaders ();
+
+      var headers = LicenseHeaderFinder.GetHeader (project);
+      var projectItems = project.ProjectItems;
+
+      foreach (ProjectItem item in projectItems)
+      {
+        if (!ProjectItemInspection.IsLink(item))
+          licenseReplacer.RemoveOrReplaceHeaderRecursive(item, headers);
       }
     }
   }

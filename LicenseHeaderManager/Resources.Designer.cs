@@ -475,6 +475,15 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Updating Project {0}/{1}.
+        /// </summary>
+        public static string UpdateSolution {
+            get {
+                return ResourceManager.GetString("UpdateSolution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Updating files....
         /// </summary>
         public static string UpdatingFiles {

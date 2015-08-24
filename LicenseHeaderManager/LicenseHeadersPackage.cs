@@ -477,10 +477,10 @@ namespace LicenseHeaderManager
     private void AddLicenseHeadersToAllFilesCallback (object sender, EventArgs e)
     {
       var obj = GetSolutionExplorerItem ();
-      AddLicenseHeaderToAllFiles (obj, true);
+      AddLicenseHeaderToAllFiles (obj);
     }
 
-    public void AddLicenseHeaderToAllFiles(object obj, bool handleLinkedItems)
+    public void AddLicenseHeaderToAllFiles(object obj)
     {
       var project = obj as Project;
       var projectItem = obj as ProjectItem;
@@ -516,8 +516,8 @@ namespace LicenseHeaderManager
             countSubLicenseHeadersFound = _licenseReplacer.RemoveOrReplaceHeaderRecursive (item, headers);
         }
 
-        if(handleLinkedItems)
-          HandleLinkedFilesAndShowMessageBox(linkedItems);
+        
+        HandleLinkedFilesAndShowMessageBox(linkedItems);
 
         statusBar.SetText (String.Empty);
         if (countSubLicenseHeadersFound == 0 && headers == null)
@@ -525,7 +525,7 @@ namespace LicenseHeaderManager
           //No license header found...
           var page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
           if (LicenseHeader.ShowQuestionForAddingLicenseHeaderFile (project ?? projectItem.ContainingProject, page))
-            AddLicenseHeaderToAllFiles (obj, true);
+            AddLicenseHeaderToAllFiles (obj);
         }
       }
     }
@@ -671,8 +671,8 @@ namespace LicenseHeaderManager
     private void AddLicenseHeaderToAllProjectsCallback (object sender, EventArgs e)
     {
       var solution = _dte.Solution;
-      
-      var addLicenseHeaderToAllProjectsCommand = new AddLicenseHeaderToAllProjectsCommand(this);
+
+      var addLicenseHeaderToAllProjectsCommand = new AddLicenseHeaderToAllProjectsCommand (this, (IVsStatusbar) GetService (typeof (SVsStatusbar)));
       addLicenseHeaderToAllProjectsCommand.Execute(solution);  
     }
 
