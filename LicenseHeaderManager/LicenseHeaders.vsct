@@ -223,7 +223,7 @@
         <Icon guid="guidImages" id="bmpAddLicenseHeaderDefinitionFile" />
         <Strings>
           <CommandName>AddLicenseHeaderDefinitionFile</CommandName>
-          <ButtonText>Add New License Header Definition File to Folder</ButtonText>
+          <ButtonText>Add New License Header Definition File</ButtonText>
         </Strings>
       </Button>
 
@@ -232,7 +232,7 @@
         <Icon guid="guidImages" id="bmpAddExistingLicenseHeaderDefinitionFile" />
         <Strings>
           <CommandName>AddExistingLicenseHeaderDefinitionFile</CommandName>
-          <ButtonText>Add Existing License Header Definition File to Folder...</ButtonText>
+          <ButtonText>Add Existing License Header Definition File...</ButtonText>
         </Strings>
       </Button>
 
@@ -259,7 +259,7 @@
         <Icon guid="guidImages" id="bmpAddLicenseHeaderDefinitionFile" />
         <Strings>
           <CommandName>AddLicenseHeaderDefinitionFile</CommandName>
-          <ButtonText>Add New License Header Definition File to Project</ButtonText>
+          <ButtonText>Add New License Header Definition File</ButtonText>
         </Strings>
       </Button>
       
@@ -268,7 +268,7 @@
         <Icon guid="guidImages" id="bmpAddExistingLicenseHeaderDefinitionFile" />
         <Strings>
           <CommandName>AddExistingLicenseHeaderDefinitionFile</CommandName>
-          <ButtonText>Add Existing License Header Definition File to Project...</ButtonText>
+          <ButtonText>Add Existing License Header Definition File...</ButtonText>
         </Strings>
       </Button>
 
