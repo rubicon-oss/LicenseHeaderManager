@@ -446,7 +446,7 @@ namespace LicenseHeaderManager
       if(item == null)
         item = GetSolutionExplorerItem() as ProjectItem;
 
-      if (ProjectItemInspection.IsPhysicalFile(item) && !ProjectItemInspection.IsLicenseHeader(item))
+      if (item != null && ProjectItemInspection.IsPhysicalFile(item) && !ProjectItemInspection.IsLicenseHeader(item))
       {
         AddLicenseHeaderToItem (item, !_isCalledByLinkedCommand);
       }
