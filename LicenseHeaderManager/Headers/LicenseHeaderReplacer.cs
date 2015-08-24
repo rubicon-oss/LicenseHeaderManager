@@ -200,13 +200,12 @@ namespace LicenseHeaderManager.Headers
       if (language == null)
           return CreateDocumentResult.LanguageNotFound;
 
-      Window window = null;
       //try to open the document as a text document
       try
       {
         if (!item.IsOpen[Constants.vsViewKindTextView])
         {
-          window = item.Open(Constants.vsViewKindTextView);
+          item.Open(Constants.vsViewKindTextView);
         }
       }
       catch (COMException)
@@ -221,7 +220,6 @@ namespace LicenseHeaderManager.Headers
       var itemDocument = item.Document;
       if (item.Document == null)
       {
-        //CloseItemWindow(window);
         return CreateDocumentResult.NoPhysicalFile;  
       }
       
@@ -229,7 +227,6 @@ namespace LicenseHeaderManager.Headers
       var textDocument = itemDocument.Object ("TextDocument") as TextDocument;
       if (textDocument == null)
       {
-        //CloseItemWindow(window);
         return CreateDocumentResult.NoTextDocument;  
       }
       
@@ -244,7 +241,6 @@ namespace LicenseHeaderManager.Headers
 
         if (extension == null)
         {
-          //CloseItemWindow(window);
           return CreateDocumentResult.NoHeaderFound;  
         }
         
@@ -252,7 +248,6 @@ namespace LicenseHeaderManager.Headers
 
         if (header.All(string.IsNullOrEmpty))
         {
-          //CloseItemWindow(window);
           return CreateDocumentResult.EmptyHeader;    
         }
       }
@@ -268,16 +263,8 @@ namespace LicenseHeaderManager.Headers
               ? optionsPage.RequiredKeywords.Split (new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select (k => k.Trim())
               : null);
 
-      //CloseItemWindow(window);
       return CreateDocumentResult.DocumentCreated;
     }
-
-    private void CloseItemWindow(Window window)
-    {
-      if (window != null)
-        window.Close ();
-    }
-
     private bool IsLink (ProjectItem item)
     {
       return (item.Properties != null && (bool) item.Properties.Item("IsLink").Value);

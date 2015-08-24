@@ -616,9 +616,7 @@ namespace LicenseHeaderManager
       var licenseHeaderDefinitionFileName = OpenFileDialogForExistingFile(fileName);
 
       if (licenseHeaderDefinitionFileName == null) return;
-      
-      ProjectItem testProjectItem = null;
-      
+        
       if (project != null)
       {
         int fileCountBefore = project.ProjectItems.Count;
