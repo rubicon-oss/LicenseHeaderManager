@@ -123,6 +123,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PackageCommands\AddLicenseHeaderToAllFilesCommand.cs" />
     <Compile Include="PackageCommands\AddLicenseHeaderToAllProjectsCommand.cs" />
     <Compile Include="Headers\CreateDocumentResult.cs" />
     <Compile Include="Headers\Document.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="Options\WpfLanguages.xaml.cs">
       <DependentUpon>WpfLanguages.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PackageCommands\RemoveAllLicenseHeadersCommand.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -195,6 +197,7 @@
     <Compile Include="Options\WpfCommandDialog.xaml.cs">
       <DependentUpon>WpfCommandDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ReturnObjects\AddLicenseHeaderToAllFilesReturn.cs" />
     <Compile Include="Utils\LinkedFileFilter.cs" />
     <Compile Include="Utils\LinkedFileHandler.cs" />
     <Compile Include="Utils\ProjectItemInspection.cs" />

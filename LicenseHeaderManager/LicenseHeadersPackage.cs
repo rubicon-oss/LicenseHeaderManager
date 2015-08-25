@@ -477,56 +477,27 @@ namespace LicenseHeaderManager
     private void AddLicenseHeadersToAllFilesCallback (object sender, EventArgs e)
     {
       var obj = GetSolutionExplorerItem ();
-      AddLicenseHeaderToAllFiles (obj);
-    }
+      var addLicenseHeaderToAllFilesCommand = new AddLicenseHeaderToAllFilesCommand(_licenseReplacer);
+      
+      var statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
+      statusBar.SetText (Resources.UpdatingFiles);
 
-    public void AddLicenseHeaderToAllFiles(object obj)
-    {
+      var addLicenseHeaderToAllFilesReturn = addLicenseHeaderToAllFilesCommand.Execute (obj);
+
+      statusBar.SetText (String.Empty);
+
+      HandleLinkedFilesAndShowMessageBox (addLicenseHeaderToAllFilesReturn.LinkedItems);
+
       var project = obj as Project;
       var projectItem = obj as ProjectItem;
-      int countSubLicenseHeadersFound = 0;
-      
-      if (project != null || projectItem != null)
+      if (project == null && projectItem == null) return;
+
+      if (addLicenseHeaderToAllFilesReturn.NoHeaderFound)
       {
-        var statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
-        statusBar.SetText (Resources.UpdatingFiles);
-
-        _licenseReplacer.ResetExtensionsWithInvalidHeaders ();
-        IDictionary<string, string[]> headers = null;
-        ProjectItems projectItems;
-        
-        if (project != null)
-        {
-          headers = LicenseHeaderFinder.GetHeader (project);
-          projectItems = project.ProjectItems;    
-        }
-        else
-        {
-          headers = LicenseHeaderFinder.GetHeaderRecursive (projectItem);
-          projectItems = projectItem.ProjectItems;          
-        }
-
-        List<ProjectItem> linkedItems = new List<ProjectItem>();
-
-        foreach (ProjectItem item in projectItems)
-        {
-          if (ProjectItemInspection.IsLink (item))
-            linkedItems.Add(item);
-          else
-            countSubLicenseHeadersFound = _licenseReplacer.RemoveOrReplaceHeaderRecursive (item, headers);
-        }
-
-        
-        HandleLinkedFilesAndShowMessageBox(linkedItems);
-
-        statusBar.SetText (String.Empty);
-        if (countSubLicenseHeadersFound == 0 && headers == null)
-        {
-          //No license header found...
-          var page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
-          if (LicenseHeader.ShowQuestionForAddingLicenseHeaderFile (project ?? projectItem.ContainingProject, page))
-            AddLicenseHeaderToAllFiles (obj);
-        }
+        //No license header found...
+        var page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
+        if (LicenseHeader.ShowQuestionForAddingLicenseHeaderFile (project ?? projectItem.ContainingProject, page))
+          AddLicenseHeadersToAllFilesCallback(obj, null); 
       }
     }
 
