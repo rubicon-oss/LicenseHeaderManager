@@ -1,5 +1,4 @@
-﻿//Sample license text.
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -102,15 +101,37 @@ namespace LicenseHeaderManager.Headers
     public int RemoveOrReplaceHeaderRecursive (ProjectItem item, IDictionary<string, string[]> headers, bool searchForLicenseHeaders = true)
     {
       int headersFound = 0;
+      bool wasOpen = true;
+
+      //We have to open the item before TryCreateDocument because otherwise, the Document gets corrupted
+      try
+      {
+        //The document has to be open to edit it
+        if (!item.IsOpen[Constants.vsViewKindTextView])
+        {
+
+          item.Open(Constants.vsViewKindTextView);
+          wasOpen = false;
+        }
+      }
+      catch (COMException e)
+      {
+        //Because not every ProjectItem has the Method .Open we have to catch the resulting ComException.
+        //Items which are throwing the ComException are pobably not a normal Document and are going to fail TryCreateDocument
+      }
       
+
+
       Document document;
       if (TryCreateDocument (item, out document, headers) == CreateDocumentResult.DocumentCreated)
       {
         // item.Saved is not implemented for web_folders, therefore this check must be after the TryCreateDocument
         bool isSaved = item.Saved;
         
-        //item.isOpen is not implemented for SQL/DBProject, therefore this check mus be after TryCreateDocument
-        bool isOpen = item.IsOpen[Constants.vsViewKindAny];
+        ////item.isOpen is not implemented for SQL/DBProject, therefore this check mus be after TryCreateDocument
+        //bool isOpen = item.IsOpen[Constants.vsViewKindAny];
+        
+
 
         string message;
         bool replace = true;
@@ -140,17 +161,16 @@ namespace LicenseHeaderManager.Headers
           }
         }
 
-        if (isOpen)
+        if (wasOpen)
         {
           if (isSaved)
           {
             item.Document.Save();
-            item.Document.Close(vsSaveChanges.vsSaveChangesYes);
           }
-          else
-          {
-            item.Document.Close (vsSaveChanges.vsSaveChangesNo);    
-          }
+        }
+        else
+        {
+          item.Document.Close (vsSaveChanges.vsSaveChangesYes);
         }
         
       }
@@ -200,12 +220,16 @@ namespace LicenseHeaderManager.Headers
       if (language == null)
           return CreateDocumentResult.LanguageNotFound;
 
+      Window window = null;
+      bool wasOpen = true;
+
       //try to open the document as a text document
       try
       {
         if (!item.IsOpen[Constants.vsViewKindTextView])
         {
-          item.Open(Constants.vsViewKindTextView);
+          window = item.Open(Constants.vsViewKindTextView);
+          wasOpen = false;
         }
       }
       catch (COMException)
@@ -220,6 +244,7 @@ namespace LicenseHeaderManager.Headers
       var itemDocument = item.Document;
       if (item.Document == null)
       {
+        CloseItemWindow(window, wasOpen);
         return CreateDocumentResult.NoPhysicalFile;  
       }
       
@@ -227,6 +252,7 @@ namespace LicenseHeaderManager.Headers
       var textDocument = itemDocument.Object ("TextDocument") as TextDocument;
       if (textDocument == null)
       {
+        CloseItemWindow (window, wasOpen);
         return CreateDocumentResult.NoTextDocument;  
       }
       
@@ -241,6 +267,7 @@ namespace LicenseHeaderManager.Headers
 
         if (extension == null)
         {
+          CloseItemWindow (window, wasOpen);
           return CreateDocumentResult.NoHeaderFound;  
         }
         
@@ -248,6 +275,7 @@ namespace LicenseHeaderManager.Headers
 
         if (header.All(string.IsNullOrEmpty))
         {
+          CloseItemWindow (window, wasOpen);
           return CreateDocumentResult.EmptyHeader;    
         }
       }
@@ -263,7 +291,19 @@ namespace LicenseHeaderManager.Headers
               ? optionsPage.RequiredKeywords.Split (new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select (k => k.Trim())
               : null);
 
+      CloseItemWindow (window, wasOpen);
       return CreateDocumentResult.DocumentCreated;
+    }
+
+    private void CloseItemWindow(Window window, bool wasOpen)
+    {
+      if (window != null && !wasOpen)
+        window.Close ();
+    }
+
+    private bool IsLink (ProjectItem item)
+    {
+      return (item.Properties != null && (bool) item.Properties.Item("IsLink").Value);
     }
   }
 }

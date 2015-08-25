@@ -40,6 +40,8 @@ namespace LicenseHeaderManager.Test
         _extensionMock.Expect (x => x.OptionsPage).Return (_optionsPage);
         _optionsPage.Expect (x => x.UseRequiredKeywords).Return (true);
         _optionsPage.Expect (x => x.RequiredKeywords).Return ("");
+
+        _projectItem.Stub(x => x.Open(Constants.vsViewKindTextView)).Return(MockRepository.GenerateMock<Window>());
       }
 
       [Test]
@@ -93,9 +95,8 @@ namespace LicenseHeaderManager.Test
       [Test]
       public void NoTextDocument ()
       {
-        var textDocument = MockRepository.GenerateMock<TextDocument> ();
         var documentMock = MockRepository.GenerateMock<EnvDTE.Document> ();
-        documentMock.Expect (x => x.Object ("TextDocument")).Return (textDocument);
+        documentMock.Expect (x => x.Object ("TextDocument")).Return (null);
         _projectItem.Expect (x => x.Kind).Return (Constants.vsProjectItemKindPhysicalFile);
         _projectItem.Expect(x => x.Name).Return("test.resx");
 
