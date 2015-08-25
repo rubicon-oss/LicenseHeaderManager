@@ -198,6 +198,7 @@
       <DependentUpon>WpfCommandDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="ReturnObjects\AddLicenseHeaderToAllFilesReturn.cs" />
+    <Compile Include="Utils\AllSolutionProjectsSearcher.cs" />
     <Compile Include="Utils\LinkedFileFilter.cs" />
     <Compile Include="Utils\LinkedFileHandler.cs" />
     <Compile Include="Utils\ProjectItemInspection.cs" />

@@ -34,20 +34,18 @@ namespace LicenseHeaderManager.PackageCommands
     {
       var project = projectOrProjectItem as Project;
       var item = projectOrProjectItem as ProjectItem;
+      if (project == null && item == null) return;
 
-      if (project != null || item != null)
+      licenseReplacer.ResetExtensionsWithInvalidHeaders ();
+      if (project != null)
       {
-        licenseReplacer.ResetExtensionsWithInvalidHeaders ();
-        if (project != null)
-        {
-          foreach (ProjectItem i in project.ProjectItems)
-            licenseReplacer.RemoveOrReplaceHeaderRecursive (i, null, false);
-        }
-        else
-        {
-          foreach (ProjectItem i in item.ProjectItems)
-            licenseReplacer.RemoveOrReplaceHeaderRecursive (i, null, false);
-        }
+        foreach (ProjectItem i in project.ProjectItems)
+          licenseReplacer.RemoveOrReplaceHeaderRecursive (i, null, false);
+      }
+      else
+      {
+        foreach (ProjectItem i in item.ProjectItems)
+          licenseReplacer.RemoveOrReplaceHeaderRecursive (i, null, false);
       }
     }
   }

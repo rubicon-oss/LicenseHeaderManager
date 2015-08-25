@@ -27,6 +27,7 @@ using LicenseHeaderManager.Headers;
 using LicenseHeaderManager.Interfaces;
 using LicenseHeaderManager.Options;
 using LicenseHeaderManager.PackageCommands;
+using LicenseHeaderManager.ReturnObjects;
 using LicenseHeaderManager.Utils;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
@@ -488,6 +489,12 @@ namespace LicenseHeaderManager
 
       HandleLinkedFilesAndShowMessageBox (addLicenseHeaderToAllFilesReturn.LinkedItems);
 
+      HandleAddLicenseHeaderToAllFilesReturn(obj, addLicenseHeaderToAllFilesReturn);
+    }
+
+    private void HandleAddLicenseHeaderToAllFilesReturn(object obj,
+      AddLicenseHeaderToAllFilesReturn addLicenseHeaderToAllFilesReturn)
+    {
       var project = obj as Project;
       var projectItem = obj as ProjectItem;
       if (project == null && projectItem == null) return;
@@ -495,9 +502,9 @@ namespace LicenseHeaderManager
       if (addLicenseHeaderToAllFilesReturn.NoHeaderFound)
       {
         //No license header found...
-        var page = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
-        if (LicenseHeader.ShowQuestionForAddingLicenseHeaderFile (project ?? projectItem.ContainingProject, page))
-          AddLicenseHeadersToAllFilesCallback(obj, null); 
+        var page = (DefaultLicenseHeaderPage) GetDialogPage(typeof (DefaultLicenseHeaderPage));
+        if (LicenseHeader.ShowQuestionForAddingLicenseHeaderFile(project ?? projectItem.ContainingProject, page))
+          AddLicenseHeadersToAllFilesCallback(obj, null);
       }
     }
 
@@ -524,28 +531,14 @@ namespace LicenseHeaderManager
 
     private void RemoveLicenseHeadersFromAllFiles(object obj)
     {
-      var project = obj as Project;
-      var item = obj as ProjectItem;
+      var removeAllLicenseHeadersCommand = new AddLicenseHeaderToAllFilesCommand(_licenseReplacer);
 
-      if (project != null || item != null)
-      {
-        IVsStatusbar statusBar = (IVsStatusbar) GetService(typeof (SVsStatusbar));
-        statusBar.SetText(Resources.UpdatingFiles);
+      IVsStatusbar statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
+      statusBar.SetText (Resources.UpdatingFiles);
 
-        _licenseReplacer.ResetExtensionsWithInvalidHeaders();
-        if (project != null)
-        {
-          foreach (ProjectItem i in project.ProjectItems)
-            _licenseReplacer.RemoveOrReplaceHeaderRecursive(i, null, false);
-        }
-        else
-        {
-          foreach (ProjectItem i in item.ProjectItems)
-            _licenseReplacer.RemoveOrReplaceHeaderRecursive(i, null, false);
-        }
+      removeAllLicenseHeadersCommand.Execute(obj);
 
-        statusBar.SetText(String.Empty);
-      }
+      statusBar.SetText(String.Empty);
     }
 
     private void AddLicenseHeaderDefinitionFileCallback (object sender, EventArgs e)
@@ -641,19 +634,26 @@ namespace LicenseHeaderManager
 
     private void AddLicenseHeaderToAllProjectsCallback (object sender, EventArgs e)
     {
-      var solution = _dte.Solution;
-
       var addLicenseHeaderToAllProjectsCommand = new AddLicenseHeaderToAllProjectsCommand (this, (IVsStatusbar) GetService (typeof (SVsStatusbar)));
-      addLicenseHeaderToAllProjectsCommand.Execute(solution);  
+      addLicenseHeaderToAllProjectsCommand.Execute( _dte.Solution);  
     }
 
     private void RemoveLicenseHeaderFromAllProjectsCallback (object sender, EventArgs e)
     {
       var solution = _dte.Solution;
+      int progressCount = 1;
+      int projectCount = solution.Count;
+      IVsStatusbar statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
+      var removeAllLicenseHeadersCommand = new RemoveAllLicenseHeadersCommand(_licenseReplacer);
+
       foreach (Project project in solution)
       {
-        RemoveLicenseHeadersFromAllFiles (project);
+        statusBar.SetText (string.Format (Resources.UpdateSolution, progressCount, projectCount));
+        removeAllLicenseHeadersCommand.Execute(project);
+        progressCount++;
       }
+
+      statusBar.SetText(string.Empty);
     }
 
     #endregion

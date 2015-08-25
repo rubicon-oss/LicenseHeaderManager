@@ -17,6 +17,7 @@ namespace LicenseHeaderManager.PackageCommands
   {
     private LicenseHeadersPackage package;
     private LicenseHeaderReplacer licenseReplacer;
+    private AddLicenseHeaderToAllFilesCommand addLicenseHeaderToAllFilesCommand;
     private IVsStatusbar statusBar;
 
     public AddLicenseHeaderToAllProjectsCommand(LicenseHeadersPackage package, IVsStatusbar statusbar)
@@ -24,6 +25,7 @@ namespace LicenseHeaderManager.PackageCommands
       this.package = package;
       this.statusBar = statusbar;
       
+      addLicenseHeaderToAllFilesCommand = new AddLicenseHeaderToAllFilesCommand(licenseReplacer);
       licenseReplacer = new LicenseHeaderReplacer (package);
       
     }
@@ -77,7 +79,6 @@ namespace LicenseHeaderManager.PackageCommands
       return list;
     }
 
-
     private List<Project> CheckForLicenseHeaderFileInProjects (List<Project> projects)
     {
       return (projects
@@ -119,28 +120,11 @@ namespace LicenseHeaderManager.PackageCommands
       foreach (Project project in projectsInSolution)
       {
         statusBar.SetText(string.Format(Resources.UpdateSolution, progressCount, projectCount));
-        AddLicenseHeaderToAllFiles(project);
+        addLicenseHeaderToAllFilesCommand.Execute(project);
         progressCount++;
       }
 
       statusBar.SetText (String.Empty);
-    }
-
-    private void AddLicenseHeaderToAllFiles (object obj)
-    {
-      var project = obj as Project;
-      if (project == null) return;
-
-      licenseReplacer.ResetExtensionsWithInvalidHeaders ();
-
-      var headers = LicenseHeaderFinder.GetHeader (project);
-      var projectItems = project.ProjectItems;
-
-      foreach (ProjectItem item in projectItems)
-      {
-        if (!ProjectItemInspection.IsLink(item))
-          licenseReplacer.RemoveOrReplaceHeaderRecursive(item, headers);
-      }
     }
   }
 }
