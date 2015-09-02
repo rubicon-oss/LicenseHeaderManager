@@ -16,7 +16,7 @@ namespace LicenseHeaderManager.Test
   {
 
     [Test]
-    public void TestGetAllProjectsShouldReturnListOfProjects()
+    public void TestGetAllProjects_ShouldReturnListOfProjects()
     {
       Solution solution = MockRepository.GenerateStub<Solution>();
  
@@ -27,15 +27,16 @@ namespace LicenseHeaderManager.Test
 
       solution.Stub(x => x.GetEnumerator()).Return(projectList.GetEnumerator());
 
-      var allSolutionProjectsSearcher = new AllSolutionProjectsSearcher();
 
+      var allSolutionProjectsSearcher = new AllSolutionProjectsSearcher();
       List<Project> returnedProjects = allSolutionProjectsSearcher.GetAllProjects(solution);
+
 
       Assert.AreEqual(2, returnedProjects.Count);
     }
 
     [Test]
-    public void TestGetAllProjectsDoesOnlyReturnProjects()
+    public void TestGetAllProjects_DoesOnlyReturnProjects()
     {
       Solution solution = MockRepository.GenerateStub<Solution>();
 
@@ -45,14 +46,41 @@ namespace LicenseHeaderManager.Test
       List<Project> projectList = new List<Project>{legitProject1, solutionFolder};
 
       solutionFolder.Stub(x => x.Kind).Return(ProjectKinds.vsProjectKindSolutionFolder);
+      solutionFolder.Stub(x => x.ProjectItems.Count).Return(0);
 
       solution.Stub(x => x.GetEnumerator()).Return(projectList.GetEnumerator());
 
-      var allSolutionProjectsSearcher = new AllSolutionProjectsSearcher();
 
+      var allSolutionProjectsSearcher = new AllSolutionProjectsSearcher();
       List<Project> returnedProjects = allSolutionProjectsSearcher.GetAllProjects(solution);
 
-      Assert.AreEqual(1, returnedProjects.Count);
+
+      Assert.AreEqual(legitProject1, returnedProjects.First());
+    }
+
+    [Test]
+    public void TestGetAllProjects_FindsNestedProject()
+    {
+      Solution solution = MockRepository.GenerateStub<Solution>();
+
+      Project legitProject1 = MockRepository.GenerateStub<Project>();
+      Project solutionFolder = MockRepository.GenerateStub<Project>();
+      Project projectInSolutionFolder = MockRepository.GenerateStub<Project>();
+
+      List<Project> projectList = new List<Project> {legitProject1, solutionFolder};
+
+      solutionFolder.Stub(x => x.Kind).Return(ProjectKinds.vsProjectKindSolutionFolder);
+      solutionFolder.Stub(x => x.ProjectItems.Count).Return(1);
+      solutionFolder.Stub(x => x.ProjectItems.Item(1).SubProject).Return(projectInSolutionFolder);
+
+      solution.Stub(x => x.GetEnumerator()).Return(projectList.GetEnumerator());
+
+
+      var allSolutionProjectsSearcher = new AllSolutionProjectsSearcher();
+      List<Project> returnedProjects = allSolutionProjectsSearcher.GetAllProjects(solution);
+    
+      
+      Assert.Contains(projectInSolutionFolder, returnedProjects);
     }
   }
 }
