@@ -634,26 +634,19 @@ namespace LicenseHeaderManager
 
     private void AddLicenseHeaderToAllProjectsCallback (object sender, EventArgs e)
     {
-      var addLicenseHeaderToAllProjectsCommand = new AddLicenseHeaderToAllProjectsCommand (this, (IVsStatusbar) GetService (typeof (SVsStatusbar)));
+      IVsStatusbar statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
+
+      var addLicenseHeaderToAllProjectsCommand = new AddLicenseHeaderToAllProjectsCommand (_licenseReplacer, statusBar, DefaultLicenseHeaderPage);
       addLicenseHeaderToAllProjectsCommand.Execute( _dte.Solution);  
     }
 
     private void RemoveLicenseHeaderFromAllProjectsCallback (object sender, EventArgs e)
     {
-      var solution = _dte.Solution;
-      int progressCount = 1;
-      int projectCount = solution.Count;
+      Solution solution = _dte.Solution;
       IVsStatusbar statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
-      var removeAllLicenseHeadersCommand = new RemoveAllLicenseHeadersCommand(_licenseReplacer);
 
-      foreach (Project project in solution)
-      {
-        statusBar.SetText (string.Format (Resources.UpdateSolution, progressCount, projectCount));
-        removeAllLicenseHeadersCommand.Execute(project);
-        progressCount++;
-      }
-
-      statusBar.SetText(string.Empty);
+      var removeLicenseHeaderFromAllProjects = new RemoveLicenseHeaderFromAllProjectsCommand(statusBar, _licenseReplacer);
+      removeLicenseHeaderFromAllProjects.Execute(solution);
     }
 
     #endregion

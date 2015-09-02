@@ -175,7 +175,8 @@
     <Compile Include="Options\WpfLanguages.xaml.cs">
       <DependentUpon>WpfLanguages.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PackageCommands\RemoveAllLicenseHeadersCommand.cs" />
+    <Compile Include="PackageCommands\RemoveLicenseHeaderFromAllFilesCommand.cs" />
+    <Compile Include="PackageCommands\RemoveLicenseHeaderFromAllProjects.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
