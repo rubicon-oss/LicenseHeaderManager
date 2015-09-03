@@ -27,6 +27,7 @@ namespace LicenseHeaderManager.Test
 
       private Document _document;
 
+      private bool _wasOpen;
 
       [SetUp]
       public void SetUp ()
@@ -49,7 +50,7 @@ namespace LicenseHeaderManager.Test
       {
         _projectItem.Expect (x => x.Kind).Return (Constants.vsProjectItemKindSubProject);
 
-        var result = _replacer.TryCreateDocument (_projectItem, out _document);
+        var result = _replacer.TryCreateDocument (_projectItem, out _document, out _wasOpen);
 
         Assert.That (result, Is.EqualTo (CreateDocumentResult.NoPhysicalFile));
       }
@@ -60,7 +61,7 @@ namespace LicenseHeaderManager.Test
         _projectItem.Expect (x => x.Kind).Return (Constants.vsProjectItemKindPhysicalFile);
         _projectItem.Expect (x => x.Name).Return ("test.licenseheader");
 
-        var result = _replacer.TryCreateDocument (_projectItem, out _document);
+        var result = _replacer.TryCreateDocument (_projectItem, out _document, out _wasOpen);
 
         Assert.That (result, Is.EqualTo (CreateDocumentResult.LicenseHeaderDocument));
       }
@@ -73,7 +74,7 @@ namespace LicenseHeaderManager.Test
 
         PrepareLanguagePage (".cs");
 
-        var result = _replacer.TryCreateDocument(_projectItem, out _document);
+        var result = _replacer.TryCreateDocument (_projectItem, out _document, out _wasOpen);
 
         Assert.That (result, Is.EqualTo (CreateDocumentResult.LanguageNotFound));
       }
@@ -87,7 +88,7 @@ namespace LicenseHeaderManager.Test
 
         PrepareLanguagePage (".cs");
 
-        var result = _replacer.TryCreateDocument (_projectItem, out _document);
+        var result = _replacer.TryCreateDocument (_projectItem, out _document, out _wasOpen);
 
         Assert.That (result, Is.EqualTo (CreateDocumentResult.NoPhysicalFile));
       }
@@ -105,7 +106,7 @@ namespace LicenseHeaderManager.Test
         _projectItem.Expect(x => x.Document).Return(documentMock);
         _projectItem.Expect (x => x.Open (Constants.vsViewKindTextView)).Throw (new COMException ());
 
-        var result = _replacer.TryCreateDocument (_projectItem, out _document);
+        var result = _replacer.TryCreateDocument (_projectItem, out _document, out _wasOpen);
 
         Assert.That (result, Is.EqualTo (CreateDocumentResult.NoTextDocument));
       }
@@ -124,7 +125,7 @@ namespace LicenseHeaderManager.Test
 
         var headers = new Dictionary<string, string[]> { { ".cs", new string[0] } };
 
-        var result = _replacer.TryCreateDocument(_projectItem, out _document, headers);
+        var result = _replacer.TryCreateDocument(_projectItem, out _document, out _wasOpen, headers);
 
         Assert.That (result, Is.EqualTo (CreateDocumentResult.EmptyHeader));
       }
@@ -140,7 +141,7 @@ namespace LicenseHeaderManager.Test
                           { ".cs", new[] { "//" } }
                       };
 
-        var result = _replacer.TryCreateDocument (_projectItem, out _document, headers);
+        var result = _replacer.TryCreateDocument (_projectItem, out _document, out _wasOpen, headers);
 
         Assert.That (result, Is.EqualTo (CreateDocumentResult.DocumentCreated));
         Assert.That (_document, Is.Not.Null);
@@ -159,7 +160,7 @@ namespace LicenseHeaderManager.Test
                           { "generated.cs", new[] { "generated" } } 
                       };
 
-        _replacer.TryCreateDocument (_projectItem, out _document, headers);
+        _replacer.TryCreateDocument (_projectItem, out _document, out _wasOpen, headers);
 
         Assert.That (_document._header.Text, Is.EqualTo ("generated\r\n"));
       }
@@ -176,7 +177,7 @@ namespace LicenseHeaderManager.Test
         AddDocumentToProjectItem ("test.cs", _projectItem);
         PrepareLanguagePage (".cs");
 
-        var result = _replacer.TryCreateDocument (_projectItem, out _document);
+        var result = _replacer.TryCreateDocument (_projectItem, out _document, out _wasOpen);
 
         Assert.That (result, Is.EqualTo (CreateDocumentResult.LinkedFile));
       }
