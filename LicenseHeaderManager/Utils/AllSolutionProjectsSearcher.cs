@@ -20,17 +20,20 @@ namespace LicenseHeaderManager.Utils
       return projectList;
     }
 
-
-
     private void PopulateProjectsList (Solution solution, List<Project> projectList)
     {
       foreach (Project project in solution)
       {
         if (project.Kind == ProjectKinds.vsProjectKindSolutionFolder)
           projectList.AddRange (GetSolutionFolderProjects (project));
-        else
+        else if(IsLoaded(project)) 
           projectList.Add (project);
       }
+    }
+
+    private bool IsLoaded(Project project)
+    {
+      return string.Compare(EnvDTE.Constants.vsProjectKindUnmodeled, project.Kind, StringComparison.OrdinalIgnoreCase) != 0;
     }
 
     private IEnumerable<Project> GetSolutionFolderProjects (Project project)
@@ -49,13 +52,12 @@ namespace LicenseHeaderManager.Utils
         {
           list.AddRange (GetSolutionFolderProjects (subProject));
         }
-        else
+        else if (IsLoaded(project))
         {
           list.Add (subProject);
         }
       }
       return list;
     }
-
   }
 }

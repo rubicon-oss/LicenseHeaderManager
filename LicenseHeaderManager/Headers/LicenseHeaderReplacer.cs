@@ -88,7 +88,7 @@ namespace LicenseHeaderManager.Headers
       }
       catch (ArgumentException ex)
       {
-        MessageBox.Show (ex.Message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
+        MessageBox.Show (ex.Message + " " + item.Name, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
       }
     }
 
@@ -119,19 +119,22 @@ namespace LicenseHeaderManager.Headers
         //Because not every ProjectItem has the Method .Open we have to catch the resulting ComException.
         //Items which are throwing the ComException are pobably not a normal Document and are going to fail TryCreateDocument
       }
-      
-
+      catch (IOException e)
+      {
+        //Because the ProjectItem can be Missing
+        //Item is going to fail TryCreateDocument
+      }
+      catch (ArgumentException e)
+      {
+        //Because not every ProjectItem takes the Constant vsViewKindTextView we have to catch the resulting ArgumentException.
+        //Items which are throwing the ComException are pobably not a normal Document and are going to fail TryCreateDocument
+      }
 
       Document document;
       if (TryCreateDocument (item, out document, headers) == CreateDocumentResult.DocumentCreated)
       {
         // item.Saved is not implemented for web_folders, therefore this check must be after the TryCreateDocument
         bool isSaved = item.Saved;
-        
-        ////item.isOpen is not implemented for SQL/DBProject, therefore this check mus be after TryCreateDocument
-        //bool isOpen = item.IsOpen[Constants.vsViewKindAny];
-        
-
 
         string message;
         bool replace = true;
