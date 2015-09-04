@@ -46,7 +46,9 @@ namespace LicenseHeaderManager.Headers
       try
       {
         Document document;
-        CreateDocumentResult result = TryCreateDocument (item, out document, headers);
+        bool wasOpen;
+
+        CreateDocumentResult result = TryCreateDocument (item, out document, out wasOpen, headers);
         string message;
 
         switch (result)
@@ -101,37 +103,10 @@ namespace LicenseHeaderManager.Headers
     public int RemoveOrReplaceHeaderRecursive (ProjectItem item, IDictionary<string, string[]> headers, bool searchForLicenseHeaders = true)
     {
       int headersFound = 0;
-      bool wasOpen = true;
-
-      //We have to open the item before TryCreateDocument because otherwise, the Document gets corrupted
-      try
-      {
-        //The document has to be open to edit it
-        if (!item.IsOpen[Constants.vsViewKindTextView])
-        {
-
-          item.Open(Constants.vsViewKindTextView);
-          wasOpen = false;
-        }
-      }
-      catch (COMException e)
-      {
-        //Because not every ProjectItem has the Method .Open we have to catch the resulting ComException.
-        //Items which are throwing the ComException are pobably not a normal Document and are going to fail TryCreateDocument
-      }
-      catch (IOException e)
-      {
-        //Because the ProjectItem can be Missing
-        //Item is going to fail TryCreateDocument
-      }
-      catch (ArgumentException e)
-      {
-        //Because not every ProjectItem takes the Constant vsViewKindTextView we have to catch the resulting ArgumentException.
-        //Items which are throwing the ComException are pobably not a normal Document and are going to fail TryCreateDocument
-      }
+      bool wasOpen;
 
       Document document;
-      if (TryCreateDocument (item, out document, headers) == CreateDocumentResult.DocumentCreated)
+      if (TryCreateDocument (item, out document, out wasOpen, headers) == CreateDocumentResult.DocumentCreated)
       {
         // item.Saved is not implemented for web_folders, therefore this check must be after the TryCreateDocument
         bool isSaved = item.Saved;
@@ -203,9 +178,10 @@ namespace LicenseHeaderManager.Headers
     /// <param name="document">The document which was created or null if an error occured (see return value).</param>
     /// <param name="headers">A dictionary of headers using the file extension as key and the header as value or null if headers should only be removed.</param>
     /// <returns>A value indicating the result of the operation. Document will be null unless DocumentCreated is returned.</returns>
-    public CreateDocumentResult TryCreateDocument (ProjectItem item, out Document document, IDictionary<string, string[]> headers = null)
+    public CreateDocumentResult TryCreateDocument (ProjectItem item, out Document document, out bool wasOpen, IDictionary<string, string[]> headers = null)
     {
       document = null;
+      wasOpen = true;
 
       if (!ProjectItemInspection.IsPhysicalFile(item))
         return CreateDocumentResult.NoPhysicalFile;
@@ -224,7 +200,6 @@ namespace LicenseHeaderManager.Headers
           return CreateDocumentResult.LanguageNotFound;
 
       Window window = null;
-      bool wasOpen = true;
 
       //try to open the document as a text document
       try
@@ -247,7 +222,6 @@ namespace LicenseHeaderManager.Headers
       var itemDocument = item.Document;
       if (item.Document == null)
       {
-        CloseItemWindow(window, wasOpen);
         return CreateDocumentResult.NoPhysicalFile;  
       }
       
@@ -255,10 +229,8 @@ namespace LicenseHeaderManager.Headers
       var textDocument = itemDocument.Object ("TextDocument") as TextDocument;
       if (textDocument == null)
       {
-        CloseItemWindow (window, wasOpen);
         return CreateDocumentResult.NoTextDocument;  
       }
-      
 
       string[] header = null;
       if (headers != null)
@@ -270,7 +242,6 @@ namespace LicenseHeaderManager.Headers
 
         if (extension == null)
         {
-          CloseItemWindow (window, wasOpen);
           return CreateDocumentResult.NoHeaderFound;  
         }
         
@@ -278,7 +249,6 @@ namespace LicenseHeaderManager.Headers
 
         if (header.All(string.IsNullOrEmpty))
         {
-          CloseItemWindow (window, wasOpen);
           return CreateDocumentResult.EmptyHeader;    
         }
       }
@@ -294,19 +264,7 @@ namespace LicenseHeaderManager.Headers
               ? optionsPage.RequiredKeywords.Split (new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select (k => k.Trim())
               : null);
 
-      CloseItemWindow (window, wasOpen);
       return CreateDocumentResult.DocumentCreated;
-    }
-
-    private void CloseItemWindow(Window window, bool wasOpen)
-    {
-      if (window != null && !wasOpen)
-        window.Close ();
-    }
-
-    private bool IsLink (ProjectItem item)
-    {
-      return (item.Properties != null && (bool) item.Properties.Item("IsLink").Value);
     }
   }
 }

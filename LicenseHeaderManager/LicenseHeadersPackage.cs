@@ -195,13 +195,7 @@ namespace LicenseHeaderManager
       var item = GetActiveProjectItem ();
       if (item != null)
       {
-        if (item.Kind == Constants.vsProjectItemKindPhysicalFile)
-        {
-          Document document;
-          visible = _licenseReplacer.TryCreateDocument (item, out document) == CreateDocumentResult.DocumentCreated;
-        }
-        else
-          visible = true;
+        visible = ShouldBeVisible(item);
       }
 
       _addLicenseHeaderCommand.Visible = visible;
@@ -217,10 +211,9 @@ namespace LicenseHeaderManager
 
       ProjectItem item = GetSolutionExplorerItem () as ProjectItem;
 
-      if (item != null && ProjectItemInspection.IsPhysicalFile(item))
+      if (item != null)
       {
-        Document document;
-        visible = _licenseReplacer.TryCreateDocument (item, out document) == CreateDocumentResult.DocumentCreated;
+        visible = ShouldBeVisible(item);
       }
 
       _addLicenseHeaderToProjectItemCommand.Visible = visible;
@@ -238,11 +231,7 @@ namespace LicenseHeaderManager
       ProjectItem item = obj as ProjectItem;
       if (item != null)
       {
-        if (item.Kind == Constants.vsProjectItemKindPhysicalFile)
-        {
-          Document document;
-          visible = _licenseReplacer.TryCreateDocument (item, out document) == CreateDocumentResult.DocumentCreated;
-        }
+        visible = ShouldBeVisible(item);
       }
       else
       {
@@ -252,6 +241,21 @@ namespace LicenseHeaderManager
 
       _addLicenseHeadersToAllFilesCommand.Visible = visible;
       _removeLicenseHeadersFromAllFilesCommand.Visible = visible;
+    }
+
+    private bool ShouldBeVisible(ProjectItem item)
+    {
+      bool visible = false;
+
+      if (ProjectItemInspection.IsPhysicalFile(item))
+      {
+        Document document;
+        bool wasOpen;
+
+        visible = _licenseReplacer.TryCreateDocument(item, out document, out wasOpen) ==
+                  CreateDocumentResult.DocumentCreated;
+      }
+      return visible;
     }
 
     private ProjectItem GetActiveProjectItem ()
@@ -364,8 +368,6 @@ namespace LicenseHeaderManager
         }
       }
     }
-
-
 
     #region insert headers in new files
 
@@ -531,7 +533,7 @@ namespace LicenseHeaderManager
 
     private void RemoveLicenseHeadersFromAllFiles(object obj)
     {
-      var removeAllLicenseHeadersCommand = new AddLicenseHeaderToAllFilesCommand(_licenseReplacer);
+      var removeAllLicenseHeadersCommand = new RemoveLicenseHeaderFromAllFilesCommand(_licenseReplacer);
 
       IVsStatusbar statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
       statusBar.SetText (Resources.UpdatingFiles);
