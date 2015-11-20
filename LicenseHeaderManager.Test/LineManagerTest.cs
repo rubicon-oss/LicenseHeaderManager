@@ -1,5 +1,4 @@
-﻿using System;
-using LicenseHeaderManager.Headers;
+﻿using LicenseHeaderManager.Headers;
 using NUnit.Framework;
 
 namespace LicenseHeaderManager.Test

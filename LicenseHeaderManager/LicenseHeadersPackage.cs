@@ -16,9 +16,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel.Design;
 using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
 using EnvDTE;
@@ -33,9 +30,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Win32;
-using Constants = EnvDTE.Constants;
 using Document = LicenseHeaderManager.Headers.Document;
-using Language = LicenseHeaderManager.Options.Language;
 
 namespace LicenseHeaderManager
 {
