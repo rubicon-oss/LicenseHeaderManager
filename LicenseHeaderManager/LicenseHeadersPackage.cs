@@ -575,54 +575,18 @@ namespace LicenseHeaderManager
         return;
       }
 
-      var licenseHeaderDefinitionFileName = OpenFileDialogForExistingFile(fileName);
+      ProjectItems projectItems = null;
 
-      if (licenseHeaderDefinitionFileName == null) return;
-        
       if (project != null)
       {
-        int fileCountBefore = project.ProjectItems.Count;
-   
-        project.ProjectItems.AddFromFile (licenseHeaderDefinitionFileName);
-   
-        int fileCountAfter = project.ProjectItems.Count;
-
-        if (fileCountBefore == fileCountAfter)
-        {
-          MessageBox.Show (Resources.Warning_CantLinkItemInSameProject, Resources.NameOfThisExtension, MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
+        projectItems = project.ProjectItems;
       }
       else if (projectItem != null)
       {
-        int fileCountBefore = projectItem.ProjectItems.Count;
-
-        projectItem.ProjectItems.AddFromFile (licenseHeaderDefinitionFileName);
-
-        int fileCountAfter = projectItem.ProjectItems.Count;
-
-        if (fileCountBefore == fileCountAfter)
-        {
-          MessageBox.Show (Resources.Warning_CantLinkItemInSameProject, Resources.NameOfThisExtension, MessageBoxButton.OK, MessageBoxImage.Information);
-        }
+        projectItems = projectItem.ProjectItems;
       }
-    }
 
-    private string OpenFileDialogForExistingFile(string fileName)
-    {
-      FileDialog dialog = new OpenFileDialog ();
-      dialog.CheckFileExists = true;
-      dialog.CheckPathExists = true;
-      dialog.DefaultExt = LicenseHeader.Extension;
-      dialog.DereferenceLinks = true;
-      dialog.Filter = "License Header Definitions|*" + LicenseHeader.Extension;
-      dialog.InitialDirectory = Path.GetDirectoryName (fileName);
-      bool? result = dialog.ShowDialog ();
-
-      if (result.HasValue && result.Value)
-        return dialog.FileName;
-
-      return string.Empty;
+      new AddExistingLicenseHeaderDefinitionFile().AddDefinitionFileToOneProject(fileName, projectItems);
     }
 
     private void LicenseHeaderOptionsCallback (object sender, EventArgs e)
