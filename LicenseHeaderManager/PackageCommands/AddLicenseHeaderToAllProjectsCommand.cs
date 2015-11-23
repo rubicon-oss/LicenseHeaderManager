@@ -26,19 +26,16 @@ namespace LicenseHeaderManager.PackageCommands
 {
   public class AddLicenseHeaderToAllProjectsCommand
   {
-    private LicenseHeaderReplacer licenseReplacer;
     private AddLicenseHeaderToAllFilesCommand addLicenseHeaderToAllFilesCommand;
     private IVsStatusbar statusBar;
     private IDefaultLicenseHeaderPage licenseHeaderPage;
 
     public AddLicenseHeaderToAllProjectsCommand(LicenseHeaderReplacer licenseReplacer, IVsStatusbar statusBar, IDefaultLicenseHeaderPage licenseHeaderPage)
     {
+      addLicenseHeaderToAllFilesCommand = new AddLicenseHeaderToAllFilesCommand (licenseReplacer);
       this.statusBar = statusBar;
-      this.licenseReplacer = licenseReplacer;
       this.licenseHeaderPage = licenseHeaderPage;
-    
-      addLicenseHeaderToAllFilesCommand = new AddLicenseHeaderToAllFilesCommand(licenseReplacer);
-    }
+     }
 
     public void Execute(Solution solution)
     {
