@@ -120,6 +120,9 @@
   <data name="Add" xml:space="preserve">
     <value>Add...</value>
   </data>
+  <data name="AddExistingLicenseHeaderFileQuestion" xml:space="preserve">
+    <value>Do you want to Add Existing License Header Definition File?</value>
+  </data>
   <data name="After" xml:space="preserve">
     <value>After</value>
   </data>

@@ -70,6 +70,15 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to Add Existing License Header Definition File?.
+        /// </summary>
+        public static string AddExistingLicenseHeaderFileQuestion {
+            get {
+                return ResourceManager.GetString("AddExistingLicenseHeaderFileQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to After.
         /// </summary>
         public static string After {

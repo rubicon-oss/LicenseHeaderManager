@@ -79,11 +79,25 @@ namespace LicenseHeaderManager.PackageCommands
 
     private void AddMissingLicenseHeaderFiles (List<Project> projectsWithoutLicenseHeader, IDefaultLicenseHeaderPage page)
     {
+      if (AskAddExistingLicenseHeaderFile())
+      {
+        new AddExistingLicenseHeaderDefinitionFile().AddDefinitionFileToMultipleProjects(projectsWithoutLicenseHeader);
+      }
+      else
+      {
         foreach (Project project in projectsWithoutLicenseHeader)
         {
           if (projectsWithoutLicenseHeader.Contains (project))
             LicenseHeader.AddLicenseHeaderDefinitionFile (project, page, false);
         }   
+      }
+    }
+
+    private bool AskAddExistingLicenseHeaderFile()
+    {
+      return MessageBox.Show (Resources.AddExistingLicenseHeaderFileQuestion, Resources.LicenseHeaderManagerName, MessageBoxButton.YesNo,
+        MessageBoxImage.Information,
+        MessageBoxResult.No) == MessageBoxResult.Yes;
     }
 
     private void AddLicenseHeaderToProjects (List<Project> projectsInSolution)
