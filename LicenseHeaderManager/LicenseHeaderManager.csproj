@@ -281,7 +281,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="VsixInformation\Icon.png" />
+    <Content Include="VsixInformation\Icon.png">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="VsixInformation\license.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
