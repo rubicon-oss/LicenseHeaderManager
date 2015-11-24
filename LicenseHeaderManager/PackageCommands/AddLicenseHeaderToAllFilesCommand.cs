@@ -57,7 +57,7 @@ namespace LicenseHeaderManager.PackageCommands
        
         foreach (ProjectItem item in projectItems)
         {
-          if (ProjectItemInspection.IsLink(item))
+          if (ProjectItemInspection.IsPhysicalFile(item) && ProjectItemInspection.IsLink(item))
             linkedItems.Add(item);
           else
             countSubLicenseHeadersFound = licenseReplacer.RemoveOrReplaceHeaderRecursive(item, headers);
