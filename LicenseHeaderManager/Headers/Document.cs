@@ -95,7 +95,7 @@ namespace LicenseHeaderManager.Headers
       if (!_header.IsEmpty)
       {
         if (existingHeader != _header.Text)
-          ReplaceHeader (existingHeader, PrepareHeader(_header.Text));
+          ReplaceHeader (existingHeader, _header.Text);
       }
       else
         RemoveHeader (existingHeader);
@@ -118,7 +118,7 @@ namespace LicenseHeaderManager.Headers
     private void ReplaceHeader (string existingHeader, string newHeader)
     {
       RemoveHeader (existingHeader);
-      AddHeader (newHeader);
+      AddHeader (PrepareHeader(newHeader));
     }
 
     private void AddHeader (string header)
