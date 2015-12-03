@@ -14,6 +14,7 @@
 
 using System;
 using System.DirectoryServices.AccountManagement;
+using LicenseHeaderManager.Utils;
 
 namespace LicenseHeaderManager.Headers
 {
@@ -25,27 +26,68 @@ namespace LicenseHeaderManager.Headers
     {
         #region Properties
 
+        private static string _name;
         /// <summary>
         /// Gets name (login) of the current user.
         /// </summary>
-        public static string Name { get; private set; }
+        public static string Name 
+        {
+          get
+          {
+            if (string.IsNullOrEmpty(_name))
+            {
+              _name = Environment.UserName;
+            }
+            return _name;
+          } 
+        }
+
+        private static string _displayName = "";
+        private static DateTime? _lastLookup = null;
+        private static bool _knowDisplayName = false;
 
         /// <summary>
         /// Gets display name of the current user, e.g. "John Smith".
         /// </summary>
-        public static string DisplayName { get; private set; }
-        
-        #endregion
-        
-        #region Constructor
-
-        /// <summary>
-        /// Initializes static properties of the current user.
-        /// </summary>
-        static UserInfo()
+        public static string DisplayName 
         {
-            Name = Environment.UserName;
-            DisplayName = UserPrincipal.Current.DisplayName;
+          get
+          {
+            if (!_knowDisplayName)
+            {
+              if (_lastLookup == null)
+              {
+                TryLookup();
+              }
+              else if (DateTime.Now.Subtract((DateTime) _lastLookup).TotalSeconds > 5)
+              {
+                TryLookup();
+              }
+              else
+              {
+                //Set _lastLookup to stop Lookups in case of BatchOperations
+                _lastLookup = DateTime.Now;
+              }  
+            }
+
+            return _displayName;
+          }
+        }
+
+        private static void TryLookup()
+        {
+          try
+          {
+            _displayName = UserPrincipal.Current.DisplayName;
+            _knowDisplayName = true;
+          }
+          catch (PrincipalServerDownException)
+          {
+            _knowDisplayName = false;
+            _lastLookup = DateTime.Now;
+            OutputWindowHandler.WriteMessage("Active Directory Lookup failed");
+            _displayName = "<Unknown>";
+          }
         }
 
         #endregion
