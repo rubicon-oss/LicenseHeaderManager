@@ -25,6 +25,8 @@ namespace LicenseHeaderManager.Headers
     public static class UserInfo
     {
         #region Properties
+        private static Object _nameLock = new Object();
+        private static Object _displayNameLock = new Object();
 
         private static string _name;
         /// <summary>
@@ -34,12 +36,15 @@ namespace LicenseHeaderManager.Headers
         {
           get
           {
-            if (string.IsNullOrEmpty(_name))
+            lock (_nameLock)
             {
-              _name = Environment.UserName;
+              if (string.IsNullOrEmpty(_name))
+              {
+                _name = Environment.UserName;
+              }
+              return _name;
             }
-            return _name;
-          } 
+          }
         }
 
         private static string _displayName = "";
@@ -53,24 +58,27 @@ namespace LicenseHeaderManager.Headers
         {
           get
           {
-            if (!_knowDisplayName)
+            lock (_displayName)
             {
-              if (_lastLookup == null)
+              if (!_knowDisplayName)
               {
-                TryLookup();
+                if (_lastLookup == null)
+                {
+                  TryLookup();
+                }
+                else if (DateTime.Now.Subtract((DateTime) _lastLookup).TotalSeconds > 5)
+                {
+                  TryLookup();
+                }
+                else
+                {
+                  //Set _lastLookup to stop Lookups in case of BatchOperations
+                  _lastLookup = DateTime.Now;
+                }
               }
-              else if (DateTime.Now.Subtract((DateTime) _lastLookup).TotalSeconds > 5)
-              {
-                TryLookup();
-              }
-              else
-              {
-                //Set _lastLookup to stop Lookups in case of BatchOperations
-                _lastLookup = DateTime.Now;
-              }  
+              return _displayName;
+            
             }
-
-            return _displayName;
           }
         }
 
