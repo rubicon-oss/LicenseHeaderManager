@@ -14,13 +14,14 @@
 
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using LicenseHeaderManager.Interfaces;
 
 namespace LicenseHeaderManager.Headers
 {
   /// <summary>
   /// Detects a comment block at the beginning of a text block and returns it (if any).
   /// </summary>
-  public class CommentParser
+  public class CommentParser : ICommentParser
   {
     private bool _started;
     private int _position;
