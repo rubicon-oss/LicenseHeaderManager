@@ -51,34 +51,38 @@ namespace LicenseHeaderManager.PackageCommands
         if (MessageBoxHelper.DoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionFileSingleProject))
         {
           LicenseHeader.AddLicenseHeaderDefinitionFile(projectsInSolution.First(), licenseHeaderPage, true);
+
+          if (!MessageBoxHelper.DoYouWant(Resources.Question_StopForConfiguringDefinitionFiles))
+            AddLicenseHeaderToProjects(projectsInSolution);
         }
       }
       else if (projectsWithoutLicenseHeaderFile.Count == projectsInSolution.Count)
       {
         //There are multiple Projects in the Solution but none of them has a Definition File 
-        //--> Offer to add new ones to everyone of them, but do not add License Headers
+        //--> Offer to add new ones to everyone of them, and ask if they want to stop the update process to configure them
         if (MessageBoxHelper.DoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionFileMultipleProjects))
         {
           AddNewLicenseHeaderDefinitionFilesToProjects(projectsWithoutLicenseHeaderFile, licenseHeaderPage);
-          MessageBoxHelper.Information(Resources.Information_DefinitionFileAdded);
-          //TODO: Discuss with MK if we add License Headers afterwards or stop
+          
+          if (!MessageBoxHelper.DoYouWant(Resources.Question_StopForConfiguringDefinitionFiles))
+            AddLicenseHeaderToProjects(projectsInSolution);
         }
         else
         {
           MessageBoxHelper.Information(Resources.Information_NoDefinitionFileStopUpdating);
         }
       }
-      //There are projects with and without Definition File --> Ask if we should add an existing License Header File to them and then add License Headers
       else if (projectsWithoutLicenseHeaderFile.Any())
       {
+        //There are projects with and without Definition File --> Ask if we should add an existing License Header File to them and then add License Headers
         if (DefinitionFilesShouldBeAdded(projectsWithoutLicenseHeaderFile))
              new AddExistingLicenseHeaderDefinitionFile().AddDefinitionFileToMultipleProjects(projectsWithoutLicenseHeaderFile);
 
         AddLicenseHeaderToProjects(projectsInSolution);
       }
-      //There are no Projects without Definition File --> Add License Headers
       else
       {
+        //There are no Projects without Definition File --> Add License Headers
         AddLicenseHeaderToProjects(projectsInSolution);  
       }
     }

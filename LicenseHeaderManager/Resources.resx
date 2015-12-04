@@ -204,9 +204,6 @@
   <data name="Help" xml:space="preserve">
     <value>Help</value>
   </data>
-  <data name="Information_DefinitionFileAdded" xml:space="preserve">
-    <value>License Header Definition files added. P</value>
-  </data>
   <data name="Information_NoDefinitionFileStopUpdating" xml:space="preserve">
     <value>Cannot add License Headers because there is no License Header Definition File. Please add one and try again.</value>
   </data>
@@ -239,6 +236,9 @@
   </data>
   <data name="Question_AddNewLicenseHeaderDefinitionFileSingleProject" xml:space="preserve">
     <value>No License Header Definition File found in your Project. Do you want to add a new one?</value>
+  </data>
+  <data name="Question_StopForConfiguringDefinitionFiles" xml:space="preserve">
+    <value>License Header Definition Files added. Do you want to stop the update process to configure them?</value>
   </data>
   <data name="Remove" xml:space="preserve">
     <value>Remove</value>

@@ -332,15 +332,6 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to License Header Definition files added. P.
-        /// </summary>
-        public static string Information_DefinitionFileAdded {
-            get {
-                return ResourceManager.GetString("Information_DefinitionFileAdded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cannot add License Headers because there is no License Header Definition File. Please add one and try again..
         /// </summary>
         public static string Information_NoDefinitionFileStopUpdating {
@@ -436,6 +427,15 @@ namespace LicenseHeaderManager {
         public static string Question_AddNewLicenseHeaderDefinitionFileSingleProject {
             get {
                 return ResourceManager.GetString("Question_AddNewLicenseHeaderDefinitionFileSingleProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License Header Definition Files added. Do you want to stop the update process to configure them?.
+        /// </summary>
+        public static string Question_StopForConfiguringDefinitionFiles {
+            get {
+                return ResourceManager.GetString("Question_StopForConfiguringDefinitionFiles", resourceCulture);
             }
         }
         
