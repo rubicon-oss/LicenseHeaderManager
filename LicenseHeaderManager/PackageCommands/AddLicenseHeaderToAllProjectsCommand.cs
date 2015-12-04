@@ -99,12 +99,28 @@ namespace LicenseHeaderManager.PackageCommands
       if (!projectsWithoutLicenseHeaderFile.Any()) return false;
 
       var errorResourceString = Resources.Error_MulitpleProjectsNoLicenseHeaderFile;
+      var projects = "";
 
-      //TODO: Wenn mehr als 5, auf 5 abkürzen und "..." anzeigen
-      var message = string.Format (errorResourceString, string.Join ("\n", projectsWithoutLicenseHeaderFile
-                                                                      .Select(x => x.Name)
-                                                                      .ToList())).Replace (@"\n", "\n");
+      if (projectsWithoutLicenseHeaderFile.Count > 5)
+      {
+        projects = string.Join("\n", projectsWithoutLicenseHeaderFile
+                         .Select(x => x.Name)
+                         .Take(5)
+                         .ToList());
 
+        projects += "\n...";
+
+      }
+      else
+      {
+        projects = string.Join("\n", projectsWithoutLicenseHeaderFile
+                         .Select(x => x.Name)
+                         .ToList());
+      }
+
+      var message = string.Format (errorResourceString, projects).Replace (@"\n", "\n");
+      
+      
       return MessageBoxHelper.DoYouWant(message);
     }
 
