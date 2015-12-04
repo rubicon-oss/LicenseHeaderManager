@@ -524,9 +524,12 @@ namespace LicenseHeaderManager
         }
         else
         {
-          if (LicenseHeader.ShowQuestionForAddingLicenseHeaderFile(currentProject, page))
+          if (MessageBoxHelper.DoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionFileSingleProject))
           {
-              AddLicenseHeadersToAllFilesCallback(obj, null);
+              LicenseHeader.AddLicenseHeaderDefinitionFile(currentProject, DefaultLicenseHeaderPage, false);
+
+              if(!MessageBoxHelper.DoYouWant(Resources.Question_StopForConfiguringDefinitionFilesSingleFile))
+                AddLicenseHeadersToAllFilesCallback((object) project ?? projectItem, null);
           } 
         }
       }
