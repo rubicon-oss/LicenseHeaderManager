@@ -516,10 +516,9 @@ namespace LicenseHeaderManager
         {
           if (MessageBoxHelper.DoYouWant(Resources.Question_AddExistingDefinitionFileToProject))
           {
-            var addExistingDefinitionFile = new AddExistingLicenseHeaderDefinitionFile();
-            addExistingDefinitionFile.AddDefinitionFileToOneProject(currentProject.FileName, currentProject.ProjectItems);
+            new AddExistingLicenseHeaderDefinitionFile().AddDefinitionFileToOneProject(currentProject.FileName, currentProject.ProjectItems);
 
-            AddLicenseHeadersToAllFilesCallback(obj, null);
+            AddLicenseHeadersToAllFilesCallback((object) project ?? projectItem, null);
           }
         }
         else
