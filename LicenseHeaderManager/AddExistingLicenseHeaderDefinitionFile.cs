@@ -21,7 +21,7 @@ namespace LicenseHeaderManager
 
     public void AddDefinitionFileToMultipleProjects (List<Project> projects)
     {
-      var licenseHeaderDefinitionFileName = OpenFileDialogForExistingFile (projects.First().FileName);
+      var licenseHeaderDefinitionFileName = OpenFileDialogForExistingFile (projects.First().DTE.Solution.FullName);
 
       if (licenseHeaderDefinitionFileName == null) return;
 
