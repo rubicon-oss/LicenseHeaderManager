@@ -14,7 +14,7 @@ namespace LicenseHeaderManager
     {
       var licenseHeaderDefinitionFileName = OpenFileDialogForExistingFile(fileName);
 
-      if (licenseHeaderDefinitionFileName == null) return;
+      if (licenseHeaderDefinitionFileName == string.Empty) return;
 
       AddFileToProject(projectItems, licenseHeaderDefinitionFileName);
     }
@@ -23,7 +23,7 @@ namespace LicenseHeaderManager
     {
       var licenseHeaderDefinitionFileName = OpenFileDialogForExistingFile (projects.First().DTE.Solution.FullName);
 
-      if (licenseHeaderDefinitionFileName == null) return;
+      if (licenseHeaderDefinitionFileName == string.Empty) return;
 
       foreach (var project in projects)
       {
@@ -31,7 +31,7 @@ namespace LicenseHeaderManager
       }
     }
 
-    private static void AddFileToProject (ProjectItems projectItems, string licenseHeaderDefinitionFileName)
+    private void AddFileToProject (ProjectItems projectItems, string licenseHeaderDefinitionFileName)
     {
       int fileCountBefore = projectItems.Count;
       projectItems.AddFromFile (licenseHeaderDefinitionFileName);
