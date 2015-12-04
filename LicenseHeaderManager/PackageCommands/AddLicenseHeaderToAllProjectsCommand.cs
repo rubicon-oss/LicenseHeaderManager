@@ -44,10 +44,43 @@ namespace LicenseHeaderManager.PackageCommands
 
       var projectsWithoutLicenseHeaderFile = CheckForLicenseHeaderFileInProjects (projectsInSolution);
 
-      if (DefinitionFilesShouldBeAdded(projectsWithoutLicenseHeaderFile))
-        AddMissingLicenseHeaderFiles(projectsWithoutLicenseHeaderFile, licenseHeaderPage);
-    
-      AddLicenseHeaderToProjects(projectsInSolution); 
+      if (projectsInSolution.Count == 1 && projectsWithoutLicenseHeaderFile.Count == 1)
+      {
+        //There is exactly one Project in the Solution and it has no Definition File 
+        //--> Offer to add a new one, but do not add License Headers
+        if (MessageBoxDoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionFileSingleProject))
+        {
+          LicenseHeader.AddLicenseHeaderDefinitionFile(projectsInSolution.First(), licenseHeaderPage, true);
+        }
+      }
+      else if (projectsWithoutLicenseHeaderFile.Count == projectsInSolution.Count)
+      {
+        //There are multiple Projects in the Solution but none of them has a Definition File 
+        //--> Offer to add new ones to everyone of them, but do not add License Headers
+        if (MessageBoxDoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionFileMultipleProjects))
+        {
+          AddNewLicenseHeaderDefinitionFilesToProjects(projectsWithoutLicenseHeaderFile, licenseHeaderPage);
+          MessageBoxInformation(Resources.Information_DefinitionFileAdded);
+          //TODO: Discuss with MK if we add License Headers afterwards or stop
+        }
+        else
+        {
+          MessageBoxInformation(Resources.Information_NoDefinitionFileStopUpdating);
+        }
+      }
+      //There are projects with and without Definition File --> Ask if we should add an existing License Header File to them and then add License Headers
+      else if (projectsWithoutLicenseHeaderFile.Any())
+      {
+        if (DefinitionFilesShouldBeAdded(projectsWithoutLicenseHeaderFile))
+             new AddExistingLicenseHeaderDefinitionFile().AddDefinitionFileToMultipleProjects(projectsWithoutLicenseHeaderFile);
+
+        AddLicenseHeaderToProjects(projectsInSolution);
+      }
+      //There are no Projects without Definition File --> Add License Headers
+      else
+      {
+        AddLicenseHeaderToProjects(projectsInSolution);  
+      }
     }
 
     private List<Project> CheckForLicenseHeaderFileInProjects (List<Project> projects)
@@ -61,40 +94,24 @@ namespace LicenseHeaderManager.PackageCommands
     {
       if (!projectsWithoutLicenseHeaderFile.Any()) return false;
 
-      var errorResourceString = projectsWithoutLicenseHeaderFile.Count == 1
-          ? Resources.Error_NoHeaderDefinition
-          : Resources.Error_MulitpleProjectsNoLicenseHeaderFile;
+      var errorResourceString = Resources.Error_MulitpleProjectsNoLicenseHeaderFile;
 
+      //TODO: Wenn mehr als 5, auf 5 abkürzen und "..." anzeigen
       var message = string.Format (errorResourceString, string.Join ("\n", projectsWithoutLicenseHeaderFile
                                                                       .Select(x => x.Name)
                                                                       .ToList())).Replace (@"\n", "\n");
 
-      return MessageBox.Show (message, Resources.LicenseHeaderManagerName, MessageBoxButton.YesNo,
-        MessageBoxImage.Information,
-        MessageBoxResult.No) == MessageBoxResult.Yes;
+      return MessageBoxDoYouWant(message);
     }
 
-    private void AddMissingLicenseHeaderFiles (List<Project> projectsWithoutLicenseHeader, IDefaultLicenseHeaderPage page)
+    private static void AddNewLicenseHeaderDefinitionFilesToProjects(List<Project> projectsWithoutLicenseHeader,
+      IDefaultLicenseHeaderPage page)
     {
-      if (AskAddExistingLicenseHeaderFile())
+      foreach (Project project in projectsWithoutLicenseHeader)
       {
-        new AddExistingLicenseHeaderDefinitionFile().AddDefinitionFileToMultipleProjects(projectsWithoutLicenseHeader);
+        if (projectsWithoutLicenseHeader.Contains(project))
+          LicenseHeader.AddLicenseHeaderDefinitionFile(project, page, false);
       }
-      else
-      {
-        foreach (Project project in projectsWithoutLicenseHeader)
-        {
-          if (projectsWithoutLicenseHeader.Contains (project))
-            LicenseHeader.AddLicenseHeaderDefinitionFile (project, page, false);
-        }   
-      }
-    }
-
-    private bool AskAddExistingLicenseHeaderFile()
-    {
-      return MessageBox.Show (Resources.AddExistingLicenseHeaderFileQuestion, Resources.LicenseHeaderManagerName, MessageBoxButton.YesNo,
-        MessageBoxImage.Information,
-        MessageBoxResult.No) == MessageBoxResult.Yes;
     }
 
     private void AddLicenseHeaderToProjects (List<Project> projectsInSolution)
@@ -110,6 +127,19 @@ namespace LicenseHeaderManager.PackageCommands
       }
 
       statusBar.SetText (String.Empty);
+    }
+
+    private void MessageBoxInformation(string message)
+    {
+      MessageBox.Show(message, Resources.LicenseHeaderManagerName, MessageBoxButton.OK,
+        MessageBoxImage.Information);
+    }
+
+    private bool MessageBoxDoYouWant(string message)
+    {
+      return MessageBox.Show(message, Resources.LicenseHeaderManagerName, MessageBoxButton.YesNo,
+        MessageBoxImage.Information,
+        MessageBoxResult.No) == MessageBoxResult.Yes;
     }
   }
 }

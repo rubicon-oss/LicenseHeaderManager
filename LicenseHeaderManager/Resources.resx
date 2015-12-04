@@ -175,10 +175,10 @@
     <value>No comment definitions found for {0} files.\nDo you want to add them to the configuration?</value>
   </data>
   <data name="Error_MulitpleProjectsNoLicenseHeaderFile" xml:space="preserve">
-    <value>No license header definition file found in following projects:\n\n{0}\n\nDo you want to add the default license header definition files automatically?</value>
+    <value>No license header definition file found in following projects:\n\n{0}\n\nDo you want to add an existing License Header Definition File into these Projects?</value>
   </data>
   <data name="Error_NoHeaderDefinition" xml:space="preserve">
-    <value>No license header definition file found in project {0}.\nDo you want to add a new file?</value>
+    <value>No license header definition file found in project {0}.\nDo you want to add a License Header Definition File?</value>
   </data>
   <data name="Error_NoHeaderFound" xml:space="preserve">
     <value>This extension currently has no header defined in the license header definition file\n </value>
@@ -204,6 +204,12 @@
   <data name="Help" xml:space="preserve">
     <value>Help</value>
   </data>
+  <data name="Information_DefinitionFileAdded" xml:space="preserve">
+    <value>License Header Definition files added. P</value>
+  </data>
+  <data name="Information_NoDefinitionFileStopUpdating" xml:space="preserve">
+    <value>Cannot add License Headers because there is no License Header Definition File. Please add one and try again.</value>
+  </data>
   <data name="InsertInNewFiles" xml:space="preserve">
     <value>Automatically insert license headers in new files</value>
   </data>
@@ -227,6 +233,12 @@
   </data>
   <data name="Ok" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="Question_AddNewLicenseHeaderDefinitionFileMultipleProjects" xml:space="preserve">
+    <value>It seems like you have no project with an License Header Definition File added. Do you want to add the Default License Header File into all projects?</value>
+  </data>
+  <data name="Question_AddNewLicenseHeaderDefinitionFileSingleProject" xml:space="preserve">
+    <value>No License Header Definition File found in your Project. Do you want to add a new one?</value>
   </data>
   <data name="Remove" xml:space="preserve">
     <value>Remove</value>

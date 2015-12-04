@@ -242,7 +242,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No license header definition file found in following projects:\n\n{0}\n\nDo you want to add the default license header definition files automatically?.
+        ///   Looks up a localized string similar to No license header definition file found in following projects:\n\n{0}\n\nDo you want to add an existing License Header Definition File into these Projects?.
         /// </summary>
         public static string Error_MulitpleProjectsNoLicenseHeaderFile {
             get {
@@ -251,7 +251,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No license header definition file found in project {0}.\nDo you want to add a new file?.
+        ///   Looks up a localized string similar to No license header definition file found in project {0}.\nDo you want to add a License Header Definition File?.
         /// </summary>
         public static string Error_NoHeaderDefinition {
             get {
@@ -332,6 +332,24 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to License Header Definition files added. P.
+        /// </summary>
+        public static string Information_DefinitionFileAdded {
+            get {
+                return ResourceManager.GetString("Information_DefinitionFileAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot add License Headers because there is no License Header Definition File. Please add one and try again..
+        /// </summary>
+        public static string Information_NoDefinitionFileStopUpdating {
+            get {
+                return ResourceManager.GetString("Information_NoDefinitionFileStopUpdating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Automatically insert license headers in new files.
         /// </summary>
         public static string InsertInNewFiles {
@@ -400,6 +418,24 @@ namespace LicenseHeaderManager {
         public static string Ok {
             get {
                 return ResourceManager.GetString("Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It seems like you have no project with an License Header Definition File added. Do you want to add the Default License Header File into all projects?.
+        /// </summary>
+        public static string Question_AddNewLicenseHeaderDefinitionFileMultipleProjects {
+            get {
+                return ResourceManager.GetString("Question_AddNewLicenseHeaderDefinitionFileMultipleProjects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No License Header Definition File found in your Project. Do you want to add a new one?.
+        /// </summary>
+        public static string Question_AddNewLicenseHeaderDefinitionFileSingleProject {
+            get {
+                return ResourceManager.GetString("Question_AddNewLicenseHeaderDefinitionFileSingleProject", resourceCulture);
             }
         }
         
