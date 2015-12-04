@@ -244,14 +244,14 @@ namespace LicenseHeaderManager {
         /// <summary>
         ///   Looks up a localized string similar to No license header definition file found in following projects:\n\n{0}\n\nDo you want to add an existing License Header Definition File into these Projects?.
         /// </summary>
-        public static string Error_MulitpleProjectsNoLicenseHeaderFile {
+        public static string Error_MultipleProjectsNoLicenseHeaderFile {
             get {
-                return ResourceManager.GetString("Error_MulitpleProjectsNoLicenseHeaderFile", resourceCulture);
+                return ResourceManager.GetString("Error_MultipleProjectsNoLicenseHeaderFile", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No license header definition file found in project {0}.\nDo you want to add a License Header Definition File?.
+        ///   Looks up a localized string similar to No license header definition file found in project {0}.\nDo you want to add a new License Header Definition File?.
         /// </summary>
         public static string Error_NoHeaderDefinition {
             get {
@@ -413,6 +413,15 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No License Header Definition file found. Do you want to add an existing License Header Definition file to the project?.
+        /// </summary>
+        public static string Question_AddExistingDefinitionFileToProject {
+            get {
+                return ResourceManager.GetString("Question_AddExistingDefinitionFileToProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to It seems like you have no project with an License Header Definition File added. Do you want to add the Default License Header File into all projects?.
         /// </summary>
         public static string Question_AddNewLicenseHeaderDefinitionFileMultipleProjects {
@@ -433,9 +442,18 @@ namespace LicenseHeaderManager {
         /// <summary>
         ///   Looks up a localized string similar to License Header Definition Files added. Do you want to stop the update process to configure them?.
         /// </summary>
-        public static string Question_StopForConfiguringDefinitionFiles {
+        public static string Question_StopForConfiguringDefinitionFilesMultipleFiles {
             get {
-                return ResourceManager.GetString("Question_StopForConfiguringDefinitionFiles", resourceCulture);
+                return ResourceManager.GetString("Question_StopForConfiguringDefinitionFilesMultipleFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License Header Definition File added. Do you want to stop the update process to configure it?.
+        /// </summary>
+        public static string Question_StopForConfiguringDefinitionFilesSingleFile {
+            get {
+                return ResourceManager.GetString("Question_StopForConfiguringDefinitionFilesSingleFile", resourceCulture);
             }
         }
         

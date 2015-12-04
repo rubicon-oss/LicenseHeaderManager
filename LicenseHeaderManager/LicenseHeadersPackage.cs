@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel.Design;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using EnvDTE;
@@ -496,13 +497,38 @@ namespace LicenseHeaderManager
       var project = obj as Project;
       var projectItem = obj as ProjectItem;
       if (project == null && projectItem == null) return;
+      Project currentProject = project;
+
+      if (projectItem != null)
+      {
+        currentProject = projectItem.ContainingProject;
+      }
 
       if (addLicenseHeaderToAllFilesReturn.NoHeaderFound)
       {
         //No license header found...
         var page = (DefaultLicenseHeaderPage) GetDialogPage(typeof (DefaultLicenseHeaderPage));
-        if (LicenseHeader.ShowQuestionForAddingLicenseHeaderFile(project ?? projectItem.ContainingProject, page))
-          AddLicenseHeadersToAllFilesCallback(obj, null);
+        var solutionSearcher = new AllSolutionProjectsSearcher();
+        var projects = solutionSearcher.GetAllProjects(_dte.Solution);
+
+        //If there is a licenseheader in the Solution 
+        if(projects.Any(projectInSolution => LicenseHeaderFinder.GetHeader(projectInSolution) != null))
+        {
+          if (MessageBoxHelper.DoYouWant(Resources.Question_AddExistingDefinitionFileToProject))
+          {
+            var addExistingDefinitionFile = new AddExistingLicenseHeaderDefinitionFile();
+            addExistingDefinitionFile.AddDefinitionFileToOneProject(currentProject.FileName, currentProject.ProjectItems);
+
+            AddLicenseHeadersToAllFilesCallback(obj, null);
+          }
+        }
+        else
+        {
+          if (LicenseHeader.ShowQuestionForAddingLicenseHeaderFile(currentProject, page))
+          {
+              AddLicenseHeadersToAllFilesCallback(obj, null);
+          } 
+        }
       }
     }
 

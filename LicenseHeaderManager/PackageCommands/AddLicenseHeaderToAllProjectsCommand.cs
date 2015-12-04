@@ -52,7 +52,7 @@ namespace LicenseHeaderManager.PackageCommands
         {
           LicenseHeader.AddLicenseHeaderDefinitionFile(projectsInSolution.First(), licenseHeaderPage, true);
 
-          if (!MessageBoxHelper.DoYouWant(Resources.Question_StopForConfiguringDefinitionFiles))
+          if (!MessageBoxHelper.DoYouWant(Resources.Question_StopForConfiguringDefinitionFilesSingleFile))
             AddLicenseHeaderToProjects(projectsInSolution);
         }
       }
@@ -64,7 +64,7 @@ namespace LicenseHeaderManager.PackageCommands
         {
           AddNewLicenseHeaderDefinitionFilesToProjects(projectsWithoutLicenseHeaderFile, licenseHeaderPage);
           
-          if (!MessageBoxHelper.DoYouWant(Resources.Question_StopForConfiguringDefinitionFiles))
+          if (!MessageBoxHelper.DoYouWant(Resources.Question_StopForConfiguringDefinitionFilesMultipleFiles))
             AddLicenseHeaderToProjects(projectsInSolution);
         }
         else
@@ -98,7 +98,7 @@ namespace LicenseHeaderManager.PackageCommands
     {
       if (!projectsWithoutLicenseHeaderFile.Any()) return false;
 
-      var errorResourceString = Resources.Error_MulitpleProjectsNoLicenseHeaderFile;
+      var errorResourceString = Resources.Error_MultipleProjectsNoLicenseHeaderFile;
       var projects = "";
 
       if (projectsWithoutLicenseHeaderFile.Count > 5)

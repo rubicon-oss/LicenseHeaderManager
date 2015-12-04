@@ -174,11 +174,11 @@
   <data name="Error_LanguageNotFound" xml:space="preserve">
     <value>No comment definitions found for {0} files.\nDo you want to add them to the configuration?</value>
   </data>
-  <data name="Error_MulitpleProjectsNoLicenseHeaderFile" xml:space="preserve">
+  <data name="Error_MultipleProjectsNoLicenseHeaderFile" xml:space="preserve">
     <value>No license header definition file found in following projects:\n\n{0}\n\nDo you want to add an existing License Header Definition File into these Projects?</value>
   </data>
   <data name="Error_NoHeaderDefinition" xml:space="preserve">
-    <value>No license header definition file found in project {0}.\nDo you want to add a License Header Definition File?</value>
+    <value>No license header definition file found in project {0}.\nDo you want to add a new License Header Definition File?</value>
   </data>
   <data name="Error_NoHeaderFound" xml:space="preserve">
     <value>This extension currently has no header defined in the license header definition file\n </value>
@@ -231,14 +231,20 @@
   <data name="Ok" xml:space="preserve">
     <value>OK</value>
   </data>
+  <data name="Question_AddExistingDefinitionFileToProject" xml:space="preserve">
+    <value>No License Header Definition file found. Do you want to add an existing License Header Definition file to the project?</value>
+  </data>
   <data name="Question_AddNewLicenseHeaderDefinitionFileMultipleProjects" xml:space="preserve">
     <value>It seems like you have no project with an License Header Definition File added. Do you want to add the Default License Header File into all projects?</value>
   </data>
   <data name="Question_AddNewLicenseHeaderDefinitionFileSingleProject" xml:space="preserve">
     <value>No License Header Definition File found in your Project. Do you want to add a new one?</value>
   </data>
-  <data name="Question_StopForConfiguringDefinitionFiles" xml:space="preserve">
+  <data name="Question_StopForConfiguringDefinitionFilesMultipleFiles" xml:space="preserve">
     <value>License Header Definition Files added. Do you want to stop the update process to configure them?</value>
+  </data>
+  <data name="Question_StopForConfiguringDefinitionFilesSingleFile" xml:space="preserve">
+    <value>License Header Definition File added. Do you want to stop the update process to configure it?</value>
   </data>
   <data name="Remove" xml:space="preserve">
     <value>Remove</value>
