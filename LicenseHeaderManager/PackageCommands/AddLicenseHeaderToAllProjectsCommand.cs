@@ -48,7 +48,7 @@ namespace LicenseHeaderManager.PackageCommands
       {
         //There is exactly one Project in the Solution and it has no Definition File 
         //--> Offer to add a new one, but do not add License Headers
-        if (MessageBoxDoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionFileSingleProject))
+        if (MessageBoxHelper.DoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionFileSingleProject))
         {
           LicenseHeader.AddLicenseHeaderDefinitionFile(projectsInSolution.First(), licenseHeaderPage, true);
         }
@@ -57,15 +57,15 @@ namespace LicenseHeaderManager.PackageCommands
       {
         //There are multiple Projects in the Solution but none of them has a Definition File 
         //--> Offer to add new ones to everyone of them, but do not add License Headers
-        if (MessageBoxDoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionFileMultipleProjects))
+        if (MessageBoxHelper.DoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionFileMultipleProjects))
         {
           AddNewLicenseHeaderDefinitionFilesToProjects(projectsWithoutLicenseHeaderFile, licenseHeaderPage);
-          MessageBoxInformation(Resources.Information_DefinitionFileAdded);
+          MessageBoxHelper.Information(Resources.Information_DefinitionFileAdded);
           //TODO: Discuss with MK if we add License Headers afterwards or stop
         }
         else
         {
-          MessageBoxInformation(Resources.Information_NoDefinitionFileStopUpdating);
+          MessageBoxHelper.Information(Resources.Information_NoDefinitionFileStopUpdating);
         }
       }
       //There are projects with and without Definition File --> Ask if we should add an existing License Header File to them and then add License Headers
@@ -101,7 +101,7 @@ namespace LicenseHeaderManager.PackageCommands
                                                                       .Select(x => x.Name)
                                                                       .ToList())).Replace (@"\n", "\n");
 
-      return MessageBoxDoYouWant(message);
+      return MessageBoxHelper.DoYouWant(message);
     }
 
     private static void AddNewLicenseHeaderDefinitionFilesToProjects(List<Project> projectsWithoutLicenseHeader,
@@ -127,19 +127,6 @@ namespace LicenseHeaderManager.PackageCommands
       }
 
       statusBar.SetText (String.Empty);
-    }
-
-    private void MessageBoxInformation(string message)
-    {
-      MessageBox.Show(message, Resources.LicenseHeaderManagerName, MessageBoxButton.OK,
-        MessageBoxImage.Information);
-    }
-
-    private bool MessageBoxDoYouWant(string message)
-    {
-      return MessageBox.Show(message, Resources.LicenseHeaderManagerName, MessageBoxButton.YesNo,
-        MessageBoxImage.Information,
-        MessageBoxResult.No) == MessageBoxResult.Yes;
     }
   }
 }
