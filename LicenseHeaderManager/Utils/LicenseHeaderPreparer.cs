@@ -12,10 +12,6 @@ namespace LicenseHeaderManager.Utils
 
       var headerWithNewLine = headerText;
       var newLine = NewLineManager.DetectMostFrequentLineEnd (headerWithNewLine);
-      
-      //If there is no empty Line at the end, we add one
-      if (!headerWithNewLine.EndsWith (newLine))
-        headerWithNewLine += newLine;
 
       headerWithNewLine = NewLineManager.ReplaceAllLineEnds (headerWithNewLine, lineEndingInDocument);
       int lastNewLine = headerWithNewLine.LastIndexOf (newLine, headerText.Length - newLine.Length);

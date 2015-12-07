@@ -52,8 +52,8 @@ namespace LicenseHeaderManager.Headers
         return null;
 
       var inputText = string.Join (_lineEndingInDocument, lines);
-      if (!inputText.EndsWith (_lineEndingInDocument))
-        inputText += _lineEndingInDocument;
+      inputText += _lineEndingInDocument;
+
       return inputText;
     }
 
