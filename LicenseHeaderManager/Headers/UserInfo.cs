@@ -66,7 +66,7 @@ namespace LicenseHeaderManager.Headers
                 {
                   TryLookup();
                 }
-                else if (DateTime.Now.Subtract((DateTime) _lastLookup).TotalSeconds > 5)
+                else if (DateTime.Now.Subtract((DateTime) _lastLookup).TotalSeconds > Resources.Constant_TimeDifferenceToLastADLookUpToDifferentiateForBatchOperations)
                 {
                   TryLookup();
                 }
