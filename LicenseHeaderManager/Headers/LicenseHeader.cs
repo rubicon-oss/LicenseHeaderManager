@@ -51,10 +51,10 @@ namespace LicenseHeaderManager.Headers
     /// <summary>
     /// Adds a new License Header Definition file to the active project.
     /// </summary>
-    public static void AddLicenseHeaderDefinitionFile (Project activeProject, IDefaultLicenseHeaderPage page, bool openLicenseHeaderFile)
+    public static ProjectItem AddLicenseHeaderDefinitionFile (Project activeProject, IDefaultLicenseHeaderPage page, bool openLicenseHeaderFile)
     {
       if (activeProject == null)
-        return;
+        return null;
 
       var fileName = GetNewFileName (activeProject.FileName);
       File.WriteAllText (fileName, page.LicenseHeaderFileText, Encoding.UTF8);
@@ -62,15 +62,17 @@ namespace LicenseHeaderManager.Headers
 
       if (openLicenseHeaderFile)
         OpenNewProjectItem(newProjectItem);
+
+      return newProjectItem;
     }
 
     /// <summary>
     /// Adds a new License Header Definition file to a folder
     /// </summary>
-    public static void AddLicenseHeaderDefinitionFile (ProjectItem folder, IDefaultLicenseHeaderPage page)
+    public static ProjectItem AddLicenseHeaderDefinitionFile (ProjectItem folder, IDefaultLicenseHeaderPage page)
     {
       if (folder == null || folder.Kind != Constants.vsProjectItemKindPhysicalFolder)
-        return;
+        return null;
 
       var fileName = GetNewFileName (folder.Properties.Item("FullPath").Value.ToString());
       File.WriteAllText (fileName, page.LicenseHeaderFileText, Encoding.UTF8);
@@ -78,6 +80,8 @@ namespace LicenseHeaderManager.Headers
       var newProjectItem = folder.ProjectItems.AddFromFile (fileName);
 
       OpenNewProjectItem(newProjectItem);
+
+      return newProjectItem;
     }
 
     private static bool OpenNewProjectItem(ProjectItem newProjectItem)

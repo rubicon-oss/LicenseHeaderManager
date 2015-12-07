@@ -10,13 +10,13 @@ namespace LicenseHeaderManager
 {
   public class AddExistingLicenseHeaderDefinitionFile
   {
-    public void AddDefinitionFileToOneProject (string fileName, ProjectItems projectItems)
+    public ProjectItem AddDefinitionFileToOneProject (string fileName, ProjectItems projectItems)
     {
       var licenseHeaderDefinitionFileName = OpenFileDialogForExistingFile(fileName);
 
-      if (licenseHeaderDefinitionFileName == string.Empty) return;
+      if (licenseHeaderDefinitionFileName == string.Empty) return null;
 
-      AddFileToProject(projectItems, licenseHeaderDefinitionFileName);
+      return AddFileToProject(projectItems, licenseHeaderDefinitionFileName);
     }
 
     public void AddDefinitionFileToMultipleProjects (List<Project> projects)
@@ -31,10 +31,10 @@ namespace LicenseHeaderManager
       }
     }
 
-    private void AddFileToProject (ProjectItems projectItems, string licenseHeaderDefinitionFileName)
+    private ProjectItem AddFileToProject (ProjectItems projectItems, string licenseHeaderDefinitionFileName)
     {
       int fileCountBefore = projectItems.Count;
-      projectItems.AddFromFile (licenseHeaderDefinitionFileName);
+      var newProjectItem = projectItems.AddFromFile (licenseHeaderDefinitionFileName);
 
       int fileCountAfter = projectItems.Count;
       if (fileCountBefore == fileCountAfter)
@@ -42,6 +42,8 @@ namespace LicenseHeaderManager
         MessageBox.Show (Resources.Warning_CantLinkItemInSameProject, Resources.NameOfThisExtension, MessageBoxButton.OK,
           MessageBoxImage.Information);
       }
+
+      return newProjectItem;
     }
 
     private string OpenFileDialogForExistingFile(string fileName)

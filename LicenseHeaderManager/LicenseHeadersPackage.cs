@@ -31,6 +31,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Win32;
+using Constants = EnvDTE.Constants;
 using Document = LicenseHeaderManager.Headers.Document;
 
 namespace LicenseHeaderManager
@@ -525,10 +526,12 @@ namespace LicenseHeaderManager
         {
           if (MessageBoxHelper.DoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionFileSingleProject))
           {
-              LicenseHeader.AddLicenseHeaderDefinitionFile(currentProject, DefaultLicenseHeaderPage, false);
+              var licenseHeader = LicenseHeader.AddLicenseHeaderDefinitionFile(currentProject, DefaultLicenseHeaderPage, false);
 
-              if(!MessageBoxHelper.DoYouWant(Resources.Question_StopForConfiguringDefinitionFilesSingleFile))
-                AddLicenseHeadersToAllFilesCallback((object) project ?? projectItem, null);
+            if (!MessageBoxHelper.DoYouWant(Resources.Question_StopForConfiguringDefinitionFilesSingleFile))
+              AddLicenseHeadersToAllFilesCallback((object) project ?? projectItem, null);
+            else if (licenseHeader != null)
+                licenseHeader.Open(Constants.vsViewKindCode).Activate();
           } 
         }
       }
