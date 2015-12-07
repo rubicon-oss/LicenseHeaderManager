@@ -47,7 +47,7 @@ namespace LicenseHeaderManager.PackageCommands
       if (projectsInSolution.Count == 1 && projectsWithoutLicenseHeaderFile.Count == 1)
       {
         //There is exactly one Project in the Solution and it has no Definition File 
-        //--> Offer to add a new one, but do not add License Headers
+        //--> Offer to add a new one and ask if they want to stop the update process to configure them
         if (MessageBoxHelper.DoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionFileSingleProject))
         {
           LicenseHeader.AddLicenseHeaderDefinitionFile(projectsInSolution.First(), licenseHeaderPage, true);

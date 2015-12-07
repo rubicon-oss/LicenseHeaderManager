@@ -232,13 +232,13 @@
     <value>OK</value>
   </data>
   <data name="Question_AddExistingDefinitionFileToProject" xml:space="preserve">
-    <value>No License Header Definition file found. Do you want to add an existing License Header Definition file to the project?</value>
+    <value>No License Header Definition File found in the Project. Do you want to add an existing License Header Definition File to the project?</value>
   </data>
   <data name="Question_AddNewLicenseHeaderDefinitionFileMultipleProjects" xml:space="preserve">
     <value>It seems like you have no project with an License Header Definition File added. Do you want to add the Default License Header File into all projects?</value>
   </data>
   <data name="Question_AddNewLicenseHeaderDefinitionFileSingleProject" xml:space="preserve">
-    <value>No License Header Definition File found in your Project. Do you want to add a new one?</value>
+    <value>No License Header Definition File found in your Solution. Do you want to add a new one?</value>
   </data>
   <data name="Question_StopForConfiguringDefinitionFilesMultipleFiles" xml:space="preserve">
     <value>License Header Definition Files added. Do you want to stop the update process to configure them?</value>
