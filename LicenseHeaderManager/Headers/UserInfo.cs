@@ -14,7 +14,6 @@
 
 using System;
 using System.DirectoryServices.AccountManagement;
-using LicenseHeaderManager.Utils;
 
 namespace LicenseHeaderManager.Headers
 {
@@ -25,8 +24,8 @@ namespace LicenseHeaderManager.Headers
     public static class UserInfo
     {
         #region Properties
-        private static Object _nameLock = new Object();
-        private static Object _displayNameLock = new Object();
+        private static readonly object NameLock = new object();
+        private static readonly object DisplayNameLock = new object();
 
         private static string _name;
         /// <summary>
@@ -36,7 +35,7 @@ namespace LicenseHeaderManager.Headers
         {
           get
           {
-            lock (_nameLock)
+            lock (NameLock)
             {
               if (string.IsNullOrEmpty(_name))
               {
@@ -48,8 +47,8 @@ namespace LicenseHeaderManager.Headers
         }
 
         private static string _displayName = "";
-        private static DateTime? _lastLookup = null;
-        private static bool _knowDisplayName = false;
+        private static DateTime _lastPropertyCall = DateTime.MinValue;
+        private static bool _lookupSuccessful = false;
 
         /// <summary>
         /// Gets display name of the current user, e.g. "John Smith".
@@ -58,43 +57,35 @@ namespace LicenseHeaderManager.Headers
         {
           get
           {
-            lock (_displayName)
+            lock (DisplayNameLock)
             {
-              if (!_knowDisplayName)
-              {
-                if (_lastLookup == null)
-                {
-                  TryLookup();
-                }
-                else if (DateTime.Now.Subtract((DateTime) _lastLookup).TotalSeconds > Resources.Constant_TimeDifferenceToLastADLookUpToDifferentiateForBatchOperations)
-                {
-                  TryLookup();
-                }
-                else
-                {
-                  //Set _lastLookup to stop Lookups in case of BatchOperations
-                  _lastLookup = DateTime.Now;
-                }
-              }
+              if (!_lookupSuccessful && LastLookupAttemptTooOld())
+                TryLookupNow();
+
+              _lastPropertyCall = DateTime.Now;
               return _displayName;
-            
             }
           }
         }
 
-        private static void TryLookup()
+      private static bool LastLookupAttemptTooOld()
+      {
+        // Use _lastPropertyCall to stop lookups in case of BatchOperations as well.
+        return DateTime.Now.Subtract(_lastPropertyCall).TotalSeconds > Resources.Constant_DisplayNameLookup_TimeDifferenceInSecondsBeforeTooOld;
+      }
+
+      private static void TryLookupNow()
         {
           try
           {
             _displayName = UserPrincipal.Current.DisplayName;
-            _knowDisplayName = true;
+            _lookupSuccessful = true;
           }
           catch (PrincipalServerDownException)
           {
-            _knowDisplayName = false;
-            _lastLookup = DateTime.Now;
-            OutputWindowHandler.WriteMessage("Active Directory Lookup failed");
+            OutputWindowHandler.WriteMessage("Active Directory Lookup of user name failed");
             _displayName = "<Unknown>";
+            _lookupSuccessful = false;
           }
         }
 
