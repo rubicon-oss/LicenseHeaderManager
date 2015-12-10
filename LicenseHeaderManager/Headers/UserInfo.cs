@@ -83,8 +83,8 @@ namespace LicenseHeaderManager.Headers
           }
           catch (PrincipalServerDownException)
           {
-            OutputWindowHandler.WriteMessage("Active Directory Lookup of user name failed");
-            _displayName = "<Unknown>";
+            OutputWindowHandler.WriteMessage(Resources.UserInfo_LookupFailure_Information);
+            _displayName = Resources.UserInfo_UnknownDisplayNameString;
             _lookupSuccessful = false;
           }
         }

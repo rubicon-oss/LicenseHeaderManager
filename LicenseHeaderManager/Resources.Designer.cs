@@ -512,6 +512,25 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Active Directory Lookup of user name failed
+        ///.
+        /// </summary>
+        public static string UserInfo_LookupFailure_Information {
+            get {
+                return ResourceManager.GetString("UserInfo_LookupFailure_Information", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;Unknown&gt;.
+        /// </summary>
+        public static string UserInfo_UnknownDisplayNameString {
+            get {
+                return ResourceManager.GetString("UserInfo_UnknownDisplayNameString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Warning.
         /// </summary>
         public static string Warning {
