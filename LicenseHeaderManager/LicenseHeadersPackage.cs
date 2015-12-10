@@ -106,6 +106,7 @@ namespace LicenseHeaderManager
     protected override void Initialize ()
     {
       base.Initialize ();
+      OutputWindowHandler.Initialize(GetGlobalService( typeof( SVsOutputWindow ) ) as IVsOutputWindow);
       _licenseReplacer = new LicenseHeaderReplacer (this);
       _dte = GetService (typeof (DTE)) as DTE2;
       _addedItems = new Stack<ProjectItem>();
@@ -422,6 +423,7 @@ namespace LicenseHeaderManager
     {
       if (item == null || ProjectItemInspection.IsLicenseHeader(item)) return;
 
+
       var headers = LicenseHeaderFinder.GetHeaderRecursive (item);
       if (headers != null)
       {
@@ -434,7 +436,6 @@ namespace LicenseHeaderManager
           AddLicenseHeaderToItem (item, true);
       }
     }
-
 
     private void AddLicenseHeaderToProjectItemCallback (object sender, EventArgs e)
     {

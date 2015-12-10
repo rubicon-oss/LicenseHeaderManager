@@ -24,28 +24,69 @@ namespace LicenseHeaderManager.Headers
     public static class UserInfo
     {
         #region Properties
+        private static readonly object NameLock = new object();
+        private static readonly object DisplayNameLock = new object();
 
+        private static string _name;
         /// <summary>
         /// Gets name (login) of the current user.
         /// </summary>
-        public static string Name { get; private set; }
+        public static string Name 
+        {
+          get
+          {
+            lock (NameLock)
+            {
+              if (string.IsNullOrEmpty(_name))
+              {
+                _name = Environment.UserName;
+              }
+              return _name;
+            }
+          }
+        }
+
+        private static string _displayName = "";
+        private static DateTime _lastPropertyCall = DateTime.MinValue;
+        private static bool _lookupSuccessful = false;
 
         /// <summary>
         /// Gets display name of the current user, e.g. "John Smith".
         /// </summary>
-        public static string DisplayName { get; private set; }
-        
-        #endregion
-        
-        #region Constructor
-
-        /// <summary>
-        /// Initializes static properties of the current user.
-        /// </summary>
-        static UserInfo()
+        public static string DisplayName 
         {
-            Name = Environment.UserName;
-            DisplayName = UserPrincipal.Current.DisplayName;
+          get
+          {
+            lock (DisplayNameLock)
+            {
+              if (!_lookupSuccessful && LastLookupAttemptTooOld())
+                TryLookupNow();
+
+              _lastPropertyCall = DateTime.Now;
+              return _displayName;
+            }
+          }
+        }
+
+      private static bool LastLookupAttemptTooOld()
+      {
+        // Use _lastPropertyCall to stop lookups in case of BatchOperations as well.
+        return DateTime.Now.Subtract(_lastPropertyCall).TotalSeconds > Resources.Constant_DisplayNameLookup_TimeDifferenceInSecondsBeforeTooOld;
+      }
+
+      private static void TryLookupNow()
+        {
+          try
+          {
+            _displayName = UserPrincipal.Current.DisplayName;
+            _lookupSuccessful = true;
+          }
+          catch (PrincipalServerDownException)
+          {
+            OutputWindowHandler.WriteMessage(Resources.UserInfo_LookupFailure_Information);
+            _displayName = Resources.UserInfo_UnknownDisplayNameString;
+            _lookupSuccessful = false;
+          }
         }
 
         #endregion
