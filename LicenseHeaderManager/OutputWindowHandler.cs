@@ -6,13 +6,13 @@ namespace LicenseHeaderManager
   internal static class OutputWindowHandler
   {
     private static IVsOutputWindow _outputWindow;
-    private static string customGuidString = "0F44E2D1-F5FA-4d2d-AB30-22BE8ECD9789";
+    
     private static Guid _customGuid;
 
     public static void Initialize(IVsOutputWindow outputWindow)
     {
       _outputWindow = outputWindow;
-      _customGuid = new Guid(customGuidString);
+      _customGuid = new Guid(GuidList.guidVisualStudioOutputWindow);
     }
 
     public static void WriteMessage(string message)
