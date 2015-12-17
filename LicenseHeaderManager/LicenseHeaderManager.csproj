@@ -123,6 +123,8 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Headers\NewLineConst.cs" />
+    <Compile Include="Interfaces\ICommentParser.cs" />
     <Compile Include="OutputWindowHandler.cs" />
     <Compile Include="PackageCommands\AddLicenseHeaderToAllFilesCommand.cs" />
     <Compile Include="PackageCommands\AddLicenseHeaderToAllProjectsCommand.cs" />
@@ -201,6 +203,7 @@
     </Compile>
     <Compile Include="ReturnObjects\AddLicenseHeaderToAllFilesReturn.cs" />
     <Compile Include="Utils\AllSolutionProjectsSearcher.cs" />
+    <Compile Include="Utils\LicenseHeaderPreparer.cs" />
     <Compile Include="Utils\LinkedFileFilter.cs" />
     <Compile Include="Utils\LinkedFileHandler.cs" />
     <Compile Include="Utils\ProjectItemInspection.cs" />

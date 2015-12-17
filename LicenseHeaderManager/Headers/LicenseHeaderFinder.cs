@@ -100,6 +100,8 @@ namespace LicenseHeaderManager.Headers
       IEnumerable<string> extensions = null;
       IList<string> header = new List<string> ();
 
+      var wholeFile = File.ReadAllText(headerFilePath);
+
       using (var streamreader = new StreamReader(headerFilePath, true))
       {
         while (!streamreader.EndOfStream)
@@ -118,7 +120,12 @@ namespace LicenseHeaderManager.Headers
           }
           else
             header.Add (line);
-        }  
+        }
+
+        if (wholeFile.EndsWith(NewLineConst.CR) || wholeFile.EndsWith(NewLineConst.CRLF) || wholeFile.EndsWith(NewLineConst.LF))
+        {
+          header.Add(string.Empty);
+        }
       }
       
       if (extensions != null)

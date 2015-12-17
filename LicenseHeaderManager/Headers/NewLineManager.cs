@@ -23,10 +23,7 @@ namespace LicenseHeaderManager.Headers
   /// </summary>
   public class NewLineManager
   {
-    private const string CR = "\r";
-    private const string LF = "\n";
-    private const string CRLF = "\r\n";
-    private static readonly string[] _allLineEndings = new[] { CR, LF, CRLF };
+    private static readonly string[] _allLineEndings = new[] {NewLineConst.CR, NewLineConst.LF, NewLineConst.CRLF };
 
     /// <summary>
     /// Replaces all LineEnds (CR,LF,CR+LF) in a string with the given newLineEnd
@@ -41,7 +38,7 @@ namespace LicenseHeaderManager.Headers
       if (newLineEnd == null)
         throw new ArgumentNullException ("newLineEnd");
 
-      return inputText.Replace (CRLF, LF).Replace (CR, LF).Replace (LF, newLineEnd);
+      return inputText.Replace (NewLineConst.CRLF, NewLineConst.LF).Replace (NewLineConst.CR, NewLineConst.LF).Replace (NewLineConst.LF, newLineEnd);
     }
 
     /// <summary>
@@ -117,9 +114,9 @@ namespace LicenseHeaderManager.Headers
 
       var ends = new[]
                  {
-                   new LineEndInformation(inputText.IndexOf (CR, startIndex, count), CR),
-                   new LineEndInformation(inputText.IndexOf (LF, startIndex, count), LF),
-                   new LineEndInformation(inputText.IndexOf (CRLF, startIndex, count), CRLF),
+                   new LineEndInformation(inputText.IndexOf (NewLineConst.CR, startIndex, count), NewLineConst.CR),
+                   new LineEndInformation(inputText.IndexOf (NewLineConst.LF, startIndex, count), NewLineConst.LF),
+                   new LineEndInformation(inputText.IndexOf (NewLineConst.CRLF, startIndex, count), NewLineConst.CRLF),
                  };
 
       var nearestLineEnd = ends.Where (lineEnd => lineEnd.Index >= 0).OrderBy (x => x.Index).ThenByDescending(x => x.LineEndLenght);
@@ -143,9 +140,9 @@ namespace LicenseHeaderManager.Headers
             LineEnding = le,
             LineEndingLength = le.Length,
             Count = 
-              le == CRLF ?
+              le == NewLineConst.CRLF ?
               inputText.CountOccurrence (le) :
-              inputText.Replace (CRLF, "").CountOccurrence (le) //To avoid that in an \r\n the \r is counted..
+              inputText.Replace (NewLineConst.CRLF, "").CountOccurrence (le) //To avoid that in an \r\n the \r is counted..
           });
 
       var mostFrequentLineEnding = lineEndStatistics.OrderByDescending (x => x.Count).ThenByDescending (x => x.LineEndingLength).First ();

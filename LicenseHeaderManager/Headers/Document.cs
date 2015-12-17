@@ -17,6 +17,7 @@ using System.Linq;
 using EnvDTE;
 using Language = LicenseHeaderManager.Options.Language;
 using System.Text.RegularExpressions;
+using LicenseHeaderManager.Utils;
 
 namespace LicenseHeaderManager.Headers
 {
@@ -51,8 +52,8 @@ namespace LicenseHeaderManager.Headers
         return null;
 
       var inputText = string.Join (_lineEndingInDocument, lines);
-      if (!inputText.EndsWith (_lineEndingInDocument))
-        inputText += _lineEndingInDocument;
+      inputText += _lineEndingInDocument;
+
       return inputText;
     }
 
@@ -95,13 +96,13 @@ namespace LicenseHeaderManager.Headers
       if (!_header.IsEmpty)
       {
         if (existingHeader != _header.Text)
-          ReplaceHeader (existingHeader, PrepareHeader(_header.Text));
+          ReplaceHeader (existingHeader, _header.Text);
       }
       else
         RemoveHeader (existingHeader);
 
       if (!string.IsNullOrEmpty (skippedText))
-        AddHeader (PrepareHeader(skippedText));
+        AddHeader (LicenseHeaderPreparer.Prepare(skippedText, GetText(), _commentParser));
     }
 
     private string SkipText ()
@@ -118,7 +119,7 @@ namespace LicenseHeaderManager.Headers
     private void ReplaceHeader (string existingHeader, string newHeader)
     {
       RemoveHeader (existingHeader);
-      AddHeader (newHeader);
+      AddHeader (LicenseHeaderPreparer.Prepare(newHeader, GetText(), _commentParser));
     }
 
     private void AddHeader (string header)
@@ -128,28 +129,6 @@ namespace LicenseHeaderManager.Headers
         var start = _document.CreateEditPoint (_document.StartPoint);
         start.Insert (header);
       }
-    }
-
-    private string PrepareHeader(string header)
-    {
-      var headerWithNewLine = header;
-      var newLine = NewLineManager.DetectMostFrequentLineEnd (headerWithNewLine);
-      //if the header ends with an empty line, there's no need to insert one
-      if (!headerWithNewLine.EndsWith (newLine))
-        headerWithNewLine += newLine;
-
-      headerWithNewLine = NewLineManager.ReplaceAllLineEnds (headerWithNewLine, _lineEndingInDocument);
-      int lastNewLine = headerWithNewLine.LastIndexOf (newLine, header.Length - newLine.Length);
-      if (lastNewLine < 0 || !string.IsNullOrWhiteSpace (header.Substring (lastNewLine, header.Length - lastNewLine)))
-      {
-        //if there's a comment right at the beginning of the file,
-        //we need to add an empty line so that the comment doesn't
-        //become a part of the header
-        if (!string.IsNullOrEmpty (_commentParser.Parse (GetText())))
-          headerWithNewLine += newLine;
-      }
-
-      return headerWithNewLine;
     }
 
     private EditPoint EndOfHeader (string header, TextPoint start = null)
