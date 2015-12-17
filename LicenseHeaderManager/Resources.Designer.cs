@@ -70,6 +70,15 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to Add Existing License Header Definition File?.
+        /// </summary>
+        public static string AddExistingLicenseHeaderFileQuestion {
+            get {
+                return ResourceManager.GetString("AddExistingLicenseHeaderFileQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to After.
         /// </summary>
         public static string After {
@@ -147,6 +156,26 @@ namespace LicenseHeaderManager {
         public static int Constant_DisplayNameLookup_TimeDifferenceInSecondsBeforeTooOld {
             get {
                 object obj = ResourceManager.GetObject("Constant_DisplayNameLookup_TimeDifferenceInSecondsBeforeTooOld", resourceCulture);
+                return ((int)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Int32 similar to 10.
+        /// </summary>
+        public static int Constant_MaxNumberOfProjectItemsWhereOpeningDefinitionFilesInEditor {
+            get {
+                object obj = ResourceManager.GetObject("Constant_MaxNumberOfProjectItemsWhereOpeningDefinitionFilesInEditor", resourceCulture);
+                return ((int)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Int32 similar to 5.
+        /// </summary>
+        public static int Constant_MaxProjectsWithoutDefinitionFileShownInMessage {
+            get {
+                object obj = ResourceManager.GetObject("Constant_MaxProjectsWithoutDefinitionFileShownInMessage", resourceCulture);
                 return ((int)(obj));
             }
         }
@@ -233,16 +262,16 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No license header definition file found in following projects:\n\n{0}\n\nDo you want to add the default license header definition files automatically?.
+        ///   Looks up a localized string similar to No license header definition file found in following projects:\n\n{0}\n\nDo you want to add an existing License Header Definition File into these Projects?.
         /// </summary>
-        public static string Error_MulitpleProjectsNoLicenseHeaderFile {
+        public static string Error_MultipleProjectsNoLicenseHeaderFile {
             get {
-                return ResourceManager.GetString("Error_MulitpleProjectsNoLicenseHeaderFile", resourceCulture);
+                return ResourceManager.GetString("Error_MultipleProjectsNoLicenseHeaderFile", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No license header definition file found in project {0}.\nDo you want to add a new file?.
+        ///   Looks up a localized string similar to No license header definition file found in project {0}.\nDo you want to add a new License Header Definition File?.
         /// </summary>
         public static string Error_NoHeaderDefinition {
             get {
@@ -323,6 +352,15 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot add License Headers because there is no License Header Definition File. Please add one and try again..
+        /// </summary>
+        public static string Information_NoDefinitionFileStopUpdating {
+            get {
+                return ResourceManager.GetString("Information_NoDefinitionFileStopUpdating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Automatically insert license headers in new files.
         /// </summary>
         public static string InsertInNewFiles {
@@ -391,6 +429,51 @@ namespace LicenseHeaderManager {
         public static string Ok {
             get {
                 return ResourceManager.GetString("Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No License Header Definition File found in the Project. Do you want to add an existing License Header Definition File to the project?.
+        /// </summary>
+        public static string Question_AddExistingDefinitionFileToProject {
+            get {
+                return ResourceManager.GetString("Question_AddExistingDefinitionFileToProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It seems like you have no project with an License Header Definition File added. Do you want to add the Default License Header File into all projects?.
+        /// </summary>
+        public static string Question_AddNewLicenseHeaderDefinitionFileMultipleProjects {
+            get {
+                return ResourceManager.GetString("Question_AddNewLicenseHeaderDefinitionFileMultipleProjects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No License Header Definition File found in your Solution. Do you want to add a new one?.
+        /// </summary>
+        public static string Question_AddNewLicenseHeaderDefinitionFileSingleProject {
+            get {
+                return ResourceManager.GetString("Question_AddNewLicenseHeaderDefinitionFileSingleProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License Header Definition Files added. Do you want to stop the update process to configure them?.
+        /// </summary>
+        public static string Question_StopForConfiguringDefinitionFilesMultipleFiles {
+            get {
+                return ResourceManager.GetString("Question_StopForConfiguringDefinitionFilesMultipleFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License Header Definition File added. Do you want to stop the update process to configure it?.
+        /// </summary>
+        public static string Question_StopForConfiguringDefinitionFilesSingleFile {
+            get {
+                return ResourceManager.GetString("Question_StopForConfiguringDefinitionFilesSingleFile", resourceCulture);
             }
         }
         

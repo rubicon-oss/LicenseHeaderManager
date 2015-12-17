@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel.Design;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using EnvDTE;
@@ -30,6 +31,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Win32;
+using Constants = EnvDTE.Constants;
 using Document = LicenseHeaderManager.Headers.Document;
 
 namespace LicenseHeaderManager
@@ -496,13 +498,42 @@ namespace LicenseHeaderManager
       var project = obj as Project;
       var projectItem = obj as ProjectItem;
       if (project == null && projectItem == null) return;
+      Project currentProject = project;
+
+      if (projectItem != null)
+      {
+        currentProject = projectItem.ContainingProject;
+      }
 
       if (addLicenseHeaderToAllFilesReturn.NoHeaderFound)
       {
         //No license header found...
         var page = (DefaultLicenseHeaderPage) GetDialogPage(typeof (DefaultLicenseHeaderPage));
-        if (LicenseHeader.ShowQuestionForAddingLicenseHeaderFile(project ?? projectItem.ContainingProject, page))
-          AddLicenseHeadersToAllFilesCallback(obj, null);
+        var solutionSearcher = new AllSolutionProjectsSearcher();
+        var projects = solutionSearcher.GetAllProjects(_dte.Solution);
+
+        //If there is a licenseheader in the Solution 
+        if(projects.Any(projectInSolution => LicenseHeaderFinder.GetHeader(projectInSolution) != null))
+        {
+          if (MessageBoxHelper.DoYouWant(Resources.Question_AddExistingDefinitionFileToProject))
+          {
+            new AddExistingLicenseHeaderDefinitionFileCommand().AddDefinitionFileToOneProject(currentProject.FileName, currentProject.ProjectItems);
+
+            AddLicenseHeadersToAllFilesCallback((object) project ?? projectItem, null);
+          }
+        }
+        else
+        {
+          if (MessageBoxHelper.DoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionFileSingleProject))
+          {
+              var licenseHeader = LicenseHeader.AddLicenseHeaderDefinitionFile(currentProject, DefaultLicenseHeaderPage);
+
+            if (!MessageBoxHelper.DoYouWant(Resources.Question_StopForConfiguringDefinitionFilesSingleFile))
+              AddLicenseHeadersToAllFilesCallback((object) project ?? projectItem, null);
+            else if (licenseHeader != null)
+                licenseHeader.Open(Constants.vsViewKindCode).Activate();
+          } 
+        }
       }
     }
 
@@ -551,8 +582,12 @@ namespace LicenseHeaderManager
           LicenseHeader.AddLicenseHeaderDefinitionFile (projectItem, page);
       }
 
-      if(project != null)
-        LicenseHeader.AddLicenseHeaderDefinitionFile (project, page, true);
+      if (project != null)
+      {
+        var licenseHeaderDefinitionFile = LicenseHeader.AddLicenseHeaderDefinitionFile (project, page);
+        licenseHeaderDefinitionFile.Open(Constants.vsViewKindCode).Activate();
+      }
+
     }
 
     private void AddExistingLicenseHeaderDefinitionFileCallback (object sender, EventArgs e)
@@ -575,54 +610,18 @@ namespace LicenseHeaderManager
         return;
       }
 
-      var licenseHeaderDefinitionFileName = OpenFileDialogForExistingFile(fileName);
+      ProjectItems projectItems = null;
 
-      if (licenseHeaderDefinitionFileName == null) return;
-        
       if (project != null)
       {
-        int fileCountBefore = project.ProjectItems.Count;
-   
-        project.ProjectItems.AddFromFile (licenseHeaderDefinitionFileName);
-   
-        int fileCountAfter = project.ProjectItems.Count;
-
-        if (fileCountBefore == fileCountAfter)
-        {
-          MessageBox.Show (Resources.Warning_CantLinkItemInSameProject, Resources.NameOfThisExtension, MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
+        projectItems = project.ProjectItems;
       }
       else if (projectItem != null)
       {
-        int fileCountBefore = projectItem.ProjectItems.Count;
-
-        projectItem.ProjectItems.AddFromFile (licenseHeaderDefinitionFileName);
-
-        int fileCountAfter = projectItem.ProjectItems.Count;
-
-        if (fileCountBefore == fileCountAfter)
-        {
-          MessageBox.Show (Resources.Warning_CantLinkItemInSameProject, Resources.NameOfThisExtension, MessageBoxButton.OK, MessageBoxImage.Information);
-        }
+        projectItems = projectItem.ProjectItems;
       }
-    }
 
-    private string OpenFileDialogForExistingFile(string fileName)
-    {
-      FileDialog dialog = new OpenFileDialog ();
-      dialog.CheckFileExists = true;
-      dialog.CheckPathExists = true;
-      dialog.DefaultExt = LicenseHeader.Extension;
-      dialog.DereferenceLinks = true;
-      dialog.Filter = "License Header Definitions|*" + LicenseHeader.Extension;
-      dialog.InitialDirectory = Path.GetDirectoryName (fileName);
-      bool? result = dialog.ShowDialog ();
-
-      if (result.HasValue && result.Value)
-        return dialog.FileName;
-
-      return string.Empty;
+      new AddExistingLicenseHeaderDefinitionFileCommand().AddDefinitionFileToOneProject(fileName, projectItems);
     }
 
     private void LicenseHeaderOptionsCallback (object sender, EventArgs e)
