@@ -111,7 +111,7 @@ namespace LicenseHeaderManager.PackageCommands
       var errorResourceString = Resources.Error_MultipleProjectsNoLicenseHeaderFile;
       var projects = "";
 
-      if (projectsWithoutLicenseHeaderFile.Count > 5)
+      if (projectsWithoutLicenseHeaderFile.Count > Resources.Constant_MaxProjectsWithoutDefinitionFileShownInMessage)
       {
         projects = string.Join("\n", projectsWithoutLicenseHeaderFile
                          .Select(x => x.Name)

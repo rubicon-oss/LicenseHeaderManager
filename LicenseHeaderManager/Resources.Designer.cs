@@ -171,6 +171,16 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Int32 similar to 5.
+        /// </summary>
+        public static int Constant_MaxProjectsWithoutDefinitionFileShownInMessage {
+            get {
+                object obj = ResourceManager.GetObject("Constant_MaxProjectsWithoutDefinitionFileShownInMessage", resourceCulture);
+                return ((int)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit....
         /// </summary>
         public static string Edit {
