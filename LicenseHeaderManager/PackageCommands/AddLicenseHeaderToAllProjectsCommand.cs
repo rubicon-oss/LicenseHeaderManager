@@ -51,7 +51,7 @@ namespace LicenseHeaderManager.PackageCommands
         //--> Offer to add a new one and ask if they want to stop the update process to configure them
         if (MessageBoxHelper.DoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionFileSingleProject))
         {
-          var licenseHeader = LicenseHeader.AddLicenseHeaderDefinitionFile(projectsInSolution.First(), licenseHeaderPage, true);
+          var licenseHeader = LicenseHeader.AddLicenseHeaderDefinitionFile(projectsInSolution.First(), licenseHeaderPage);
 
           if (!MessageBoxHelper.DoYouWant(Resources.Question_StopForConfiguringDefinitionFilesSingleFile))
             AddLicenseHeaderToProjects(projectsInSolution);
@@ -142,7 +142,7 @@ namespace LicenseHeaderManager.PackageCommands
       foreach (Project project in projectsWithoutLicenseHeader)
       {
         if (projectsWithoutLicenseHeader.Contains(project))
-          newLicenseHeaders.Add(LicenseHeader.AddLicenseHeaderDefinitionFile(project, page, false));
+          newLicenseHeaders.Add(LicenseHeader.AddLicenseHeaderDefinitionFile(project, page));
       }
 
       return newLicenseHeaders;

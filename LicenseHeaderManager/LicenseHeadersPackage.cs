@@ -526,7 +526,7 @@ namespace LicenseHeaderManager
         {
           if (MessageBoxHelper.DoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionFileSingleProject))
           {
-              var licenseHeader = LicenseHeader.AddLicenseHeaderDefinitionFile(currentProject, DefaultLicenseHeaderPage, false);
+              var licenseHeader = LicenseHeader.AddLicenseHeaderDefinitionFile(currentProject, DefaultLicenseHeaderPage);
 
             if (!MessageBoxHelper.DoYouWant(Resources.Question_StopForConfiguringDefinitionFilesSingleFile))
               AddLicenseHeadersToAllFilesCallback((object) project ?? projectItem, null);
@@ -582,8 +582,12 @@ namespace LicenseHeaderManager
           LicenseHeader.AddLicenseHeaderDefinitionFile (projectItem, page);
       }
 
-      if(project != null)
-        LicenseHeader.AddLicenseHeaderDefinitionFile (project, page, true);
+      if (project != null)
+      {
+        var licenseHeaderDefinitionFile = LicenseHeader.AddLicenseHeaderDefinitionFile (project, page);
+        licenseHeaderDefinitionFile.Open(Constants.vsViewKindCode).Activate();
+      }
+
     }
 
     private void AddExistingLicenseHeaderDefinitionFileCallback (object sender, EventArgs e)
