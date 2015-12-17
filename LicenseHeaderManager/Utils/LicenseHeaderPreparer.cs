@@ -14,16 +14,13 @@ namespace LicenseHeaderManager.Utils
       var newLine = NewLineManager.DetectMostFrequentLineEnd (headerWithNewLine);
 
       headerWithNewLine = NewLineManager.ReplaceAllLineEnds (headerWithNewLine, lineEndingInDocument);
-      int lastNewLine = headerWithNewLine.LastIndexOf (newLine, headerText.Length - newLine.Length);
-
-      if (lastNewLine < 0 || !string.IsNullOrWhiteSpace(headerText.Substring(lastNewLine, headerText.Length - lastNewLine)))
-      {
-         //if there's a comment right at the beginning of the file,
-        //we need to add an empty line so that the comment doesn't
-        //become a part of the header
-        if (!string.IsNullOrEmpty (commentParser.Parse (currentHeaderText)))
-          headerWithNewLine += newLine;
-      }
+      
+      //if there's a comment right at the beginning of the file,
+      //we need to add an empty line so that the comment doesn't
+      //become a part of the header
+      if (!string.IsNullOrEmpty (commentParser.Parse (currentHeaderText)) && !headerWithNewLine.EndsWith(lineEndingInDocument + lineEndingInDocument))
+        headerWithNewLine += newLine;
+      
 
       return headerWithNewLine;
     }
