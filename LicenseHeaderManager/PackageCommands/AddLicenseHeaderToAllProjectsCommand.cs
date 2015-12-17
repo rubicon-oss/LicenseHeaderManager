@@ -86,7 +86,7 @@ namespace LicenseHeaderManager.PackageCommands
       {
         //There are projects with and without Definition File --> Ask if we should add an existing License Header File to them and then add License Headers
         if (DefinitionFilesShouldBeAdded(projectsWithoutLicenseHeaderFile))
-             new AddExistingLicenseHeaderDefinitionFile().AddDefinitionFileToMultipleProjects(projectsWithoutLicenseHeaderFile);
+             new AddExistingLicenseHeaderDefinitionFileCommand().AddDefinitionFileToMultipleProjects(projectsWithoutLicenseHeaderFile);
 
         AddLicenseHeaderToProjects(projectsInSolution);
       }

@@ -6,9 +6,9 @@ using EnvDTE;
 using LicenseHeaderManager.Headers;
 using Microsoft.Win32;
 
-namespace LicenseHeaderManager
+namespace LicenseHeaderManager.PackageCommands
 {
-  public class AddExistingLicenseHeaderDefinitionFile
+  public class AddExistingLicenseHeaderDefinitionFileCommand
   {
     public ProjectItem AddDefinitionFileToOneProject (string fileName, ProjectItems projectItems)
     {

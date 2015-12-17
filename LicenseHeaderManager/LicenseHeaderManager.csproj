@@ -123,7 +123,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddExistingLicenseHeaderDefinitionFile.cs" />
+    <Compile Include="PackageCommands\AddExistingLicenseHeaderDefinitionFileCommand.cs" />
     <Compile Include="Headers\NewLineConst.cs" />
     <Compile Include="Interfaces\ICommentParser.cs" />
     <Compile Include="OutputWindowHandler.cs" />

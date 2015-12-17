@@ -517,7 +517,7 @@ namespace LicenseHeaderManager
         {
           if (MessageBoxHelper.DoYouWant(Resources.Question_AddExistingDefinitionFileToProject))
           {
-            new AddExistingLicenseHeaderDefinitionFile().AddDefinitionFileToOneProject(currentProject.FileName, currentProject.ProjectItems);
+            new AddExistingLicenseHeaderDefinitionFileCommand().AddDefinitionFileToOneProject(currentProject.FileName, currentProject.ProjectItems);
 
             AddLicenseHeadersToAllFilesCallback((object) project ?? projectItem, null);
           }
@@ -617,7 +617,7 @@ namespace LicenseHeaderManager
         projectItems = projectItem.ProjectItems;
       }
 
-      new AddExistingLicenseHeaderDefinitionFile().AddDefinitionFileToOneProject(fileName, projectItems);
+      new AddExistingLicenseHeaderDefinitionFileCommand().AddDefinitionFileToOneProject(fileName, projectItems);
     }
 
     private void LicenseHeaderOptionsCallback (object sender, EventArgs e)
