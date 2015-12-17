@@ -225,7 +225,7 @@
   <ItemGroup>
     <EmbeddedResource Include="default.licenseheader" />
     <None Include="LicenseHeaderManager.licenseheader" />
-    <None Include="source.extension.vsixmanifest">
+    <None Include="VsixInformation\source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
@@ -281,15 +281,15 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Icon.png">
+    <Content Include="VsixInformation\Icon.png">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="VsixInformation\license.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="license.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="Preview.png">
+    <Content Include="VsixInformation\Preview.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
