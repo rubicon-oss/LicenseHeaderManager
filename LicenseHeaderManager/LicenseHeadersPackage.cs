@@ -632,18 +632,31 @@ namespace LicenseHeaderManager
     private void AddLicenseHeaderToAllProjectsCallback (object sender, EventArgs e)
     {
       IVsStatusbar statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
-
       var addLicenseHeaderToAllProjectsCommand = new AddLicenseHeaderToAllProjectsCommand (_licenseReplacer, statusBar, DefaultLicenseHeaderPage);
-      addLicenseHeaderToAllProjectsCommand.Execute( _dte.Solution);  
+      
+      bool resharperSuspended = CommandUtility.ExecuteCommandIfExists("ReSharper_Suspend", _dte);
+      
+      addLicenseHeaderToAllProjectsCommand.Execute( _dte.Solution);
+
+      if (resharperSuspended)
+      {
+        CommandUtility.ExecuteCommand("ReSharper_Resume", _dte);  
+      }
     }
 
     private void RemoveLicenseHeaderFromAllProjectsCallback (object sender, EventArgs e)
     {
       Solution solution = _dte.Solution;
       IVsStatusbar statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
-
       var removeLicenseHeaderFromAllProjects = new RemoveLicenseHeaderFromAllProjectsCommand(statusBar, _licenseReplacer);
+      bool resharperSuspended = CommandUtility.ExecuteCommandIfExists("ReSharper_Suspend", _dte);
+
       removeLicenseHeaderFromAllProjects.Execute(solution);
+
+      if (resharperSuspended)
+      {
+        CommandUtility.ExecuteCommand("ReSharper_Resume", _dte);  
+      }
     }
 
     #endregion
