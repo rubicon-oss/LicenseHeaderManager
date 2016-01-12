@@ -27,16 +27,16 @@ namespace LicenseHeaderManager.PackageCommands
 {
   public class AddLicenseHeaderToAllProjectsCommand
   {
-    private AddLicenseHeaderToAllFilesCommand addLicenseHeaderToAllFilesCommand;
     private IVsStatusbar statusBar;
     private IDefaultLicenseHeaderPage licenseHeaderPage;
+    private LicenseHeaderReplacer licenseReplacer;
 
     public AddLicenseHeaderToAllProjectsCommand(LicenseHeaderReplacer licenseReplacer, IVsStatusbar statusBar, IDefaultLicenseHeaderPage licenseHeaderPage)
     {
-      addLicenseHeaderToAllFilesCommand = new AddLicenseHeaderToAllFilesCommand (licenseReplacer);
       this.statusBar = statusBar;
       this.licenseHeaderPage = licenseHeaderPage;
-     }
+      this.licenseReplacer = licenseReplacer;
+    }
 
     public void Execute(Solution solution)
     {
@@ -134,7 +134,7 @@ namespace LicenseHeaderManager.PackageCommands
       return MessageBoxHelper.DoYouWant(message);
     }
 
-    private static IEnumerable<ProjectItem> AddNewLicenseHeaderDefinitionFilesToProjects(List<Project> projectsWithoutLicenseHeader,
+    private IEnumerable<ProjectItem> AddNewLicenseHeaderDefinitionFilesToProjects(List<Project> projectsWithoutLicenseHeader,
       IDefaultLicenseHeaderPage page)
     {
       List<ProjectItem> newLicenseHeaders = new List<ProjectItem>();
@@ -156,7 +156,7 @@ namespace LicenseHeaderManager.PackageCommands
       foreach (Project project in projectsInSolution)
       {
         statusBar.SetText(string.Format(Resources.UpdateSolution, progressCount, projectCount));
-        addLicenseHeaderToAllFilesCommand.Execute(project);
+        new AddLicenseHeaderToAllFilesCommand (licenseReplacer).Execute(project);
         progressCount++;
       }
 
