@@ -70,9 +70,20 @@ namespace LicenseHeaderManager.Headers
       return _document.CreateEditPoint (start).GetText (end);
     }
 
-    private string GetText ()
+    private string _documentTextCache;
+    private string GetText()
     {
-      return GetText (_document.StartPoint, _document.EndPoint);
+      if (string.IsNullOrEmpty(_documentTextCache))
+      {
+        RefreshText();
+      }
+
+      return _documentTextCache;
+    }
+
+    private void RefreshText ()
+    {
+      _documentTextCache = GetText (_document.StartPoint, _document.EndPoint);
     }
 
     private string GetExistingHeader ()
@@ -150,6 +161,7 @@ namespace LicenseHeaderManager.Headers
         var start = _document.CreateEditPoint (_document.StartPoint);
         var end = EndOfHeader (header, _document.StartPoint);
         start.Delete (end);
+        RefreshText();
       }
     }
   }
