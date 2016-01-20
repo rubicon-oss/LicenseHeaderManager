@@ -595,7 +595,16 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Active Directory Lookup of user name failed
+        ///   Looks up a localized string similar to FileNotFoundException caught while trying to lookup the DisplayName with &apos;UserPrincipal.Current.DisplayName&apos;. \nThis is possibly caused by an Windows 10 update and can be fixed by updating the registry. \nSee https://github.com/rubicon-oss/LicenseHeaderManager/wiki/FileNotFoundException-caught-while-trying-to-Lookup-the-DisplayName-with-&apos;UserPrincipal.Current.DisplayName&apos; for more information..
+        /// </summary>
+        public static string UserInfo_LookupFailure_FileNotFoundException_Information {
+            get {
+                return ResourceManager.GetString("UserInfo_LookupFailure_FileNotFoundException_Information", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exception caught while trying to Lookup the DisplayName with &apos;UserPrincipal.Current.DisplayName&apos;. \n Stacktrace: {0}
         ///.
         /// </summary>
         public static string UserInfo_LookupFailure_Information {

@@ -13,6 +13,7 @@
 #endregion
 
 using System;
+using System.IO;
 using System.DirectoryServices.AccountManagement;
 
 namespace LicenseHeaderManager.Headers
@@ -80,10 +81,18 @@ namespace LicenseHeaderManager.Headers
           {
             _displayName = UserPrincipal.Current.DisplayName;
             _lookupSuccessful = true;
+            
           }
-          catch (PrincipalServerDownException)
+          catch (Exception e)
           {
-            OutputWindowHandler.WriteMessage(Resources.UserInfo_LookupFailure_Information);
+            string OutputMessage = string.Format(Resources.UserInfo_LookupFailure_Information, e).Replace (@"\n", "\n");
+ 
+            if (e is FileNotFoundException)
+            {
+              OutputMessage = string.Format(Resources.UserInfo_LookupFailure_FileNotFoundException_Information).Replace (@"\n", "\n");
+            }
+            
+            OutputWindowHandler.WriteMessage(OutputMessage);
             _displayName = Resources.UserInfo_UnknownDisplayNameString;
             _lookupSuccessful = false;
           }

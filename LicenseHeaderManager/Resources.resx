@@ -300,20 +300,24 @@
   <data name="WpfLanguageDialogTitle" xml:space="preserve">
     <value>Edit language</value>
   </data>
-  <data name="Constant_MaxNumberOfProjectItemsWhereOpeningDefinitionFilesInEditor" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Constant_MaxNumberOfProjectItemsWhereOpeningDefinitionFilesInEditor" type="System.Int32, mscorlib">
     <value>10</value>
   </data>
-  <data name="Constant_DisplayNameLookup_TimeDifferenceInSecondsBeforeTooOld" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <data name="Constant_DisplayNameLookup_TimeDifferenceInSecondsBeforeTooOld" type="System.Int32, mscorlib">
     <value>5</value>
   </data>
   <data name="UserInfo_LookupFailure_Information" xml:space="preserve">
-    <value>Active Directory Lookup of user name failed
+    <value>Exception caught while trying to Lookup the DisplayName with 'UserPrincipal.Current.DisplayName'. \n Stacktrace: {0}
 </value>
   </data>
   <data name="UserInfo_UnknownDisplayNameString" xml:space="preserve">
     <value>&lt;Unknown&gt;</value>
   </data>
-  <data name="Constant_MaxProjectsWithoutDefinitionFileShownInMessage" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <data name="Constant_MaxProjectsWithoutDefinitionFileShownInMessage" type="System.Int32, mscorlib">
     <value>5</value>
+  </data>
+  <data name="UserInfo_LookupFailure_FileNotFoundException_Information" xml:space="preserve">
+    <value>FileNotFoundException caught while trying to lookup the DisplayName with 'UserPrincipal.Current.DisplayName'. \nThis is possibly caused by an Windows 10 update and can be fixed by updating the registry. \nSee https://github.com/rubicon-oss/LicenseHeaderManager/wiki/FileNotFoundException-caught-while-trying-to-Lookup-the-DisplayName-with-'UserPrincipal.Current.DisplayName' for more information.</value>
   </data>
 </root>
