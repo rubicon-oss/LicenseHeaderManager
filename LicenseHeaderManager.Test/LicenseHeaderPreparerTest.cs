@@ -21,7 +21,7 @@ namespace LicenseHeaderManager.Test
       
       string preparedHeader = LicenseHeaderPreparer.Prepare(toBeInsertedHeaderText, currentHeaderText, commentParserMock);
       
-      Assert.AreEqual (toBeInsertedHeaderText + Environment.NewLine, preparedHeader);
+      Assert.AreEqual (toBeInsertedHeaderText, preparedHeader);
     }
 
     [Test]
