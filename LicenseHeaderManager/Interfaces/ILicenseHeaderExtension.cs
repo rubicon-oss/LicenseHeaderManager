@@ -12,6 +12,8 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 #endregion
 
+using EnvDTE;
+using EnvDTE80;
 using LicenseHeaderManager.Options;
 
 namespace LicenseHeaderManager.Interfaces
@@ -23,5 +25,7 @@ namespace LicenseHeaderManager.Interfaces
     IDefaultLicenseHeaderPage DefaultLicenseHeaderPage { get; }
     ILanguagesPage LanguagesPage { get; }
     IOptionsPage OptionsPage { get; }
+    DTE2 Dte2 { get; }
+
   }
 }

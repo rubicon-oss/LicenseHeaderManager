@@ -15,11 +15,10 @@ namespace LicenseHeaderManager.Utils
         {
           dte.ExecuteCommand(command);
           OutputWindowHandler.WriteMessage("Command executed");
-
         }
         catch (COMException e)
         {
-          if (command == "ReSharper_Suspend")
+          if(command == "ReSharper_Suspend")
           {
             OutputWindowHandler.WriteMessage("Excecution of '" + command +
                                              "' failed. Maybe ReSharper is already suspended? \n " + e.ToString());
@@ -39,7 +38,7 @@ namespace LicenseHeaderManager.Utils
 
     public static void ExecuteCommand(string command, DTE2 dte)
     {
-        dte.ExecuteCommand(command);
+      dte.ExecuteCommand(command);
     }
   }
 }
