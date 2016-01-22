@@ -123,6 +123,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ButtonHandler\ButtonHandlerFactory.cs" />
+    <Compile Include="ButtonHandler\AddLicenseHeaderToAllProjectsButtonHandler.cs" />
+    <Compile Include="ButtonHandler\SolutionLevelButtonThreadWorker.cs" />
+    <Compile Include="Interfaces\ISolutionLevelCommand.cs" />
     <Compile Include="PackageCommands\AddExistingLicenseHeaderDefinitionFileCommand.cs" />
     <Compile Include="Headers\NewLineConst.cs" />
     <Compile Include="Interfaces\ICommentParser.cs" />
@@ -203,7 +207,13 @@
       <DependentUpon>WpfCommandDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="ReturnObjects\AddLicenseHeaderToAllFilesReturn.cs" />
+    <Compile Include="SolutionUpdateViewModels\RelayCommand.cs" />
+    <Compile Include="SolutionUpdateViews\SolutionUpdateDialog.xaml.cs">
+      <DependentUpon>SolutionUpdateDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SolutionUpdateViewModels\SolutionUpdateViewModel.cs" />
     <Compile Include="Utils\AllSolutionProjectsSearcher.cs" />
+    <Compile Include="Utils\CommandUtility.cs" />
     <Compile Include="Utils\LicenseHeaderPreparer.cs" />
     <Compile Include="Utils\LinkedFileFilter.cs" />
     <Compile Include="Utils\LinkedFileHandler.cs" />
@@ -283,6 +293,10 @@
       <Generator>MSBuild:Compile</Generator>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SolutionUpdateViews\SolutionUpdateDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

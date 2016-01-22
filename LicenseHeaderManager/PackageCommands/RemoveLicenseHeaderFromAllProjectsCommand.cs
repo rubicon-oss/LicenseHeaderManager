@@ -14,39 +14,42 @@
 
 using EnvDTE;
 using LicenseHeaderManager.Headers;
+using LicenseHeaderManager.Interfaces;
 using LicenseHeaderManager.Utils;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace LicenseHeaderManager.PackageCommands
 {
-  class RemoveLicenseHeaderFromAllProjectsCommand
+  class RemoveLicenseHeaderFromAllProjectsCommand : ISolutionLevelCommand
   {
-    private IVsStatusbar statusBar;
-    private LicenseHeaderReplacer licenseReplacer;
+    private readonly IVsStatusbar _statusBar;
+    private readonly LicenseHeaderReplacer _licenseReplacer;
 
     public RemoveLicenseHeaderFromAllProjectsCommand(IVsStatusbar statusBar, LicenseHeaderReplacer licenseReplacer)
     {
-      this.statusBar = statusBar;
-      this.licenseReplacer = licenseReplacer;
+      this._statusBar = statusBar;
+      this._licenseReplacer = licenseReplacer;
     }
 
     public void Execute(Solution solution)
     {
+      if (solution == null) return;
+
       var allSolutionProjectsSearcher = new AllSolutionProjectsSearcher();
       var projectsInSolution = allSolutionProjectsSearcher.GetAllProjects(solution);
 
       int progressCount = 1;
       int projectCount = projectsInSolution.Count;
-      var removeAllLicenseHeadersCommand = new RemoveLicenseHeaderFromAllFilesCommand(licenseReplacer);
+      var removeAllLicenseHeadersCommand = new RemoveLicenseHeaderFromAllFilesCommand(_licenseReplacer);
       
       foreach (Project project in projectsInSolution)
       {
-        statusBar.SetText(string.Format(Resources.UpdateSolution, progressCount, projectCount));
+        _statusBar.SetText(string.Format(Resources.UpdateSolution, progressCount, projectCount));
         removeAllLicenseHeadersCommand.Execute(project);
         progressCount++;
       }
 
-      statusBar.SetText(string.Empty);
+      _statusBar.SetText(string.Empty);
     }
   }
 }

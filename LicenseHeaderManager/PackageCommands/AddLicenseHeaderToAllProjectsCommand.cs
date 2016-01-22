@@ -18,28 +18,32 @@ using System.Linq;
 using System.Windows;
 using EnvDTE;
 using LicenseHeaderManager.Headers;
+using LicenseHeaderManager.Interfaces;
 using LicenseHeaderManager.Options;
+using LicenseHeaderManager.SolutionUpdateViewModels;
 using LicenseHeaderManager.Utils;
 using Microsoft.VisualStudio.Shell.Interop;
 using Constants = EnvDTE.Constants;
 
 namespace LicenseHeaderManager.PackageCommands
 {
-  public class AddLicenseHeaderToAllProjectsCommand
+  public class AddLicenseHeaderToAllProjectsCommand : ISolutionLevelCommand
   {
-    private IVsStatusbar statusBar;
-    private IDefaultLicenseHeaderPage licenseHeaderPage;
-    private LicenseHeaderReplacer licenseReplacer;
+    private readonly IDefaultLicenseHeaderPage _licenseHeaderPage;
+    private readonly LicenseHeaderReplacer _licenseReplacer;
+    private readonly SolutionUpdateViewModel _solutionUpdateViewModel;
 
-    public AddLicenseHeaderToAllProjectsCommand(LicenseHeaderReplacer licenseReplacer, IVsStatusbar statusBar, IDefaultLicenseHeaderPage licenseHeaderPage)
+    public AddLicenseHeaderToAllProjectsCommand(LicenseHeaderReplacer licenseReplacer, IDefaultLicenseHeaderPage licenseHeaderPage, SolutionUpdateViewModel solutionUpdateViewModel)
     {
-      this.statusBar = statusBar;
-      this.licenseHeaderPage = licenseHeaderPage;
-      this.licenseReplacer = licenseReplacer;
+      _licenseHeaderPage = licenseHeaderPage;
+      _licenseReplacer = licenseReplacer;
+      _solutionUpdateViewModel = solutionUpdateViewModel;
     }
 
     public void Execute(Solution solution)
     {
+      if (solution == null) return;
+
       var allSolutionProjectsSearcher = new AllSolutionProjectsSearcher();
       var projectsInSolution = allSolutionProjectsSearcher.GetAllProjects(solution);
 
@@ -51,7 +55,7 @@ namespace LicenseHeaderManager.PackageCommands
         //--> Offer to add a new one and ask if they want to stop the update process to configure them
         if (MessageBoxHelper.DoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionFileSingleProject))
         {
-          var licenseHeader = LicenseHeader.AddLicenseHeaderDefinitionFile(projectsInSolution.First(), licenseHeaderPage);
+          var licenseHeader = LicenseHeader.AddLicenseHeaderDefinitionFile(projectsInSolution.First(), _licenseHeaderPage);
 
           if (!MessageBoxHelper.DoYouWant(Resources.Question_StopForConfiguringDefinitionFilesSingleFile))
             AddLicenseHeaderToProjects(projectsInSolution);
@@ -65,7 +69,7 @@ namespace LicenseHeaderManager.PackageCommands
         //--> Offer to add new ones to everyone of them and ask if they want to stop the update process to configure them
         if (MessageBoxHelper.DoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionFileMultipleProjects))
         {
-          var newLicenseHeaders = AddNewLicenseHeaderDefinitionFilesToProjects(projectsWithoutLicenseHeaderFile, licenseHeaderPage);
+          var newLicenseHeaders = AddNewLicenseHeaderDefinitionFilesToProjects(projectsWithoutLicenseHeaderFile, _licenseHeaderPage);
           
           if (!MessageBoxHelper.DoYouWant(Resources.Question_StopForConfiguringDefinitionFilesMultipleFiles))
             AddLicenseHeaderToProjects(projectsInSolution);
@@ -155,12 +159,11 @@ namespace LicenseHeaderManager.PackageCommands
 
       foreach (Project project in projectsInSolution)
       {
-        statusBar.SetText(string.Format(Resources.UpdateSolution, progressCount, projectCount));
-        new AddLicenseHeaderToAllFilesCommand (licenseReplacer).Execute(project);
+        _solutionUpdateViewModel.ProgressText = string.Format("Currently updating '{0}'. Updating {1}/{2} Projects.", project.Name, progressCount, projectCount);
+        new AddLicenseHeaderToAllFilesCommand (_licenseReplacer).Execute(project);
         progressCount++;
       }
 
-      statusBar.SetText (String.Empty);
     }
   }
 }

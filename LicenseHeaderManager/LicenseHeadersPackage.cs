@@ -14,13 +14,17 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
 using EnvDTE;
 using EnvDTE80;
+using LicenseHeaderManager.ButtonHandler;
 using LicenseHeaderManager.Headers;
 using LicenseHeaderManager.Interfaces;
 using LicenseHeaderManager.Options;
@@ -28,11 +32,13 @@ using LicenseHeaderManager.PackageCommands;
 using LicenseHeaderManager.ReturnObjects;
 using LicenseHeaderManager.Utils;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Win32;
 using Constants = EnvDTE.Constants;
 using Document = LicenseHeaderManager.Headers.Document;
+using Thread = EnvDTE.Thread;
 
 namespace LicenseHeaderManager
 {
@@ -112,6 +118,7 @@ namespace LicenseHeaderManager
       _licenseReplacer = new LicenseHeaderReplacer (this);
       _dte = GetService (typeof (DTE)) as DTE2;
       _addedItems = new Stack<ProjectItem>();
+      var buttonHandlerFactory = new ButtonHandlerFactory(this, _licenseReplacer);
 
       //register commands
       OleMenuCommandService mcs = GetService (typeof (IMenuCommandService)) as OleMenuCommandService;
@@ -132,7 +139,7 @@ namespace LicenseHeaderManager
         RegisterCommand (mcs, PkgCmdIDList.cmdIdAddLicenseHeaderDefinitionFile, AddLicenseHeaderDefinitionFileCallback);
         RegisterCommand (mcs, PkgCmdIDList.cmdIdAddExistingLicenseHeaderDefinitionFile, AddExistingLicenseHeaderDefinitionFileCallback);
         RegisterCommand (mcs, PkgCmdIDList.cmdIdLicenseHeaderOptions, LicenseHeaderOptionsCallback);
-        RegisterCommand (mcs, PkgCmdIDList.cmdIdAddLicenseHeaderToAllProjects, AddLicenseHeaderToAllProjectsCallback);
+        RegisterCommand (mcs, PkgCmdIDList.cmdIdAddLicenseHeaderToAllProjects, buttonHandlerFactory.CreateAddLicenseHeaderToAllProjectsButtonHandler().HandleButton);
         RegisterCommand (mcs, PkgCmdIDList.cmdIdRemoveLicenseHeaderFromAllProjects, RemoveLicenseHeaderFromAllProjectsCallback);
       }
 
@@ -629,21 +636,19 @@ namespace LicenseHeaderManager
       ShowOptionPage (typeof (OptionsPage));
     }
 
-    private void AddLicenseHeaderToAllProjectsCallback (object sender, EventArgs e)
-    {
-      IVsStatusbar statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
-
-      var addLicenseHeaderToAllProjectsCommand = new AddLicenseHeaderToAllProjectsCommand (_licenseReplacer, statusBar, DefaultLicenseHeaderPage);
-      addLicenseHeaderToAllProjectsCommand.Execute( _dte.Solution);  
-    }
-
     private void RemoveLicenseHeaderFromAllProjectsCallback (object sender, EventArgs e)
     {
       Solution solution = _dte.Solution;
       IVsStatusbar statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
-
       var removeLicenseHeaderFromAllProjects = new RemoveLicenseHeaderFromAllProjectsCommand(statusBar, _licenseReplacer);
+      bool resharperSuspended = CommandUtility.ExecuteCommandIfExists("ReSharper_Suspend", _dte);
+
       removeLicenseHeaderFromAllProjects.Execute(solution);
+
+      if (resharperSuspended)
+      {
+        CommandUtility.ExecuteCommand("ReSharper_Resume", _dte);  
+      }
     }
 
     #endregion
@@ -667,6 +672,11 @@ namespace LicenseHeaderManager
     public IOptionsPage OptionsPage
     {
       get { return (OptionsPage) GetDialogPage (typeof (OptionsPage)); }
+    }
+
+    public DTE2 Dte2
+    {
+      get { return GetService(typeof (DTE)) as DTE2; }
     }
   }
 }
