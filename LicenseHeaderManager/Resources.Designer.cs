@@ -595,7 +595,16 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Active Directory Lookup of user name failed
+        ///   Looks up a localized string similar to FileNotFoundException caught while trying to lookup the display name with &apos;UserPrincipal.Current.DisplayName&apos;. \nThis is likely caused by an Windows 10 update and can be fixed by updating the registry. \nSee https://git.io/vza4O for more information..
+        /// </summary>
+        public static string UserInfo_LookupFailure_FileNotFoundException_Information {
+            get {
+                return ResourceManager.GetString("UserInfo_LookupFailure_FileNotFoundException_Information", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exception caught while trying to lookup the display name with &apos;UserPrincipal.Current.DisplayName&apos;. \nStacktrace: {0}
         ///.
         /// </summary>
         public static string UserInfo_LookupFailure_Information {
