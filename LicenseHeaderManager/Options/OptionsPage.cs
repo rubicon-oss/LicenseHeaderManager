@@ -37,6 +37,8 @@ namespace LicenseHeaderManager.Options
     public bool InsertInNewFiles { get; set; }
     public bool UseRequiredKeywords { get; set; }
     public string RequiredKeywords { get; set; }
+    public bool UseBlacklistedKeywords { get; set; }
+    public string BlacklistedKeywords { get; set; }
 
     private ObservableCollection<LinkedCommand> _linkedCommands;
     [TypeConverter (typeof (LinkedCommandConverter))]
@@ -76,6 +78,8 @@ namespace LicenseHeaderManager.Options
       InsertInNewFiles = false;
       UseRequiredKeywords = true;
       RequiredKeywords = "license, copyright, (c)";
+      UseBlacklistedKeywords = false;
+      BlacklistedKeywords = string.Empty;
       LinkedCommands = new ObservableCollection<LinkedCommand> ();
       base.ResetSettings ();
     }

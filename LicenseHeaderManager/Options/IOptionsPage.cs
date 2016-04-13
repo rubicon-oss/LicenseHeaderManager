@@ -18,5 +18,7 @@ namespace LicenseHeaderManager.Options
   {
     bool UseRequiredKeywords { get; }
     string RequiredKeywords { get; }
+    bool UseBlacklistedKeywords { get; }
+    string BlacklistedKeywords { get; }
   }
 }
