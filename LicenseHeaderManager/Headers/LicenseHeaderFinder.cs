@@ -54,8 +54,44 @@ namespace LicenseHeaderManager.Headers
       var headerFile = GetLicenseHeaderDefinitions (projectItem.ProjectItems);
       if (!string.IsNullOrEmpty(headerFile))
         return LoadLicenseHeaderDefinition (headerFile); //Found a License header file on this level
+      
+      var projectItemParent = GetProjectItemParent(projectItem);
+
       //Lookup in the parent --> Go Up!
-      return GetHeaderRecursive (projectItem.Collection.Parent);
+      return GetHeaderRecursive (projectItemParent);
+    }
+
+    private static object GetProjectItemParent(ProjectItem projectItem)
+    {
+      object projectItemParent = null;
+
+      //Folder Items in Custom Projects behave different than their ComObject counterparts.
+      if (projectItem.GetType().FullName == "Microsoft.VisualStudioTools.Project.Automation.OAFolderItem")
+      {
+        try
+        {
+          var parentProperty = projectItem.Object.GetType().GetProperty("Parent").GetValue(projectItem.Object, null);
+          var parentUrl = parentProperty.GetType().GetProperty("Url").GetValue(parentProperty, null) as string;
+          projectItemParent = projectItem.DTE.Solution.FindProjectItem(parentUrl);
+
+          //If the ProjectItemParent could not be found by "FindProjectItem" this means we are a Folder at TopLevel and only the ContainingProject is above us
+          if (projectItemParent == null)
+            projectItemParent = projectItem.ContainingProject;
+        }
+        catch (Exception exception)
+        {
+          //We catch everything as a multitude of Execptions can be thrown if the projectItem.Object is not structured as we assume
+          OutputWindowHandler.WriteMessage(
+            string.Format("Exception '{0}' got thrown when searching for the LicenseHeaderFile. Stacktrace: {1}",
+              exception.Message, exception.StackTrace));
+        }
+      }
+      else
+      {
+        projectItemParent = projectItem.Collection.Parent;
+      }
+
+      return projectItemParent;
     }
 
     /// <summary>
@@ -135,7 +171,6 @@ namespace LicenseHeaderManager.Headers
           headers[extension] = array;
       }
     }
-
 
     private static string GetLicenseHeaderDefinitions (ProjectItems projectItems)
     {
