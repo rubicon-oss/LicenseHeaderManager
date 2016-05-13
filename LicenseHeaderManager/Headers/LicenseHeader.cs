@@ -12,6 +12,7 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 #endregion
 
+using System;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -47,7 +48,9 @@ namespace LicenseHeaderManager.Headers
         MessageBoxHelper.Information ("We could not determine a path and name for the new .licenseheader file." +
                                       "As a workaround you could create a .licenseheader file manually." +
                                       "If possible, please report this issue to us." +
-                                      "Path.GetDirectoryName(" + name + ") returned empty string.");
+                                      "Additional Information: Path.GetDirectoryName(" + name + ") returned empty string.");
+
+        throw new ArgumentException ("Path.GetDirectoryName(" + name + ") returned empty string.");
       }
 
       var projectName = directory.Substring (directory.LastIndexOf ('\\') + 1);
