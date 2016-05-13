@@ -12,11 +12,13 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 #endregion
 
+using System;
 using System.IO;
 using System.Text;
 using System.Windows;
 using EnvDTE;
 using LicenseHeaderManager.Options;
+using LicenseHeaderManager.Utils;
 
 namespace LicenseHeaderManager.Headers
 {
@@ -25,9 +27,32 @@ namespace LicenseHeaderManager.Headers
     public const string Keyword = "extensions:";
     public const string Extension = ".licenseheader";
 
-    private static string GetNewFileName (string name)
+    private static string GetNewFullName (Project project)
+    {
+      //This is just to check if activeProject.FullName contains the FullName as expected. 
+      //If an Project Type uses this Property incorrectly, we try generating the .licenseheader filename with the .FileName Property
+      if (string.IsNullOrEmpty (Path.GetDirectoryName (project.FullName)))
+      {
+        return GetNewFullName (project.FileName);
+      }
+      
+      return GetNewFullName (project.FullName);
+    }
+
+    private static string GetNewFullName (string name)
     {
       var directory = Path.GetDirectoryName (name);
+
+      if (string.IsNullOrEmpty (directory))
+      {
+        MessageBoxHelper.Information ("We could not determine a path and name for the new .licenseheader file." +
+                                      "As a workaround you could create a .licenseheader file manually." +
+                                      "If possible, please report this issue to us." +
+                                      "Additional Information: Path.GetDirectoryName(" + name + ") returned empty string.");
+
+        throw new ArgumentException ("Path.GetDirectoryName(" + name + ") returned empty string.");
+      }
+
       var projectName = directory.Substring (directory.LastIndexOf ('\\') + 1);
       var fileName = Path.Combine (directory, projectName) + Extension;
 
@@ -56,8 +81,8 @@ namespace LicenseHeaderManager.Headers
     {
       if (activeProject == null)
         return null;
-
-      var fileName = GetNewFileName (activeProject.FileName);
+      
+      var fileName = GetNewFullName (activeProject);
       File.WriteAllText (fileName, page.LicenseHeaderFileText, Encoding.UTF8);
       var newProjectItem = activeProject.ProjectItems.AddFromFile (fileName);
 
@@ -78,7 +103,7 @@ namespace LicenseHeaderManager.Headers
       if (folder == null || folder.Kind != Constants.vsProjectItemKindPhysicalFolder)
         return null;
 
-      var fileName = GetNewFileName (folder.Properties.Item("FullPath").Value.ToString());
+      var fileName = GetNewFullName (folder.Properties.Item("FullPath").Value.ToString());
       File.WriteAllText (fileName, page.LicenseHeaderFileText, Encoding.UTF8);
 
       var newProjectItem = folder.ProjectItems.AddFromFile (fileName);
