@@ -250,7 +250,7 @@
     <value>Remove</value>
   </data>
   <data name="RequiredKeywordsTooltip" xml:space="preserve">
-    <value>You can specify a list of keywords separated by commas.</value>
+    <value>A comma-delimited list of valid keywords.</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search:</value>
@@ -283,7 +283,7 @@
     <value>Updating files...</value>
   </data>
   <data name="UseRequiredKeywords" xml:space="preserve">
-    <value>Only remove comments containing at least one of the keywords below</value>
+    <value>Replace license header if it contains one of the following keywords</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Warning</value>
@@ -319,5 +319,11 @@
   </data>
   <data name="UserInfo_LookupFailure_FileNotFoundException_Information" xml:space="preserve">
     <value>FileNotFoundException caught while trying to lookup the display name with 'UserPrincipal.Current.DisplayName'. \nThis is likely caused by an Windows 10 update and can be fixed by updating the registry. \nSee https://git.io/vza4O for more information.</value>
+  </data>
+  <data name="UseBlacklistedKeywords" xml:space="preserve">
+    <value>Unless it contains one of the following blacklisted items</value>
+  </data>
+  <data name="BlacklistedKeywordsTooltip" xml:space="preserve">
+    <value>A comma-delimited list of blacklisted keywords.</value>
   </data>
 </root>

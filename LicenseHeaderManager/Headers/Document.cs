@@ -26,11 +26,12 @@ namespace LicenseHeaderManager.Headers
     internal readonly DocumentHeader _header;
     internal readonly Language _language;
     internal readonly IEnumerable<string> _keywords;
+    internal readonly IEnumerable<string> _blacklist;
     internal readonly TextDocument _document;
     internal readonly CommentParser _commentParser;
     internal readonly string _lineEndingInDocument;
 
-    public Document (TextDocument document, Language language, string[] lines, ProjectItem projectItem, IEnumerable<string> keywords = null)
+    public Document (TextDocument document, Language language, string[] lines, ProjectItem projectItem, IEnumerable<string> keywords = null, IEnumerable<string> blacklist = null)
     {
       _document = document;
 
@@ -40,6 +41,7 @@ namespace LicenseHeaderManager.Headers
       string inputText = CreateInputText(lines);
       _header = new DocumentHeader (document, inputText, new DocumentHeaderProperties (projectItem));
       _keywords = keywords;
+      _blacklist = blacklist;
 
       _language = language;
       
@@ -86,34 +88,44 @@ namespace LicenseHeaderManager.Headers
       _documentTextCache = GetText (_document.StartPoint, _document.EndPoint);
     }
 
-    private string GetExistingHeader ()
-    {
-      string header = _commentParser.Parse (GetText ());
-
-      if (_keywords == null || _keywords.Any (k => header.ToLower ().Contains (k.ToLower ())))
-        return header;
-      else
-        return string.Empty;
-    }
-
     public void ReplaceHeaderIfNecessary ()
     {
+      // get the header copyright section of this document
+      string existingHeader = _commentParser.Parse(GetText());
+
+      // if the filter keywords exist but none match, return -- no replacement.
+      if (!string.IsNullOrEmpty(existingHeader) && 
+          _keywords != null && 
+          (_keywords.Any(k => existingHeader.ToLower().Contains(k.ToLower()))) == false)
+      {
+        return;
+      }
+
+      // if blacklist keywords exist and any of them match, return -- no replacement.
+      if (!string.IsNullOrEmpty(existingHeader) &&
+          _blacklist != null && 
+          (_blacklist.Any(b => existingHeader.ToLower().Contains(b.ToLower()))))
+      {
+        return;
+      }
+
+      // check for and process skip expression
       var skippedText = SkipText ();
-      if (!string.IsNullOrEmpty (skippedText))
+      if (!string.IsNullOrEmpty(skippedText))
+      {
         RemoveHeader (skippedText);
+        AddHeader(LicenseHeaderPreparer.Prepare(skippedText, GetText(), _commentParser));
+        return;
+      }
 
-      string existingHeader = GetExistingHeader ();
-
+      // if new header is not empty and differs from original, replace it
       if (!_header.IsEmpty)
       {
         if (existingHeader != _header.Text)
-          ReplaceHeader (existingHeader, _header.Text);
+          ReplaceHeader(existingHeader, _header.Text);
       }
-      else
-        RemoveHeader (existingHeader);
-
-      if (!string.IsNullOrEmpty (skippedText))
-        AddHeader (LicenseHeaderPreparer.Prepare(skippedText, GetText(), _commentParser));
+      else // else remove it
+        RemoveHeader(existingHeader);
     }
 
     private string SkipText ()
@@ -124,7 +136,7 @@ namespace LicenseHeaderManager.Headers
       if (match.Success && match.Index == 0)
         return match.Value;
       else
-        return null;
+          return null;
     }
 
     private void ReplaceHeader (string existingHeader, string newHeader)

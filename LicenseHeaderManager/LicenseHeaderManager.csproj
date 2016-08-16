@@ -13,7 +13,7 @@
     <AssemblyName>LicenseHeaderManager</AssemblyName>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -150,6 +150,9 @@
     <Compile Include="ButtonHandler\AddLicenseHeaderToAllProjectsButtonHandler.cs" />
     <Compile Include="ButtonHandler\SolutionLevelButtonThreadWorker.cs" />
     <Compile Include="Interfaces\ISolutionLevelCommand.cs" />
+    <Compile Include="Options\Converters\BoolMultiValueConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PackageCommands\AddExistingLicenseHeaderDefinitionFileCommand.cs" />
     <Compile Include="Headers\NewLineConst.cs" />
     <Compile Include="Interfaces\ICommentParser.cs" />

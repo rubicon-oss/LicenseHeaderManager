@@ -142,6 +142,15 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A comma-delimited list of blacklisted keywords..
+        /// </summary>
+        public static string BlacklistedKeywordsTooltip {
+            get {
+                return ResourceManager.GetString("BlacklistedKeywordsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
@@ -487,7 +496,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can specify a list of keywords separated by commas..
+        ///   Looks up a localized string similar to A comma-delimited list of valid keywords..
         /// </summary>
         public static string RequiredKeywordsTooltip {
             get {
@@ -586,7 +595,16 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only remove comments containing at least one of the keywords below.
+        ///   Looks up a localized string similar to Unless it contains one of the following blacklisted items.
+        /// </summary>
+        public static string UseBlacklistedKeywords {
+            get {
+                return ResourceManager.GetString("UseBlacklistedKeywords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace license header if it contains one of the following keywords.
         /// </summary>
         public static string UseRequiredKeywords {
             get {

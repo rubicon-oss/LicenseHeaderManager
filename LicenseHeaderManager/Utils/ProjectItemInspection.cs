@@ -42,7 +42,7 @@ namespace LicenseHeaderManager.Utils
       {
         isLinkProperty = projectItem.Properties.Item("IsLink");
       }
-      catch (ArgumentException e)
+      catch (ArgumentException)
       {
         return false;
       }

@@ -265,14 +265,17 @@ namespace LicenseHeaderManager.Headers
 
       var optionsPage = _licenseHeaderExtension.OptionsPage;
 
-      document = new Document (
-          textDocument,
-          language,
-          header,
-          item,
-          optionsPage.UseRequiredKeywords
-              ? optionsPage.RequiredKeywords.Split (new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select (k => k.Trim())
-              : null);
+      document = new Document(
+          document: textDocument,
+          language: language,
+          lines: header,
+          projectItem: item,
+          keywords: (optionsPage.UseRequiredKeywords
+            ? optionsPage.RequiredKeywords.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(k => k.Trim())
+            : null),
+          blacklist: (optionsPage.UseBlacklistedKeywords
+            ? optionsPage.BlacklistedKeywords.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(b => b.Trim())
+            : null));
 
       return CreateDocumentResult.DocumentCreated;
     }
