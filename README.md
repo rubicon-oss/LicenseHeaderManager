@@ -11,6 +11,7 @@ License Header Manager allows you to:
 * Share license headers between projects via "Add as Link"
 * Add, remove and replace headers at any time for one or all files
 * Put your license headers in #regions
+* Use [Expendable Properties](https://github.com/rubicon-oss/LicenseHeaderManager/wiki/Expendable-Properties) like %FileName%, %Project% or %UserName% and many more, which are automatically filled everytime the Header is reinserted 
 
 
 [Start right here!](https://github.com/rubicon-oss/LicenseHeaderManager/wiki)
