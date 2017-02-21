@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{ACB75143-10C4-4687-85EF-84CBCE53B954}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PythonToolsLinks1</RootNamespace>
+    <AssemblyName>PythonToolsLinks1</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="PythonTools.html" />
+    <Content Include="vslogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\TypeScriptHTMLApp1\TypeScriptHTMLApp1.licenseheader">
+      <Link>NewFolder1\TypeScriptHTMLApp1.licenseheader</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NewFolder1\NewFolder1\" />
+  </ItemGroup>
+</Project>
