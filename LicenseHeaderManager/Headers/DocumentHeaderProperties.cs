@@ -14,8 +14,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using EnvDTE;
+using LicenseHeaderManager.Utils;
 
 namespace LicenseHeaderManager.Headers
 {
@@ -46,13 +48,13 @@ namespace LicenseHeaderManager.Headers
       List<DocumentHeaderProperty> properties = new List<DocumentHeaderProperty> ()
       {
         new DocumentHeaderProperty(
-          "%FullFileName%", 
-          documentHeader => documentHeader.FileInfo != null, 
-          documentHeader => documentHeader.FileInfo.FullName),
+          "%FullFileName%",
+          documentHeader => documentHeader.FileInfo != null,
+          documentHeader => GetProperFilePathCapitalization (documentHeader.FileInfo)),
         new DocumentHeaderProperty(
-          "%FileName%", 
+          "%FileName%",
           documentHeader => documentHeader.FileInfo != null, 
-          documentHeader => documentHeader.FileInfo.Name),
+          documentHeader => GetProperFileNameCapitalization (documentHeader.FileInfo)),
         new DocumentHeaderProperty(
           "%CreationYear%", 
           documentHeader => documentHeader.FileInfo != null, 
@@ -105,6 +107,40 @@ namespace LicenseHeaderManager.Headers
           documentHeader => projectItem.FileCodeModel.CodeElements.Cast<CodeElement>().First (ce => ce.Kind == vsCMElement.vsCMElementNamespace).Name)
       };
       return properties;
+    }
+
+    private string GetProperFilePathCapitalization (FileInfo fileInfo)
+    {
+      try
+      {
+        return PathUtility.GetProperFilePathCapitalization (fileInfo);
+      }
+      catch (Exception e)
+      {
+        OutputWindowHandler.WriteMessage ("Could not get proper file path capitalization.");
+        OutputWindowHandler.WriteMessage ("Falling back to path as we receive it from 'FileInfo'.");
+        OutputWindowHandler.WriteMessage (e.ToString());
+
+        //Use the FilePath in the same capitalization as we got it
+        return fileInfo.FullName;
+      }
+    }
+
+    private string GetProperFileNameCapitalization (FileInfo fileInfo)
+    {
+      try
+      {
+        return Path.GetFileName (PathUtility.GetProperFilePathCapitalization (fileInfo));
+      }
+      catch (Exception e)
+      {
+        OutputWindowHandler.WriteMessage ("Could not get proper file name capitalization.");
+        OutputWindowHandler.WriteMessage ("Falling back to name as we receive it from 'FileInfo'.");
+        OutputWindowHandler.WriteMessage (e.ToString());
+
+        //Use the FileName in the same capitalization as we got it
+        return fileInfo.Name;
+      }
     }
   }
 }

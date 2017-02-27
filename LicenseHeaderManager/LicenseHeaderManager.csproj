@@ -241,6 +241,7 @@
     <Compile Include="Utils\LinkedFileFilter.cs" />
     <Compile Include="Utils\LinkedFileHandler.cs" />
     <Compile Include="Utils\MessageBoxHelper.cs" />
+    <Compile Include="Utils\PathUtility.cs" />
     <Compile Include="Utils\ProjectItemInspection.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
   </ItemGroup>
