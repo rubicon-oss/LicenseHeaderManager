@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using EnvDTE;
+using LicenseHeaderManager.Utils;
 
 namespace LicenseHeaderManager.Headers
 {
@@ -65,39 +66,15 @@ namespace LicenseHeaderManager.Headers
     {
       object projectItemParent = null;
 
-      //Folder Items in Custom Projects behave different than their ComObject counterparts.
-      if (projectItem.GetType ().FullName == "Microsoft.VisualStudioTools.Project.Automation.OAFolderItem")
+      if (IsEndlessRecursion (projectItem))
       {
-        try
-        {
-          if (projectItem.Object == null)
-          {
-            OutputWindowHandler.WriteMessage (
-              string.Format (
-                  "Property 'Object' of the FolderItem of Type {0} is null. Can't find LicenseHeaderFile.", 
-                  projectItem.GetType ().FullName));
-          }
-          else
-          {
-            var parentProperty = projectItem.Object.GetType ().GetProperty ("Parent").GetValue (projectItem.Object, null);
-            var parentUrl = parentProperty.GetType ().GetProperty ("Url").GetValue (parentProperty, null) as string;
-            projectItemParent = projectItem.DTE.Solution.FindProjectItem (parentUrl);
+        projectItemParent = TryGetProjectIteamParentViaReflection (projectItem);
 
-            //If the ProjectItemParent could not be found by "FindProjectItem" this means we are a Folder at TopLevel and only the ContainingProject is above us
-            if (projectItemParent == null)
-            {
-              projectItemParent = projectItem.ContainingProject;
-            }
-          }
-        }
-        catch (Exception exception)
+        if (projectItemParent == null)
         {
-          //We catch everything as a multitude of Execptions can be thrown if the projectItem.Object is not structured as we assume
-          OutputWindowHandler.WriteMessage (
-              string.Format (
-                  "Exception got thrown when searching for the LicenseHeaderFile on FolderItem of Type '{0}'. Exception: {1}", 
-                  projectItem.GetType ().FullName, 
-                  exception));
+          OutputWindowHandler.WriteMessage ($"Could not find LicenseHeader for {projectItem.Name}." +
+                                           "This is probably due to a custom project type." +
+                                           "Please report the issue and include the type of your project in the description.");
         }
       }
       else
@@ -106,6 +83,65 @@ namespace LicenseHeaderManager.Headers
       }
 
       return projectItemParent;
+    }
+
+    private static object TryGetProjectIteamParentViaReflection (ProjectItem projectItem)
+    {
+      try
+      {
+        if (projectItem.Object != null)
+        {
+          var parentProperty = projectItem.Object.GetType().GetProperty ("Parent").GetValue (projectItem.Object, null);
+          var parentUrl = parentProperty.GetType().GetProperty ("Url").GetValue (parentProperty, null) as string;
+          object projectItemParent = projectItem.DTE.Solution.FindProjectItem (parentUrl);
+
+          //If the ProjectItemParent could not be found by "FindProjectItem" this means we are a Folder at TopLevel and only the ContainingProject is above us
+          if (projectItemParent == null)
+          {
+            projectItemParent = projectItem.ContainingProject;
+          }
+
+          return projectItemParent;
+        }
+      }
+      catch (Exception exception)
+      {
+        //We catch everything as a multitude of Exceptions can be thrown if the projectItem.Object is not structured as we assume
+        OutputWindowHandler.WriteMessage (
+            string.Format (
+                "Exception got thrown when searching for the LicenseHeaderFile on FolderItem of Type '{0}' with the name '{1}'. Exception: {2}",
+                projectItem.GetType().FullName,
+                projectItem.Name,
+                exception));
+      }
+
+      return null;
+    }
+
+    private static bool IsEndlessRecursion (ProjectItem projectItem)
+    {
+      var projectItemPath = GetPath (projectItem);
+      var projectItemParent = projectItem.Collection.Parent as ProjectItem;
+
+      //ProjectItemParent is no ProjectItem --> 100% no endless recursion
+      if (projectItemParent == null)
+        return false;
+      
+      var parentProjectItemPath = GetPath (projectItemParent);
+
+      //If both paths are empty it is impossible to say if we are in an endless recursion
+      if (String.IsNullOrEmpty (projectItemPath) && String.IsNullOrEmpty (parentProjectItemPath))
+        return false;
+
+      //If the Paths are the same, we are in an endless recursion (projectItem.Parent == projectItem)
+      return projectItemPath == parentProjectItemPath;
+    }
+
+    private static string GetPath (ProjectItem projectItem)
+    {
+      var fullPathProperty = projectItem.Properties.Item ("FullPath");
+
+      return fullPathProperty?.Value.ToString() ?? String.Empty;
     }
 
     /// <summary>
@@ -190,6 +226,7 @@ namespace LicenseHeaderManager.Headers
     {
       if (projectItems == null)
         return null;
+
       foreach (ProjectItem item in projectItems)
       {
         if (item.FileCount == 1)
@@ -208,6 +245,7 @@ namespace LicenseHeaderManager.Headers
             return fileName;
         }
       }
+
       return string.Empty;
     }
     #endregion
