@@ -70,7 +70,7 @@ namespace LicenseHeaderManager.Options
 
     private void InitializeFromResource ()
     {
-      using (var resource = Assembly.GetExecutingAssembly ().GetManifestResourceStream (typeof (LicenseHeadersPackage), "default.licenseheader"))
+      using (var resource = Assembly.GetExecutingAssembly ().GetManifestResourceStream (typeof (LicenseHeadersPackage), "Resources.default.licenseheader"))
       {
         string text;
         using (StreamReader streamreader = new StreamReader(resource, Encoding.UTF8))

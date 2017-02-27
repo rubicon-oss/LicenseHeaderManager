@@ -261,7 +261,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="default.licenseheader" />
+    <EmbeddedResource Include="Resources\default.licenseheader" />
     <None Include="LicenseHeaderManager.licenseheader" />
     <None Include="packages.config" />
     <None Include="VsixInformation\source.extension.vsixmanifest">
