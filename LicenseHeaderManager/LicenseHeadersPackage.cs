@@ -95,6 +95,7 @@ namespace LicenseHeaderManager
     private DTE2 _dte;
 
     private ProjectItemsEvents _projectItemEvents;
+    private ProjectItemsEvents _websiteItemEvents;
     private CommandEvents _commandEvents;
 
     private OleMenuCommand _addLicenseHeaderCommand;
@@ -152,6 +153,15 @@ namespace LicenseHeaderManager
       {
         _projectItemEvents = events.ProjectItemsEvents; //we need to keep a reference, otherwise the object is garbage collected and the event won't be fired
         _projectItemEvents.ItemAdded += ItemAdded;
+       
+        //Register to WebsiteItemEvents for Website Projects to work
+        //Reference: https://social.msdn.microsoft.com/Forums/en-US/dde7d858-2440-43f9-bbdc-3e1b815d4d1e/itemadded-itemremoved-and-itemrenamed-events-not-firing-in-web-projects?forum=vsx
+        //Concerns, that the ItemAdded Event gets called on unrelated events, like closing the solution or opening folder, could not be reproduced
+        _websiteItemEvents = events.GetObject ("WebSiteItemsEvents") as ProjectItemsEvents;
+        if (_websiteItemEvents != null)
+        {
+          _websiteItemEvents.ItemAdded += ItemAdded;
+        }
       }
 
       //register event handlers for linked commands
