@@ -29,6 +29,7 @@ namespace LicenseHeaderManager.Headers
     internal readonly TextDocument _document;
     internal readonly CommentParser _commentParser;
     internal readonly string _lineEndingInDocument;
+    private string _documentTextCache;
 
     public Document (TextDocument document, Language language, string[] lines, ProjectItem projectItem, IEnumerable<string> keywords = null)
     {
@@ -65,12 +66,6 @@ namespace LicenseHeaderManager.Headers
         return LicenseHeader.Validate (_header.Text, _commentParser);
     }
 
-    private string GetText (TextPoint start, TextPoint end)
-    {
-      return _document.CreateEditPoint (start).GetText (end);
-    }
-
-    private string _documentTextCache;
     private string GetText()
     {
       if (string.IsNullOrEmpty(_documentTextCache))
@@ -84,6 +79,11 @@ namespace LicenseHeaderManager.Headers
     private void RefreshText ()
     {
       _documentTextCache = GetText (_document.StartPoint, _document.EndPoint);
+    }
+
+    private string GetText(TextPoint start, TextPoint end)
+    {
+      return _document.CreateEditPoint(start).GetText(end);
     }
 
     private string GetExistingHeader ()
@@ -139,6 +139,7 @@ namespace LicenseHeaderManager.Headers
       {
         var start = _document.CreateEditPoint (_document.StartPoint);
         start.Insert (header);
+        RefreshText();
       }
     }
 
