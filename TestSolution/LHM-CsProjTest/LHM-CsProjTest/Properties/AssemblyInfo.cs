@@ -1,4 +1,4 @@
-﻿Copyright (c) 2011 rubicon IT GmbH
+﻿//Copyright (c) 2011 rubicon IT GmbH
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;

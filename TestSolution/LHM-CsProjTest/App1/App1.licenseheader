@@ -1,5 +1,5 @@
 ﻿extensions: designer.cs generated.cs
-extensions: .cs .cpp .h .js .xaml
+extensions: .cs .cpp .h .js
 //Sample license text.
 extensions: .aspx .ascx
 <%-- 

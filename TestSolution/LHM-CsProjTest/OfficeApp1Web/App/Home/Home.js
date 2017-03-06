@@ -1,7 +1,6 @@
-﻿//Sample license text.
+﻿/// <reference path="../App.js" />
 
-/// <reference path="../App.js" />
-
+//Sample license text.
 (function () {
     "use strict";
 
