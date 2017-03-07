@@ -1,7 +1,5 @@
 ﻿/// <reference path="jquery-1.9.1.js" />
-
 //Sample license text.
-
 
 /* Required to correctly initalize Office.js for intellisense */
 /// <reference path="_officeintellisense.js" />
