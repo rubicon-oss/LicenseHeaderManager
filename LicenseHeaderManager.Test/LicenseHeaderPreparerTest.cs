@@ -51,5 +51,19 @@ namespace LicenseHeaderManager.Test
       
       Assert.AreEqual (toBeInsertedHeaderText + Environment.NewLine, preparedHeader);
     }
+
+    [Test]
+    public void TestLicenseHeaderWhereCurrentHeaderHasCommentAndFileStartsWithNewLine()
+    {
+      var currentHeaderText = Environment.NewLine + "//HighlyRelevantComment";
+      var toBeInsertedHeaderText = "//Testtext";
+
+      var commentParserMock = MockRepository.GenerateMock<ICommentParser>();
+      commentParserMock.Expect(x => x.Parse(currentHeaderText)).Return("OhOurCurrentHeaderTextHasAComment");
+      
+      string preparedHeader = LicenseHeaderPreparer.Prepare(toBeInsertedHeaderText, currentHeaderText, commentParserMock);
+      
+      Assert.AreEqual (toBeInsertedHeaderText, preparedHeader);
+    }
   }
 }
