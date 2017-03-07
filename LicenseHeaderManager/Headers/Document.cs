@@ -113,7 +113,7 @@ namespace LicenseHeaderManager.Headers
         RemoveHeader (existingHeader);
 
       if (!string.IsNullOrEmpty (skippedText))
-        AddHeader (LicenseHeaderPreparer.Prepare(skippedText, GetText(), _commentParser));
+        AddHeader (skippedText);
     }
 
     private string SkipText ()
