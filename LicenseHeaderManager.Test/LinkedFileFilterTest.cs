@@ -69,11 +69,20 @@ namespace LicenseHeaderManager.Test
     public void TestProjectItemWithoutLicenseHeaderFile()
     {
       Solution solution = MockRepository.GenerateMock<Solution> ();
+      EnvDTE.Properties properties = MockRepository.GenerateMock<EnvDTE.Properties>();
+      ProjectItems projectItems = MockRepository.GenerateMock<ProjectItems>();
+
       ProjectItem linkedFile = MockRepository.GenerateMock<ProjectItem> ();
+      projectItems.Expect (x => x.Parent).Return (new object());
+      linkedFile.Expect (x => x.Collection).Return (projectItems);
 
       solution.Expect (x => x.FindProjectItem ("linkedFile.cs")).Return (linkedFile);
+
+      properties.Expect (x => x.Item ("FullPath")).Return (null);
+
       linkedFile.Expect (x => x.Name).Return ("linkedFile.cs");
-      linkedFile.Expect(x => x.Collection.Parent).Return(new object());
+      linkedFile.Expect (x => x.Properties).Return (properties);
+      
 
       LinkedFileFilter linkedFileFilter = new LinkedFileFilter(solution);
       linkedFileFilter.Filter(new List<ProjectItem>{linkedFile});

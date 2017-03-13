@@ -149,6 +149,7 @@
     <Compile Include="ButtonHandler\ButtonHandlerFactory.cs" />
     <Compile Include="ButtonHandler\AddLicenseHeaderToAllProjectsButtonHandler.cs" />
     <Compile Include="ButtonHandler\SolutionLevelButtonThreadWorker.cs" />
+    <Compile Include="Utils\ProjectItemParentFinder.cs" />
     <Compile Include="Interfaces\ISolutionLevelCommand.cs" />
     <Compile Include="PackageCommands\AddExistingLicenseHeaderDefinitionFileCommand.cs" />
     <Compile Include="Headers\NewLineConst.cs" />
