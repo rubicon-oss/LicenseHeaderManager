@@ -23,16 +23,33 @@ namespace LicenseHeaderManager.Utils
     {
       var lineEndingInDocument = NewLineManager.DetectMostFrequentLineEnd (headerText);
 
-      headerWithNewLine = NewLineManager.ReplaceAllLineEnds (headerWithNewLine, lineEndingInDocument);
-      
-      //if there's a comment right at the beginning of the file,
-      //we need to add an empty line so that the comment doesn't
-      //become a part of the header
-      if (!string.IsNullOrEmpty (commentParser.Parse (currentHeaderText)) && !headerWithNewLine.EndsWith(lineEndingInDocument + lineEndingInDocument))
-        return headerWithNewLine + lineEndingInDocument;
-      
+      var headerWithNewLine = NewLineManager.ReplaceAllLineEnds (headerText, lineEndingInDocument);
 
+      //If there's a comment right at the beginning of the file, we need to add an empty line so that the comment doesn't
+      //become a part of the header. If there already exists an empty line we dont have to add another one
+      if (!CurrentFileStartsWithNewLine (currentHeaderText, lineEndingInDocument) &&
+          !HeaderEndsWithNewline (headerWithNewLine, lineEndingInDocument) &&
+          CurrentFileContainsCommentOnTop (currentHeaderText, commentParser))
+      {
+        return headerWithNewLine + lineEndingInDocument;
+      }
+      
       return headerWithNewLine;
+    }
+
+    private static bool CurrentFileStartsWithNewLine (string currentHeaderText, string lineEndingInDocument)
+    {
+      return currentHeaderText.StartsWith (lineEndingInDocument);
+    }
+
+    private static bool HeaderEndsWithNewline (string headerWithNewLine, string lineEndingInDocument)
+    {
+      return headerWithNewLine.EndsWith (lineEndingInDocument + lineEndingInDocument);
+    }
+
+    private static bool CurrentFileContainsCommentOnTop (string currentHeaderText, ICommentParser commentParser)
+    {
+      return !string.IsNullOrEmpty (commentParser.Parse (currentHeaderText));
     }
   }
 }
