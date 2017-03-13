@@ -14,32 +14,57 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using LicenseHeaderManager.Utils;
 using Microsoft.VisualStudio.Shell;
 
 namespace LicenseHeaderManager.Options
 {
   public class VersionedDialogPage : DialogPage
   {
-    // serialized properties
+    //Serialized properties
+    //Is managed by VisualStudio and placed persistently in the Registry
     public string Version { get; set; }
+
+    private static bool s_firstDialogPageLoaded = true;
 
     public override void LoadSettingsFromStorage()
     {
       base.LoadSettingsFromStorage();
+      
+      //Could happen if you install a LicenseHeaderManager (LHM) version which is older than the ever installed highest version
+      //Should only happen to developers of LHM, but could theoretically also happen if someone downgrades LHM.
+      if (GetParsedRegistryVersion() > GetCurrentlyInstalledVersion())
+      {
+        if (s_firstDialogPageLoaded)
+        {
+            MessageBoxHelper.Information (
+                    "We detected that you are downgrading LicenseHeaderManager from a higher version." + Environment.NewLine +
+                    "As we dont know what you did to get to that state, it is possible that you missed an update for the Language Settings."
+                    + Environment.NewLine +
+                    "If some of your license headers do not update, check if your Language Settings (Options -> LicenseHeaderManager -> Languages) "
+                    + Environment.NewLine +
+                    "contain all the extensions you require.");
 
-      bool saveRequired = false;
-      foreach (var updateStep in GetVersionUpdateSteps())
-        saveRequired |= Update (updateStep);
-
-      if (Version != LicenseHeadersPackage.Version)
-        saveRequired |= Update (new UpdateStep (System.Version.Parse (LicenseHeadersPackage.Version)));
-
-      Trace.Assert (Version == LicenseHeadersPackage.Version, "Settings update to " + LicenseHeadersPackage.Version + " didn't work.");
-
-      if (saveRequired)
+            s_firstDialogPageLoaded = false;
+        }
+        
+        Version = LicenseHeadersPackage.Version;
         SaveSettingsToStorage();
+      }
+      else
+      {
+        var saveRequired = false;
+
+        foreach (var updateStep in GetVersionUpdateSteps())
+          saveRequired |= Update (updateStep);
+
+        if (Version != LicenseHeadersPackage.Version)
+          saveRequired |= Update (new UpdateStep (GetCurrentlyInstalledVersion()));
+        
+        if (saveRequired)
+          SaveSettingsToStorage();
+      }
     }
 
     protected virtual IEnumerable<UpdateStep> GetVersionUpdateSteps()
@@ -49,8 +74,8 @@ namespace LicenseHeaderManager.Options
 
     private bool Update (UpdateStep updateStep)
     {
-      var currentVersion = GetParsedCurrentVersion();
-      if (currentVersion >= updateStep.TargetVersion)
+      var registryVersion = GetParsedRegistryVersion();
+      if (registryVersion >= updateStep.TargetVersion)
         return false;
 
       updateStep.ExecuteActions();
@@ -59,11 +84,16 @@ namespace LicenseHeaderManager.Options
       return true;
     }
 
-    private Version GetParsedCurrentVersion()
+    private Version GetParsedRegistryVersion()
     {
       Version result;
       System.Version.TryParse (Version, out result);
       return result;
+    }
+
+    private Version GetCurrentlyInstalledVersion ()
+    {
+      return System.Version.Parse (LicenseHeadersPackage.Version);
     }
   }
 }
