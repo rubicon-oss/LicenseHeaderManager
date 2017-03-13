@@ -21,3 +21,6 @@ Install License Header Manager from Visual Studio via Tools|Extension Manager|On
 ReSharper user? Take a look at [this](https://github.com/rubicon-oss/LicenseHeaderManager/wiki/License-Header-Manager-and-Resharper)!
 
 Previously located at: https://licensemanager.codeplex.com/
+
+# License
+[MIT-License](license/MIT.txt)

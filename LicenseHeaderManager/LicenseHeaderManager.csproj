@@ -326,13 +326,14 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\license\MIT.txt">
+      <Link>VsixInformation\MIT.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="VsixInformation\Icon.png">
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="VsixInformation\license.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="VsixInformation\Preview.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
