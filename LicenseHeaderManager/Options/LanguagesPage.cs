@@ -45,13 +45,18 @@ namespace LicenseHeaderManager.Options
     {
       Languages = new ObservableCollection<Language>
       {
-        new Language { Extensions = new[] { ".cs", ".designer.cs", ".xaml.cs", "aspx.cs", "ascx.cs"}, LineComment = "//", BeginComment = "/*", EndComment = "*/", BeginRegion = "#region", EndRegion = "#endregion"},
+        new Language { Extensions = new[] { ".cs" }, LineComment = "//", BeginComment = "/*", EndComment = "*/", BeginRegion = "#region", EndRegion = "#endregion"},
         new Language { Extensions = new[] { ".c", ".cpp", ".cxx", ".h", ".hpp" }, LineComment = "//", BeginComment = "/*", EndComment = "*/"},
-        new Language { Extensions = new[] { ".vb", ".designer.vb", ".xaml.vb" }, LineComment = "'", BeginRegion = "#Region", EndRegion = "#End Region" },
+        new Language { Extensions = new[] { ".vb" }, LineComment = "'", BeginRegion = "#Region", EndRegion = "#End Region" },
         new Language { Extensions = new[] { ".aspx", ".ascx", }, BeginComment = "<%--", EndComment = "--%>" },
         new Language { Extensions = new[] { ".htm", ".html", ".xhtml", ".xml", ".xaml", ".resx", ".config", ".xsd" }, BeginComment = "<!--", EndComment = "-->", SkipExpression = @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?( |\t)*(\n|\r\n|\r)?" },
         new Language { Extensions = new[] { ".css" }, BeginComment = "/*", EndComment = "*/" },
-        new Language { Extensions = new[] { ".js" }, LineComment = "//", BeginComment = "/*", EndComment = "*/", SkipExpression = @"/// *<reference.*/>( |\t)*(\n|\r\n|\r)?"}
+        new Language { Extensions = new[] { ".js", ".ts" }, LineComment = "//", BeginComment = "/*", EndComment = "*/", SkipExpression = @"/// *<reference.*/>( |\t)*(\n|\r\n|\r)?"},
+        new Language { Extensions = new[] { ".sql" }, BeginComment = "/*", EndComment = "*/", LineComment = "--"},
+        new Language { Extensions = new[] { ".php" }, BeginComment = "/*", EndComment = "*/", LineComment = "//"},
+        new Language { Extensions = new[] { ".wxs", ".wxl", ".wxi" }, BeginComment = "<!--", EndComment = "-->"},
+        new Language { Extensions = new[] { ".py" }, BeginComment = "\"\"\"", EndComment = "\"\"\""},
+        new Language { Extensions = new[] { ".fs" }, BeginComment = "(*", EndComment = "*)", LineComment = "//"},
       };
       base.ResetSettings ();
     }
@@ -75,16 +80,7 @@ namespace LicenseHeaderManager.Options
       yield return new UpdateStep (new Version (1, 2, 2), AdjustDefaultXmlSkipExpression_1_2_2);
       yield return new UpdateStep (new Version (1, 3, 2), AddXmlXsd_1_3_2);
       yield return new UpdateStep (new Version (1, 3, 6), ReduceToBaseExtensions_1_3_6);
-    }
-
-    private void ReduceToBaseExtensions_1_3_6 ()
-    {
-      UpdateLanguages (
-          new[] { ".cs" },
-          l => l.Extensions = new[] { ".cs" });
-      UpdateLanguages (
-          new[] { ".vb" },
-          l => l.Extensions = new[] { ".vb" });
+      yield return new UpdateStep (new Version (1, 7, 3), AddMultipleDefaultExtensions_1_7_3);
     }
 
     private void AddDefaultSkipExpressions_1_1_4 ()
@@ -157,6 +153,7 @@ namespace LicenseHeaderManager.Options
         MessageBox.Show (Resources.Update_SkipExpressions_1_2_2.Replace (@"\n", "\n"), "Update");
     }
 
+
     private void AddXmlXsd_1_3_2 ()
     {
       //Add a default rule for config/xsd
@@ -169,6 +166,44 @@ namespace LicenseHeaderManager.Options
         MessageBox.Show (Resources.Update_1_3_1.Replace (@"\n", "\n"), "Update");
     }
 
+    private void ReduceToBaseExtensions_1_3_6 ()
+    {
+      UpdateLanguages (
+          new[] { ".cs" },
+          l => l.Extensions = new[] { ".cs" });
+      UpdateLanguages (
+          new[] { ".vb" },
+          l => l.Extensions = new[] { ".vb" });
+    }
+
+    private void AddMultipleDefaultExtensions_1_7_3 ()
+    {
+      AddExtensionToExistingExtension (".js", ".ts");
+      AddExtensionToExistingExtension (".xml", ".wxi");
+      AddExtensionToExistingExtension (".xml", ".wxl");
+      AddExtensionToExistingExtension (".xml", ".wxs");
+      
+      AddLanguageIfNotExistent (".fs", new Language { Extensions = new[] { ".fs" }, BeginComment = "(*", EndComment = "*)", LineComment = "//" });
+      AddLanguageIfNotExistent (".php", new Language { Extensions = new[] { ".php" }, BeginComment = "/*", EndComment = "*/", LineComment = "//" });
+      AddLanguageIfNotExistent (".py", new Language { Extensions = new[] { ".py" }, BeginComment = "\"\"\"", EndComment = "\"\"\"" });
+      AddLanguageIfNotExistent (".sql", new Language { Extensions = new[] { ".sql" }, BeginComment = "/*", EndComment = "*/", LineComment = "--" });
+
+      MessageBox.Show
+          (
+              "License Header Manager has automatically updated its configuration to add Language settings for multiple file extensions."
+              + Environment.NewLine +
+              "You can see all Language Settings at 'Options -> License Header Manager -> Languages'." + Environment.NewLine +
+              Environment.NewLine +
+              "Added file extension settings:" + Environment.NewLine +
+              ".ts" + Environment.NewLine +
+              ".wxi;.wxl;.wxs" + Environment.NewLine +
+              ".fs" + Environment.NewLine +
+              ".php" + Environment.NewLine +
+              ".py" + Environment.NewLine +
+              ".sql",
+              "License Header Manager Update");
+    } 
+    
     private bool AddExtensionToExistingExtension(string existingExtension, string newExtension)
     {
       if (Languages.Any (x => x.Extensions.Contains (newExtension)))
@@ -193,6 +228,13 @@ namespace LicenseHeaderManager.Options
         if (language != null)
           updateAction (language);
       }
+    }
+    
+    private void AddLanguageIfNotExistent (string extension, Language language)
+    {
+      //We just want to check if our extension is already added as extension somewhere and add it as new Language if not
+      if (!Languages.Any (x => x.Extensions.Contains (extension)))
+        Languages.Add (language);
     }
 
     #endregion
