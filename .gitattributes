@@ -3,3 +3,9 @@
 
 # DotSettings files have LFs, not CRLFs
 *.DotSettings text eol=lf
+
+#Github language statistic should ignore specific languages, so that the project is still defined as c# project 
+special-vendored-path/* linguist-vendored
+*.js linguist-vendored=true
+*.cpp linguist-vendored=true
+*.h linguist-vendored=true
