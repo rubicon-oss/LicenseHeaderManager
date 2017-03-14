@@ -85,28 +85,33 @@ namespace LicenseHeaderManager.Options
 
     private void AddDefaultSkipExpressions_1_1_4 ()
     {
+      bool updated = false;
+      
       //add SkipExpression for XML-based languages to replicate the previous hardcoded skipping of XML declarations
       UpdateLanguages (
           new[] {".htm", ".html", ".xhtml", ".xml", ".resx"},
-          l => UpdateIfNullOrEmpty(l, lang => lang.SkipExpression, @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?(\n|\r\n|\r)"));
+          l => updated |= UpdateIfNullOrEmpty(l, lang => lang.SkipExpression, @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?(\n|\r\n|\r)"));
       
       //add SkipExpression for JavaScript
       UpdateLanguages (
           new[] { ".js" }, 
-          l => UpdateIfNullOrEmpty (l, lang => lang.SkipExpression, "/// *<reference.*/>"));
+          l => updated |= UpdateIfNullOrEmpty(l, lang => lang.SkipExpression, "/// *<reference.*/>"));
 
-      MessageBox.Show (Resources.Update_1_1_3.Replace (@"\n", "\n"), "Update");
+      if (updated)
+        MessageBox.Show (Resources.Update_1_1_3.Replace (@"\n", "\n"), "Update");
     }
 
     private void AddDefaultRegionSettings_1_2_1 ()
     {
+      bool updated = false;
+
       //add regions for CS files
       UpdateLanguages (
           new[] {".cs", ".designer.cs", ".xaml.cs", "aspx.cs", "ascx.cs"},
           l =>
           {
-            UpdateIfNullOrEmpty (l, lang => lang.BeginRegion, "#region");
-            UpdateIfNullOrEmpty (l, lang => lang.EndRegion, "#endregion");
+            updated |= UpdateIfNullOrEmpty (l, lang => lang.BeginRegion, "#region");
+            updated |= UpdateIfNullOrEmpty (l, lang => lang.EndRegion, "#endregion");
           });
 
       //add regions for VB files
@@ -114,12 +119,17 @@ namespace LicenseHeaderManager.Options
           new[] { ".vb", ".designer.vb", ".xaml.vb" },
           l =>
           {
-            UpdateIfNullOrEmpty (l, lang => lang.BeginRegion, "#Region");
+            updated |= UpdateIfNullOrEmpty (l, lang => lang.BeginRegion, "#Region");
+
             if (string.IsNullOrEmpty (l.EndRegion) || l.EndRegion == "End Region")
+            {
               l.EndRegion = "#End Region";
+              updated = true;
+            }
           });
 
-      MessageBox.Show (Resources.Update_RegionSettings_1_2_1.Replace (@"\n", "\n"), "Update");
+      if (updated)
+        MessageBox.Show (Resources.Update_RegionSettings_1_2_1.Replace (@"\n", "\n"), "Update");
     }
 
     private void AdjustDefaultXmlSkipExpression_1_2_2 ()
@@ -178,17 +188,21 @@ namespace LicenseHeaderManager.Options
 
     private void AddMultipleDefaultExtensions_1_7_3 ()
     {
-      AddExtensionToExistingExtension (".js", ".ts");
-      AddExtensionToExistingExtension (".xml", ".wxi");
-      AddExtensionToExistingExtension (".xml", ".wxl");
-      AddExtensionToExistingExtension (".xml", ".wxs");
-      
-      AddLanguageIfNotExistent (".fs", new Language { Extensions = new[] { ".fs" }, BeginComment = "(*", EndComment = "*)", LineComment = "//" });
-      AddLanguageIfNotExistent (".php", new Language { Extensions = new[] { ".php" }, BeginComment = "/*", EndComment = "*/", LineComment = "//" });
-      AddLanguageIfNotExistent (".py", new Language { Extensions = new[] { ".py" }, BeginComment = "\"\"\"", EndComment = "\"\"\"" });
-      AddLanguageIfNotExistent (".sql", new Language { Extensions = new[] { ".sql" }, BeginComment = "/*", EndComment = "*/", LineComment = "--" });
+      var added = false;
 
-      MessageBox.Show
+      added |= AddExtensionToExistingExtension (".js", ".ts");
+      added |= AddExtensionToExistingExtension (".xml", ".wxi");
+      added |= AddExtensionToExistingExtension (".xml", ".wxl");
+      added |= AddExtensionToExistingExtension (".xml", ".wxs");
+
+      added |= AddLanguageIfNotExistent (".fs", new Language { Extensions = new[] { ".fs" }, BeginComment = "(*", EndComment = "*)", LineComment = "//" });
+      added |= AddLanguageIfNotExistent (".php", new Language { Extensions = new[] { ".php" }, BeginComment = "/*", EndComment = "*/", LineComment = "//" });
+      added |= AddLanguageIfNotExistent (".py", new Language { Extensions = new[] { ".py" }, BeginComment = "\"\"\"", EndComment = "\"\"\"" });
+      added |= AddLanguageIfNotExistent (".sql", new Language { Extensions = new[] { ".sql" }, BeginComment = "/*", EndComment = "*/", LineComment = "--" });
+
+      if (added)
+      {
+        MessageBox.Show
           (
               "License Header Manager has automatically updated its configuration to add Language settings for multiple file extensions."
               + Environment.NewLine +
@@ -202,6 +216,7 @@ namespace LicenseHeaderManager.Options
               ".py" + Environment.NewLine +
               ".sql",
               "License Header Manager Update");
+      }
     } 
     
     private bool AddExtensionToExistingExtension(string existingExtension, string newExtension)
@@ -213,11 +228,17 @@ namespace LicenseHeaderManager.Options
       return true;
     }
 
-    private void UpdateIfNullOrEmpty (Language l, Expression<Func<Language, string>> propertyAccessExpression, string value)
+    private bool UpdateIfNullOrEmpty (Language l, Expression<Func<Language, string>> propertyAccessExpression, string value)
     {
       var property = (PropertyInfo) ((MemberExpression) propertyAccessExpression.Body).Member;
+
       if (string.IsNullOrEmpty ((string) property.GetValue (l, null)))
-        property.SetValue (l, value, null);
+      {
+        property.SetValue(l, value, null);
+        return true;
+      }
+
+      return false;
     }
 
     private void UpdateLanguages (IEnumerable<string> extensions, Action<Language> updateAction)
@@ -230,11 +251,16 @@ namespace LicenseHeaderManager.Options
       }
     }
     
-    private void AddLanguageIfNotExistent (string extension, Language language)
+    private bool AddLanguageIfNotExistent (string extension, Language language)
     {
       //We just want to check if our extension is already added as extension somewhere and add it as new Language if not
-      if (!Languages.Any (x => x.Extensions.Contains (extension)))
-        Languages.Add (language);
+      if (!Languages.Any (x => x.Extensions.Contains(extension)))
+      {
+        Languages.Add(language);
+        return true;
+      }
+
+      return false;
     }
 
     #endregion
