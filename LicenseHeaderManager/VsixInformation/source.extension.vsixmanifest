@@ -7,7 +7,7 @@
     <Description xml:space="preserve">An extension for adding license headers to source code files.</Description>
     <Locale>1033</Locale>
     <MoreInfoUrl>https://github.com/rubicon-oss/LicenseHeaderManager</MoreInfoUrl>
-    <License>VsixInformation/license.txt</License>
+    <License>VsixInformation/MIT.txt</License>
     <GettingStartedGuide>https://github.com/rubicon-oss/LicenseHeaderManager/wiki</GettingStartedGuide>
     <Icon>VsixInformation/Icon.png</Icon>
     <PreviewImage>VsixInformation/Preview.png</PreviewImage>
