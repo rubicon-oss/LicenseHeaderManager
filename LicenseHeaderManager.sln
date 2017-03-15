@@ -1,16 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseHeaderManager", "LicenseHeaderManager\LicenseHeaderManager.csproj", "{8E234F35-CABF-48BF-B747-3DC0EC2776C9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseHeaderManager.Test", "LicenseHeaderManager.Test\LicenseHeaderManager.Test.csproj", "{F224872B-FDB9-4DA1-BEA4-0FA4F1BA3E82}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D3308A06-7879-4144-B50B-E476C11F5801}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseHeaderManager", "LicenseHeaderManager\LicenseHeaderManager.csproj", "{8E234F35-CABF-48BF-B747-3DC0EC2776C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseHeaderManager.Test", "LicenseHeaderManager.Test\LicenseHeaderManager.Test.csproj", "{F224872B-FDB9-4DA1-BEA4-0FA4F1BA3E82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
