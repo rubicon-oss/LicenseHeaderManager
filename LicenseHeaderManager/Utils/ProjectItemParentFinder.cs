@@ -13,6 +13,7 @@
 #endregion
 
 using System;
+using System.Linq;
 using EnvDTE;
 
 namespace LicenseHeaderManager.Utils
@@ -111,8 +112,10 @@ namespace LicenseHeaderManager.Utils
 
     private static string GetPath (ProjectItem projectItem)
     {
-      var fullPathProperty = projectItem.Properties.Item ("FullPath");
+      if (projectItem.Properties == null)
+        return String.Empty;
 
+      var fullPathProperty = projectItem.Properties.Cast<Property>().FirstOrDefault (property => property.Name == "FullPath");
       if (fullPathProperty != null && fullPathProperty.Value != null)
         return fullPathProperty.Value.ToString();
       else
