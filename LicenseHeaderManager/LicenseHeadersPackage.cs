@@ -654,7 +654,14 @@ namespace LicenseHeaderManager
       var removeLicenseHeaderFromAllProjects = new RemoveLicenseHeaderFromAllProjectsCommand(statusBar, _licenseReplacer);
       bool resharperSuspended = CommandUtility.ExecuteCommandIfExists("ReSharper_Suspend", _dte);
 
-      removeLicenseHeaderFromAllProjects.Execute(solution);
+      try
+      {
+        removeLicenseHeaderFromAllProjects.Execute(solution);
+      }
+      catch (Exception exception)
+      {
+        OutputWindowHandler.WriteMessage (exception.Message);
+      }
 
       if (resharperSuspended)
       {

@@ -34,7 +34,14 @@ namespace LicenseHeaderManager.ButtonHandler
       Solution solution = solutionObject as Solution;
       if (solution == null) return;
 
-      _solutionLevelCommand.Execute(solution);
+      try
+      {
+        _solutionLevelCommand.Execute(solution);
+      }
+      catch (Exception exception)
+      {
+        OutputWindowHandler.WriteMessage(exception.Message);
+      }
 
       if (ThreadDone != null)
           ThreadDone(this, EventArgs.Empty);
