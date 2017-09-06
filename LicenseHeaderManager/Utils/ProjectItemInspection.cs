@@ -13,6 +13,7 @@
 #endregion
 
 using System;
+using System.Linq;
 using EnvDTE;
 using LicenseHeaderManager.Headers;
 
@@ -40,9 +41,9 @@ namespace LicenseHeaderManager.Utils
 
       try
       {
-        isLinkProperty = projectItem.Properties.Item("IsLink");
+        isLinkProperty = projectItem.Properties.Cast<Property>().FirstOrDefault(property => property.Name == "IsLink");
       }
-      catch (ArgumentException e)
+      catch (ArgumentException)
       {
         return false;
       }
