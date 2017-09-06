@@ -79,7 +79,7 @@ namespace LicenseHeaderManager.Headers
     /// </summary>
     public static ProjectItem AddLicenseHeaderDefinitionFile (Project activeProject, IDefaultLicenseHeaderPage page)
     {
-      if (activeProject == null)
+      if (IsValidProject (activeProject))
         return null;
       
       var fileName = GetNewFullName (activeProject);
@@ -93,6 +93,12 @@ namespace LicenseHeaderManager.Headers
       }
 
       return newProjectItem;
+    }
+
+    private static bool IsValidProject (Project activeProject)
+    {
+      return activeProject == null || 
+             (string.IsNullOrEmpty (activeProject.FullName) && string.IsNullOrEmpty (activeProject.FileName)); //It is possible that we receive a Project which is missing the Path property entirely.
     }
 
     /// <summary>
