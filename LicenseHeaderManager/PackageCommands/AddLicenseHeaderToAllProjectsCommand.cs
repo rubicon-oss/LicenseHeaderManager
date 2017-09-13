@@ -29,6 +29,8 @@ namespace LicenseHeaderManager.PackageCommands
 {
   public class AddLicenseHeaderToAllProjectsCommand : ISolutionLevelCommand
   {
+    private const string c_commandName = "Add LicenseHeader to all Projects";
+
     private readonly IDefaultLicenseHeaderPage _licenseHeaderPage;
     private readonly LicenseHeaderReplacer _licenseReplacer;
     private readonly SolutionUpdateViewModel _solutionUpdateViewModel;
@@ -38,6 +40,11 @@ namespace LicenseHeaderManager.PackageCommands
       _licenseHeaderPage = licenseHeaderPage;
       _licenseReplacer = licenseReplacer;
       _solutionUpdateViewModel = solutionUpdateViewModel;
+    }
+
+    public string GetCommandName ()
+    {
+      return c_commandName;
     }
 
     public void Execute(Solution solution)

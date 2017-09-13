@@ -22,6 +22,8 @@ namespace LicenseHeaderManager.PackageCommands
 {
   class RemoveLicenseHeaderFromAllProjectsCommand : ISolutionLevelCommand
   {
+    private const string c_commandName = "Remove LicenseHeader from all Projects";
+
     private readonly IVsStatusbar _statusBar;
     private readonly LicenseHeaderReplacer _licenseReplacer;
 
@@ -29,6 +31,11 @@ namespace LicenseHeaderManager.PackageCommands
     {
       this._statusBar = statusBar;
       this._licenseReplacer = licenseReplacer;
+    }
+
+    public string GetCommandName ()
+    {
+      return c_commandName;
     }
 
     public void Execute(Solution solution)

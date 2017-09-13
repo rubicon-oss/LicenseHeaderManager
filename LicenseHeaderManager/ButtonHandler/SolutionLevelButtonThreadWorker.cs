@@ -15,6 +15,7 @@
 using System;
 using EnvDTE;
 using LicenseHeaderManager.Interfaces;
+using LicenseHeaderManager.Utils;
 
 namespace LicenseHeaderManager.ButtonHandler
 {
@@ -40,7 +41,8 @@ namespace LicenseHeaderManager.ButtonHandler
       }
       catch (Exception exception)
       {
-        OutputWindowHandler.WriteMessage(exception.Message);
+        MessageBoxHelper.Information (string.Format ("The command '{0}' failed with the exception '{1}'. See Visual Studio Output Window for Details.", _solutionLevelCommand.GetCommandName(), exception.Message));
+        OutputWindowHandler.WriteMessage (exception.ToString());
       }
 
       if (ThreadDone != null)

@@ -660,7 +660,8 @@ namespace LicenseHeaderManager
       }
       catch (Exception exception)
       {
-        OutputWindowHandler.WriteMessage (exception.Message);
+        MessageBoxHelper.Information(string.Format("The command '{0}' failed with the exception '{1}'. See Visual Studio Output Window for Details.", removeLicenseHeaderFromAllProjects.GetCommandName(), exception.Message));
+        OutputWindowHandler.WriteMessage(exception.ToString());
       }
 
       if (resharperSuspended)
