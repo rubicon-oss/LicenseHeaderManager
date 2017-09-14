@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="4c570677-8476-4d33-bd0c-da36c89287c8" Version="2.0.1.1" Language="en-US" Publisher="rubicon IT GmbH" />
+    <Identity Id="4c570677-8476-4d33-bd0c-da36c89287c8" Version="2.0.2" Language="en-US" Publisher="rubicon IT GmbH" />
     <DisplayName>License Header Manager</DisplayName>
     <Description xml:space="preserve">An extension for adding license headers to source code files.</Description>
     <MoreInfo>https://github.com/rubicon-oss/LicenseHeaderManager</MoreInfo>
