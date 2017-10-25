@@ -157,7 +157,15 @@ namespace LicenseHeaderManager
         //Register to WebsiteItemEvents for Website Projects to work
         //Reference: https://social.msdn.microsoft.com/Forums/en-US/dde7d858-2440-43f9-bbdc-3e1b815d4d1e/itemadded-itemremoved-and-itemrenamed-events-not-firing-in-web-projects?forum=vsx
         //Concerns, that the ItemAdded Event gets called on unrelated events, like closing the solution or opening folder, could not be reproduced
-        _websiteItemEvents = events.GetObject ("WebSiteItemsEvents") as ProjectItemsEvents;
+        try
+        {
+          _websiteItemEvents = events.GetObject ("WebSiteItemsEvents") as ProjectItemsEvents;
+        }
+        catch (Exception ex)
+        {
+          OutputWindowHandler.WriteMessage ("Exception when trying to access WebSiteItemsEvents. \n" + ex);
+        }
+
         if (_websiteItemEvents != null)
         {
           _websiteItemEvents.ItemAdded += ItemAdded;
