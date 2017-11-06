@@ -21,7 +21,7 @@ namespace LicenseHeaderManager.Test
       LicenseHeaderReplacer licenseHeaderReplacer = MockRepository.GenerateStrictMock<LicenseHeaderReplacer>(extension);
 
       LinkedFileHandler linkedFileHandler = new LinkedFileHandler();
-      linkedFileHandler.Handle (licenseHeaderReplacer, linkedFileFilter);
+      linkedFileHandler.Handle(licenseHeaderReplacer, linkedFileFilter);
 
       Assert.AreEqual(string.Empty, linkedFileHandler.Message);
     }

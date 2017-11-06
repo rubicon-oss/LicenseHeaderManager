@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using EnvDTE;
+using EnvDTE80;
 using LicenseHeaderManager.Headers;
 using LicenseHeaderManager.Interfaces;
 
@@ -51,7 +52,7 @@ namespace LicenseHeaderManager.Utils
 
     private void CheckForLicenseHeaderFile(ProjectItem projectItem)
     {
-      var headers = LicenseHeaderFinder.GetHeaderRecursive(projectItem);
+      var headers = LicenseHeaderFinder.GetHeaderDefinitionForItem(projectItem);
       if (headers == null)
         NoLicenseHeaderFile.Add(projectItem);
       else

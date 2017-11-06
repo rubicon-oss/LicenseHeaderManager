@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using EnvDTE;
+using EnvDTE80;
 using LicenseHeaderManager.Headers;
 using LicenseHeaderManager.Interfaces;
 
@@ -29,11 +30,11 @@ namespace LicenseHeaderManager.Utils
       Message = string.Empty;
     }
 
-    public void Handle (LicenseHeaderReplacer licenseHeaderReplacer, ILinkedFileFilter linkedFileFilter)
+    public void Handle(LicenseHeaderReplacer licenseHeaderReplacer, ILinkedFileFilter linkedFileFilter)
     {
       foreach (ProjectItem projectItem in linkedFileFilter.ToBeProgressed)
       {
-        var headers = LicenseHeaderFinder.GetHeaderRecursive (projectItem);
+        var headers = LicenseHeaderFinder.GetHeaderDefinitionForItem(projectItem);
         licenseHeaderReplacer.RemoveOrReplaceHeader (projectItem, headers, true);
       }
 

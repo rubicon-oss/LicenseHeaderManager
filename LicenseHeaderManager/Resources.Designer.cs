@@ -19,7 +19,7 @@ namespace LicenseHeaderManager {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -156,26 +156,6 @@ namespace LicenseHeaderManager {
         public static int Constant_DisplayNameLookup_TimeDifferenceInSecondsBeforeTooOld {
             get {
                 object obj = ResourceManager.GetObject("Constant_DisplayNameLookup_TimeDifferenceInSecondsBeforeTooOld", resourceCulture);
-                return ((int)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Int32 similar to 10.
-        /// </summary>
-        public static int Constant_MaxNumberOfProjectItemsWhereOpeningDefinitionFilesInEditor {
-            get {
-                object obj = ResourceManager.GetObject("Constant_MaxNumberOfProjectItemsWhereOpeningDefinitionFilesInEditor", resourceCulture);
-                return ((int)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Int32 similar to 5.
-        /// </summary>
-        public static int Constant_MaxProjectsWithoutDefinitionFileShownInMessage {
-            get {
-                object obj = ResourceManager.GetObject("Constant_MaxProjectsWithoutDefinitionFileShownInMessage", resourceCulture);
                 return ((int)(obj));
             }
         }
@@ -433,29 +413,20 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No License Header Definition File found in the Project. Do you want to add an existing License Header Definition File to the project?.
+        ///   Looks up a localized string similar to No License Header Definition File found. Do you want to add a new one for the Solution?.
         /// </summary>
-        public static string Question_AddExistingDefinitionFileToProject {
+        public static string Question_AddNewLicenseHeaderDefinitionForSolution {
             get {
-                return ResourceManager.GetString("Question_AddExistingDefinitionFileToProject", resourceCulture);
+                return ResourceManager.GetString("Question_AddNewLicenseHeaderDefinitionForSolution", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It seems like you have no project with an License Header Definition File added. Do you want to add the Default License Header File into all projects?.
+        ///   Looks up a localized string similar to Some projects are missing a License Header Definition File. Do you want to add a new one for the Solution?.
         /// </summary>
-        public static string Question_AddNewLicenseHeaderDefinitionFileMultipleProjects {
+        public static string Question_SomeProjectsMissingAddNewLicenseHeaderDefinitionForSolution {
             get {
-                return ResourceManager.GetString("Question_AddNewLicenseHeaderDefinitionFileMultipleProjects", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No License Header Definition File found in your Solution. Do you want to add a new one?.
-        /// </summary>
-        public static string Question_AddNewLicenseHeaderDefinitionFileSingleProject {
-            get {
-                return ResourceManager.GetString("Question_AddNewLicenseHeaderDefinitionFileSingleProject", resourceCulture);
+                return ResourceManager.GetString("Question_SomeProjectsMissingAddNewLicenseHeaderDefinitionForSolution", resourceCulture);
             }
         }
         

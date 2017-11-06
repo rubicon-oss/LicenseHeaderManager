@@ -12,23 +12,21 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 #endregion
 
-// PkgCmdID.cs
-// MUST match PkgCmdID.h
-
 namespace LicenseHeaderManager
 {
-    static class PkgCmdIDList
-    {
-      public const uint cmdIdLicenseHeaderOptions = 0x0001;
-      public const uint cmdIdAddLicenseHeader = 0x0002;
-      public const uint cmdIdRemoveLicenseHeader = 0x0003;
-      public const uint cmdIdAddLicenseHeadersToAllFiles = 0x004;
-      public const uint cmdIdRemoveLicenseHeadersFromAllFiles = 0x0005;
-      public const uint cmdIdAddLicenseHeaderDefinitionFile = 0x0006;
-      public const uint cmdIdAddExistingLicenseHeaderDefinitionFile = 0x0007;
-      public const uint cmdIdAddLicenseHeaderToProjectItem = 0x0008;
-      public const uint cmdIdRemoveLicenseHeaderFromProjectItem = 0x0009;
-      public const uint cmdIdAddLicenseHeaderToAllProjects = 0x0010;
-      public const uint cmdIdRemoveLicenseHeaderFromAllProjects = 0x0011;
-    };
+  static class PkgCmdIDList
+  {
+    public const uint cmdIdLicenseHeaderOptions = 0x0001;
+    public const uint cmdIdAddHeader = 0x0002;
+    public const uint cmdIdRemoveHeader = 0x0003;
+    public const uint cmdIdAddHeadersToAllFilesInProject = 0x004;
+    public const uint cmdIdRemoveHeadersFromAllFilesInProject = 0x0005;
+    public const uint cmdIdAddNewHeaderDefinitionFileToProject = 0x0006;
+    public const uint cmdIdAddExistingHeaderDefinitionFileToProject = 0x0007;
+    public const uint cmdIdAddHeaderToProjectItem = 0x0008;
+    public const uint cmdIdRemoveHeaderFromProjectItem = 0x0009;
+    public const uint cmdIdAddHeaderToAllFilesInSolution = 0x0010;
+    public const uint cmdIdRemoveHeaderFromAllFilesInSolution = 0x0011;
+    public const uint cmdIdAddNewHeaderDefinitionFileToSolution = 0x0012;
+  }
 }

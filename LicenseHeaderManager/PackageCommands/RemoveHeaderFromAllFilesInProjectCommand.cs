@@ -17,11 +17,11 @@ using LicenseHeaderManager.Headers;
 
 namespace LicenseHeaderManager.PackageCommands
 {
-  class RemoveLicenseHeaderFromAllFilesCommand
+  public class RemoveHeaderFromAllFilesInProjectCommand
   {
     private LicenseHeaderReplacer licenseReplacer;
 
-    public RemoveLicenseHeaderFromAllFilesCommand(LicenseHeaderReplacer licenseReplacer)
+    public RemoveHeaderFromAllFilesInProjectCommand(LicenseHeaderReplacer licenseReplacer)
     {
       this.licenseReplacer = licenseReplacer;
     }

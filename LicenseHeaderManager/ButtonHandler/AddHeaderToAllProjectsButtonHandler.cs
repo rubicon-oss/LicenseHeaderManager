@@ -26,13 +26,13 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace LicenseHeaderManager.ButtonHandler
 {
-  public class AddLicenseHeaderToAllProjectsButtonHandler
+  public class AddHeaderToAllProjectsButtonHandler
   {
     private readonly LicenseHeaderReplacer _licenseReplacer;
     private readonly IDefaultLicenseHeaderPage _defaultLicenseHeaderPage;
     private readonly DTE2 _dte2;
 
-    public AddLicenseHeaderToAllProjectsButtonHandler(LicenseHeaderReplacer licenseReplacer, IDefaultLicenseHeaderPage defaultLicenseHeaderPage, DTE2 dte2)
+    public AddHeaderToAllProjectsButtonHandler(LicenseHeaderReplacer licenseReplacer, IDefaultLicenseHeaderPage defaultLicenseHeaderPage, DTE2 dte2)
     {
       _licenseReplacer = licenseReplacer;
       _defaultLicenseHeaderPage = defaultLicenseHeaderPage;
@@ -45,8 +45,8 @@ namespace LicenseHeaderManager.ButtonHandler
     public void HandleButton(object sender, EventArgs e)
     {
       var solutionUpdateViewModel = new SolutionUpdateViewModel();
-      var addLicenseHeaderToAllProjectsCommand = new AddLicenseHeaderToAllProjectsCommand (_licenseReplacer, _defaultLicenseHeaderPage, solutionUpdateViewModel);
-      var buttonThreadWorker = new SolutionLevelButtonThreadWorker(addLicenseHeaderToAllProjectsCommand);
+      var addHeaderToAllProjectsCommand = new AddHeaderToAllFilesInSolutionCommand (_licenseReplacer, _defaultLicenseHeaderPage, solutionUpdateViewModel);
+      var buttonThreadWorker = new SolutionLevelButtonThreadWorker(addHeaderToAllProjectsCommand);
       var dialog = new SolutionUpdateDialog(solutionUpdateViewModel);
 
 

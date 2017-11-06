@@ -14,17 +14,19 @@
 
 using System.Collections.Generic;
 using EnvDTE;
+using EnvDTE80;
 using LicenseHeaderManager.Headers;
 using LicenseHeaderManager.ReturnObjects;
 using LicenseHeaderManager.Utils;
+using Microsoft.VisualStudio.Shell;
 
 namespace LicenseHeaderManager.PackageCommands
 {
-  internal class AddLicenseHeaderToAllFilesCommand
+  internal class AddHeaderToAllFilesInProjectCommand
   {
     private LicenseHeaderReplacer licenseReplacer;
 
-    public AddLicenseHeaderToAllFilesCommand(LicenseHeaderReplacer licenseReplacer)
+    public AddHeaderToAllFilesInProjectCommand(LicenseHeaderReplacer licenseReplacer)
     {
       this.licenseReplacer = licenseReplacer;
     }
@@ -40,18 +42,17 @@ namespace LicenseHeaderManager.PackageCommands
 
       if (project != null || projectItem != null)
       {
-
         licenseReplacer.ResetExtensionsWithInvalidHeaders();
         ProjectItems projectItems;
 
         if (project != null)
         {
-          headers = LicenseHeaderFinder.GetHeader(project);
+          headers = LicenseHeaderFinder.GetHeaderDefinitionForProject(project);
           projectItems = project.ProjectItems;
         }
         else
         {
-          headers = LicenseHeaderFinder.GetHeaderRecursive(projectItem);
+          headers = LicenseHeaderFinder.GetHeaderDefinitionForItem(projectItem);
           projectItems = projectItem.ProjectItems;
         }
        

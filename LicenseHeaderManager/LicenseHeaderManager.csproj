@@ -174,16 +174,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ButtonHandler\ButtonHandlerFactory.cs" />
-    <Compile Include="ButtonHandler\AddLicenseHeaderToAllProjectsButtonHandler.cs" />
+    <Compile Include="ButtonHandler\AddHeaderToAllProjectsButtonHandler.cs" />
     <Compile Include="ButtonHandler\SolutionLevelButtonThreadWorker.cs" />
+    <Compile Include="PackageCommands\AddNewHeaderDefinitionFileToSolutionCommand.cs" />
     <Compile Include="Utils\ProjectItemParentFinder.cs" />
     <Compile Include="Interfaces\ISolutionLevelCommand.cs" />
-    <Compile Include="PackageCommands\AddExistingLicenseHeaderDefinitionFileCommand.cs" />
+    <Compile Include="PackageCommands\AddExistingHeaderDefinitionFileToProjectCommand.cs" />
     <Compile Include="Headers\NewLineConst.cs" />
     <Compile Include="Interfaces\ICommentParser.cs" />
     <Compile Include="OutputWindowHandler.cs" />
-    <Compile Include="PackageCommands\AddLicenseHeaderToAllFilesCommand.cs" />
-    <Compile Include="PackageCommands\AddLicenseHeaderToAllProjectsCommand.cs" />
+    <Compile Include="PackageCommands\AddHeaderToAllFilesInProjectCommand.cs" />
+    <Compile Include="PackageCommands\AddHeaderToAllFilesInSolutionCommand.cs" />
     <Compile Include="Headers\CreateDocumentResult.cs" />
     <Compile Include="Headers\Document.cs" />
     <Compile Include="Guids.cs" />
@@ -234,8 +235,8 @@
     <Compile Include="Options\WpfLanguages.xaml.cs">
       <DependentUpon>WpfLanguages.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PackageCommands\RemoveLicenseHeaderFromAllFilesCommand.cs" />
-    <Compile Include="PackageCommands\RemoveLicenseHeaderFromAllProjectsCommand.cs" />
+    <Compile Include="PackageCommands\RemoveHeaderFromAllFilesInProjectCommand.cs" />
+    <Compile Include="PackageCommands\RemoveHeaderFromAllFilesInSolutionCommand.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

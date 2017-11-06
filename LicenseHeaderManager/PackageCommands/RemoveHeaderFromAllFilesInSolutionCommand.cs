@@ -20,14 +20,14 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace LicenseHeaderManager.PackageCommands
 {
-  class RemoveLicenseHeaderFromAllProjectsCommand : ISolutionLevelCommand
+  public class RemoveHeaderFromAllFilesInSolutionCommand : ISolutionLevelCommand
   {
     private const string c_commandName = "Remove LicenseHeader from all Projects";
 
     private readonly IVsStatusbar _statusBar;
     private readonly LicenseHeaderReplacer _licenseReplacer;
 
-    public RemoveLicenseHeaderFromAllProjectsCommand(IVsStatusbar statusBar, LicenseHeaderReplacer licenseReplacer)
+    public RemoveHeaderFromAllFilesInSolutionCommand(IVsStatusbar statusBar, LicenseHeaderReplacer licenseReplacer)
     {
       this._statusBar = statusBar;
       this._licenseReplacer = licenseReplacer;
@@ -47,7 +47,7 @@ namespace LicenseHeaderManager.PackageCommands
 
       int progressCount = 1;
       int projectCount = projectsInSolution.Count;
-      var removeAllLicenseHeadersCommand = new RemoveLicenseHeaderFromAllFilesCommand(_licenseReplacer);
+      var removeAllLicenseHeadersCommand = new RemoveHeaderFromAllFilesInProjectCommand(_licenseReplacer);
       
       foreach (Project project in projectsInSolution)
       {
