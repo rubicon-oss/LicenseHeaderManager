@@ -74,14 +74,9 @@ namespace LicenseHeaderManager.PackageCommands
 
         if (MessageBoxHelper.DoYouWant(question))
         {
-          ProjectItem solutionHeaderDefinitionItem = AddNewHeaderDefinitionFileToSolutionCommand.Instance.Execute(solution);
+          AddNewSolutionHeaderDefinitionFileCommand.Instance.Execute(solution);
 
-          if (MessageBoxHelper.DoYouWant(Resources.Question_StopForConfiguringDefinitionFilesSingleFile))
-          {
-            // They want to stop and edit the definition file that was just added.
-            solutionHeaderDefinitionItem.Open(Constants.vsViewKindCode).Activate();
-          }
-          else
+          if (!MessageBoxHelper.DoYouWant(Resources.Question_StopForConfiguringDefinitionFilesSingleFile))
           {
             // They want to go ahead and apply without editing.
             AddLicenseHeaderToProjects(projectsInSolution);

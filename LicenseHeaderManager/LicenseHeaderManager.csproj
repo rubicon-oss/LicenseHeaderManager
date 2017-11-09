@@ -176,7 +176,9 @@
     <Compile Include="ButtonHandler\ButtonHandlerFactory.cs" />
     <Compile Include="ButtonHandler\AddHeaderToAllProjectsButtonHandler.cs" />
     <Compile Include="ButtonHandler\SolutionLevelButtonThreadWorker.cs" />
-    <Compile Include="PackageCommands\AddNewHeaderDefinitionFileToSolutionCommand.cs" />
+    <Compile Include="PackageCommands\AddNewSolutionHeaderDefinitionFileCommand.cs" />
+    <Compile Include="PackageCommands\OpenSolutionHeaderDefinitionFileCommand.cs" />
+    <Compile Include="PackageCommands\RemoveSolutionHeaderDefinitionFileCommand.cs" />
     <Compile Include="Utils\ProjectItemParentFinder.cs" />
     <Compile Include="Interfaces\ISolutionLevelCommand.cs" />
     <Compile Include="PackageCommands\AddExistingHeaderDefinitionFileToProjectCommand.cs" />

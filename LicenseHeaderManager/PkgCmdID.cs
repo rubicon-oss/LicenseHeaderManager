@@ -27,6 +27,8 @@ namespace LicenseHeaderManager
     public const uint cmdIdRemoveHeaderFromProjectItem = 0x0009;
     public const uint cmdIdAddHeaderToAllFilesInSolution = 0x0010;
     public const uint cmdIdRemoveHeaderFromAllFilesInSolution = 0x0011;
-    public const uint cmdIdAddNewHeaderDefinitionFileToSolution = 0x0012;
+    public const uint cmdIdAddNewSolutionHeaderDefinitionFile = 0x0012;
+    public const uint cmdIdOpenSolutionHeaderDefinitionFile = 0x0013;
+    public const uint cmdIdRemoveSolutionHeaderDefinitionFile = 0x0014;
   }
 }
