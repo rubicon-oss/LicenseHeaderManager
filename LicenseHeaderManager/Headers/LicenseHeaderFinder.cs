@@ -17,7 +17,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using EnvDTE;
-using EnvDTE80;
 using LicenseHeaderManager.Utils;
 
 namespace LicenseHeaderManager.Headers
@@ -55,7 +54,7 @@ namespace LicenseHeaderManager.Headers
       // Check for License-file within this level
       var headerFileName = SearchItemsDirectlyGetHeaderDefinitionFileName(projectItems);
       if (!string.IsNullOrEmpty(headerFileName))
-        return LoadLicenseHeaderDefinition(headerFileName); // Found a License header file on this level
+        return LoadHeaderDefinition(headerFileName); // Found a License header file on this level
       return null;
     }
 
@@ -68,7 +67,7 @@ namespace LicenseHeaderManager.Headers
     {
       // First look for a header definition for the project
       var headerFile = SearchItemsDirectlyGetHeaderDefinitionFileName(project.ProjectItems);
-      var definition = LoadLicenseHeaderDefinition(headerFile);
+      var definition = LoadHeaderDefinition(headerFile);
 
       if (definition != null)
       {
@@ -92,7 +91,7 @@ namespace LicenseHeaderManager.Headers
       string solutionHeaderFilePath = Path.Combine(solutionDirectory, solutionFileName + LicenseHeader.Extension);
       if (File.Exists(solutionHeaderFilePath))
       {
-        return LoadLicenseHeaderDefinition(solutionHeaderFilePath);
+        return LoadHeaderDefinition(solutionHeaderFilePath);
       }
 
       return null;
@@ -108,7 +107,7 @@ namespace LicenseHeaderManager.Headers
     private static IDictionary<string, string[]> GetHeaderDefinitionDirectlyOnProject(Project project)
     {
       var headerFile = SearchItemsDirectlyGetHeaderDefinitionFileName(project.ProjectItems);
-      var definition = LoadLicenseHeaderDefinition(headerFile);
+      var definition = LoadHeaderDefinition(headerFile);
       return definition;
     }
 
@@ -122,7 +121,7 @@ namespace LicenseHeaderManager.Headers
       //Check for License-file within this level
       var headerFile = SearchItemsDirectlyGetHeaderDefinitionFileName(projectItem.ProjectItems);
       if (!string.IsNullOrEmpty(headerFile))
-        return LoadLicenseHeaderDefinition(headerFile); //Found a License header file on this level
+        return LoadHeaderDefinition(headerFile); //Found a License header file on this level
 
       var projectItemParent = ProjectItemParentFinder.GetProjectItemParent(projectItem);
 
@@ -148,7 +147,7 @@ namespace LicenseHeaderManager.Headers
       return null;
     }
 
-    private static Dictionary<string, string[]> LoadLicenseHeaderDefinition (string headerFilePath)
+    private static Dictionary<string, string[]> LoadHeaderDefinition (string headerFilePath)
     {
       if (string.IsNullOrEmpty (headerFilePath))
         return null;

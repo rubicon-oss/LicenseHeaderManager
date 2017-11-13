@@ -75,7 +75,7 @@ namespace LicenseHeaderManager.Options
     {
       InsertInNewFiles = false;
       UseRequiredKeywords = true;
-      RequiredKeywords = "license, copyright, (c)";
+      RequiredKeywords = "license, copyright, (c), ©";
       LinkedCommands = new ObservableCollection<LinkedCommand> ();
       base.ResetSettings ();
     }

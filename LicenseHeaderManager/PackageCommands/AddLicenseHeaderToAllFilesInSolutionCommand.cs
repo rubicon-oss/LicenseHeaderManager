@@ -12,33 +12,25 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 #endregion
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using EnvDTE;
-using EnvDTE80;
 using LicenseHeaderManager.Headers;
 using LicenseHeaderManager.Interfaces;
-using LicenseHeaderManager.Options;
 using LicenseHeaderManager.SolutionUpdateViewModels;
 using LicenseHeaderManager.Utils;
-using Microsoft.VisualStudio.Shell.Interop;
-using Constants = EnvDTE.Constants;
 
 namespace LicenseHeaderManager.PackageCommands
 {
-  public class AddHeaderToAllFilesInSolutionCommand : ISolutionLevelCommand
+  public class AddLicenseHeaderToAllFilesInSolutionCommand : ISolutionLevelCommand
   {
     private const string c_commandName = "Add LicenseHeader to all files in Solution";
 
-    private readonly IDefaultLicenseHeaderPage _licenseHeaderPage;
     private readonly LicenseHeaderReplacer _licenseReplacer;
     private readonly SolutionUpdateViewModel _solutionUpdateViewModel;
 
-    public AddHeaderToAllFilesInSolutionCommand(LicenseHeaderReplacer licenseReplacer, IDefaultLicenseHeaderPage licenseHeaderPage, SolutionUpdateViewModel solutionUpdateViewModel)
+    public AddLicenseHeaderToAllFilesInSolutionCommand(LicenseHeaderReplacer licenseReplacer, SolutionUpdateViewModel solutionUpdateViewModel)
     {
-      _licenseHeaderPage = licenseHeaderPage;
       _licenseReplacer = licenseReplacer;
       _solutionUpdateViewModel = solutionUpdateViewModel;
     }
@@ -74,7 +66,7 @@ namespace LicenseHeaderManager.PackageCommands
 
         if (MessageBoxHelper.DoYouWant(question))
         {
-          AddNewSolutionHeaderDefinitionFileCommand.Instance.Execute(solution);
+          AddNewSolutionLicenseHeaderDefinitionFileCommand.Instance.Execute(solution);
 
           if (!MessageBoxHelper.DoYouWant(Resources.Question_StopForConfiguringDefinitionFilesSingleFile))
           {
@@ -100,10 +92,9 @@ namespace LicenseHeaderManager.PackageCommands
       foreach (Project project in projectsInSolution)
       {
         _solutionUpdateViewModel.ProgressText = string.Format("Currently updating '{0}'. Updating {1}/{2} Projects.", project.Name, progressCount, projectCount);
-        new AddHeaderToAllFilesInProjectCommand (_licenseReplacer).Execute(project);
+        new AddLicenseHeaderToAllFilesInProjectCommand (_licenseReplacer).Execute(project);
         progressCount++;
       }
-
     }
   }
 }

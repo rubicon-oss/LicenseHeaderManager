@@ -12,42 +12,54 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 #endregion
 
-using System.Collections.Generic;
-using System.Linq;
+using System;
+using System.IO;
 using EnvDTE;
 using LicenseHeaderManager.Headers;
-using LicenseHeaderManager.Interfaces;
 
-namespace LicenseHeaderManager.Utils
+namespace LicenseHeaderManager.PackageCommands
 {
-  public class LinkedFileHandler
+  public class RemoveSolutionLicenseHeaderDefinitionFileCommand
   {
-    public string Message { get; private set; }
-
-    public LinkedFileHandler ()
+    private RemoveSolutionLicenseHeaderDefinitionFileCommand()
     {
-      Message = string.Empty;
     }
 
-    public void Handle(LicenseHeaderReplacer licenseHeaderReplacer, ILinkedFileFilter linkedFileFilter)
+    /// <summary>
+    /// Gets the instance of the command.
+    /// </summary>
+    public static RemoveSolutionLicenseHeaderDefinitionFileCommand Instance
     {
-      foreach (ProjectItem projectItem in linkedFileFilter.ToBeProgressed)
+      get;
+      private set;
+    }
+
+    public void Execute(Solution solution)
+    {
+      string solutionHeaderDefinitionFilePath = LicenseHeader.GetHeaderDefinitionFilePathForSolution(solution);
+
+      // Look for and close the document if it exists
+      foreach (EnvDTE.Document document in solution.DTE.Documents)
       {
-        var headers = LicenseHeaderFinder.GetHeaderDefinitionForItem(projectItem);
-        licenseHeaderReplacer.RemoveOrReplaceHeader (projectItem, headers, true);
+        if (string.Equals(solutionHeaderDefinitionFilePath, document.FullName, StringComparison.OrdinalIgnoreCase))
+        {
+          document.Close();
+        }
       }
 
-      if (linkedFileFilter.NoLicenseHeaderFile.Any () || linkedFileFilter.NotInSolution.Any ())
+      // Delete the file
+      if (File.Exists(solutionHeaderDefinitionFilePath))
       {
-        List<ProjectItem> notProgressedItems =
-          linkedFileFilter.NoLicenseHeaderFile.Concat (linkedFileFilter.NotInSolution).ToList ();
-
-        List<string> notProgressedNames = notProgressedItems.Select(x => x.Name).ToList();
-
-        Message +=
-          string.Format (Resources.LinkedFileUpdateInformation, string.Join ("\n", notProgressedNames))
-            .Replace (@"\n", "\n");
+        File.Delete(solutionHeaderDefinitionFilePath);
       }
+    }
+
+    /// <summary>
+    /// Initializes the singleton instance of the command.
+    /// </summary>
+    public static void Initialize()
+    {
+      Instance = new RemoveSolutionLicenseHeaderDefinitionFileCommand();
     }
   }
 }

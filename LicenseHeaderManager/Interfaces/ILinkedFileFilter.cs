@@ -14,7 +14,6 @@
 
 using System.Collections.Generic;
 using EnvDTE;
-using EnvDTE80;
 
 namespace LicenseHeaderManager.Interfaces
 {

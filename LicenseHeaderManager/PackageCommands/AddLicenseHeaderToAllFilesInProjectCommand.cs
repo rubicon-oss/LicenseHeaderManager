@@ -14,21 +14,19 @@
 
 using System.Collections.Generic;
 using EnvDTE;
-using EnvDTE80;
 using LicenseHeaderManager.Headers;
 using LicenseHeaderManager.ReturnObjects;
 using LicenseHeaderManager.Utils;
-using Microsoft.VisualStudio.Shell;
 
 namespace LicenseHeaderManager.PackageCommands
 {
-  internal class AddHeaderToAllFilesInProjectCommand
+  internal class AddLicenseHeaderToAllFilesInProjectCommand
   {
-    private LicenseHeaderReplacer licenseReplacer;
+    private LicenseHeaderReplacer _licenseReplacer;
 
-    public AddHeaderToAllFilesInProjectCommand(LicenseHeaderReplacer licenseReplacer)
+    public AddLicenseHeaderToAllFilesInProjectCommand(LicenseHeaderReplacer licenseReplacer)
     {
-      this.licenseReplacer = licenseReplacer;
+      _licenseReplacer = licenseReplacer;
     }
 
     public AddLicenseHeaderToAllFilesReturn Execute(object projectOrProjectItem)
@@ -42,7 +40,7 @@ namespace LicenseHeaderManager.PackageCommands
 
       if (project != null || projectItem != null)
       {
-        licenseReplacer.ResetExtensionsWithInvalidHeaders();
+        _licenseReplacer.ResetExtensionsWithInvalidHeaders();
         ProjectItems projectItems;
 
         if (project != null)
@@ -61,7 +59,7 @@ namespace LicenseHeaderManager.PackageCommands
           if (ProjectItemInspection.IsPhysicalFile(item) && ProjectItemInspection.IsLink(item))
             linkedItems.Add(item);
           else
-            countSubLicenseHeadersFound = licenseReplacer.RemoveOrReplaceHeaderRecursive(item, headers);
+            countSubLicenseHeadersFound = _licenseReplacer.RemoveOrReplaceHeaderRecursive(item, headers);
         }
       }
 
