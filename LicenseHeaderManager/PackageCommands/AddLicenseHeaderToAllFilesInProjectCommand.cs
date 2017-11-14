@@ -45,7 +45,7 @@ namespace LicenseHeaderManager.PackageCommands
 
         if (project != null)
         {
-          headers = LicenseHeaderFinder.GetHeaderDefinitionForProject(project);
+          headers = LicenseHeaderFinder.GetHeaderDefinitionForProjectWithFallback(project);
           projectItems = project.ProjectItems;
         }
         else

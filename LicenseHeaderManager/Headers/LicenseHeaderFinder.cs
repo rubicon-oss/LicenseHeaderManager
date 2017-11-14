@@ -63,11 +63,10 @@ namespace LicenseHeaderManager.Headers
     /// </summary>
     /// <param name="project">The project which is scanned for the License header file</param>
     /// <returns>A dictionary, which contains the extensions and the corresponding lines</returns>
-    public static IDictionary<string, string[]> GetHeaderDefinitionForProject(Project project)
+    public static IDictionary<string, string[]> GetHeaderDefinitionForProjectWithFallback(Project project)
     {
       // First look for a header definition for the project
-      var headerFile = SearchItemsDirectlyGetHeaderDefinitionFileName(project.ProjectItems);
-      var definition = LoadHeaderDefinition(headerFile);
+      var definition = GetHeaderDefinitionForProjectWithoutFallback(project);
 
       if (definition != null)
       {
@@ -76,6 +75,17 @@ namespace LicenseHeaderManager.Headers
 
       // Next look for the solution-level definition
       return GetHeaderDefinitionForSolution(project.DTE.Solution);
+    }
+
+    /// <summary>
+    /// Returns the License header file for the specified project. Does not fall back to the solution header file.
+    /// </summary>
+    /// <param name="project">The project which is scanned for the License header file</param>
+    /// <returns>A dictionary, which contains the extensions and the corresponding lines</returns>
+    public static IDictionary<string, string[]> GetHeaderDefinitionForProjectWithoutFallback(Project project)
+    {
+      var headerFile = SearchItemsDirectlyGetHeaderDefinitionFileName(project.ProjectItems);
+      return LoadHeaderDefinition(headerFile);
     }
 
     /// <summary>

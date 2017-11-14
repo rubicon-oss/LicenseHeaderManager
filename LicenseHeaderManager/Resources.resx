@@ -308,7 +308,4 @@
   <data name="Question_AddNewLicenseHeaderDefinitionForSolution" xml:space="preserve">
     <value>No License Header Definition File found. Do you want to add a new one for the Solution?</value>
   </data>
-  <data name="Question_SomeProjectsMissingAddNewLicenseHeaderDefinitionForSolution" xml:space="preserve">
-    <value>Some projects are missing a License Header Definition File. Do you want to add a new one for the Solution?</value>
-  </data>
 </root>

@@ -36,14 +36,26 @@ namespace LicenseHeaderManager.Utils
       {
         if (project.Kind == ProjectKinds.vsProjectKindSolutionFolder)
           projectList.AddRange (GetSolutionFolderProjects (project));
-        else if(IsLoaded(project)) 
+        else if(IsValid(project)) 
           projectList.Add (project);
       }
     }
 
-    private bool IsLoaded(Project project)
+    private bool IsValid(Project project)
     {
-      return string.Compare(EnvDTE.Constants.vsProjectKindUnmodeled, project.Kind, StringComparison.OrdinalIgnoreCase) != 0;
+      if (string.Equals(project.Kind, EnvDTE.Constants.vsProjectKindUnmodeled, StringComparison.OrdinalIgnoreCase))
+      {
+        // If project is not loaded, it doesn't count.
+        return false;
+      }
+
+      if (string.Equals(project.Kind, EnvDTE.Constants.vsProjectKindMisc, StringComparison.OrdinalIgnoreCase))
+      {
+        // If project is "miscellaneous items", it doesn't count.
+        return false;
+      }
+
+      return true;
     }
 
     private IEnumerable<Project> GetSolutionFolderProjects (Project project)
@@ -62,7 +74,7 @@ namespace LicenseHeaderManager.Utils
         {
           list.AddRange (GetSolutionFolderProjects (subProject));
         }
-        else if (IsLoaded(project))
+        else if (IsValid(project))
         {
           list.Add (subProject);
         }
