@@ -28,9 +28,9 @@ namespace LicenseHeaderManager.ButtonHandler
       _licenseHeaderReplacer = licenseHeaderReplacer;
     }
 
-    public AddHeaderToAllProjectsButtonHandler CreateAddLicenseHeaderToAllProjectsButtonHandler() 
+    public AddLicenseHeaderToAllProjectsButtonHandler CreateAddLicenseHeaderToAllProjectsButtonHandler() 
     { 
-      return new AddHeaderToAllProjectsButtonHandler(_licenseHeaderReplacer, _licenseHeadersPackage.Dte2);
+      return new AddLicenseHeaderToAllProjectsButtonHandler(_licenseHeaderReplacer, _licenseHeadersPackage.Dte2);
     }
   }
 }

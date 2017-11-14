@@ -23,12 +23,12 @@ using LicenseHeaderManager.Utils;
 
 namespace LicenseHeaderManager.ButtonHandler
 {
-  public class AddHeaderToAllProjectsButtonHandler
+  public class AddLicenseHeaderToAllProjectsButtonHandler
   {
     private readonly LicenseHeaderReplacer _licenseReplacer;
     private readonly DTE2 _dte2;
 
-    public AddHeaderToAllProjectsButtonHandler(LicenseHeaderReplacer licenseReplacer, DTE2 dte2)
+    public AddLicenseHeaderToAllProjectsButtonHandler(LicenseHeaderReplacer licenseReplacer, DTE2 dte2)
     {
       _licenseReplacer = licenseReplacer;
       _dte2 = dte2;
