@@ -44,10 +44,7 @@ namespace LicenseHeaderManager.SolutionUpdateViewModels
     public event PropertyChangedEventHandler PropertyChanged;
     private void NotifyPropertyChanged(String propertyName = "")
     {
-        if (PropertyChanged != null)
-        {
-            PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
+      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
   }
 }
