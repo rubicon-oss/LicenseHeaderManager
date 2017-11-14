@@ -47,23 +47,20 @@ namespace LicenseHeaderManager.Options
         if (_linkedCommands != null)
         {
           _linkedCommands.CollectionChanged -= OnLinkedCommandsChanged;
-          if (LinkedCommandsChanged != null)
-            LinkedCommandsChanged (_linkedCommands, new NotifyCollectionChangedEventArgs (NotifyCollectionChangedAction.Remove, _linkedCommands));
+          LinkedCommandsChanged?.Invoke(_linkedCommands, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, _linkedCommands));
         }
         _linkedCommands = value;
         if (_linkedCommands != null)
         {
           _linkedCommands.CollectionChanged += OnLinkedCommandsChanged;
-          if (LinkedCommandsChanged != null)
-            LinkedCommandsChanged (value, new NotifyCollectionChangedEventArgs (NotifyCollectionChangedAction.Add, _linkedCommands));
+          LinkedCommandsChanged?.Invoke(value, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, _linkedCommands));
         }
       }
     }
 
     private void OnLinkedCommandsChanged (object sender, NotifyCollectionChangedEventArgs e)
     {
-      if (LinkedCommandsChanged != null)
-        LinkedCommandsChanged (sender, e);
+      LinkedCommandsChanged?.Invoke(sender, e);
     }
 
     public OptionsPage ()

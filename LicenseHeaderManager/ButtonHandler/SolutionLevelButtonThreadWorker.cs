@@ -45,8 +45,7 @@ namespace LicenseHeaderManager.ButtonHandler
         OutputWindowHandler.WriteMessage (exception.ToString());
       }
 
-      if (ThreadDone != null)
-          ThreadDone(this, EventArgs.Empty);
+      ThreadDone?.Invoke(this, EventArgs.Empty);
     }
   }
 }

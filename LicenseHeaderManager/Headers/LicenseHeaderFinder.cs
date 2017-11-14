@@ -126,7 +126,7 @@ namespace LicenseHeaderManager.Headers
             header.Add (line);
         }
 
-        if (wholeFile.EndsWith(NewLineConst.CR) || wholeFile.EndsWith(NewLineConst.CRLF) || wholeFile.EndsWith(NewLineConst.LF))
+        if (wholeFile.EndsWith(NewLineConst.CR) || wholeFile.EndsWith(NewLineConst.LF))
         {
           header.Add(string.Empty);
         }
