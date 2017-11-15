@@ -228,8 +228,8 @@ namespace LicenseHeaderManager
         visible = ShouldBeVisible(item);
       }
 
-      this._addHeaderCommand.Visible = visible;
-      this._removeHeaderCommand.Visible = visible;
+      _addHeaderCommand.Visible = visible;
+      _removeHeaderCommand.Visible = visible;
     }
 
     /// <summary>
@@ -246,8 +246,8 @@ namespace LicenseHeaderManager
         visible = ShouldBeVisible(item);
       }
 
-      this._addHeaderToProjectItemCommand.Visible = visible;
-      this._removeHeaderFromProjectItemCommand.Visible = visible;
+      _addHeaderToProjectItemCommand.Visible = visible;
+      _removeHeaderFromProjectItemCommand.Visible = visible;
     }
 
     /// <summary>
@@ -370,7 +370,7 @@ namespace LicenseHeaderManager
     private void InvokeAddLicenseHeaderCommandFromLinkedCmd()
     {
       _isCalledByLinkedCommand = true;
-      this._addHeaderCommand.Invoke (false);
+      _addHeaderCommand.Invoke (false);
       _isCalledByLinkedCommand = false;
     }
 
@@ -536,7 +536,7 @@ namespace LicenseHeaderManager
 
       HandleLinkedFilesAndShowMessageBox (addLicenseHeaderToAllFilesReturn.LinkedItems);
 
-      this.HandleAddLicenseHeaderToAllFilesInProjectReturn(obj, addLicenseHeaderToAllFilesReturn);
+      HandleAddLicenseHeaderToAllFilesInProjectReturn(obj, addLicenseHeaderToAllFilesReturn);
     }
 
     private void HandleAddLicenseHeaderToAllFilesInProjectReturn(object obj,
@@ -545,13 +545,36 @@ namespace LicenseHeaderManager
       var project = obj as Project;
       var projectItem = obj as ProjectItem;
       if (project == null && projectItem == null) return;
+      Project currentProject = project;
+
+      if (projectItem != null)
+      {
+        currentProject = projectItem.ContainingProject;
+      }
 
       if (addLicenseHeaderToAllFilesReturn.NoHeaderFound)
       {
         // No license header found...
-        if (MessageBoxHelper.DoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionForSolution))
+        var solutionSearcher = new AllSolutionProjectsSearcher();
+        var projects = solutionSearcher.GetAllProjects(_dte.Solution);
+
+        if (projects.Any(projectInSolution => LicenseHeaderFinder.GetHeaderDefinitionForProjectWithoutFallback(projectInSolution) != null))
         {
-          this.AddNewSolutionLicenseHeaderDefinitionFileCallback(this, new EventArgs());
+          // If another projet has a license header, offer to add a link to the existing one.
+          if (MessageBoxHelper.DoYouWant(Resources.Question_AddExistingDefinitionFileToProject))
+          {
+            new AddExistingLicenseHeaderDefinitionFileToProjectCommand().AddDefinitionFileToOneProject(currentProject.FileName, currentProject.ProjectItems);
+
+            AddLicenseHeadersToAllFilesInProjectCallback((object)project ?? projectItem, null);
+          }
+        }
+        else
+        {
+          // If no project has a license header, offer to add one for the solution.
+          if (MessageBoxHelper.DoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionForSolution))
+          {
+            AddNewSolutionLicenseHeaderDefinitionFileCallback(this, new EventArgs());
+          }
         }
       }
     }

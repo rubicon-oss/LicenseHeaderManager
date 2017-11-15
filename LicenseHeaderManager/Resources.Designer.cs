@@ -413,6 +413,15 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No License Header Definition File found in the Project. Do you want to add an existing License Header Definition File to the project?.
+        /// </summary>
+        public static string Question_AddExistingDefinitionFileToProject {
+            get {
+                return ResourceManager.GetString("Question_AddExistingDefinitionFileToProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No License Header Definition File found. Do you want to add a new one for the Solution?.
         /// </summary>
         public static string Question_AddNewLicenseHeaderDefinitionForSolution {
