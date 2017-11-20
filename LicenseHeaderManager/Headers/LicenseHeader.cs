@@ -35,7 +35,7 @@ namespace LicenseHeaderManager.Headers
       {
         return GetNewFullName (project.FileName);
       }
-      
+
       return GetNewFullName (project.FullName);
     }
 
@@ -45,10 +45,11 @@ namespace LicenseHeaderManager.Headers
 
       if (string.IsNullOrEmpty (directory))
       {
-        MessageBoxHelper.Information ("We could not determine a path and name for the new .licenseheader file." +
-                                      "As a workaround you could create a .licenseheader file manually." +
-                                      "If possible, please report this issue to us." +
-                                      "Additional Information: Path.GetDirectoryName(" + name + ") returned empty string.");
+        MessageBoxHelper.Information (
+            "We could not determine a path and name for the new .licenseheader file." +
+            "As a workaround you could create a .licenseheader file manually." +
+            "If possible, please report this issue to us." +
+            "Additional Information: Path.GetDirectoryName(" + name + ") returned empty string.");
 
         throw new ArgumentException ("Path.GetDirectoryName(" + name + ") returned empty string.");
       }
@@ -56,27 +57,27 @@ namespace LicenseHeaderManager.Headers
       var projectName = directory.Substring (directory.LastIndexOf ('\\') + 1);
       var fileName = Path.Combine (directory, projectName) + Extension;
 
-      for (var i = 2; File.Exists(fileName); i++)
+      for (var i = 2; File.Exists (fileName); i++)
         fileName = Path.Combine (directory, projectName) + i + Extension;
 
       return fileName;
     }
 
-    public static string GetHeaderDefinitionFilePathForSolution(Solution solution)
+    public static string GetHeaderDefinitionFilePathForSolution (Solution solution)
     {
-      string solutionDirectory = Path.GetDirectoryName(solution.FullName);
-      string solutionFileName = Path.GetFileName(solution.FullName);
-      return Path.Combine(solutionDirectory, solutionFileName + LicenseHeader.Extension);
+      string solutionDirectory = Path.GetDirectoryName (solution.FullName);
+      string solutionFileName = Path.GetFileName (solution.FullName);
+      return Path.Combine (solutionDirectory, solutionFileName + LicenseHeader.Extension);
     }
 
     public static bool ShowQuestionForAddingLicenseHeaderFile (Project activeProject, IDefaultLicenseHeaderPage page)
     {
-      string message = string.Format(Resources.Error_NoHeaderDefinition, activeProject.Name).Replace (@"\n", "\n");
+      string message = string.Format (Resources.Error_NoHeaderDefinition, activeProject.Name).Replace (@"\n", "\n");
       var messageBoxResult = MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
       if (messageBoxResult != MessageBoxResult.Yes)
         return false;
-      var licenseHeaderDefinitionFile = AddHeaderDefinitionFile(activeProject, page);
-      licenseHeaderDefinitionFile.Open(Constants.vsViewKindCode).Activate();
+      var licenseHeaderDefinitionFile = AddHeaderDefinitionFile (activeProject, page);
+      licenseHeaderDefinitionFile.Open (Constants.vsViewKindCode).Activate();
       return true;
     }
 
@@ -88,15 +89,15 @@ namespace LicenseHeaderManager.Headers
     {
       if (IsValidProject (activeProject))
         return null;
-      
+
       var fileName = GetNewFullName (activeProject);
       File.WriteAllText (fileName, page.LicenseHeaderFileText, Encoding.UTF8);
       var newProjectItem = activeProject.ProjectItems.AddFromFile (fileName);
 
       if (newProjectItem == null)
       {
-        string message = string.Format(Resources.Error_CreatingFile).Replace(@"\n", "\n");
-        MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+        string message = string.Format (Resources.Error_CreatingFile).Replace (@"\n", "\n");
+        MessageBox.Show (message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
       }
 
       return newProjectItem;
@@ -104,8 +105,9 @@ namespace LicenseHeaderManager.Headers
 
     private static bool IsValidProject (Project activeProject)
     {
-      return activeProject == null || 
-             (string.IsNullOrEmpty (activeProject.FullName) && string.IsNullOrEmpty (activeProject.FileName)); //It is possible that we receive a Project which is missing the Path property entirely.
+      return activeProject == null ||
+      (string.IsNullOrEmpty (activeProject.FullName)
+          && string.IsNullOrEmpty (activeProject.FileName)); //It is possible that we receive a Project which is missing the Path property entirely.
     }
 
     /// <summary>
@@ -116,26 +118,26 @@ namespace LicenseHeaderManager.Headers
       if (folder == null || folder.Kind != Constants.vsProjectItemKindPhysicalFolder)
         return null;
 
-      var fileName = GetNewFullName (folder.Properties.Item("FullPath").Value.ToString());
+      var fileName = GetNewFullName (folder.Properties.Item ("FullPath").Value.ToString());
       File.WriteAllText (fileName, page.LicenseHeaderFileText, Encoding.UTF8);
 
       var newProjectItem = folder.ProjectItems.AddFromFile (fileName);
 
-      OpenNewProjectItem(newProjectItem);
+      OpenNewProjectItem (newProjectItem);
 
       return newProjectItem;
     }
 
-    private static bool OpenNewProjectItem(ProjectItem newProjectItem)
+    private static bool OpenNewProjectItem (ProjectItem newProjectItem)
     {
       if (newProjectItem != null)
       {
-        var window = newProjectItem.Open(Constants.vsViewKindCode);
+        var window = newProjectItem.Open (Constants.vsViewKindCode);
         window.Activate();
         return true;
       }
-      string message = string.Format(Resources.Error_CreatingFile).Replace(@"\n", "\n");
-      MessageBox.Show(message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+      string message = string.Format (Resources.Error_CreatingFile).Replace (@"\n", "\n");
+      MessageBox.Show (message, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
       return false;
     }
 

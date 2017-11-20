@@ -12,8 +12,6 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 #endregion
 
-using System.ComponentModel;
-using System.Windows;
 using LicenseHeaderManager.SolutionUpdateViewModels;
 using Microsoft.VisualStudio.PlatformUI;
 
@@ -26,10 +24,8 @@ namespace LicenseHeaderManager
   {
     public SolutionUpdateDialog (SolutionUpdateViewModel solutionUpdateViewModel)
     {
-      InitializeComponent ();
+      InitializeComponent();
       this.DataContext = solutionUpdateViewModel;
     }
-
-
   }
 }

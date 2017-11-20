@@ -20,33 +20,29 @@ namespace LicenseHeaderManager.PackageCommands
 {
   public class OpenSolutionLicenseHeaderDefinitionFileCommand
   {
-    private OpenSolutionLicenseHeaderDefinitionFileCommand()
+    private OpenSolutionLicenseHeaderDefinitionFileCommand ()
     {
     }
 
     /// <summary>
     /// Gets the instance of the command.
     /// </summary>
-    public static OpenSolutionLicenseHeaderDefinitionFileCommand Instance
-    {
-      get;
-      private set;
-    }
+    public static OpenSolutionLicenseHeaderDefinitionFileCommand Instance { get; private set; }
 
-    public void Execute(Solution solution)
+    public void Execute (Solution solution)
     {
-      string solutionHeaderDefinitionFilePath = LicenseHeader.GetHeaderDefinitionFilePathForSolution(solution);
+      string solutionHeaderDefinitionFilePath = LicenseHeader.GetHeaderDefinitionFilePathForSolution (solution);
 
-      if (File.Exists(solutionHeaderDefinitionFilePath))
+      if (File.Exists (solutionHeaderDefinitionFilePath))
       {
-        solution.DTE.OpenFile(EnvDTE.Constants.vsViewKindTextView, solutionHeaderDefinitionFilePath).Activate();
+        solution.DTE.OpenFile (EnvDTE.Constants.vsViewKindTextView, solutionHeaderDefinitionFilePath).Activate();
       }
     }
 
     /// <summary>
     /// Initializes the singleton instance of the command.
     /// </summary>
-    public static void Initialize()
+    public static void Initialize ()
     {
       Instance = new OpenSolutionLicenseHeaderDefinitionFileCommand();
     }

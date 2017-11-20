@@ -23,29 +23,33 @@ namespace LicenseHeaderManager.ButtonHandler
   {
     private readonly ISolutionLevelCommand _solutionLevelCommand;
 
-    public SolutionLevelButtonThreadWorker(ISolutionLevelCommand solutionLevelCommand)
+    public SolutionLevelButtonThreadWorker (ISolutionLevelCommand solutionLevelCommand)
     {
       _solutionLevelCommand = solutionLevelCommand;
     }
 
     public event EventHandler ThreadDone;
 
-    public void Run(object solutionObject)
+    public void Run (object solutionObject)
     {
       Solution solution = solutionObject as Solution;
       if (solution == null) return;
 
       try
       {
-        _solutionLevelCommand.Execute(solution);
+        _solutionLevelCommand.Execute (solution);
       }
       catch (Exception exception)
       {
-        MessageBoxHelper.Information (string.Format ("The command '{0}' failed with the exception '{1}'. See Visual Studio Output Window for Details.", _solutionLevelCommand.GetCommandName(), exception.Message));
+        MessageBoxHelper.Information (
+            string.Format (
+                "The command '{0}' failed with the exception '{1}'. See Visual Studio Output Window for Details.",
+                _solutionLevelCommand.GetCommandName(),
+                exception.Message));
         OutputWindowHandler.WriteMessage (exception.ToString());
       }
 
-      ThreadDone?.Invoke(this, EventArgs.Empty);
+      ThreadDone?.Invoke (this, EventArgs.Empty);
     }
   }
 }

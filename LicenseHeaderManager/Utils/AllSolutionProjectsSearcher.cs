@@ -21,11 +21,10 @@ namespace LicenseHeaderManager.Utils
 {
   class AllSolutionProjectsSearcher
   {
-
-    public List<Project> GetAllProjects(Solution solution)
+    public List<Project> GetAllProjects (Solution solution)
     {
       List<Project> projectList = new List<Project>();
-      PopulateProjectsList(solution, projectList);
+      PopulateProjectsList (solution, projectList);
 
       return projectList;
     }
@@ -36,20 +35,20 @@ namespace LicenseHeaderManager.Utils
       {
         if (project.Kind == ProjectKinds.vsProjectKindSolutionFolder)
           projectList.AddRange (GetSolutionFolderProjects (project));
-        else if(IsValid(project)) 
+        else if (IsValid (project))
           projectList.Add (project);
       }
     }
 
-    private bool IsValid(Project project)
+    private bool IsValid (Project project)
     {
-      if (string.Equals(project.Kind, EnvDTE.Constants.vsProjectKindUnmodeled, StringComparison.OrdinalIgnoreCase))
+      if (string.Equals (project.Kind, EnvDTE.Constants.vsProjectKindUnmodeled, StringComparison.OrdinalIgnoreCase))
       {
         // If project is not loaded, it doesn't count.
         return false;
       }
 
-      if (string.Equals(project.Kind, EnvDTE.Constants.vsProjectKindMisc, StringComparison.OrdinalIgnoreCase))
+      if (string.Equals (project.Kind, EnvDTE.Constants.vsProjectKindMisc, StringComparison.OrdinalIgnoreCase))
       {
         // If project is "miscellaneous items", it doesn't count.
         return false;
@@ -60,7 +59,7 @@ namespace LicenseHeaderManager.Utils
 
     private IEnumerable<Project> GetSolutionFolderProjects (Project project)
     {
-      List<Project> list = new List<Project> ();
+      List<Project> list = new List<Project>();
       for (var i = 1; i <= project.ProjectItems.Count; i++)
       {
         var subProject = project.ProjectItems.Item (i).SubProject;
@@ -74,7 +73,7 @@ namespace LicenseHeaderManager.Utils
         {
           list.AddRange (GetSolutionFolderProjects (subProject));
         }
-        else if (IsValid(project))
+        else if (IsValid (project))
         {
           list.Add (subProject);
         }

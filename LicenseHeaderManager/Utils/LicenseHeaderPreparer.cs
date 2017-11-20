@@ -33,7 +33,7 @@ namespace LicenseHeaderManager.Utils
       {
         return headerWithNewLine + lineEndingInDocument;
       }
-      
+
       return headerWithNewLine;
     }
 

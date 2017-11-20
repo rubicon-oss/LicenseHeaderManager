@@ -16,7 +16,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -32,13 +31,13 @@ namespace LicenseHeaderManager.Options
   {
     //serialized properties
 
-    [TypeConverter(typeof(LanguageConverter))]
+    [TypeConverter (typeof(LanguageConverter))]
     [DesignerSerializationVisibility (DesignerSerializationVisibility.Visible)]
-    public IList<Language> Languages { get; set;}
+    public IList<Language> Languages { get; set; }
 
     public LanguagesPage ()
     {
-      ResetSettings ();
+      ResetSettings();
     }
 
     public override sealed void ResetSettings ()
@@ -86,16 +85,16 @@ namespace LicenseHeaderManager.Options
     private void AddDefaultSkipExpressions_1_1_4 ()
     {
       bool updated = false;
-      
+
       //add SkipExpression for XML-based languages to replicate the previous hardcoded skipping of XML declarations
       UpdateLanguages (
-          new[] {".htm", ".html", ".xhtml", ".xml", ".resx"},
-          l => updated |= UpdateIfNullOrEmpty(l, lang => lang.SkipExpression, @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?(\n|\r\n|\r)"));
-      
+          new[] { ".htm", ".html", ".xhtml", ".xml", ".resx" },
+          l => updated |= UpdateIfNullOrEmpty (l, lang => lang.SkipExpression, @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?(\n|\r\n|\r)"));
+
       //add SkipExpression for JavaScript
       UpdateLanguages (
-          new[] { ".js" }, 
-          l => updated |= UpdateIfNullOrEmpty(l, lang => lang.SkipExpression, "/// *<reference.*/>"));
+          new[] { ".js" },
+          l => updated |= UpdateIfNullOrEmpty (l, lang => lang.SkipExpression, "/// *<reference.*/>"));
 
       if (updated)
         MessageBox.Show (Resources.Update_1_1_3.Replace (@"\n", "\n"), "Update");
@@ -107,7 +106,7 @@ namespace LicenseHeaderManager.Options
 
       //add regions for CS files
       UpdateLanguages (
-          new[] {".cs", ".designer.cs", ".xaml.cs", "aspx.cs", "ascx.cs"},
+          new[] { ".cs", ".designer.cs", ".xaml.cs", "aspx.cs", "ascx.cs" },
           l =>
           {
             updated |= UpdateIfNullOrEmpty (l, lang => lang.BeginRegion, "#region");
@@ -202,24 +201,23 @@ namespace LicenseHeaderManager.Options
 
       if (added)
       {
-        MessageBox.Show
-          (
-              "License Header Manager has automatically updated its configuration to add Language settings for multiple file extensions."
-              + Environment.NewLine +
-              "You can see all Language Settings at 'Options -> License Header Manager -> Languages'." + Environment.NewLine +
-              Environment.NewLine +
-              "Added file extension settings:" + Environment.NewLine +
-              ".ts" + Environment.NewLine +
-              ".wxi;.wxl;.wxs" + Environment.NewLine +
-              ".fs" + Environment.NewLine +
-              ".php" + Environment.NewLine +
-              ".py" + Environment.NewLine +
-              ".sql",
-              "License Header Manager Update");
+        MessageBox.Show (
+            "License Header Manager has automatically updated its configuration to add Language settings for multiple file extensions."
+            + Environment.NewLine +
+            "You can see all Language Settings at 'Options -> License Header Manager -> Languages'." + Environment.NewLine +
+            Environment.NewLine +
+            "Added file extension settings:" + Environment.NewLine +
+            ".ts" + Environment.NewLine +
+            ".wxi;.wxl;.wxs" + Environment.NewLine +
+            ".fs" + Environment.NewLine +
+            ".php" + Environment.NewLine +
+            ".py" + Environment.NewLine +
+            ".sql",
+            "License Header Manager Update");
       }
-    } 
-    
-    private bool AddExtensionToExistingExtension(string existingExtension, string newExtension)
+    }
+
+    private bool AddExtensionToExistingExtension (string existingExtension, string newExtension)
     {
       if (Languages.Any (x => x.Extensions.Contains (newExtension)))
         return false;
@@ -234,7 +232,7 @@ namespace LicenseHeaderManager.Options
 
       if (string.IsNullOrEmpty ((string) property.GetValue (l, null)))
       {
-        property.SetValue(l, value, null);
+        property.SetValue (l, value, null);
         return true;
       }
 
@@ -250,19 +248,18 @@ namespace LicenseHeaderManager.Options
           updateAction (language);
       }
     }
-    
+
     private bool AddLanguageIfNotExistent (string extension, Language language)
     {
       //We just want to check if our extension is already added as extension somewhere and add it as new Language if not
-      if (!Languages.Any (x => x.Extensions.Contains(extension)))
+      if (!Languages.Any (x => x.Extensions.Contains (extension)))
       {
-        Languages.Add(language);
+        Languages.Add (language);
         return true;
       }
 
       return false;
     }
-
     #endregion
   }
 }

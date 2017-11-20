@@ -41,11 +41,11 @@ namespace LicenseHeaderManager.Headers
       Contract.Requires (string.IsNullOrWhiteSpace (beginRegion) == string.IsNullOrWhiteSpace (endRegion));
       Contract.Requires (!(string.IsNullOrWhiteSpace (lineComment) && string.IsNullOrWhiteSpace (beginComment)));
 
-      LineComment = string.IsNullOrEmpty(lineComment) ? null : lineComment;
+      LineComment = string.IsNullOrEmpty (lineComment) ? null : lineComment;
       BeginComment = string.IsNullOrEmpty (beginComment) ? null : beginComment;
-      EndComment = string.IsNullOrEmpty(endComment) ? null : endComment;
-      BeginRegion = string.IsNullOrEmpty(beginRegion) ? null : beginRegion;
-      EndRegion = string.IsNullOrEmpty(endRegion) ? null : endRegion;
+      EndComment = string.IsNullOrEmpty (endComment) ? null : endComment;
+      BeginRegion = string.IsNullOrEmpty (beginRegion) ? null : beginRegion;
+      EndRegion = string.IsNullOrEmpty (endRegion) ? null : endRegion;
     }
 
     public string Parse (string text)
@@ -55,15 +55,17 @@ namespace LicenseHeaderManager.Headers
       _started = false;
       _position = 0;
       _text = text;
-      _regionStarts = new Stack<int> ();
+      _regionStarts = new Stack<int>();
 
-      for (string token = GetToken (); HandleToken (token); token = GetToken ()) { }
+      for (string token = GetToken(); HandleToken (token); token = GetToken())
+      {
+      }
 
       if (!_started)
         return string.Empty; //don't return any empty lines at the begin of the file which would normally be part of the header
 
       while (_regionStarts.Count > 1)
-        _regionStarts.Pop ();
+        _regionStarts.Pop();
 
       if (_regionStarts.Count > 0)
         _position = _regionStarts.Pop();
@@ -73,11 +75,13 @@ namespace LicenseHeaderManager.Headers
 
     private string GetToken ()
     {
-      if (SkipWhiteSpaces ())
+      if (SkipWhiteSpaces())
         return null;
 
       int start = _position;
-      for (; _position < _text.Length && !char.IsWhiteSpace (_text, _position); _position++) { }
+      for (; _position < _text.Length && !char.IsWhiteSpace (_text, _position); _position++)
+      {
+      }
       return _text.Substring (start, _position - start);
     }
 
@@ -86,8 +90,10 @@ namespace LicenseHeaderManager.Headers
       int start = _position;
 
       //move to next real character
-      for (; _position < _text.Length && char.IsWhiteSpace (_text, _position); _position++) { }
-      
+      for (; _position < _text.Length && char.IsWhiteSpace (_text, _position); _position++)
+      {
+      }
+
       //end of file
       if (_position >= _text.Length)
         return true;
@@ -114,25 +120,25 @@ namespace LicenseHeaderManager.Headers
       if (token == null)
         return false;
 
-      if (LineComment != null && token.StartsWith(LineComment))
+      if (LineComment != null && token.StartsWith (LineComment))
       {
         SetStarted();
 
         //proceed to end of line
         _position = NewLineManager.NextLineEndPosition (_text, _position - token.Length + LineComment.Length);
-        
+
         UpdatePositionIfEndOfFile();
-          
+
         return true;
       }
 
       else if (BeginComment != null && token.StartsWith (BeginComment))
       {
-        SetStarted ();
+        SetStarted();
 
         _position = _text.IndexOf (EndComment, _position - token.Length + BeginComment.Length);
         if (_position < 0)
-          throw new ParseException ();
+          throw new ParseException();
         else
           _position += EndComment.Length;
 
@@ -141,54 +147,53 @@ namespace LicenseHeaderManager.Headers
 
       else if (BeginRegion != null && token == BeginRegion)
       {
-        SetStarted ();
+        SetStarted();
 
-        _regionStarts.Push(_position - BeginRegion.Length);
+        _regionStarts.Push (_position - BeginRegion.Length);
 
 
         _position = NewLineManager.NextLineEndPosition (_text, _position);
-        
-        UpdatePositionIfEndOfFile ();
-        
+
+        UpdatePositionIfEndOfFile();
+
         return true;
       }
 
       else if (EndRegion != null && token == EndRegion)
       {
-        SetStarted ();
+        SetStarted();
 
         if (_regionStarts.Count == 0)
-          throw new ParseException ();
+          throw new ParseException();
 
-        _regionStarts.Pop ();
+        _regionStarts.Pop();
 
         _position = NewLineManager.NextLineEndPosition (_text, _position);
-        
-        UpdatePositionIfEndOfFile ();
-        
+
+        UpdatePositionIfEndOfFile();
+
 
         return true;
       }
-      else if (EndRegion != null && EndRegion.Contains(token))
+      else if (EndRegion != null && EndRegion.Contains (token))
       {
-        SetStarted ();
+        SetStarted();
 
         string firstPart = token;
         token = GetToken();
 
         if ((firstPart + " " + token) == EndRegion)
         {
-
           if (_regionStarts.Count == 0)
-            throw new ParseException ();
+            throw new ParseException();
 
-          _regionStarts.Pop ();
+          _regionStarts.Pop();
         }
 
         _position = NewLineManager.NextLineEndPosition (_text, _position);
 
-        UpdatePositionIfEndOfFile ();
-        
+        UpdatePositionIfEndOfFile();
+
 
         return true;
       }
@@ -200,15 +205,15 @@ namespace LicenseHeaderManager.Headers
       }
     }
 
-    private void UpdatePositionIfEndOfFile()
+    private void UpdatePositionIfEndOfFile ()
     {
       if (_position < 0)
         _position = _text.Length; //end of file
     }
 
-    private void SetStarted()
+    private void SetStarted ()
     {
-        _started = true;
+      _started = true;
     }
   }
 }

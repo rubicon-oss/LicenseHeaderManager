@@ -27,7 +27,7 @@ namespace LicenseHeaderManager.PackageCommands
     private readonly IVsStatusbar _statusBar;
     private readonly LicenseHeaderReplacer _licenseReplacer;
 
-    public RemoveLicenseHeaderFromAllFilesInSolutionCommand(IVsStatusbar statusBar, LicenseHeaderReplacer licenseReplacer)
+    public RemoveLicenseHeaderFromAllFilesInSolutionCommand (IVsStatusbar statusBar, LicenseHeaderReplacer licenseReplacer)
     {
       _statusBar = statusBar;
       _licenseReplacer = licenseReplacer;
@@ -38,25 +38,25 @@ namespace LicenseHeaderManager.PackageCommands
       return c_commandName;
     }
 
-    public void Execute(Solution solution)
+    public void Execute (Solution solution)
     {
       if (solution == null) return;
 
       var allSolutionProjectsSearcher = new AllSolutionProjectsSearcher();
-      var projectsInSolution = allSolutionProjectsSearcher.GetAllProjects(solution);
+      var projectsInSolution = allSolutionProjectsSearcher.GetAllProjects (solution);
 
       int progressCount = 1;
       int projectCount = projectsInSolution.Count;
-      var removeAllLicenseHeadersCommand = new RemoveLicenseHeaderFromAllFilesInProjectCommand(_licenseReplacer);
-      
+      var removeAllLicenseHeadersCommand = new RemoveLicenseHeaderFromAllFilesInProjectCommand (_licenseReplacer);
+
       foreach (Project project in projectsInSolution)
       {
-        _statusBar.SetText(string.Format(Resources.UpdateSolution, progressCount, projectCount));
-        removeAllLicenseHeadersCommand.Execute(project);
+        _statusBar.SetText (string.Format (Resources.UpdateSolution, progressCount, projectCount));
+        removeAllLicenseHeadersCommand.Execute (project);
         progressCount++;
       }
 
-      _statusBar.SetText(string.Empty);
+      _statusBar.SetText (string.Empty);
     }
   }
 }

@@ -28,27 +28,27 @@ namespace LicenseHeaderManager.Options
 
     private static bool s_firstDialogPageLoaded = true;
 
-    public override void LoadSettingsFromStorage()
+    public override void LoadSettingsFromStorage ()
     {
       base.LoadSettingsFromStorage();
-      
+
       //Could happen if you install a LicenseHeaderManager (LHM) version which is older than the ever installed highest version
       //Should only happen to developers of LHM, but could theoretically also happen if someone downgrades LHM.
       if (GetParsedRegistryVersion() > GetCurrentlyInstalledVersion())
       {
         if (s_firstDialogPageLoaded)
         {
-            MessageBoxHelper.Information (
-                    "We detected that you are downgrading LicenseHeaderManager from a higher version." + Environment.NewLine +
-                    "As we dont know what you did to get to that state, it is possible that you missed an update for the Language Settings."
-                    + Environment.NewLine +
-                    "If some of your license headers do not update, check if your Language Settings (Options -> LicenseHeaderManager -> Languages) "
-                    + Environment.NewLine +
-                    "contain all the extensions you require.");
+          MessageBoxHelper.Information (
+              "We detected that you are downgrading LicenseHeaderManager from a higher version." + Environment.NewLine +
+              "As we dont know what you did to get to that state, it is possible that you missed an update for the Language Settings."
+              + Environment.NewLine +
+              "If some of your license headers do not update, check if your Language Settings (Options -> LicenseHeaderManager -> Languages) "
+              + Environment.NewLine +
+              "contain all the extensions you require.");
 
-            s_firstDialogPageLoaded = false;
+          s_firstDialogPageLoaded = false;
         }
-        
+
         Version = LicenseHeadersPackage.Version;
         SaveSettingsToStorage();
       }
@@ -61,13 +61,13 @@ namespace LicenseHeaderManager.Options
 
         if (Version != LicenseHeadersPackage.Version)
           saveRequired |= Update (new UpdateStep (GetCurrentlyInstalledVersion()));
-        
+
         if (saveRequired)
           SaveSettingsToStorage();
       }
     }
 
-    protected virtual IEnumerable<UpdateStep> GetVersionUpdateSteps()
+    protected virtual IEnumerable<UpdateStep> GetVersionUpdateSteps ()
     {
       return Enumerable.Empty<UpdateStep>();
     }
@@ -84,7 +84,7 @@ namespace LicenseHeaderManager.Options
       return true;
     }
 
-    private Version GetParsedRegistryVersion()
+    private Version GetParsedRegistryVersion ()
     {
       Version result;
       System.Version.TryParse (Version, out result);

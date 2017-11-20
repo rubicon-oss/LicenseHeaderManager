@@ -22,23 +22,26 @@ namespace LicenseHeaderManager.Headers
     private readonly Predicate<DocumentHeader> _canCreateValue;
     private readonly Func<DocumentHeader, string> _createValue;
 
-    public DocumentHeaderProperty(string token, Predicate<DocumentHeader> canCreateValue, Func<DocumentHeader, string> createValue)
+    public DocumentHeaderProperty (string token, Predicate<DocumentHeader> canCreateValue, Func<DocumentHeader, string> createValue)
     {
       _token = token;
       _canCreateValue = canCreateValue;
       _createValue = createValue;
     }
 
-    public string Token { get { return _token; } }
-
-    public bool CanCreateValue(DocumentHeader documentHeader)
+    public string Token
     {
-      return _canCreateValue(documentHeader);
+      get { return _token; }
     }
 
-    public string CreateValue(DocumentHeader documentHeader)
+    public bool CanCreateValue (DocumentHeader documentHeader)
     {
-      return _createValue(documentHeader);
+      return _canCreateValue (documentHeader);
+    }
+
+    public string CreateValue (DocumentHeader documentHeader)
+    {
+      return _createValue (documentHeader);
     }
   }
 }

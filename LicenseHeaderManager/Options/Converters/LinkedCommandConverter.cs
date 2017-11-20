@@ -34,14 +34,14 @@ namespace LicenseHeaderManager.Options.Converters
       try
       {
         var xml = from c in commands
-                  select new XElement (
-                      c_command,
-                      new XAttribute (c_name, c.Name ?? string.Empty),
-                      new XAttribute (c_guid, c.Guid ?? string.Empty),
-                      new XAttribute (c_id, c.Id),
-                      new XAttribute (c_executionTime, c.ExecutionTime));
+            select new XElement (
+                c_command,
+                new XAttribute (c_name, c.Name ?? string.Empty),
+                new XAttribute (c_guid, c.Guid ?? string.Empty),
+                new XAttribute (c_id, c.Id),
+                new XAttribute (c_executionTime, c.ExecutionTime));
 
-        return new XElement (c_linkedCommands, xml).ToString ();
+        return new XElement (c_linkedCommands, xml).ToString();
       }
       catch (Exception)
       {
@@ -54,18 +54,18 @@ namespace LicenseHeaderManager.Options.Converters
       try
       {
         var commands = from c in XElement.Parse (xml).Descendants (c_command)
-                        select new LinkedCommand()
-                        {
-                          Name = GetAttributeValue(c, c_name),
-                          Guid = GetAttributeValue (c, c_guid),
-                          Id = int.Parse(GetAttributeValue (c, c_id)),
-                          ExecutionTime = (ExecutionTime)Enum.Parse(typeof(ExecutionTime), GetAttributeValue (c, c_executionTime))
-                        };
+            select new LinkedCommand()
+                   {
+                     Name = GetAttributeValue (c, c_name),
+                     Guid = GetAttributeValue (c, c_guid),
+                     Id = int.Parse (GetAttributeValue (c, c_id)),
+                     ExecutionTime = (ExecutionTime) Enum.Parse (typeof(ExecutionTime), GetAttributeValue (c, c_executionTime))
+                   };
         return new ObservableCollection<LinkedCommand> (commands);
       }
-      catch(Exception)
+      catch (Exception)
       {
-        return new ObservableCollection<LinkedCommand> ();
+        return new ObservableCollection<LinkedCommand>();
       }
     }
   }

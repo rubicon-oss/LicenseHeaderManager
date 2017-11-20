@@ -21,43 +21,39 @@ namespace LicenseHeaderManager.PackageCommands
 {
   public class RemoveSolutionLicenseHeaderDefinitionFileCommand
   {
-    private RemoveSolutionLicenseHeaderDefinitionFileCommand()
+    private RemoveSolutionLicenseHeaderDefinitionFileCommand ()
     {
     }
 
     /// <summary>
     /// Gets the instance of the command.
     /// </summary>
-    public static RemoveSolutionLicenseHeaderDefinitionFileCommand Instance
-    {
-      get;
-      private set;
-    }
+    public static RemoveSolutionLicenseHeaderDefinitionFileCommand Instance { get; private set; }
 
-    public void Execute(Solution solution)
+    public void Execute (Solution solution)
     {
-      string solutionHeaderDefinitionFilePath = LicenseHeader.GetHeaderDefinitionFilePathForSolution(solution);
+      string solutionHeaderDefinitionFilePath = LicenseHeader.GetHeaderDefinitionFilePathForSolution (solution);
 
       // Look for and close the document if it exists
       foreach (EnvDTE.Document document in solution.DTE.Documents)
       {
-        if (string.Equals(solutionHeaderDefinitionFilePath, document.FullName, StringComparison.OrdinalIgnoreCase))
+        if (string.Equals (solutionHeaderDefinitionFilePath, document.FullName, StringComparison.OrdinalIgnoreCase))
         {
           document.Close();
         }
       }
 
       // Delete the file
-      if (File.Exists(solutionHeaderDefinitionFilePath))
+      if (File.Exists (solutionHeaderDefinitionFilePath))
       {
-        File.Delete(solutionHeaderDefinitionFilePath);
+        File.Delete (solutionHeaderDefinitionFilePath);
       }
     }
 
     /// <summary>
     /// Initializes the singleton instance of the command.
     /// </summary>
-    public static void Initialize()
+    public static void Initialize ()
     {
       Instance = new RemoveSolutionLicenseHeaderDefinitionFileCommand();
     }

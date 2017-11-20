@@ -23,14 +23,14 @@ namespace LicenseHeaderManager.Options
   public partial class WpfEditDefaultLicenseHeaderDialog : Window
   {
     public WpfEditDefaultLicenseHeaderDialog (DefaultLicenseHeaderPage page)
-      : this ()
+        : this()
     {
       DataContext = page;
     }
 
     public WpfEditDefaultLicenseHeaderDialog ()
     {
-      InitializeComponent ();
+      InitializeComponent();
     }
 
     private void OKButtonClick (object sender, RoutedEventArgs e)

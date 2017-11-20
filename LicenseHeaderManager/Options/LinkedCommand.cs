@@ -30,10 +30,12 @@ namespace LicenseHeaderManager.Options
     public CommandEvents Events { get; set; }
 
     private string _name;
+
     public string Name
     {
       get { return _name; }
-      set {
+      set
+      {
         if (value != _name)
         {
           _name = value;
@@ -43,6 +45,7 @@ namespace LicenseHeaderManager.Options
     }
 
     private ExecutionTime _executionTime;
+
     public ExecutionTime ExecutionTime
     {
       get { return _executionTime; }
@@ -60,7 +63,7 @@ namespace LicenseHeaderManager.Options
 
     private void OnPropertyChanged (string propertyName)
     {
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+      PropertyChanged?.Invoke (this, new PropertyChangedEventArgs (propertyName));
     }
   }
 }

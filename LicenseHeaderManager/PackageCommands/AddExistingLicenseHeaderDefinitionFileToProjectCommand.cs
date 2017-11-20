@@ -26,11 +26,11 @@ namespace LicenseHeaderManager.PackageCommands
   {
     public ProjectItem AddDefinitionFileToOneProject (string fileName, ProjectItems projectItems)
     {
-      var licenseHeaderDefinitionFileName = OpenFileDialogForExistingFile(fileName);
+      var licenseHeaderDefinitionFileName = OpenFileDialogForExistingFile (fileName);
 
       if (licenseHeaderDefinitionFileName == string.Empty) return null;
 
-      return AddFileToProject(projectItems, licenseHeaderDefinitionFileName);
+      return AddFileToProject (projectItems, licenseHeaderDefinitionFileName);
     }
 
     public void AddDefinitionFileToMultipleProjects (List<Project> projects)
@@ -41,7 +41,7 @@ namespace LicenseHeaderManager.PackageCommands
 
       foreach (var project in projects)
       {
-        AddFileToProject(project.ProjectItems, licenseHeaderDefinitionFileName);
+        AddFileToProject (project.ProjectItems, licenseHeaderDefinitionFileName);
       }
     }
 
@@ -53,23 +53,26 @@ namespace LicenseHeaderManager.PackageCommands
       int fileCountAfter = projectItems.Count;
       if (fileCountBefore == fileCountAfter)
       {
-        MessageBox.Show (Resources.Warning_CantLinkItemInSameProject, Resources.NameOfThisExtension, MessageBoxButton.OK,
-          MessageBoxImage.Information);
+        MessageBox.Show (
+            Resources.Warning_CantLinkItemInSameProject,
+            Resources.NameOfThisExtension,
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
       }
 
       return newProjectItem;
     }
 
-    private string OpenFileDialogForExistingFile(string fileName)
+    private string OpenFileDialogForExistingFile (string fileName)
     {
-      FileDialog dialog = new OpenFileDialog ();
+      FileDialog dialog = new OpenFileDialog();
       dialog.CheckFileExists = true;
       dialog.CheckPathExists = true;
       dialog.DefaultExt = LicenseHeader.Extension;
       dialog.DereferenceLinks = true;
       dialog.Filter = "License Header Definitions|*" + LicenseHeader.Extension;
       dialog.InitialDirectory = Path.GetDirectoryName (fileName);
-      bool? result = dialog.ShowDialog ();
+      bool? result = dialog.ShowDialog();
 
       if (result.HasValue && result.Value)
         return dialog.FileName;

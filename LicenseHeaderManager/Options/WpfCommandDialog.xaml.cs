@@ -31,13 +31,15 @@ namespace LicenseHeaderManager.Options
     private ICollectionView View
     {
       get { return commands.ItemsSource as ICollectionView; }
-      set {
+      set
+      {
         commands.ItemsSource = value;
         value.Filter = Filter;
       }
     }
 
-    public IEnumerable Commands {
+    public IEnumerable Commands
+    {
       get { return View.SourceCollection; }
       set { View = CollectionViewSource.GetDefaultView (value); }
     }
@@ -45,12 +47,12 @@ namespace LicenseHeaderManager.Options
     public LinkedCommand Command
     {
       get { return DataContext as LinkedCommand; }
-      set { DataContext = value;}
+      set { DataContext = value; }
     }
 
     public WpfCommandDialog (LinkedCommand command, Commands allCommands)
     {
-      InitializeComponent ();
+      InitializeComponent();
 
       _timer = new Timer();
       _timer.Interval = 200;
@@ -58,9 +60,9 @@ namespace LicenseHeaderManager.Options
 
       Command = command;
       Commands = from Command c in allCommands
-                 where !String.IsNullOrEmpty (c.Name)
-                 orderby c.Name
-                 select c;
+          where !String.IsNullOrEmpty (c.Name)
+          orderby c.Name
+          select c;
 
       before.IsChecked = command.ExecutionTime == ExecutionTime.Before;
       after.IsChecked = command.ExecutionTime == ExecutionTime.After;
@@ -71,11 +73,11 @@ namespace LicenseHeaderManager.Options
         //item would scroll out of view again once the timer expires)
         search.TextChanged -= OnTextChanged;
         search.Text = string.Empty;
-        search.TextChanged += OnTextChanged;  
-        
+        search.TextChanged += OnTextChanged;
+
         //refresh the view as it is still only displaying the last filtered result
         if (View != null)
-          View.Refresh ();
+          View.Refresh();
 
         //select the currently attached command
         try
@@ -87,7 +89,9 @@ namespace LicenseHeaderManager.Options
             commands.ScrollIntoView (selected);
           }
         }
-        catch (ArgumentException) { }
+        catch (ArgumentException)
+        {
+        }
       };
     }
 
@@ -100,23 +104,23 @@ namespace LicenseHeaderManager.Options
         Command.ExecutionTime = before.IsChecked.Value ? ExecutionTime.Before : ExecutionTime.After;
         Command.Guid = command.Guid;
         Command.Id = command.ID;
-          
+
         DialogResult = true;
-        Close ();
+        Close();
       }
     }
 
     private void OnTick (object sender, EventArgs e)
     {
-      _timer.Stop ();
+      _timer.Stop();
       if (View != null)
-        View.Refresh ();
+        View.Refresh();
     }
 
     private void OnTextChanged (object sender, TextChangedEventArgs e)
     {
-      _timer.Stop ();
-      _timer.Start ();
+      _timer.Stop();
+      _timer.Start();
     }
 
     private bool Filter (object item)
@@ -127,7 +131,7 @@ namespace LicenseHeaderManager.Options
         char[] chars = new[] { ' ', '.' };
         string[] parts = command.Name.Split (chars, StringSplitOptions.RemoveEmptyEntries);
         string[] queries = search.Text.Split (chars, StringSplitOptions.RemoveEmptyEntries);
-        return queries.All (q => parts.Any (p => p.ToLower ().Contains (q.ToLower ())));
+        return queries.All (q => parts.Any (p => p.ToLower().Contains (q.ToLower())));
       }
       return false;
     }

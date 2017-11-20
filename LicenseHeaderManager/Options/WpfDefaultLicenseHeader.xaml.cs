@@ -24,7 +24,7 @@ namespace LicenseHeaderManager.Options
     private readonly DefaultLicenseHeaderPage _page;
 
     public WpfDefaultLicenseHeader (DefaultLicenseHeaderPage page)
-      : this ()
+        : this()
     {
       _page = page;
       DataContext = _page;
@@ -32,7 +32,7 @@ namespace LicenseHeaderManager.Options
 
     public WpfDefaultLicenseHeader ()
     {
-      InitializeComponent ();
+      InitializeComponent();
     }
 
     private void EditButton_Click (object sender, System.Windows.RoutedEventArgs e)

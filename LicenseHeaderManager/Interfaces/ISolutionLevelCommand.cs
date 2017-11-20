@@ -18,7 +18,7 @@ namespace LicenseHeaderManager.Interfaces
 {
   public interface ISolutionLevelCommand
   {
-    string GetCommandName();
-    void Execute(Solution solutionObject);
+    string GetCommandName ();
+    void Execute (Solution solutionObject);
   }
 }

@@ -28,7 +28,7 @@ namespace LicenseHeaderManager.Test
     }
 
     [Test]
-    public void ReplaceAllLineEnds_ReplaceFullLineEnding()
+    public void ReplaceAllLineEnds_ReplaceFullLineEnding ()
     {
       string text1 = "test1";
       string text2 = "test2";
@@ -39,7 +39,7 @@ namespace LicenseHeaderManager.Test
     }
 
     [Test]
-    public void DetectMostFrequentLineEnd_DetectFullLineEnding()
+    public void DetectMostFrequentLineEnd_DetectFullLineEnding ()
     {
       string text = "test\n\r\n\r\n test\r\n te\r restasd";
       var result = NewLineManager.DetectMostFrequentLineEnd (text);

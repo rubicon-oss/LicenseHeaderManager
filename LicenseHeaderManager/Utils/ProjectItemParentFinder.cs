@@ -91,7 +91,7 @@ namespace LicenseHeaderManager.Utils
         if (projectItemParent == null)
         {
           Project containingProject = projectItem.ContainingProject;
-          
+
           if (containingProject.FullName != parentUrl)
           {
             projectItemParentViaReflection = null;

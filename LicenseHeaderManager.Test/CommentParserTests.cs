@@ -7,12 +7,11 @@ namespace LicenseHeaderManager.Test
   [TestFixture]
   public class CommentParserTests
   {
-
-    private void Test(string[] header, string[] text)
+    private void Test (string[] header, string[] text)
     {
       string headerString = string.Join (Environment.NewLine, header);
-      string textString = string.Join(Environment.NewLine, text);
-      
+      string textString = string.Join (Environment.NewLine, text);
+
       if (header.Length > 0 && text.Length > 0)
         headerString += Environment.NewLine;
 
@@ -24,22 +23,20 @@ namespace LicenseHeaderManager.Test
     {
       string textString = string.Join (Environment.NewLine, text);
       var parser = new CommentParser ("//", "/*", "*/", "#region", "#endregion");
-      Assert.Throws<ParseException>(() => parser.Parse (textString));
+      Assert.Throws<ParseException> (() => parser.Parse (textString));
     }
 
     [Test]
     public void TestMultipleLineComments ()
     {
       var header = new[]
-      {
-        "//This is a comment that",
-        "//spans multiple lines."
-      };
+                   {
+                     "//This is a comment that",
+                     "//spans multiple lines."
+                   };
 
       var text = new[]
-      {
-        "This is not a comment."
-      };
+                     { "This is not a comment." };
 
       Test (header, text);
     }
@@ -48,15 +45,13 @@ namespace LicenseHeaderManager.Test
     public void TestMultipleBeginEndComments ()
     {
       var header = new[]
-      {
-        "/* This is a comment that */",
-        "/* spans multiple lines.  */"
-      };
+                   {
+                     "/* This is a comment that */",
+                     "/* spans multiple lines.  */"
+                   };
 
       var text = new[]
-      {
-        "This is not a comment."
-      };
+                     { "This is not a comment." };
 
       Test (header, text);
     }
@@ -65,15 +60,13 @@ namespace LicenseHeaderManager.Test
     public void TestMultiLineBeginEndComment ()
     {
       var header = new[]
-      {
-        "/* This is a comment that ",
-        "   spans multiple lines.  */"
-      };
+                   {
+                     "/* This is a comment that ",
+                     "   spans multiple lines.  */"
+                   };
 
       var text = new[]
-      {
-        "This is not a comment."
-      };
+                     { "This is not a comment." };
 
       Test (header, text);
     }
@@ -82,16 +75,14 @@ namespace LicenseHeaderManager.Test
     public void TestMultipleLineBeginEndCommentsWithEmptyLine ()
     {
       var header = new[]
-      {
-        "/* This is a comment that ",
-        "   spans multiple lines.  */",
-        ""
-      };
+                   {
+                     "/* This is a comment that ",
+                     "   spans multiple lines.  */",
+                     ""
+                   };
 
       var text = new[]
-      {
-        "/* This is another comment. */"
-      };
+                     { "/* This is another comment. */" };
 
       Test (header, text);
     }
@@ -100,16 +91,14 @@ namespace LicenseHeaderManager.Test
     public void TestMultipleLineCommentsWithEmptyLine ()
     {
       var header = new[]
-      {
-        "//This is a comment that",
-        "//spans multiple lines.",
-        ""
-      };
+                   {
+                     "//This is a comment that",
+                     "//spans multiple lines.",
+                     ""
+                   };
 
       var text = new[]
-      {
-        "//This is another comment."
-      };
+                     { "//This is another comment." };
 
       Test (header, text);
     }
@@ -118,17 +107,15 @@ namespace LicenseHeaderManager.Test
     public void TestMixedComments ()
     {
       var header = new[]
-      {
-        "/* This is a comment that",
-        "   spans multiple lines.  */",
-        "// This is also part of the header.",
-        ""
-      };
+                   {
+                     "/* This is a comment that",
+                     "   spans multiple lines.  */",
+                     "// This is also part of the header.",
+                     ""
+                   };
 
       var text = new[]
-      {
-        "//This is another comment."
-      };
+                     { "//This is another comment." };
 
       Test (header, text);
     }
@@ -137,16 +124,14 @@ namespace LicenseHeaderManager.Test
     public void TestRegion ()
     {
       var header = new[]
-      {
-        "#region copyright",
-        "//This is a comment.",
-        "#endregion"
-      };
+                   {
+                     "#region copyright",
+                     "//This is a comment.",
+                     "#endregion"
+                   };
 
       var text = new[]
-      {
-        "This is not a comment."
-      };
+                     { "This is not a comment." };
 
       Test (header, text);
     }
@@ -155,19 +140,17 @@ namespace LicenseHeaderManager.Test
     public void TestRegionWithEmptyLines ()
     {
       var header = new[]
-      {
-        "#region copyright",
-        "//This is a comment.",
-        "",
-        "//This is also part of the header.",
-        "#endregion",
-        ""
-      };
+                   {
+                     "#region copyright",
+                     "//This is a comment.",
+                     "",
+                     "//This is also part of the header.",
+                     "#endregion",
+                     ""
+                   };
 
       var text = new[]
-      {
-        "//This is another comment."
-      };
+                     { "//This is another comment." };
 
       Test (header, text);
     }
@@ -176,20 +159,18 @@ namespace LicenseHeaderManager.Test
     public void TestMultipleRegions ()
     {
       var header = new[]
-      {
-        "#region copyright",
-        "//This is a comment.",
-        "",
-        "#endregion",
-        "#region something else",
-        "",
-        "#endregion"
-      };
+                   {
+                     "#region copyright",
+                     "//This is a comment.",
+                     "",
+                     "#endregion",
+                     "#region something else",
+                     "",
+                     "#endregion"
+                   };
 
       var text = new[]
-      {
-        "This is not a comment."
-      };
+                     { "This is not a comment." };
 
       Test (header, text);
     }
@@ -198,20 +179,18 @@ namespace LicenseHeaderManager.Test
     public void TestNestedRegions ()
     {
       var header = new[]
-      {
-        "#region copyright",
-        "//This is a comment.",
-        "",
-        "#region something else",
-        "",
-        "#endregion",
-        "#endregion"
-      };
+                   {
+                     "#region copyright",
+                     "//This is a comment.",
+                     "",
+                     "#region something else",
+                     "",
+                     "#endregion",
+                     "#endregion"
+                   };
 
       var text = new[]
-      {
-        "This is not a comment."
-      };
+                     { "This is not a comment." };
 
       Test (header, text);
     }
@@ -220,16 +199,14 @@ namespace LicenseHeaderManager.Test
     public void TestEmptyLinesBeforeComment ()
     {
       var header = new[]
-      {
-        "",
-        "",
-        "//This is a comment.",
-      };
+                   {
+                     "",
+                     "",
+                     "//This is a comment.",
+                   };
 
       var text = new[]
-      {
-        "This is not a comment."
-      };
+                     { "This is not a comment." };
 
       Test (header, text);
     }
@@ -238,29 +215,27 @@ namespace LicenseHeaderManager.Test
     public void TestEverything ()
     {
       var header = new[]
-      {
-        "",
-        " ",
-        "#region copyright",
-        "  ",
-        "//This is a comment.",
-        "",
-        "/*This is also part",
-        "",
-        "of the header*/",
-        "#region something else",
-        "",
-        "//So is this.", 
-        "#endregion",
-        " ",
-        "#endregion",
-        " "
-      };
+                   {
+                     "",
+                     " ",
+                     "#region copyright",
+                     "  ",
+                     "//This is a comment.",
+                     "",
+                     "/*This is also part",
+                     "",
+                     "of the header*/",
+                     "#region something else",
+                     "",
+                     "//So is this.",
+                     "#endregion",
+                     " ",
+                     "#endregion",
+                     " "
+                   };
 
       var text = new[]
-      {
-        "This is not a comment."
-      };
+                     { "This is not a comment." };
 
       Test (header, text);
     }
@@ -269,9 +244,7 @@ namespace LicenseHeaderManager.Test
     public void TestHeaderOnly ()
     {
       var header = new[]
-      {
-        "//This is a comment.",
-      };
+                       { "//This is a comment.", };
 
       var text = new string[0];
 
@@ -282,12 +255,12 @@ namespace LicenseHeaderManager.Test
     public void TestMultiLineHeaderOnly ()
     {
       var header = new[]
-      {
-        "/*",
-        "This is a comment that ",
-        "spans multiple lines.",
-        "*/"
-      };
+                   {
+                     "/*",
+                     "This is a comment that ",
+                     "spans multiple lines.",
+                     "*/"
+                   };
 
       var text = new string[0];
 
@@ -298,13 +271,13 @@ namespace LicenseHeaderManager.Test
     public void TestHeaderOnlyWithEmptyLines ()
     {
       var header = new[]
-      {
-        "",
-        "",
-        "//This is a comment.",
-        "",
-        ""
-      };
+                   {
+                     "",
+                     "",
+                     "//This is a comment.",
+                     "",
+                     ""
+                   };
 
       var text = new string[0];
 
@@ -317,10 +290,10 @@ namespace LicenseHeaderManager.Test
       var header = new string[0];
 
       var text = new[]
-      {
-        "This is not a comment.",
-        "//This is not part of the header.",
-      };
+                 {
+                   "This is not a comment.",
+                   "//This is not part of the header.",
+                 };
 
       Test (header, text);
     }
@@ -331,12 +304,12 @@ namespace LicenseHeaderManager.Test
       var header = new string[0];
 
       var text = new[]
-      {
-        "",
-        "",
-        "This is not a comment.",
-        "//This is not part of the header.",
-      };
+                 {
+                   "",
+                   "",
+                   "This is not a comment.",
+                   "//This is not part of the header.",
+                 };
 
       Test (header, text);
     }
@@ -347,11 +320,11 @@ namespace LicenseHeaderManager.Test
       var header = new string[0];
 
       var text = new[]
-      {
-        "#region normal region",
-        "This is not a comment.",
-        "#endregion"
-      };
+                 {
+                   "#region normal region",
+                   "This is not a comment.",
+                   "#endregion"
+                 };
 
       Test (header, text);
     }
@@ -369,10 +342,10 @@ namespace LicenseHeaderManager.Test
     public void TestMissingEndComment ()
     {
       var text = new[]
-      {
-        "/* This is a comment.",
-        "This is not a comment."
-      };
+                 {
+                   "/* This is a comment.",
+                   "This is not a comment."
+                 };
 
       TestError (text);
     }
@@ -383,11 +356,11 @@ namespace LicenseHeaderManager.Test
       var header = new string[0];
 
       var text = new[]
-      {
-        "#region copyright",
-        "//This is a comment.",
-        "This is not a comment."
-      };
+                 {
+                   "#region copyright",
+                   "//This is a comment.",
+                   "This is not a comment."
+                 };
 
       Test (header, text);
     }
@@ -398,14 +371,14 @@ namespace LicenseHeaderManager.Test
       var header = new string[0];
 
       var text = new[]
-      {
-        "#region copyright",
-        "//This is a comment.",
-        "#region something else",
-        "",
-        "#endregion",
-        "This is not a comment."
-      };
+                 {
+                   "#region copyright",
+                   "//This is a comment.",
+                   "#region something else",
+                   "",
+                   "#endregion",
+                   "This is not a comment."
+                 };
 
       Test (header, text);
     }
@@ -416,12 +389,12 @@ namespace LicenseHeaderManager.Test
       var header = new string[0];
 
       var text = new[]
-      {
-        "#region copyright",
-        "//This is a comment.",
-        "This is not a comment.",
-        "#endregion"
-      };
+                 {
+                   "#region copyright",
+                   "//This is a comment.",
+                   "This is not a comment.",
+                   "#endregion"
+                 };
 
       Test (header, text);
     }
@@ -429,41 +402,40 @@ namespace LicenseHeaderManager.Test
     [Test]
     public void TestCommentBeforeRegionWithText ()
     {
-      var header = new []
-      {
-        "",
-        "//This is a comment."
-      };
+      var header = new[]
+                   {
+                     "",
+                     "//This is a comment."
+                   };
 
       var text = new[]
-      {
-        "#region copyright",
-        "//This is a comment.",
-        "This is not a comment.",
-        "#endregion"
-      };
+                 {
+                   "#region copyright",
+                   "//This is a comment.",
+                   "This is not a comment.",
+                   "#endregion"
+                 };
 
       Test (header, text);
     }
 
 
     [Test]
-    public void TestEndRegionWithSpace()
+    public void TestEndRegionWithSpace ()
     {
       var header = new[]
-      {
-        "#Region ",
-        "//This is a comment.",
-        "#End Region"
-      };
+                   {
+                     "#Region ",
+                     "//This is a comment.",
+                     "#End Region"
+                   };
 
       string headerString = string.Join (Environment.NewLine, header);
-      
+
       headerString += Environment.NewLine;
 
       var parser = new CommentParser ("//", "/*", "*/", "#Region", "#End Region");
       Assert.AreEqual (headerString, parser.Parse (headerString));
-      
     }
   }
 }

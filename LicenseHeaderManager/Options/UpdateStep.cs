@@ -37,7 +37,7 @@ namespace LicenseHeaderManager.Options
       get { return _customUpdateActions; }
     }
 
-    public void ExecuteActions()
+    public void ExecuteActions ()
     {
       foreach (var customUpdateStep in CustomUpdateActions)
         customUpdateStep();

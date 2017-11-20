@@ -29,17 +29,17 @@ namespace LicenseHeaderManager.Test
       [SetUp]
       public void SetUp ()
       {
-        _extensionMock = MockRepository.GenerateMock<ILicenseHeaderExtension> ();
+        _extensionMock = MockRepository.GenerateMock<ILicenseHeaderExtension>();
         _optionsPage = MockRepository.GenerateMock<IOptionsPage>();
         _replacer = new LicenseHeaderReplacer (_extensionMock);
-        _projectItem = MockRepository.GenerateMock<ProjectItem> ();
+        _projectItem = MockRepository.GenerateMock<ProjectItem>();
         _languagesPage = MockRepository.GenerateMock<ILanguagesPage>();
         _extensionMock.Expect (x => x.LanguagesPage).Return (_languagesPage);
         _extensionMock.Expect (x => x.OptionsPage).Return (_optionsPage);
         _optionsPage.Expect (x => x.UseRequiredKeywords).Return (true);
         _optionsPage.Expect (x => x.RequiredKeywords).Return ("");
 
-        _projectItem.Stub(x => x.Open(Constants.vsViewKindTextView)).Return(MockRepository.GenerateMock<Window>());
+        _projectItem.Stub (x => x.Open (Constants.vsViewKindTextView)).Return (MockRepository.GenerateMock<Window>());
       }
 
       [Test]
@@ -66,8 +66,8 @@ namespace LicenseHeaderManager.Test
       [Test]
       public void LanguageNotFound ()
       {
-        _projectItem.Expect(x => x.Kind).Return(Constants.vsProjectItemKindPhysicalFile);
-        _projectItem.Expect(x => x.Name).Return("test.txt");
+        _projectItem.Expect (x => x.Kind).Return (Constants.vsProjectItemKindPhysicalFile);
+        _projectItem.Expect (x => x.Name).Return ("test.txt");
 
         PrepareLanguagePage (".cs");
 
@@ -80,8 +80,8 @@ namespace LicenseHeaderManager.Test
       public void NoPhysicalFile_Document ()
       {
         _projectItem.Expect (x => x.Kind).Return (Constants.vsProjectItemKindPhysicalFile);
-        _projectItem.Expect (x => x.Document).Return(null);
-        _projectItem.Expect(x => x.Name).Return("test.cs");
+        _projectItem.Expect (x => x.Document).Return (null);
+        _projectItem.Expect (x => x.Name).Return ("test.cs");
 
         PrepareLanguagePage (".cs");
 
@@ -93,15 +93,15 @@ namespace LicenseHeaderManager.Test
       [Test]
       public void NoTextDocument ()
       {
-        var documentMock = MockRepository.GenerateMock<EnvDTE.Document> ();
+        var documentMock = MockRepository.GenerateMock<EnvDTE.Document>();
         documentMock.Expect (x => x.Object ("TextDocument")).Return (null);
         _projectItem.Expect (x => x.Kind).Return (Constants.vsProjectItemKindPhysicalFile);
-        _projectItem.Expect(x => x.Name).Return("test.resx");
+        _projectItem.Expect (x => x.Name).Return ("test.resx");
 
         PrepareLanguagePage (".resx");
 
-        _projectItem.Expect(x => x.Document).Return(documentMock);
-        _projectItem.Expect (x => x.Open (Constants.vsViewKindTextView)).Throw (new COMException ());
+        _projectItem.Expect (x => x.Document).Return (documentMock);
+        _projectItem.Expect (x => x.Open (Constants.vsViewKindTextView)).Throw (new COMException());
 
         var result = _replacer.TryCreateDocument (_projectItem, out _document, out _wasOpen);
 
@@ -113,16 +113,16 @@ namespace LicenseHeaderManager.Test
       {
         var textDocument = MockRepository.GenerateMock<TextDocument>();
         var documentMock = MockRepository.GenerateMock<EnvDTE.Document>();
-        documentMock.Expect(x => x.Object("TextDocument")).Return(textDocument);
-        _projectItem.Expect(x => x.Kind).Return(Constants.vsProjectItemKindPhysicalFile);
-        _projectItem.Expect(x => x.Document).Return(documentMock);
-        _projectItem.Expect(x => x.Name).Return("test.cs");
-        
-        PrepareLanguagePage(".cs");
+        documentMock.Expect (x => x.Object ("TextDocument")).Return (textDocument);
+        _projectItem.Expect (x => x.Kind).Return (Constants.vsProjectItemKindPhysicalFile);
+        _projectItem.Expect (x => x.Document).Return (documentMock);
+        _projectItem.Expect (x => x.Name).Return ("test.cs");
+
+        PrepareLanguagePage (".cs");
 
         var headers = new Dictionary<string, string[]> { { ".cs", new string[0] } };
 
-        var result = _replacer.TryCreateDocument(_projectItem, out _document, out _wasOpen, headers);
+        var result = _replacer.TryCreateDocument (_projectItem, out _document, out _wasOpen, headers);
 
         Assert.That (result, Is.EqualTo (CreateDocumentResult.EmptyHeader));
       }
@@ -130,20 +130,18 @@ namespace LicenseHeaderManager.Test
       [Test]
       public void DocumentCreated ()
       {
-        AddDocumentToProjectItem("test.cs", _projectItem);
+        AddDocumentToProjectItem ("test.cs", _projectItem);
         PrepareLanguagePage (".cs");
 
         var headers = new Dictionary<string, string[]>
-                      {
-                          { ".cs", new[] { "//" } }
-                      };
+                          { { ".cs", new[] { "//" } } };
 
         var result = _replacer.TryCreateDocument (_projectItem, out _document, out _wasOpen, headers);
 
         Assert.That (result, Is.EqualTo (CreateDocumentResult.DocumentCreated));
         Assert.That (_document, Is.Not.Null);
       }
-  
+
 
       [Test]
       public void UseMostSignificantExtension ()
@@ -153,8 +151,8 @@ namespace LicenseHeaderManager.Test
 
         var headers = new Dictionary<string, string[]>
                       {
-                          { ".cs", new[] { "cs" } },
-                          { "generated.cs", new[] { "generated" } } 
+                        { ".cs", new[] { "cs" } },
+                        { "generated.cs", new[] { "generated" } }
                       };
 
         _replacer.TryCreateDocument (_projectItem, out _document, out _wasOpen, headers);
@@ -163,14 +161,14 @@ namespace LicenseHeaderManager.Test
       }
 
       [Test]
-      [Ignore("#68 changed access to IsLink which cant be mocked anymore.")]
+      [Ignore ("#68 changed access to IsLink which cant be mocked anymore.")]
       public void LinkedFile ()
       {
-        Property propertyStub = MockRepository.GenerateStub<Property> ();
+        Property propertyStub = MockRepository.GenerateStub<Property>();
         propertyStub.Value = true;
 
-        _projectItem.Stub(x => x.Properties).Return(MockRepository.GenerateStub<Properties>());
-        _projectItem.Properties.Stub(x => x.Item("IsLink")).Return(propertyStub);
+        _projectItem.Stub (x => x.Properties).Return (MockRepository.GenerateStub<Properties>());
+        _projectItem.Properties.Stub (x => x.Item ("IsLink")).Return (propertyStub);
 
         AddDocumentToProjectItem ("test.cs", _projectItem);
         PrepareLanguagePage (".cs");
@@ -182,17 +180,17 @@ namespace LicenseHeaderManager.Test
 
       private void AddDocumentToProjectItem (string name, ProjectItem projectItem)
       {
-        var parent = MockRepository.GenerateMock<EnvDTE.Document> ();
+        var parent = MockRepository.GenerateMock<EnvDTE.Document>();
         parent.Expect (x => x.FullName).Return ("");
 
-        var editPoint = MockRepository.GenerateMock<EditPoint> ();
-        editPoint.Expect (x => x.GetText (null)).IgnoreArguments ().Return ("");
+        var editPoint = MockRepository.GenerateMock<EditPoint>();
+        editPoint.Expect (x => x.GetText (null)).IgnoreArguments().Return ("");
 
-        var textDocument = MockRepository.GenerateMock<TextDocument> ();
-        textDocument.Expect (x => x.CreateEditPoint ()).IgnoreArguments ().Return (editPoint);
+        var textDocument = MockRepository.GenerateMock<TextDocument>();
+        textDocument.Expect (x => x.CreateEditPoint()).IgnoreArguments().Return (editPoint);
         textDocument.Expect (x => x.Parent).Return (parent);
 
-        var documentMock = MockRepository.GenerateMock<EnvDTE.Document> ();
+        var documentMock = MockRepository.GenerateMock<EnvDTE.Document>();
         documentMock.Expect (x => x.Object ("TextDocument")).Return (textDocument);
         projectItem.Expect (x => x.Kind).Return (Constants.vsProjectItemKindPhysicalFile);
         projectItem.Expect (x => x.Document).Return (documentMock);

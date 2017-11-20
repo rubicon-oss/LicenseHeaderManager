@@ -23,38 +23,34 @@ namespace LicenseHeaderManager.PackageCommands
   {
     private readonly Func<string> _defaultHeaderDefinitionFunc;
 
-    private AddNewSolutionLicenseHeaderDefinitionFileCommand(Func<string> defaultHeaderDefinitionFunc)
+    private AddNewSolutionLicenseHeaderDefinitionFileCommand (Func<string> defaultHeaderDefinitionFunc)
     {
       _defaultHeaderDefinitionFunc = defaultHeaderDefinitionFunc;
     }
 
-    public void Execute(Solution solution)
+    public void Execute (Solution solution)
     {
-      string solutionHeaderDefinitionFilePath = LicenseHeader.GetHeaderDefinitionFilePathForSolution(solution);
+      string solutionHeaderDefinitionFilePath = LicenseHeader.GetHeaderDefinitionFilePathForSolution (solution);
 
       // Add file
       string defaultLicenseHeaderFileText = this._defaultHeaderDefinitionFunc();
 
-      File.WriteAllText(solutionHeaderDefinitionFilePath, defaultLicenseHeaderFileText);
+      File.WriteAllText (solutionHeaderDefinitionFilePath, defaultLicenseHeaderFileText);
 
-      solution.DTE.OpenFile(EnvDTE.Constants.vsViewKindTextView, solutionHeaderDefinitionFilePath).Activate();
+      solution.DTE.OpenFile (EnvDTE.Constants.vsViewKindTextView, solutionHeaderDefinitionFilePath).Activate();
     }
 
     /// <summary>
     /// Gets the instance of the command.
     /// </summary>
-    public static AddNewSolutionLicenseHeaderDefinitionFileCommand Instance
-    {
-      get;
-      private set;
-    }
+    public static AddNewSolutionLicenseHeaderDefinitionFileCommand Instance { get; private set; }
 
     /// <summary>
     /// Initializes the singleton instance of the command.
     /// </summary>
-    public static void Initialize(Func<string> defaultHeaderDefinitionFunc)
+    public static void Initialize (Func<string> defaultHeaderDefinitionFunc)
     {
-      Instance = new AddNewSolutionLicenseHeaderDefinitionFileCommand(defaultHeaderDefinitionFunc);
+      Instance = new AddNewSolutionLicenseHeaderDefinitionFileCommand (defaultHeaderDefinitionFunc);
     }
   }
 }

@@ -25,26 +25,24 @@ namespace LicenseHeaderManager.SolutionUpdateViewModels
 
     public string ProgressText
     {
-      get
-      {
-        return _progressText;
-      }
+      get { return _progressText; }
       set
       {
         _progressText = value;
-        NotifyPropertyChanged("ProgressText");
+        NotifyPropertyChanged ("ProgressText");
       }
     }
 
     public ICommand CloseCommand
     {
-      get { return new RelayCommand(o => ((DialogWindow) o).Close()); }
+      get { return new RelayCommand (o => ((DialogWindow) o).Close()); }
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
-    private void NotifyPropertyChanged(String propertyName = "")
+
+    private void NotifyPropertyChanged (String propertyName = "")
     {
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+      PropertyChanged?.Invoke (this, new PropertyChangedEventArgs (propertyName));
     }
   }
 }

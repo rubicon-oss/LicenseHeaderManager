@@ -30,10 +30,10 @@ namespace LicenseHeaderManager.Utils
     public LinkedFileFilter (Solution solution)
     {
       this.solution = solution;
-    
-      ToBeProgressed = new List<ProjectItem> ();
-      NoLicenseHeaderFile = new List<ProjectItem> ();
-      NotInSolution = new List<ProjectItem> ();  
+
+      ToBeProgressed = new List<ProjectItem>();
+      NoLicenseHeaderFile = new List<ProjectItem>();
+      NotInSolution = new List<ProjectItem>();
     }
 
 
@@ -41,21 +41,21 @@ namespace LicenseHeaderManager.Utils
     {
       foreach (ProjectItem projectItem in projectItems)
       {
-        ProjectItem foundProjectItem = solution.FindProjectItem(projectItem.Name);
+        ProjectItem foundProjectItem = solution.FindProjectItem (projectItem.Name);
         if (foundProjectItem == null)
-          NotInSolution.Add(projectItem);
+          NotInSolution.Add (projectItem);
         else
-          CheckForLicenseHeaderFile(foundProjectItem);
+          CheckForLicenseHeaderFile (foundProjectItem);
       }
     }
 
-    private void CheckForLicenseHeaderFile(ProjectItem projectItem)
+    private void CheckForLicenseHeaderFile (ProjectItem projectItem)
     {
-      var headers = LicenseHeaderFinder.GetHeaderDefinitionForItem(projectItem);
+      var headers = LicenseHeaderFinder.GetHeaderDefinitionForItem (projectItem);
       if (headers == null)
-        NoLicenseHeaderFile.Add(projectItem);
+        NoLicenseHeaderFile.Add (projectItem);
       else
-        ToBeProgressed.Add(projectItem);
+        ToBeProgressed.Add (projectItem);
     }
   }
 }

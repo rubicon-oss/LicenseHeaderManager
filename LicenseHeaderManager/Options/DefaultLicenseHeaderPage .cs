@@ -14,7 +14,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Reflection;
@@ -30,16 +29,16 @@ namespace LicenseHeaderManager.Options
   {
     public DefaultLicenseHeaderPage ()
     {
-      ResetSettings ();
+      ResetSettings();
     }
 
     public string LicenseHeaderFileText { get; set; }
 
     public override void ResetSettings ()
     {
-      InitializeFromResource ();
+      InitializeFromResource();
 
-      base.ResetSettings ();
+      base.ResetSettings();
     }
 
     protected override IEnumerable<UpdateStep> GetVersionUpdateSteps ()
@@ -62,17 +61,18 @@ namespace LicenseHeaderManager.Options
     {
       if (string.IsNullOrEmpty (LicenseHeaderFileText))
       {
-        InitializeFromResource ();
+        InitializeFromResource();
         MessageBox.Show (Resources.Update_DefaultLicenseHeader_1_2_1.Replace (@"\n", "\n"), "Update");
       }
     }
 
     private void InitializeFromResource ()
     {
-      using (var resource = Assembly.GetExecutingAssembly ().GetManifestResourceStream (typeof (LicenseHeadersPackage), "Resources.default.licenseheader"))
+      using (var resource = Assembly.GetExecutingAssembly()
+          .GetManifestResourceStream (typeof(LicenseHeadersPackage), "Resources.default.licenseheader"))
       {
         string text;
-        using (StreamReader streamreader = new StreamReader(resource, Encoding.UTF8))
+        using (StreamReader streamreader = new StreamReader (resource, Encoding.UTF8))
         {
           text = streamreader.ReadToEnd();
         }

@@ -21,9 +21,13 @@ namespace LicenseHeaderManager.Headers
   {
     public int Index { get; private set; }
     public string LineEnd { get; private set; }
-    public int LineEndLenght { get { return LineEnd.Length; } }
 
-    public LineEndInformation(int index, string lineEnd)
+    public int LineEndLenght
+    {
+      get { return LineEnd.Length; }
+    }
+
+    public LineEndInformation (int index, string lineEnd)
     {
       this.Index = index;
       this.LineEnd = lineEnd;

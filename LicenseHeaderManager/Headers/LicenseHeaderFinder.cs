@@ -31,17 +31,17 @@ namespace LicenseHeaderManager.Headers
     /// </summary>
     /// <param name="projectItem"></param>
     /// <returns>A dictionary, which contains the extensions and the corresponding lines</returns>
-    public static IDictionary<string, string[]> GetHeaderDefinitionForItem(ProjectItem projectItem)
+    public static IDictionary<string, string[]> GetHeaderDefinitionForItem (ProjectItem projectItem)
     {
       // First search for the definition within the project
-      IDictionary<string, string[]> headerDefinition = SearchWithinProjectGetHeaderDefinitionForItem(projectItem);
+      IDictionary<string, string[]> headerDefinition = SearchWithinProjectGetHeaderDefinitionForItem (projectItem);
       if (headerDefinition != null)
       {
         return headerDefinition;
       }
 
       // Next look for the solution-level definition
-      return GetHeaderDefinitionForSolution(projectItem.DTE.Solution);
+      return GetHeaderDefinitionForSolution (projectItem.DTE.Solution);
     }
 
     /// <summary>
@@ -49,12 +49,12 @@ namespace LicenseHeaderManager.Headers
     /// </summary>
     /// <param name="projectItems"></param>
     /// <returns>A dictionary, which contains the extensions and the corresponding lines</returns>
-    public static IDictionary<string, string[]> SearchItemsDirectlyGetHeaderDefinition(ProjectItems projectItems)
+    public static IDictionary<string, string[]> SearchItemsDirectlyGetHeaderDefinition (ProjectItems projectItems)
     {
       // Check for License-file within this level
-      var headerFileName = SearchItemsDirectlyGetHeaderDefinitionFileName(projectItems);
-      if (!string.IsNullOrEmpty(headerFileName))
-        return LoadHeaderDefinition(headerFileName); // Found a License header file on this level
+      var headerFileName = SearchItemsDirectlyGetHeaderDefinitionFileName (projectItems);
+      if (!string.IsNullOrEmpty (headerFileName))
+        return LoadHeaderDefinition (headerFileName); // Found a License header file on this level
       return null;
     }
 
@@ -63,10 +63,10 @@ namespace LicenseHeaderManager.Headers
     /// </summary>
     /// <param name="project">The project which is scanned for the License header file</param>
     /// <returns>A dictionary, which contains the extensions and the corresponding lines</returns>
-    public static IDictionary<string, string[]> GetHeaderDefinitionForProjectWithFallback(Project project)
+    public static IDictionary<string, string[]> GetHeaderDefinitionForProjectWithFallback (Project project)
     {
       // First look for a header definition for the project
-      var definition = GetHeaderDefinitionForProjectWithoutFallback(project);
+      var definition = GetHeaderDefinitionForProjectWithoutFallback (project);
 
       if (definition != null)
       {
@@ -74,7 +74,7 @@ namespace LicenseHeaderManager.Headers
       }
 
       // Next look for the solution-level definition
-      return GetHeaderDefinitionForSolution(project.DTE.Solution);
+      return GetHeaderDefinitionForSolution (project.DTE.Solution);
     }
 
     /// <summary>
@@ -82,10 +82,10 @@ namespace LicenseHeaderManager.Headers
     /// </summary>
     /// <param name="project">The project which is scanned for the License header file</param>
     /// <returns>A dictionary, which contains the extensions and the corresponding lines</returns>
-    public static IDictionary<string, string[]> GetHeaderDefinitionForProjectWithoutFallback(Project project)
+    public static IDictionary<string, string[]> GetHeaderDefinitionForProjectWithoutFallback (Project project)
     {
-      var headerFile = SearchItemsDirectlyGetHeaderDefinitionFileName(project.ProjectItems);
-      return LoadHeaderDefinition(headerFile);
+      var headerFile = SearchItemsDirectlyGetHeaderDefinitionFileName (project.ProjectItems);
+      return LoadHeaderDefinition (headerFile);
     }
 
     /// <summary>
@@ -93,31 +93,30 @@ namespace LicenseHeaderManager.Headers
     /// </summary>
     /// <param name="solution">The solution to look in.</param>
     /// <returns>A dictionary, which contains the extensions and the corresponding lines</returns>
-    public static IDictionary<string, string[]> GetHeaderDefinitionForSolution(Solution solution)
+    public static IDictionary<string, string[]> GetHeaderDefinitionForSolution (Solution solution)
     {
-      string solutionDirectory = Path.GetDirectoryName(solution.FullName);
-      string solutionFileName = Path.GetFileName(solution.FullName);
+      string solutionDirectory = Path.GetDirectoryName (solution.FullName);
+      string solutionFileName = Path.GetFileName (solution.FullName);
 
-      string solutionHeaderFilePath = Path.Combine(solutionDirectory, solutionFileName + LicenseHeader.Extension);
-      if (File.Exists(solutionHeaderFilePath))
+      string solutionHeaderFilePath = Path.Combine (solutionDirectory, solutionFileName + LicenseHeader.Extension);
+      if (File.Exists (solutionHeaderFilePath))
       {
-        return LoadHeaderDefinition(solutionHeaderFilePath);
+        return LoadHeaderDefinition (solutionHeaderFilePath);
       }
 
       return null;
     }
 
     #region Helper Methods
-
     /// <summary>
     /// Returns the License header file that is directly attached to the project.
     /// </summary>
     /// <param name="project">The project which is scanned for the License header file</param>
     /// <returns>A dictionary, which contains the extensions and the corresponding lines</returns>
-    private static IDictionary<string, string[]> GetHeaderDefinitionDirectlyOnProject(Project project)
+    private static IDictionary<string, string[]> GetHeaderDefinitionDirectlyOnProject (Project project)
     {
-      var headerFile = SearchItemsDirectlyGetHeaderDefinitionFileName(project.ProjectItems);
-      var definition = LoadHeaderDefinition(headerFile);
+      var headerFile = SearchItemsDirectlyGetHeaderDefinitionFileName (project.ProjectItems);
+      var definition = LoadHeaderDefinition (headerFile);
       return definition;
     }
 
@@ -126,17 +125,17 @@ namespace LicenseHeaderManager.Headers
     /// </summary>
     /// <param name="projectItem"></param>
     /// <returns>A dictionary, which contains the extensions and the corresponding lines</returns>
-    private static IDictionary<string, string[]> SearchWithinProjectGetHeaderDefinitionForItem(ProjectItem projectItem)
+    private static IDictionary<string, string[]> SearchWithinProjectGetHeaderDefinitionForItem (ProjectItem projectItem)
     {
       //Check for License-file within this level
-      var headerFile = SearchItemsDirectlyGetHeaderDefinitionFileName(projectItem.ProjectItems);
-      if (!string.IsNullOrEmpty(headerFile))
-        return LoadHeaderDefinition(headerFile); //Found a License header file on this level
+      var headerFile = SearchItemsDirectlyGetHeaderDefinitionFileName (projectItem.ProjectItems);
+      if (!string.IsNullOrEmpty (headerFile))
+        return LoadHeaderDefinition (headerFile); //Found a License header file on this level
 
-      var projectItemParent = ProjectItemParentFinder.GetProjectItemParent(projectItem);
+      var projectItemParent = ProjectItemParentFinder.GetProjectItemParent (projectItem);
 
       //Lookup in the parent --> Go Up!
-      return SearchWithinProjectGetHeaderDefinitionForProjectOrItem(projectItemParent);
+      return SearchWithinProjectGetHeaderDefinitionForProjectOrItem (projectItemParent);
     }
 
     /// <summary>
@@ -144,15 +143,15 @@ namespace LicenseHeaderManager.Headers
     /// </summary>
     /// <param name="projectOrItem">An oject which is either is a project or a projectitem</param>
     /// <returns>A dictionary, which contains the extensions and the corresponding lines</returns>
-    private static IDictionary<string, string[]> SearchWithinProjectGetHeaderDefinitionForProjectOrItem(object projectOrItem)
+    private static IDictionary<string, string[]> SearchWithinProjectGetHeaderDefinitionForProjectOrItem (object projectOrItem)
     {
       var parentAsProject = projectOrItem as Project;
       if (parentAsProject != null)
-        return GetHeaderDefinitionDirectlyOnProject(parentAsProject); //We are on the top --> load project License file if it exists
+        return GetHeaderDefinitionDirectlyOnProject (parentAsProject); //We are on the top --> load project License file if it exists
 
       var parentAsProjectItem = projectOrItem as ProjectItem;
       if (parentAsProjectItem != null)
-        return SearchWithinProjectGetHeaderDefinitionForItem(parentAsProjectItem); //Lookup in the item above
+        return SearchWithinProjectGetHeaderDefinitionForItem (parentAsProjectItem); //Lookup in the item above
 
       return null;
     }
@@ -161,7 +160,7 @@ namespace LicenseHeaderManager.Headers
     {
       if (string.IsNullOrEmpty (headerFilePath))
         return null;
-      var headers = new Dictionary<string, string[]> ();
+      var headers = new Dictionary<string, string[]>();
       AddHeaders (headers, headerFilePath);
       return headers;
     }
@@ -169,45 +168,46 @@ namespace LicenseHeaderManager.Headers
     private static void AddHeaders (IDictionary<string, string[]> headers, string headerFilePath)
     {
       IEnumerable<string> extensions = null;
-      IList<string> header = new List<string> ();
+      IList<string> header = new List<string>();
 
-      var wholeFile = File.ReadAllText(headerFilePath);
+      var wholeFile = File.ReadAllText (headerFilePath);
 
-      using (var streamreader = new StreamReader(headerFilePath, true))
+      using (var streamreader = new StreamReader (headerFilePath, true))
       {
         while (!streamreader.EndOfStream)
         {
-          var line = streamreader.ReadLine ();
+          var line = streamreader.ReadLine();
           if (line.StartsWith (LicenseHeader.Keyword))
           {
             if (extensions != null)
             {
-              var array = header.ToArray ();
+              var array = header.ToArray();
               foreach (var extension in extensions)
                 headers[extension] = array;
             }
-            extensions = line.Substring (LicenseHeader.Keyword.Length).Split (new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select (LicenseHeader.AddDot);
-            header.Clear ();
+            extensions = line.Substring (LicenseHeader.Keyword.Length).Split (new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select (LicenseHeader.AddDot);
+            header.Clear();
           }
           else
             header.Add (line);
         }
 
-        if (wholeFile.EndsWith(NewLineConst.CR) || wholeFile.EndsWith(NewLineConst.LF))
+        if (wholeFile.EndsWith (NewLineConst.CR) || wholeFile.EndsWith (NewLineConst.LF))
         {
-          header.Add(string.Empty);
+          header.Add (string.Empty);
         }
       }
-      
+
       if (extensions != null)
       {
-        var array = header.ToArray ();
+        var array = header.ToArray();
         foreach (var extension in extensions)
           headers[extension] = array;
       }
     }
 
-    private static string SearchItemsDirectlyGetHeaderDefinitionFileName(ProjectItems projectItems)
+    private static string SearchItemsDirectlyGetHeaderDefinitionFileName (ProjectItems projectItems)
     {
       if (projectItems == null)
         return null;
@@ -217,16 +217,16 @@ namespace LicenseHeaderManager.Headers
         if (item.FileCount == 1)
         {
           string fileName = null;
-          
+
           try
           {
             fileName = item.FileNames[0];
           }
-          catch (Exception) 
+          catch (Exception)
           {
           }
 
-          if (fileName != null && Path.GetExtension(fileName).ToLowerInvariant() == LicenseHeader.Extension)
+          if (fileName != null && Path.GetExtension (fileName).ToLowerInvariant() == LicenseHeader.Extension)
             return fileName;
         }
       }
@@ -234,6 +234,5 @@ namespace LicenseHeaderManager.Headers
       return string.Empty;
     }
     #endregion
-
   }
 }

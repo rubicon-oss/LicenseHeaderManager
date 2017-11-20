@@ -18,11 +18,11 @@ namespace LicenseHeaderManager.Utils
 {
   internal static class StringExtensions
   {
-    internal static int CountOccurrence(this string inputString, string searchString)
+    internal static int CountOccurrence (this string inputString, string searchString)
     {
       if (inputString == null)
         throw new ArgumentNullException ("inputString");
-      if (string.IsNullOrEmpty(searchString))
+      if (string.IsNullOrEmpty (searchString))
         throw new ArgumentNullException ("searchString");
 
       int idx = 0;

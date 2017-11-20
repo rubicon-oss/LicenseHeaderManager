@@ -27,10 +27,10 @@ namespace LicenseHeaderManager.Headers
     private readonly FileInfo _fileInfo;
     private readonly IEnumerable<DocumentHeaderProperty> _properties;
 
-    public DocumentHeader(TextDocument document, string text, IEnumerable<DocumentHeaderProperty> properties)
+    public DocumentHeader (TextDocument document, string text, IEnumerable<DocumentHeaderProperty> properties)
     {
-      if (document == null) throw new ArgumentNullException("document");
-      if (properties == null) throw new ArgumentNullException("properties");
+      if (document == null) throw new ArgumentNullException ("document");
+      if (properties == null) throw new ArgumentNullException ("properties");
 
       _document = document;
       _properties = properties;
@@ -39,18 +39,18 @@ namespace LicenseHeaderManager.Headers
       _text = CreateText (text);
     }
 
-    private FileInfo CreateFileInfo()
+    private FileInfo CreateFileInfo ()
     {
       string pathToDocument = _document.Parent.FullName;
 
-      if (File.Exists(pathToDocument))
+      if (File.Exists (pathToDocument))
       {
-        return new FileInfo(pathToDocument);
+        return new FileInfo (pathToDocument);
       }
       return null;
     }
 
-    private string CreateText(string inputText)
+    private string CreateText (string inputText)
     {
       if (inputText == null)
       {

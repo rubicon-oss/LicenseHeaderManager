@@ -41,7 +41,7 @@ namespace LicenseHeaderManager.Options
 
         if (string.IsNullOrEmpty (LineComment))
           return (!string.IsNullOrEmpty (BeginComment) &&
-                  !string.IsNullOrEmpty (EndComment));
+              !string.IsNullOrEmpty (EndComment));
 
         return string.IsNullOrEmpty (BeginComment) == string.IsNullOrEmpty (EndComment);
       }
@@ -49,12 +49,21 @@ namespace LicenseHeaderManager.Options
 
     public object Clone ()
     {
-      return new Language () { Extensions = Extensions.ToList (), LineComment = LineComment, BeginComment = BeginComment, EndComment = EndComment, BeginRegion = BeginRegion, EndRegion = EndRegion, SkipExpression = SkipExpression };
+      return new Language()
+             {
+               Extensions = Extensions.ToList(),
+               LineComment = LineComment,
+               BeginComment = BeginComment,
+               EndComment = EndComment,
+               BeginRegion = BeginRegion,
+               EndRegion = EndRegion,
+               SkipExpression = SkipExpression
+             };
     }
 
     public void NormalizeExtensions ()
     {
-      Extensions = Extensions.Where (e => !string.IsNullOrWhiteSpace(e)).Select(e => LicenseHeader.AddDot (e).ToLower ()).ToArray();
+      Extensions = Extensions.Where (e => !string.IsNullOrWhiteSpace (e)).Select (e => LicenseHeader.AddDot (e).ToLower()).ToArray();
     }
   }
 }

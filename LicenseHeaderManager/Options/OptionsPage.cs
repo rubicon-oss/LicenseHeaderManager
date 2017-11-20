@@ -29,9 +29,15 @@ namespace LicenseHeaderManager.Options
   {
     public event NotifyCollectionChangedEventHandler LinkedCommandsChanged;
 
-    private DTE2 Dte { get { return GetService (typeof (DTE)) as DTE2; } }
-    
-    public Commands Commands { get { return Dte.Commands; } }
+    private DTE2 Dte
+    {
+      get { return GetService (typeof(DTE)) as DTE2; }
+    }
+
+    public Commands Commands
+    {
+      get { return Dte.Commands; }
+    }
 
     //serialized properties
     public bool InsertInNewFiles { get; set; }
@@ -39,33 +45,38 @@ namespace LicenseHeaderManager.Options
     public string RequiredKeywords { get; set; }
 
     private ObservableCollection<LinkedCommand> _linkedCommands;
-    [TypeConverter (typeof (LinkedCommandConverter))]
+
+    [TypeConverter (typeof(LinkedCommandConverter))]
     [DesignerSerializationVisibility (DesignerSerializationVisibility.Visible)]
-    public ObservableCollection<LinkedCommand> LinkedCommands {
+    public ObservableCollection<LinkedCommand> LinkedCommands
+    {
       get { return _linkedCommands; }
-      set {
+      set
+      {
         if (_linkedCommands != null)
         {
           _linkedCommands.CollectionChanged -= OnLinkedCommandsChanged;
-          LinkedCommandsChanged?.Invoke(_linkedCommands, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, _linkedCommands));
+          LinkedCommandsChanged?.Invoke (
+              _linkedCommands,
+              new NotifyCollectionChangedEventArgs (NotifyCollectionChangedAction.Remove, _linkedCommands));
         }
         _linkedCommands = value;
         if (_linkedCommands != null)
         {
           _linkedCommands.CollectionChanged += OnLinkedCommandsChanged;
-          LinkedCommandsChanged?.Invoke(value, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, _linkedCommands));
+          LinkedCommandsChanged?.Invoke (value, new NotifyCollectionChangedEventArgs (NotifyCollectionChangedAction.Add, _linkedCommands));
         }
       }
     }
 
     private void OnLinkedCommandsChanged (object sender, NotifyCollectionChangedEventArgs e)
     {
-      LinkedCommandsChanged?.Invoke(sender, e);
+      LinkedCommandsChanged?.Invoke (sender, e);
     }
 
     public OptionsPage ()
     {
-      ResetSettings ();
+      ResetSettings();
     }
 
     public override sealed void ResetSettings ()
@@ -73,8 +84,8 @@ namespace LicenseHeaderManager.Options
       InsertInNewFiles = false;
       UseRequiredKeywords = true;
       RequiredKeywords = "license, copyright, (c), ©";
-      LinkedCommands = new ObservableCollection<LinkedCommand> ();
-      base.ResetSettings ();
+      LinkedCommands = new ObservableCollection<LinkedCommand>();
+      base.ResetSettings();
     }
 
     [Browsable (false)]

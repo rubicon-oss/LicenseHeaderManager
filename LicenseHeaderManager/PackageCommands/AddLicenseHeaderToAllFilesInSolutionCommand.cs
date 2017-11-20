@@ -30,38 +30,38 @@ namespace LicenseHeaderManager.PackageCommands
     private readonly LicenseHeaderReplacer _licenseReplacer;
     private readonly SolutionUpdateViewModel _solutionUpdateViewModel;
 
-    public AddLicenseHeaderToAllFilesInSolutionCommand(LicenseHeaderReplacer licenseReplacer, SolutionUpdateViewModel solutionUpdateViewModel)
+    public AddLicenseHeaderToAllFilesInSolutionCommand (LicenseHeaderReplacer licenseReplacer, SolutionUpdateViewModel solutionUpdateViewModel)
     {
       _licenseReplacer = licenseReplacer;
       _solutionUpdateViewModel = solutionUpdateViewModel;
     }
 
-    public string GetCommandName()
+    public string GetCommandName ()
     {
       return c_commandName;
     }
 
-    public void Execute(Solution solution)
+    public void Execute (Solution solution)
     {
       if (solution == null) return;
 
-      IDictionary<string, string[]> solutionHeaderDefinitions = LicenseHeaderFinder.GetHeaderDefinitionForSolution(solution);
+      IDictionary<string, string[]> solutionHeaderDefinitions = LicenseHeaderFinder.GetHeaderDefinitionForSolution (solution);
 
       var allSolutionProjectsSearcher = new AllSolutionProjectsSearcher();
-      var projectsInSolution = allSolutionProjectsSearcher.GetAllProjects(solution);
+      var projectsInSolution = allSolutionProjectsSearcher.GetAllProjects (solution);
 
       var projectsWithoutLicenseHeaderFile = projectsInSolution
-        .Where(project => LicenseHeaderFinder.GetHeaderDefinitionForProjectWithoutFallback(project) == null)
-        .ToList();
+          .Where (project => LicenseHeaderFinder.GetHeaderDefinitionForProjectWithoutFallback (project) == null)
+          .ToList();
 
       var projectsWithLicenseHeaderFile = projectsInSolution
-        .Where(project => LicenseHeaderFinder.GetHeaderDefinitionForProjectWithoutFallback(project) != null)
-        .ToList();
+          .Where (project => LicenseHeaderFinder.GetHeaderDefinitionForProjectWithoutFallback (project) != null)
+          .ToList();
 
       if (solutionHeaderDefinitions != null || !projectsWithoutLicenseHeaderFile.Any())
       {
         // Every project is covered either by a solution or project level license header defintion, go ahead and add them.
-        AddLicenseHeaderToProjects(projectsInSolution);
+        AddLicenseHeaderToProjects (projectsInSolution);
       }
       else
       {
@@ -71,29 +71,29 @@ namespace LicenseHeaderManager.PackageCommands
         if (someProjectsHaveDefinition)
         {
           // Some projects have a header. Ask the user if they want to add an existing header to the uncovered projects.
-          if (DefinitionFilesShouldBeAdded(projectsWithoutLicenseHeaderFile))
-            new AddExistingLicenseHeaderDefinitionFileToProjectCommand().AddDefinitionFileToMultipleProjects(projectsWithoutLicenseHeaderFile);
+          if (DefinitionFilesShouldBeAdded (projectsWithoutLicenseHeaderFile))
+            new AddExistingLicenseHeaderDefinitionFileToProjectCommand().AddDefinitionFileToMultipleProjects (projectsWithoutLicenseHeaderFile);
 
-          AddLicenseHeaderToProjects(projectsInSolution);
+          AddLicenseHeaderToProjects (projectsInSolution);
         }
         else
         {
           // No projects have definition. Ask the user if they want to add a solution level header definition.
-          if (MessageBoxHelper.DoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionForSolution))
+          if (MessageBoxHelper.DoYouWant (Resources.Question_AddNewLicenseHeaderDefinitionForSolution))
           {
-            AddNewSolutionLicenseHeaderDefinitionFileCommand.Instance.Execute(solution);
+            AddNewSolutionLicenseHeaderDefinitionFileCommand.Instance.Execute (solution);
 
-            if (!MessageBoxHelper.DoYouWant(Resources.Question_StopForConfiguringDefinitionFilesSingleFile))
+            if (!MessageBoxHelper.DoYouWant (Resources.Question_StopForConfiguringDefinitionFilesSingleFile))
             {
               // They want to go ahead and apply without editing.
-              AddLicenseHeaderToProjects(projectsInSolution);
+              AddLicenseHeaderToProjects (projectsInSolution);
             }
           }
         }
       }
     }
 
-    private bool DefinitionFilesShouldBeAdded(List<Project> projectsWithoutLicenseHeaderFile)
+    private bool DefinitionFilesShouldBeAdded (List<Project> projectsWithoutLicenseHeaderFile)
     {
       if (!projectsWithoutLicenseHeaderFile.Any()) return false;
 
@@ -102,36 +102,43 @@ namespace LicenseHeaderManager.PackageCommands
 
       if (projectsWithoutLicenseHeaderFile.Count > MaxProjectsWithoutDefinitionFileShownInMessage)
       {
-        projects = string.Join("\n", projectsWithoutLicenseHeaderFile
-          .Select(x => x.Name)
-          .Take(5)
-          .ToList());
+        projects = string.Join (
+            "\n",
+            projectsWithoutLicenseHeaderFile
+                .Select (x => x.Name)
+                .Take (5)
+                .ToList());
 
         projects += "\n...";
-
       }
       else
       {
-        projects = string.Join("\n", projectsWithoutLicenseHeaderFile
-          .Select(x => x.Name)
-          .ToList());
+        projects = string.Join (
+            "\n",
+            projectsWithoutLicenseHeaderFile
+                .Select (x => x.Name)
+                .ToList());
       }
 
-      var message = string.Format(errorResourceString, projects).Replace(@"\n", "\n");
+      var message = string.Format (errorResourceString, projects).Replace (@"\n", "\n");
 
 
-      return MessageBoxHelper.DoYouWant(message);
+      return MessageBoxHelper.DoYouWant (message);
     }
 
-    private void AddLicenseHeaderToProjects(List<Project> projectsInSolution)
+    private void AddLicenseHeaderToProjects (List<Project> projectsInSolution)
     {
       int progressCount = 1;
       int projectCount = projectsInSolution.Count;
 
       foreach (Project project in projectsInSolution)
       {
-        _solutionUpdateViewModel.ProgressText = string.Format("Currently updating '{0}'. Updating {1}/{2} Projects.", project.Name, progressCount, projectCount);
-        new AddLicenseHeaderToAllFilesInProjectCommand(_licenseReplacer).Execute(project);
+        _solutionUpdateViewModel.ProgressText = string.Format (
+            "Currently updating '{0}'. Updating {1}/{2} Projects.",
+            project.Name,
+            progressCount,
+            projectCount);
+        new AddLicenseHeaderToAllFilesInProjectCommand (_licenseReplacer).Execute (project);
         progressCount++;
       }
     }

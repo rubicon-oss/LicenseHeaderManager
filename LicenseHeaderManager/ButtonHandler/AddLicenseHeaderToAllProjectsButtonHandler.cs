@@ -28,7 +28,7 @@ namespace LicenseHeaderManager.ButtonHandler
     private readonly LicenseHeaderReplacer _licenseReplacer;
     private readonly DTE2 _dte2;
 
-    public AddLicenseHeaderToAllProjectsButtonHandler(LicenseHeaderReplacer licenseReplacer, DTE2 dte2)
+    public AddLicenseHeaderToAllProjectsButtonHandler (LicenseHeaderReplacer licenseReplacer, DTE2 dte2)
     {
       _licenseReplacer = licenseReplacer;
       _dte2 = dte2;
@@ -37,45 +37,43 @@ namespace LicenseHeaderManager.ButtonHandler
     private System.Threading.Thread _solutionUpdateThread;
     private bool _resharperSuspended;
 
-    public void HandleButton(object sender, EventArgs e)
+    public void HandleButton (object sender, EventArgs e)
     {
       var solutionUpdateViewModel = new SolutionUpdateViewModel();
       var addHeaderToAllProjectsCommand = new AddLicenseHeaderToAllFilesInSolutionCommand (_licenseReplacer, solutionUpdateViewModel);
-      var buttonThreadWorker = new SolutionLevelButtonThreadWorker(addHeaderToAllProjectsCommand);
-      var dialog = new SolutionUpdateDialog(solutionUpdateViewModel);
+      var buttonThreadWorker = new SolutionLevelButtonThreadWorker (addHeaderToAllProjectsCommand);
+      var dialog = new SolutionUpdateDialog (solutionUpdateViewModel);
 
 
       dialog.Closing += DialogOnClosing;
-      _resharperSuspended = CommandUtility.ExecuteCommandIfExists("ReSharper_Suspend", _dte2);
+      _resharperSuspended = CommandUtility.ExecuteCommandIfExists ("ReSharper_Suspend", _dte2);
       Dispatcher uiDispatcher = Dispatcher.CurrentDispatcher;
 
       buttonThreadWorker.ThreadDone += (o, args) =>
       {
-        uiDispatcher.BeginInvoke(new Action(() => { dialog.Close(); }));
+        uiDispatcher.BeginInvoke (new Action (() => { dialog.Close(); }));
         ResumeResharper();
       };
 
-      _solutionUpdateThread = new System.Threading.Thread(buttonThreadWorker.Run)
-      {
-        IsBackground = true
-      };
-      _solutionUpdateThread.Start(_dte2.Solution);
+      _solutionUpdateThread = new System.Threading.Thread (buttonThreadWorker.Run)
+                                  { IsBackground = true };
+      _solutionUpdateThread.Start (_dte2.Solution);
 
-      dialog.ShowModal(); 
+      dialog.ShowModal();
     }
 
-    private void DialogOnClosing(object sender, CancelEventArgs cancelEventArgs)
+    private void DialogOnClosing (object sender, CancelEventArgs cancelEventArgs)
     {
       _solutionUpdateThread.Abort();
 
       ResumeResharper();
     }
 
-    private void ResumeResharper()
+    private void ResumeResharper ()
     {
       if (_resharperSuspended)
       {
-        CommandUtility.ExecuteCommand("ReSharper_Resume", _dte2);
+        CommandUtility.ExecuteCommand ("ReSharper_Resume", _dte2);
       }
     }
   }

@@ -29,24 +29,24 @@ namespace LicenseHeaderManager.Utils
       Message = string.Empty;
     }
 
-    public void Handle(LicenseHeaderReplacer licenseHeaderReplacer, ILinkedFileFilter linkedFileFilter)
+    public void Handle (LicenseHeaderReplacer licenseHeaderReplacer, ILinkedFileFilter linkedFileFilter)
     {
       foreach (ProjectItem projectItem in linkedFileFilter.ToBeProgressed)
       {
-        var headers = LicenseHeaderFinder.GetHeaderDefinitionForItem(projectItem);
+        var headers = LicenseHeaderFinder.GetHeaderDefinitionForItem (projectItem);
         licenseHeaderReplacer.RemoveOrReplaceHeader (projectItem, headers, true);
       }
 
-      if (linkedFileFilter.NoLicenseHeaderFile.Any () || linkedFileFilter.NotInSolution.Any ())
+      if (linkedFileFilter.NoLicenseHeaderFile.Any() || linkedFileFilter.NotInSolution.Any())
       {
         List<ProjectItem> notProgressedItems =
-          linkedFileFilter.NoLicenseHeaderFile.Concat (linkedFileFilter.NotInSolution).ToList ();
+            linkedFileFilter.NoLicenseHeaderFile.Concat (linkedFileFilter.NotInSolution).ToList();
 
-        List<string> notProgressedNames = notProgressedItems.Select(x => x.Name).ToList();
+        List<string> notProgressedNames = notProgressedItems.Select (x => x.Name).ToList();
 
         Message +=
-          string.Format (Resources.LinkedFileUpdateInformation, string.Join ("\n", notProgressedNames))
-            .Replace (@"\n", "\n");
+            string.Format (Resources.LinkedFileUpdateInformation, string.Join ("\n", notProgressedNames))
+                .Replace (@"\n", "\n");
       }
     }
   }

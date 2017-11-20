@@ -15,13 +15,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows;
 using EnvDTE;
 using EnvDTE80;
@@ -35,15 +32,12 @@ using LicenseHeaderManager.Utils;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.Win32;
 using Constants = EnvDTE.Constants;
 using Document = LicenseHeaderManager.Headers.Document;
 
 namespace LicenseHeaderManager
 {
-
   #region package infrastructure
-
   /// <summary>
   /// This is the class that implements the package exposed by this assembly.
   ///
@@ -111,28 +105,30 @@ namespace LicenseHeaderManager
 
 
     private LicenseHeaderReplacer _licenseReplacer;
+
     /// <summary>
     /// Initialization of the package; this method is called right after the package is sited, so this is the 
     /// place where you can put all the initilaization code that rely on services provided by VisualStudio.
     /// </summary>
     protected override void Initialize ()
     {
-      base.Initialize ();
-      OutputWindowHandler.Initialize(GetGlobalService( typeof( SVsOutputWindow ) ) as IVsOutputWindow);
+      base.Initialize();
+      OutputWindowHandler.Initialize (GetGlobalService (typeof (SVsOutputWindow)) as IVsOutputWindow);
       _licenseReplacer = new LicenseHeaderReplacer (this);
       _dte = GetService (typeof (DTE)) as DTE2;
       _addedItems = new Stack<ProjectItem>();
-      var buttonHandlerFactory = new ButtonHandlerFactory(this, _licenseReplacer);
+      var buttonHandlerFactory = new ButtonHandlerFactory (this, _licenseReplacer);
 
       //register commands
       OleMenuCommandService mcs = GetService (typeof (IMenuCommandService)) as OleMenuCommandService;
       if (mcs != null)
       {
-        AddNewSolutionLicenseHeaderDefinitionFileCommand.Initialize(() =>
-        {
-          var page2 = (DefaultLicenseHeaderPage)GetDialogPage(typeof(DefaultLicenseHeaderPage));
-          return page2.LicenseHeaderFileText;
-        });
+        AddNewSolutionLicenseHeaderDefinitionFileCommand.Initialize (
+            () =>
+            {
+              var page2 = (DefaultLicenseHeaderPage) GetDialogPage (typeof (DefaultLicenseHeaderPage));
+              return page2.LicenseHeaderFileText;
+            });
         OpenSolutionLicenseHeaderDefinitionFileCommand.Initialize();
         RemoveSolutionLicenseHeaderDefinitionFileCommand.Initialize();
 
@@ -153,14 +149,13 @@ namespace LicenseHeaderManager
         _removeSolutionHeaderDefinitionFileCommand = RegisterCommand(mcs, PkgCmdIDList.cmdIdRemoveSolutionLicenseHeaderDefinitionFile, RemoveSolutionLicenseHeaderDefinitionFileCallback);
         _addNewSolutionHeaderDefinitionFileCommand.BeforeQueryStatus += QuerySolutionCommandStatus;
 
-        RegisterCommand(mcs, PkgCmdIDList.cmdIdAddNewLicenseHeaderDefinitionFileToProject, AddNewLicenseHeaderDefinitionFileToProjectCallback);
-        RegisterCommand(mcs, PkgCmdIDList.cmdIdAddExistingLicenseHeaderDefinitionFileToProject, AddExistingLicenseHeaderDefinitionFileToProjectCallback);
-        RegisterCommand(mcs, PkgCmdIDList.cmdIdLicenseHeaderOptions, LicenseHeaderOptionsCallback);
-        RegisterCommand(mcs, PkgCmdIDList.cmdIdAddLicenseHeaderToAllFilesInSolution, buttonHandlerFactory.CreateAddLicenseHeaderToAllProjectsButtonHandler().HandleButton);
-        RegisterCommand(mcs, PkgCmdIDList.cmdIdRemoveLicenseHeaderFromAllFilesInSolution, RemoveLicenseHeaderFromAllFilesInSolutionCallback);
+        RegisterCommand (mcs, PkgCmdIDList.cmdIdAddNewLicenseHeaderDefinitionFileToProject, AddNewLicenseHeaderDefinitionFileToProjectCallback);
+        RegisterCommand (mcs, PkgCmdIDList.cmdIdAddExistingLicenseHeaderDefinitionFileToProject, AddExistingLicenseHeaderDefinitionFileToProjectCallback);
+        RegisterCommand (mcs, PkgCmdIDList.cmdIdLicenseHeaderOptions, LicenseHeaderOptionsCallback);
+        RegisterCommand (mcs, PkgCmdIDList.cmdIdAddLicenseHeaderToAllFilesInSolution, buttonHandlerFactory.CreateAddLicenseHeaderToAllProjectsButtonHandler().HandleButton);
+        RegisterCommand (mcs, PkgCmdIDList.cmdIdRemoveLicenseHeaderFromAllFilesInSolution, RemoveLicenseHeaderFromAllFilesInSolutionCallback);
       }
 
-      
 
       //register ItemAdded event handler
       var events = _dte.Events as Events2;
@@ -168,7 +163,7 @@ namespace LicenseHeaderManager
       {
         _projectItemEvents = events.ProjectItemsEvents; //we need to keep a reference, otherwise the object is garbage collected and the event won't be fired
         _projectItemEvents.ItemAdded += ItemAdded;
-       
+
         //Register to WebsiteItemEvents for Website Projects to work
         //Reference: https://social.msdn.microsoft.com/Forums/en-US/dde7d858-2440-43f9-bbdc-3e1b815d4d1e/itemadded-itemremoved-and-itemrenamed-events-not-firing-in-web-projects?forum=vsx
         //Concerns, that the ItemAdded Event gets called on unrelated events, like closing the solution or opening folder, could not be reproduced
@@ -222,10 +217,10 @@ namespace LicenseHeaderManager
     {
       bool visible = false;
 
-      var item = GetActiveProjectItem ();
+      var item = GetActiveProjectItem();
       if (item != null)
       {
-        visible = ShouldBeVisible(item);
+        visible = ShouldBeVisible (item);
       }
 
       _addHeaderCommand.Visible = visible;
@@ -239,11 +234,11 @@ namespace LicenseHeaderManager
     {
       bool visible = false;
 
-      ProjectItem item = GetSolutionExplorerItem () as ProjectItem;
+      ProjectItem item = GetSolutionExplorerItem() as ProjectItem;
 
       if (item != null)
       {
-        visible = ShouldBeVisible(item);
+        visible = ShouldBeVisible (item);
       }
 
       _addHeaderToProjectItemCommand.Visible = visible;
@@ -257,11 +252,11 @@ namespace LicenseHeaderManager
     {
       bool visible = false;
 
-      object obj = GetSolutionExplorerItem ();
+      object obj = GetSolutionExplorerItem();
       ProjectItem item = obj as ProjectItem;
       if (item != null)
       {
-        visible = ShouldBeVisible(item);
+        visible = ShouldBeVisible (item);
       }
       else
       {
@@ -273,7 +268,7 @@ namespace LicenseHeaderManager
       _removeHeadersFromAllFilesInProjectCommand.Visible = visible;
     }
 
-    private void QuerySolutionCommandStatus(object sender, EventArgs eventArgs)
+    private void QuerySolutionCommandStatus (object sender, EventArgs eventArgs)
     {
       bool solutionHeaderDefinitionExists = SolutionHeaderDefinitionExists();
 
@@ -282,17 +277,17 @@ namespace LicenseHeaderManager
       _removeSolutionHeaderDefinitionFileCommand.Enabled = solutionHeaderDefinitionExists;
     }
 
-    private bool SolutionHeaderDefinitionExists()
+    private bool SolutionHeaderDefinitionExists ()
     {
-      string solutionHeaderDefinitionFilePath = LicenseHeader.GetHeaderDefinitionFilePathForSolution(_dte.Solution);
-      return File.Exists(solutionHeaderDefinitionFilePath);
+      string solutionHeaderDefinitionFilePath = LicenseHeader.GetHeaderDefinitionFilePathForSolution (_dte.Solution);
+      return File.Exists (solutionHeaderDefinitionFilePath);
     }
 
-    private bool ShouldBeVisible(ProjectItem item)
+    private bool ShouldBeVisible (ProjectItem item)
     {
       bool visible = false;
 
-      if (ProjectItemInspection.IsPhysicalFile(item))
+      if (ProjectItemInspection.IsPhysicalFile (item))
       {
         Document document;
         bool wasOpen;
@@ -320,6 +315,7 @@ namespace LicenseHeaderManager
     }
 
     private bool _isCalledByLinkedCommand = false;
+
     private object GetSolutionExplorerItem ()
     {
       IntPtr hierarchyPtr, selectionContainerPtr;
@@ -347,19 +343,18 @@ namespace LicenseHeaderManager
     private void PostExecCommand (Guid guid, uint id, object argument)
     {
       IVsUIShell shell = (IVsUIShell) GetService (typeof (SVsUIShell));
-      shell.PostExecCommand (ref guid,
-                            id,
-                            (uint) vsCommandExecOption.vsCommandExecOptionDoDefault,
-                            ref argument);
+      shell.PostExecCommand (
+          ref guid,
+          id,
+          (uint) vsCommandExecOption.vsCommandExecOptionDoDefault,
+          ref argument);
     }
-
-  #endregion
+    #endregion
 
     #region event handlers
-
     private void BeforeLinkedCommandExecuted (string guid, int id, object customIn, object customOut, ref bool cancelDefault)
     {
-      InvokeAddLicenseHeaderCommandFromLinkedCmd ();
+      InvokeAddLicenseHeaderCommandFromLinkedCmd();
     }
 
     private void AfterLinkedCommandExecuted (string guid, int id, object customIn, object customOut)
@@ -367,7 +362,7 @@ namespace LicenseHeaderManager
       InvokeAddLicenseHeaderCommandFromLinkedCmd();
     }
 
-    private void InvokeAddLicenseHeaderCommandFromLinkedCmd()
+    private void InvokeAddLicenseHeaderCommandFromLinkedCmd ()
     {
       _isCalledByLinkedCommand = true;
       _addHeaderCommand.Invoke (false);
@@ -415,7 +410,6 @@ namespace LicenseHeaderManager
     }
 
     #region insert headers in new files
-
     private string _currentCommandGuid;
     private int _currentCommandId;
     private CommandEvents _currentCommandEvents;
@@ -448,32 +442,29 @@ namespace LicenseHeaderManager
 
       while (_addedItems.Count > 0)
       {
-        var item = _addedItems.Pop ();
-        var headers = LicenseHeaderFinder.GetHeaderDefinitionForItem(item);
+        var item = _addedItems.Pop();
+        var headers = LicenseHeaderFinder.GetHeaderDefinitionForItem (item);
         if (headers != null)
           _licenseReplacer.RemoveOrReplaceHeader (item, headers, false);
       }
       _currentCommandEvents.AfterExecute -= FinishedAddingItem;
     }
-
     #endregion
-
     #endregion
 
     #region command handlers
-
     private void AddLicenseHeaderCallback (object sender, EventArgs e)
     {
-      var item = GetActiveProjectItem ();
+      var item = GetActiveProjectItem();
       AddLicenseHeaderToItem (item, !_isCalledByLinkedCommand);
     }
 
     private void AddLicenseHeaderToItem (ProjectItem item, bool calledByUser)
     {
-      if (item == null || ProjectItemInspection.IsLicenseHeader(item)) return;
+      if (item == null || ProjectItemInspection.IsLicenseHeader (item)) return;
 
 
-      var headers = LicenseHeaderFinder.GetHeaderDefinitionForItem(item);
+      var headers = LicenseHeaderFinder.GetHeaderDefinitionForItem (item);
       if (headers != null)
       {
         _licenseReplacer.RemoveOrReplaceHeader (item, headers, calledByUser);
@@ -491,10 +482,10 @@ namespace LicenseHeaderManager
       var args = e as OleMenuCmdEventArgs;
       if (args == null) return;
       var item = args.InValue as ProjectItem;
-      if(item == null)
+      if (item == null)
         item = GetSolutionExplorerItem() as ProjectItem;
 
-      if (item != null && ProjectItemInspection.IsPhysicalFile(item) && !ProjectItemInspection.IsLicenseHeader(item))
+      if (item != null && ProjectItemInspection.IsPhysicalFile (item) && !ProjectItemInspection.IsLicenseHeader (item))
       {
         AddLicenseHeaderToItem (item, !_isCalledByLinkedCommand);
       }
@@ -502,7 +493,7 @@ namespace LicenseHeaderManager
 
     private void RemoveLicenseHeaderCallback (object sender, EventArgs e)
     {
-      var item = GetActiveProjectItem ();
+      var item = GetActiveProjectItem();
 
       if (item != null)
       {
@@ -516,7 +507,7 @@ namespace LicenseHeaderManager
       OleMenuCmdEventArgs args = e as OleMenuCmdEventArgs;
       if (args != null)
       {
-        ProjectItem item = args.InValue as ProjectItem ?? GetSolutionExplorerItem () as ProjectItem;
+        ProjectItem item = args.InValue as ProjectItem ?? GetSolutionExplorerItem() as ProjectItem;
         if (item != null && Path.GetExtension (item.Name) != LicenseHeader.Extension)
           _licenseReplacer.RemoveOrReplaceHeaderRecursive (item, null, false);
       }
@@ -524,9 +515,9 @@ namespace LicenseHeaderManager
 
     private void AddLicenseHeadersToAllFilesInProjectCallback (object sender, EventArgs e)
     {
-      var obj = GetSolutionExplorerItem ();
-      var addLicenseHeaderToAllFilesCommand = new AddLicenseHeaderToAllFilesInProjectCommand(_licenseReplacer);
-      
+      var obj = GetSolutionExplorerItem();
+      var addLicenseHeaderToAllFilesCommand = new AddLicenseHeaderToAllFilesInProjectCommand (_licenseReplacer);
+
       var statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
       statusBar.SetText (Resources.UpdatingFiles);
 
@@ -536,11 +527,12 @@ namespace LicenseHeaderManager
 
       HandleLinkedFilesAndShowMessageBox (addLicenseHeaderToAllFilesReturn.LinkedItems);
 
-      HandleAddLicenseHeaderToAllFilesInProjectReturn(obj, addLicenseHeaderToAllFilesReturn);
+      HandleAddLicenseHeaderToAllFilesInProjectReturn (obj, addLicenseHeaderToAllFilesReturn);
     }
 
-    private void HandleAddLicenseHeaderToAllFilesInProjectReturn(object obj,
-      AddLicenseHeaderToAllFilesReturn addLicenseHeaderToAllFilesReturn)
+    private void HandleAddLicenseHeaderToAllFilesInProjectReturn (
+        object obj,
+        AddLicenseHeaderToAllFilesReturn addLicenseHeaderToAllFilesReturn)
     {
       var project = obj as Project;
       var projectItem = obj as ProjectItem;
@@ -556,60 +548,65 @@ namespace LicenseHeaderManager
       {
         // No license header found...
         var solutionSearcher = new AllSolutionProjectsSearcher();
-        var projects = solutionSearcher.GetAllProjects(_dte.Solution);
+        var projects = solutionSearcher.GetAllProjects (_dte.Solution);
 
-        if (projects.Any(projectInSolution => LicenseHeaderFinder.GetHeaderDefinitionForProjectWithoutFallback(projectInSolution) != null))
+        if (projects.Any (projectInSolution => LicenseHeaderFinder.GetHeaderDefinitionForProjectWithoutFallback (projectInSolution) != null))
         {
           // If another projet has a license header, offer to add a link to the existing one.
-          if (MessageBoxHelper.DoYouWant(Resources.Question_AddExistingDefinitionFileToProject))
+          if (MessageBoxHelper.DoYouWant (Resources.Question_AddExistingDefinitionFileToProject))
           {
-            new AddExistingLicenseHeaderDefinitionFileToProjectCommand().AddDefinitionFileToOneProject(currentProject.FileName, currentProject.ProjectItems);
+            new AddExistingLicenseHeaderDefinitionFileToProjectCommand().AddDefinitionFileToOneProject (
+                currentProject.FileName,
+                currentProject.ProjectItems);
 
-            AddLicenseHeadersToAllFilesInProjectCallback((object)project ?? projectItem, null);
+            AddLicenseHeadersToAllFilesInProjectCallback ((object) project ?? projectItem, null);
           }
         }
         else
         {
           // If no project has a license header, offer to add one for the solution.
-          if (MessageBoxHelper.DoYouWant(Resources.Question_AddNewLicenseHeaderDefinitionForSolution))
+          if (MessageBoxHelper.DoYouWant (Resources.Question_AddNewLicenseHeaderDefinitionForSolution))
           {
-            AddNewSolutionLicenseHeaderDefinitionFileCallback(this, new EventArgs());
+            AddNewSolutionLicenseHeaderDefinitionFileCallback (this, new EventArgs());
           }
         }
       }
     }
 
-    private void HandleLinkedFilesAndShowMessageBox(List<ProjectItem> linkedItems)
+    private void HandleLinkedFilesAndShowMessageBox (List<ProjectItem> linkedItems)
     {
-      LinkedFileFilter linkedFileFilter = new LinkedFileFilter(_dte.Solution);
-      linkedFileFilter.Filter(linkedItems);
+      LinkedFileFilter linkedFileFilter = new LinkedFileFilter (_dte.Solution);
+      linkedFileFilter.Filter (linkedItems);
 
       LinkedFileHandler linkedFileHandler = new LinkedFileHandler();
-      linkedFileHandler.Handle(_licenseReplacer, linkedFileFilter);
+      linkedFileHandler.Handle (_licenseReplacer, linkedFileFilter);
 
       if (linkedFileHandler.Message != string.Empty)
       {
-        MessageBox.Show(linkedFileHandler.Message, Resources.NameOfThisExtension, MessageBoxButton.OK,
-          MessageBoxImage.Information);
+        MessageBox.Show (
+            linkedFileHandler.Message,
+            Resources.NameOfThisExtension,
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
       }
-    }   
+    }
 
     private void RemoveLicenseHeadersFromAllFilesInProjectCallback (object sender, EventArgs e)
     {
-      var obj = GetSolutionExplorerItem ();
-      RemoveLicenseHeadersFromAllFiles(obj);
+      var obj = GetSolutionExplorerItem();
+      RemoveLicenseHeadersFromAllFiles (obj);
     }
 
-    private void RemoveLicenseHeadersFromAllFiles(object obj)
+    private void RemoveLicenseHeadersFromAllFiles (object obj)
     {
-      var removeAllLicenseHeadersCommand = new RemoveLicenseHeaderFromAllFilesInProjectCommand(_licenseReplacer);
+      var removeAllLicenseHeadersCommand = new RemoveLicenseHeaderFromAllFilesInProjectCommand (_licenseReplacer);
 
       IVsStatusbar statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
       statusBar.SetText (Resources.UpdatingFiles);
 
-      removeAllLicenseHeadersCommand.Execute(obj);
+      removeAllLicenseHeadersCommand.Execute (obj);
 
-      statusBar.SetText(String.Empty);
+      statusBar.SetText (String.Empty);
     }
 
     private void AddNewLicenseHeaderDefinitionFileToProjectCallback (object sender, EventArgs e)
@@ -627,14 +624,14 @@ namespace LicenseHeaderManager
       if (project != null)
       {
         var licenseHeaderDefinitionFile = LicenseHeader.AddHeaderDefinitionFile (project, page);
-        licenseHeaderDefinitionFile.Open(Constants.vsViewKindCode).Activate();
+        licenseHeaderDefinitionFile.Open (Constants.vsViewKindCode).Activate();
       }
     }
 
     private void AddExistingLicenseHeaderDefinitionFileToProjectCallback (object sender, EventArgs e)
     {
-      var project = GetSolutionExplorerItem () as Project;
-      var projectItem = GetSolutionExplorerItem () as ProjectItem;
+      var project = GetSolutionExplorerItem() as Project;
+      var projectItem = GetSolutionExplorerItem() as ProjectItem;
 
       string fileName = "";
 
@@ -662,22 +659,22 @@ namespace LicenseHeaderManager
         projectItems = projectItem.ProjectItems;
       }
 
-      new AddExistingLicenseHeaderDefinitionFileToProjectCommand().AddDefinitionFileToOneProject(fileName, projectItems);
+      new AddExistingLicenseHeaderDefinitionFileToProjectCommand().AddDefinitionFileToOneProject (fileName, projectItems);
     }
 
-    private void AddNewSolutionLicenseHeaderDefinitionFileCallback(object sender, EventArgs e)
+    private void AddNewSolutionLicenseHeaderDefinitionFileCallback (object sender, EventArgs e)
     {
-      AddNewSolutionLicenseHeaderDefinitionFileCommand.Instance.Execute(_dte.Solution);
+      AddNewSolutionLicenseHeaderDefinitionFileCommand.Instance.Execute (_dte.Solution);
     }
 
-    private void OpenSolutionLicenseHeaderDefinitionFileCallback(object sender, EventArgs e)
+    private void OpenSolutionLicenseHeaderDefinitionFileCallback (object sender, EventArgs e)
     {
-      OpenSolutionLicenseHeaderDefinitionFileCommand.Instance.Execute(_dte.Solution);
+      OpenSolutionLicenseHeaderDefinitionFileCommand.Instance.Execute (_dte.Solution);
     }
 
-    private void RemoveSolutionLicenseHeaderDefinitionFileCallback(object sender, EventArgs e)
+    private void RemoveSolutionLicenseHeaderDefinitionFileCallback (object sender, EventArgs e)
     {
-      RemoveSolutionLicenseHeaderDefinitionFileCommand.Instance.Execute(_dte.Solution);
+      RemoveSolutionLicenseHeaderDefinitionFileCommand.Instance.Execute (_dte.Solution);
     }
 
     private void LicenseHeaderOptionsCallback (object sender, EventArgs e)
@@ -689,25 +686,28 @@ namespace LicenseHeaderManager
     {
       Solution solution = _dte.Solution;
       IVsStatusbar statusBar = (IVsStatusbar) GetService (typeof (SVsStatusbar));
-      var removeLicenseHeaderFromAllProjects = new RemoveLicenseHeaderFromAllFilesInSolutionCommand(statusBar, _licenseReplacer);
-      bool resharperSuspended = CommandUtility.ExecuteCommandIfExists("ReSharper_Suspend", _dte);
+      var removeLicenseHeaderFromAllProjects = new RemoveLicenseHeaderFromAllFilesInSolutionCommand (statusBar, _licenseReplacer);
+      bool resharperSuspended = CommandUtility.ExecuteCommandIfExists ("ReSharper_Suspend", _dte);
 
       try
       {
-        removeLicenseHeaderFromAllProjects.Execute(solution);
+        removeLicenseHeaderFromAllProjects.Execute (solution);
       }
       catch (Exception exception)
       {
-        MessageBoxHelper.Information(string.Format("The command '{0}' failed with the exception '{1}'. See Visual Studio Output Window for Details.", removeLicenseHeaderFromAllProjects.GetCommandName(), exception.Message));
-        OutputWindowHandler.WriteMessage(exception.ToString());
+        MessageBoxHelper.Information (
+            string.Format (
+                "The command '{0}' failed with the exception '{1}'. See Visual Studio Output Window for Details.",
+                removeLicenseHeaderFromAllProjects.GetCommandName(),
+                exception.Message));
+        OutputWindowHandler.WriteMessage (exception.ToString());
       }
 
       if (resharperSuspended)
       {
-        CommandUtility.ExecuteCommand("ReSharper_Resume", _dte);  
+        CommandUtility.ExecuteCommand ("ReSharper_Resume", _dte);
       }
     }
-
     #endregion
 
 
@@ -733,7 +733,7 @@ namespace LicenseHeaderManager
 
     public DTE2 Dte2
     {
-      get { return GetService(typeof (DTE)) as DTE2; }
+      get { return GetService (typeof (DTE)) as DTE2; }
     }
   }
 }

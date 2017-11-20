@@ -24,19 +24,19 @@ namespace LicenseHeaderManager.PackageCommands
   {
     private LicenseHeaderReplacer _licenseReplacer;
 
-    public AddLicenseHeaderToAllFilesInProjectCommand(LicenseHeaderReplacer licenseReplacer)
+    public AddLicenseHeaderToAllFilesInProjectCommand (LicenseHeaderReplacer licenseReplacer)
     {
       _licenseReplacer = licenseReplacer;
     }
 
-    public AddLicenseHeaderToAllFilesReturn Execute(object projectOrProjectItem)
+    public AddLicenseHeaderToAllFilesReturn Execute (object projectOrProjectItem)
     {
       var project = projectOrProjectItem as Project;
       var projectItem = projectOrProjectItem as ProjectItem;
-      
+
       int countSubLicenseHeadersFound = 0;
       IDictionary<string, string[]> headers = null;
-      List<ProjectItem> linkedItems = new List<ProjectItem> ();
+      List<ProjectItem> linkedItems = new List<ProjectItem>();
 
       if (project != null || projectItem != null)
       {
@@ -45,25 +45,25 @@ namespace LicenseHeaderManager.PackageCommands
 
         if (project != null)
         {
-          headers = LicenseHeaderFinder.GetHeaderDefinitionForProjectWithFallback(project);
+          headers = LicenseHeaderFinder.GetHeaderDefinitionForProjectWithFallback (project);
           projectItems = project.ProjectItems;
         }
         else
         {
-          headers = LicenseHeaderFinder.GetHeaderDefinitionForItem(projectItem);
+          headers = LicenseHeaderFinder.GetHeaderDefinitionForItem (projectItem);
           projectItems = projectItem.ProjectItems;
         }
-       
+
         foreach (ProjectItem item in projectItems)
         {
-          if (ProjectItemInspection.IsPhysicalFile(item) && ProjectItemInspection.IsLink(item))
-            linkedItems.Add(item);
+          if (ProjectItemInspection.IsPhysicalFile (item) && ProjectItemInspection.IsLink (item))
+            linkedItems.Add (item);
           else
-            countSubLicenseHeadersFound = _licenseReplacer.RemoveOrReplaceHeaderRecursive(item, headers);
+            countSubLicenseHeadersFound = _licenseReplacer.RemoveOrReplaceHeaderRecursive (item, headers);
         }
       }
 
-      return new AddLicenseHeaderToAllFilesReturn(countSubLicenseHeadersFound, headers == null, linkedItems);
+      return new AddLicenseHeaderToAllFilesReturn (countSubLicenseHeadersFound, headers == null, linkedItems);
     }
   }
 }

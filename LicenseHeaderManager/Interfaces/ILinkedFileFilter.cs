@@ -19,7 +19,7 @@ namespace LicenseHeaderManager.Interfaces
 {
   public interface ILinkedFileFilter
   {
-    void Filter(List<ProjectItem> projectItems);
+    void Filter (List<ProjectItem> projectItems);
 
     List<ProjectItem> ToBeProgressed { get; }
     List<ProjectItem> NoLicenseHeaderFile { get; }

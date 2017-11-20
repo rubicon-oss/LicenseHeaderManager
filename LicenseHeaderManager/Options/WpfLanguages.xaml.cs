@@ -30,7 +30,7 @@ namespace LicenseHeaderManager.Options
       Loaded += (s, e) =>
       {
         grid.ItemsSource = _page.Languages;
-        EnableButtons ();
+        EnableButtons();
       };
     }
 
@@ -41,9 +41,9 @@ namespace LicenseHeaderManager.Options
 
     private void Add (object sender, RoutedEventArgs e)
     {
-      var dialog = new WpfLanguageDialog ();
-      dialog.Language = new Language ();
-      bool? result = dialog.ShowDialog ();
+      var dialog = new WpfLanguageDialog();
+      dialog.Language = new Language();
+      bool? result = dialog.ShowDialog();
       if (result.HasValue && result.Value)
         _page.Languages.Add (dialog.Language);
     }

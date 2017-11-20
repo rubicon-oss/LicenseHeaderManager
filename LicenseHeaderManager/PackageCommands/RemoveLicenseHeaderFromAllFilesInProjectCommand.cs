@@ -21,18 +21,18 @@ namespace LicenseHeaderManager.PackageCommands
   {
     private LicenseHeaderReplacer _licenseReplacer;
 
-    public RemoveLicenseHeaderFromAllFilesInProjectCommand(LicenseHeaderReplacer licenseReplacer)
+    public RemoveLicenseHeaderFromAllFilesInProjectCommand (LicenseHeaderReplacer licenseReplacer)
     {
       _licenseReplacer = licenseReplacer;
     }
 
-    public void Execute(object projectOrProjectItem)
+    public void Execute (object projectOrProjectItem)
     {
       var project = projectOrProjectItem as Project;
       var item = projectOrProjectItem as ProjectItem;
       if (project == null && item == null) return;
 
-      _licenseReplacer.ResetExtensionsWithInvalidHeaders ();
+      _licenseReplacer.ResetExtensionsWithInvalidHeaders();
       if (project != null)
       {
         foreach (ProjectItem i in project.ProjectItems)

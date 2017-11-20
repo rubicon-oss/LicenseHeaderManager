@@ -31,16 +31,16 @@ namespace LicenseHeaderManager.Headers
     /// Used to keep track of the user selection when he is trying to insert invalid headers into all files,
     /// so that the warning is only displayed once per file extension.
     /// </summary>
-    private readonly IDictionary<string, bool> _extensionsWithInvalidHeaders = new Dictionary<string, bool> ();
+    private readonly IDictionary<string, bool> _extensionsWithInvalidHeaders = new Dictionary<string, bool>();
 
     private readonly ILicenseHeaderExtension _licenseHeaderExtension;
 
-    public LicenseHeaderReplacer(ILicenseHeaderExtension licenseHeaderExtension)
+    public LicenseHeaderReplacer (ILicenseHeaderExtension licenseHeaderExtension)
     {
       _licenseHeaderExtension = licenseHeaderExtension;
     }
 
-    public void ResetExtensionsWithInvalidHeaders()
+    public void ResetExtensionsWithInvalidHeaders ()
     {
       _extensionsWithInvalidHeaders.Clear();
     }
@@ -64,7 +64,7 @@ namespace LicenseHeaderManager.Headers
         switch (result)
         {
           case CreateDocumentResult.DocumentCreated:
-            if (!document.ValidateHeader ())
+            if (!document.ValidateHeader())
             {
               message = string.Format (Resources.Warning_InvalidLicenseHeader, Path.GetExtension (item.Name)).Replace (@"\n", "\n");
               if (MessageBox.Show (message, Resources.Warning, MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No)
@@ -73,7 +73,7 @@ namespace LicenseHeaderManager.Headers
             }
             try
             {
-              document.ReplaceHeaderIfNecessary ();
+              document.ReplaceHeaderIfNecessary();
             }
             catch (ParseException)
             {
@@ -85,15 +85,15 @@ namespace LicenseHeaderManager.Headers
             message = string.Format (Resources.Error_LanguageNotFound, Path.GetExtension (item.Name)).Replace (@"\n", "\n");
             if (calledbyUser && MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No)
                 == MessageBoxResult.Yes)
-              _licenseHeaderExtension.ShowLanguagesPage ();
+              _licenseHeaderExtension.ShowLanguagesPage();
             break;
           case CreateDocumentResult.EmptyHeader:
             break;
           case CreateDocumentResult.NoHeaderFound:
             if (calledbyUser)
             {
-              message = string.Format(Resources.Error_NoHeaderFound).Replace(@"\n", "\n");
-              MessageBox.Show(message, Resources.NameOfThisExtension, MessageBoxButton.OK, MessageBoxImage.Question);
+              message = string.Format (Resources.Error_NoHeaderFound).Replace (@"\n", "\n");
+              MessageBox.Show (message, Resources.NameOfThisExtension, MessageBoxButton.OK, MessageBoxImage.Question);
             }
             break;
         }
@@ -124,14 +124,14 @@ namespace LicenseHeaderManager.Headers
         string message;
         bool replace = true;
 
-        if (!document.ValidateHeader ())
+        if (!document.ValidateHeader())
         {
           string extension = Path.GetExtension (item.Name);
           if (!_extensionsWithInvalidHeaders.TryGetValue (extension, out replace))
           {
             message = string.Format (Resources.Warning_InvalidLicenseHeader, extension).Replace (@"\n", "\n");
             replace = MessageBox.Show (message, Resources.Warning, MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No)
-                      == MessageBoxResult.Yes;
+                == MessageBoxResult.Yes;
             _extensionsWithInvalidHeaders[extension] = replace;
           }
         }
@@ -140,7 +140,7 @@ namespace LicenseHeaderManager.Headers
         {
           try
           {
-            document.ReplaceHeaderIfNecessary ();
+            document.ReplaceHeaderIfNecessary();
           }
           catch (ParseException)
           {
@@ -160,7 +160,6 @@ namespace LicenseHeaderManager.Headers
         {
           item.Document.Close (vsSaveChanges.vsSaveChangesYes);
         }
-        
       }
 
       if (item.ProjectItems != null)
@@ -188,26 +187,30 @@ namespace LicenseHeaderManager.Headers
     /// <param name="document">The document which was created or null if an error occured (see return value).</param>
     /// <param name="headers">A dictionary of headers using the file extension as key and the header as value or null if headers should only be removed.</param>
     /// <returns>A value indicating the result of the operation. Document will be null unless DocumentCreated is returned.</returns>
-    public CreateDocumentResult TryCreateDocument (ProjectItem item, out Document document, out bool wasOpen, IDictionary<string, string[]> headers = null)
+    public CreateDocumentResult TryCreateDocument (
+        ProjectItem item,
+        out Document document,
+        out bool wasOpen,
+        IDictionary<string, string[]> headers = null)
     {
       document = null;
       wasOpen = true;
 
-      if (!ProjectItemInspection.IsPhysicalFile(item))
+      if (!ProjectItemInspection.IsPhysicalFile (item))
         return CreateDocumentResult.NoPhysicalFile;
 
-      if (ProjectItemInspection.IsLicenseHeader(item))
+      if (ProjectItemInspection.IsLicenseHeader (item))
         return CreateDocumentResult.LicenseHeaderDocument;
 
-      if(ProjectItemInspection.IsLink (item))
+      if (ProjectItemInspection.IsLink (item))
         return CreateDocumentResult.LinkedFile;
 
       var language = _licenseHeaderExtension.LanguagesPage.Languages
-          .Where(x => x.Extensions.Any(y => item.Name.EndsWith(y, StringComparison.OrdinalIgnoreCase)))
+          .Where (x => x.Extensions.Any (y => item.Name.EndsWith (y, StringComparison.OrdinalIgnoreCase)))
           .FirstOrDefault();
 
       if (language == null)
-          return CreateDocumentResult.LanguageNotFound;
+        return CreateDocumentResult.LanguageNotFound;
 
       Window window = null;
 
@@ -216,7 +219,7 @@ namespace LicenseHeaderManager.Headers
       {
         if (!item.IsOpen[Constants.vsViewKindTextView])
         {
-          window = item.Open(Constants.vsViewKindTextView);
+          window = item.Open (Constants.vsViewKindTextView);
           wasOpen = false;
         }
       }
@@ -232,14 +235,14 @@ namespace LicenseHeaderManager.Headers
       var itemDocument = item.Document;
       if (item.Document == null)
       {
-        return CreateDocumentResult.NoPhysicalFile;  
+        return CreateDocumentResult.NoPhysicalFile;
       }
-      
-      
+
+
       var textDocument = itemDocument.Object ("TextDocument") as TextDocument;
       if (textDocument == null)
       {
-        return CreateDocumentResult.NoTextDocument;  
+        return CreateDocumentResult.NoTextDocument;
       }
 
       string[] header = null;
@@ -252,14 +255,14 @@ namespace LicenseHeaderManager.Headers
 
         if (extension == null)
         {
-          return CreateDocumentResult.NoHeaderFound;  
+          return CreateDocumentResult.NoHeaderFound;
         }
-        
+
         header = headers[extension];
 
-        if (header.All(string.IsNullOrEmpty))
+        if (header.All (string.IsNullOrEmpty))
         {
-          return CreateDocumentResult.EmptyHeader;    
+          return CreateDocumentResult.EmptyHeader;
         }
       }
 

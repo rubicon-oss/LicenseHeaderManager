@@ -31,14 +31,14 @@ namespace LicenseHeaderManager.Options
       Loaded += (s, e) =>
       {
         grid.ItemsSource = page.LinkedCommands;
-        EnableButtons ();
+        EnableButtons();
       };
     }
 
     private void Add (object sender, RoutedEventArgs e)
     {
       var dialog = new WpfCommandDialog (new LinkedCommand(), Page.Commands);
-      bool? result = dialog.ShowDialog ();
+      bool? result = dialog.ShowDialog();
       if (result.HasValue && result.Value)
         Page.LinkedCommands.Add (dialog.Command);
     }
@@ -67,7 +67,7 @@ namespace LicenseHeaderManager.Options
         return;
 
       var dialog = new WpfCommandDialog (command, Page.Commands);
-      dialog.ShowDialog ();
+      dialog.ShowDialog();
     }
 
     private void EnableButtons ()
@@ -77,7 +77,7 @@ namespace LicenseHeaderManager.Options
 
     private void OnSelectionChanged (object sender, SelectionChangedEventArgs e)
     {
-      EnableButtons ();
+      EnableButtons();
     }
   }
 }

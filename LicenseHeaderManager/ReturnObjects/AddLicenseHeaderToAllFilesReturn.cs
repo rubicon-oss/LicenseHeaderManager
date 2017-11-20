@@ -23,7 +23,7 @@ namespace LicenseHeaderManager.ReturnObjects
     public bool BaseHeaderFound { get; set; }
     public List<ProjectItem> LinkedItems { get; set; }
 
-    public AddLicenseHeaderToAllFilesReturn(int countSubLicenseHeadersFound, bool baseHeaderFound, List<ProjectItem> linkedItems)
+    public AddLicenseHeaderToAllFilesReturn (int countSubLicenseHeadersFound, bool baseHeaderFound, List<ProjectItem> linkedItems)
     {
       CountSubLicenseHeadersFound = countSubLicenseHeadersFound;
       BaseHeaderFound = baseHeaderFound;

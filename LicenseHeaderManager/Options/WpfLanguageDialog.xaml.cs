@@ -26,7 +26,7 @@ namespace LicenseHeaderManager.Options
 
     public WpfLanguageDialog ()
     {
-      InitializeComponent ();
+      InitializeComponent();
       skipExpression.ToolTip = LicenseHeaderManager.Resources.SkipExpressionHelp.Replace (@"\n", "\n");
     }
 
@@ -36,12 +36,16 @@ namespace LicenseHeaderManager.Options
       {
         if (Language.IsValid)
         {
-          Language.NormalizeExtensions ();
+          Language.NormalizeExtensions();
           DialogResult = true;
           Close();
         }
         else
-          MessageBox.Show (LicenseHeaderManager.Resources.Error_LanguageInvalid, LicenseHeaderManager.Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
+          MessageBox.Show (
+              LicenseHeaderManager.Resources.Error_LanguageInvalid,
+              LicenseHeaderManager.Resources.Error,
+              MessageBoxButton.OK,
+              MessageBoxImage.Warning);
       }
     }
   }
