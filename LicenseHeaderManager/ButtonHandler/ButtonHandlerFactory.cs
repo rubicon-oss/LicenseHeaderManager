@@ -30,7 +30,7 @@ namespace LicenseHeaderManager.ButtonHandler
 
     public AddLicenseHeaderToAllProjectsButtonHandler CreateAddLicenseHeaderToAllProjectsButtonHandler() 
     { 
-      return new AddLicenseHeaderToAllProjectsButtonHandler(_licenseHeaderReplacer, _licenseHeadersPackage.DefaultLicenseHeaderPage, _licenseHeadersPackage.Dte2);
+      return new AddLicenseHeaderToAllProjectsButtonHandler(_licenseHeaderReplacer, _licenseHeadersPackage.Dte2);
     }
   }
 }

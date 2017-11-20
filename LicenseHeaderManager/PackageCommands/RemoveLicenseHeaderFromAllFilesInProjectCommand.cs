@@ -17,13 +17,13 @@ using LicenseHeaderManager.Headers;
 
 namespace LicenseHeaderManager.PackageCommands
 {
-  class RemoveLicenseHeaderFromAllFilesCommand
+  public class RemoveLicenseHeaderFromAllFilesInProjectCommand
   {
-    private LicenseHeaderReplacer licenseReplacer;
+    private LicenseHeaderReplacer _licenseReplacer;
 
-    public RemoveLicenseHeaderFromAllFilesCommand(LicenseHeaderReplacer licenseReplacer)
+    public RemoveLicenseHeaderFromAllFilesInProjectCommand(LicenseHeaderReplacer licenseReplacer)
     {
-      this.licenseReplacer = licenseReplacer;
+      _licenseReplacer = licenseReplacer;
     }
 
     public void Execute(object projectOrProjectItem)
@@ -32,16 +32,16 @@ namespace LicenseHeaderManager.PackageCommands
       var item = projectOrProjectItem as ProjectItem;
       if (project == null && item == null) return;
 
-      licenseReplacer.ResetExtensionsWithInvalidHeaders ();
+      _licenseReplacer.ResetExtensionsWithInvalidHeaders ();
       if (project != null)
       {
         foreach (ProjectItem i in project.ProjectItems)
-          licenseReplacer.RemoveOrReplaceHeaderRecursive (i, null, false);
+          _licenseReplacer.RemoveOrReplaceHeaderRecursive (i, null, false);
       }
       else
       {
         foreach (ProjectItem i in item.ProjectItems)
-          licenseReplacer.RemoveOrReplaceHeaderRecursive (i, null, false);
+          _licenseReplacer.RemoveOrReplaceHeaderRecursive (i, null, false);
       }
     }
   }

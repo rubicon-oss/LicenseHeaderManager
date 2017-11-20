@@ -22,7 +22,7 @@ using Microsoft.Win32;
 
 namespace LicenseHeaderManager.PackageCommands
 {
-  public class AddExistingLicenseHeaderDefinitionFileCommand
+  public class AddExistingLicenseHeaderDefinitionFileToProjectCommand
   {
     public ProjectItem AddDefinitionFileToOneProject (string fileName, ProjectItems projectItems)
     {

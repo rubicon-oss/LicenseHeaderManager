@@ -12,51 +12,43 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 #endregion
 
+using System.IO;
 using EnvDTE;
 using LicenseHeaderManager.Headers;
-using LicenseHeaderManager.Interfaces;
-using LicenseHeaderManager.Utils;
-using Microsoft.VisualStudio.Shell.Interop;
 
 namespace LicenseHeaderManager.PackageCommands
 {
-  class RemoveLicenseHeaderFromAllProjectsCommand : ISolutionLevelCommand
+  public class OpenSolutionLicenseHeaderDefinitionFileCommand
   {
-    private const string c_commandName = "Remove LicenseHeader from all Projects";
-
-    private readonly IVsStatusbar _statusBar;
-    private readonly LicenseHeaderReplacer _licenseReplacer;
-
-    public RemoveLicenseHeaderFromAllProjectsCommand(IVsStatusbar statusBar, LicenseHeaderReplacer licenseReplacer)
+    private OpenSolutionLicenseHeaderDefinitionFileCommand()
     {
-      this._statusBar = statusBar;
-      this._licenseReplacer = licenseReplacer;
     }
 
-    public string GetCommandName ()
+    /// <summary>
+    /// Gets the instance of the command.
+    /// </summary>
+    public static OpenSolutionLicenseHeaderDefinitionFileCommand Instance
     {
-      return c_commandName;
+      get;
+      private set;
     }
 
     public void Execute(Solution solution)
     {
-      if (solution == null) return;
+      string solutionHeaderDefinitionFilePath = LicenseHeader.GetHeaderDefinitionFilePathForSolution(solution);
 
-      var allSolutionProjectsSearcher = new AllSolutionProjectsSearcher();
-      var projectsInSolution = allSolutionProjectsSearcher.GetAllProjects(solution);
-
-      int progressCount = 1;
-      int projectCount = projectsInSolution.Count;
-      var removeAllLicenseHeadersCommand = new RemoveLicenseHeaderFromAllFilesCommand(_licenseReplacer);
-      
-      foreach (Project project in projectsInSolution)
+      if (File.Exists(solutionHeaderDefinitionFilePath))
       {
-        _statusBar.SetText(string.Format(Resources.UpdateSolution, progressCount, projectCount));
-        removeAllLicenseHeadersCommand.Execute(project);
-        progressCount++;
+        solution.DTE.OpenFile(EnvDTE.Constants.vsViewKindTextView, solutionHeaderDefinitionFilePath).Activate();
       }
+    }
 
-      _statusBar.SetText(string.Empty);
+    /// <summary>
+    /// Initializes the singleton instance of the command.
+    /// </summary>
+    public static void Initialize()
+    {
+      Instance = new OpenSolutionLicenseHeaderDefinitionFileCommand();
     }
   }
 }

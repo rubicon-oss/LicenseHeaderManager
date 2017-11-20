@@ -70,9 +70,15 @@ namespace LicenseHeaderManager.Test
     public void TestProjectItemWithoutLicenseHeaderFile()
     {
       Solution solution = MockRepository.GenerateMock<Solution> ();
+      solution.Expect(x => x.FullName).Return(@"d:\projects\Stuff.sln");
+
+      DTE dte = MockRepository.GenerateMock<DTE>();
+      dte.Expect(x => x.Solution).Return(solution);
+
       ProjectItems projectItems = MockRepository.GenerateMock<ProjectItems>();
 
       ProjectItem linkedFile = MockRepository.GenerateMock<ProjectItem> ();
+      linkedFile.Expect(x => x.DTE).Return(dte);
       projectItems.Expect (x => x.Parent).Return (new object());
       linkedFile.Expect (x => x.Collection).Return (projectItems);
 

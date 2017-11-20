@@ -168,7 +168,7 @@ namespace LicenseHeaderManager.Headers
         var childHeaders = headers;
         if (searchForLicenseHeaders)
         {
-          childHeaders = LicenseHeaderFinder.GetHeader (item.ProjectItems);
+          childHeaders = LicenseHeaderFinder.SearchItemsDirectlyGetHeaderDefinition (item.ProjectItems);
           if (childHeaders != null)
             headersFound++;
           else

@@ -104,6 +104,9 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualStudio.CommandBars, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Private>False</Private>
       <HintPath>..\packages\VSSDK.OLE.Interop.7.0.4\lib\net20\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
@@ -153,15 +156,6 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="Microsoft.VisualStudio.CommandBars">
-      <Guid>{1CBA492E-7263-47BB-87FE-639000619B15}</Guid>
-      <VersionMajor>8</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </COMReference>
     <COMReference Include="stdole">
       <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
       <VersionMajor>2</VersionMajor>
@@ -176,14 +170,17 @@
     <Compile Include="ButtonHandler\ButtonHandlerFactory.cs" />
     <Compile Include="ButtonHandler\AddLicenseHeaderToAllProjectsButtonHandler.cs" />
     <Compile Include="ButtonHandler\SolutionLevelButtonThreadWorker.cs" />
+    <Compile Include="PackageCommands\AddNewSolutionLicenseHeaderDefinitionFileCommand.cs" />
+    <Compile Include="PackageCommands\OpenSolutionLicenseHeaderDefinitionFileCommand.cs" />
+    <Compile Include="PackageCommands\RemoveSolutionLicenseHeaderDefinitionFileCommand.cs" />
     <Compile Include="Utils\ProjectItemParentFinder.cs" />
     <Compile Include="Interfaces\ISolutionLevelCommand.cs" />
-    <Compile Include="PackageCommands\AddExistingLicenseHeaderDefinitionFileCommand.cs" />
+    <Compile Include="PackageCommands\AddExistingLicenseHeaderDefinitionFileToProjectCommand.cs" />
     <Compile Include="Headers\NewLineConst.cs" />
     <Compile Include="Interfaces\ICommentParser.cs" />
     <Compile Include="OutputWindowHandler.cs" />
-    <Compile Include="PackageCommands\AddLicenseHeaderToAllFilesCommand.cs" />
-    <Compile Include="PackageCommands\AddLicenseHeaderToAllProjectsCommand.cs" />
+    <Compile Include="PackageCommands\AddLicenseHeaderToAllFilesInProjectCommand.cs" />
+    <Compile Include="PackageCommands\AddLicenseHeaderToAllFilesInSolutionCommand.cs" />
     <Compile Include="Headers\CreateDocumentResult.cs" />
     <Compile Include="Headers\Document.cs" />
     <Compile Include="Guids.cs" />
@@ -234,8 +231,8 @@
     <Compile Include="Options\WpfLanguages.xaml.cs">
       <DependentUpon>WpfLanguages.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PackageCommands\RemoveLicenseHeaderFromAllFilesCommand.cs" />
-    <Compile Include="PackageCommands\RemoveLicenseHeaderFromAllProjectsCommand.cs" />
+    <Compile Include="PackageCommands\RemoveLicenseHeaderFromAllFilesInProjectCommand.cs" />
+    <Compile Include="PackageCommands\RemoveLicenseHeaderFromAllFilesInSolutionCommand.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

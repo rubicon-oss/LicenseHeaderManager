@@ -20,13 +20,13 @@ using LicenseHeaderManager.Utils;
 
 namespace LicenseHeaderManager.PackageCommands
 {
-  internal class AddLicenseHeaderToAllFilesCommand
+  internal class AddLicenseHeaderToAllFilesInProjectCommand
   {
-    private LicenseHeaderReplacer licenseReplacer;
+    private LicenseHeaderReplacer _licenseReplacer;
 
-    public AddLicenseHeaderToAllFilesCommand(LicenseHeaderReplacer licenseReplacer)
+    public AddLicenseHeaderToAllFilesInProjectCommand(LicenseHeaderReplacer licenseReplacer)
     {
-      this.licenseReplacer = licenseReplacer;
+      _licenseReplacer = licenseReplacer;
     }
 
     public AddLicenseHeaderToAllFilesReturn Execute(object projectOrProjectItem)
@@ -40,18 +40,17 @@ namespace LicenseHeaderManager.PackageCommands
 
       if (project != null || projectItem != null)
       {
-
-        licenseReplacer.ResetExtensionsWithInvalidHeaders();
+        _licenseReplacer.ResetExtensionsWithInvalidHeaders();
         ProjectItems projectItems;
 
         if (project != null)
         {
-          headers = LicenseHeaderFinder.GetHeader(project);
+          headers = LicenseHeaderFinder.GetHeaderDefinitionForProjectWithFallback(project);
           projectItems = project.ProjectItems;
         }
         else
         {
-          headers = LicenseHeaderFinder.GetHeaderRecursive(projectItem);
+          headers = LicenseHeaderFinder.GetHeaderDefinitionForItem(projectItem);
           projectItems = projectItem.ProjectItems;
         }
        
@@ -60,7 +59,7 @@ namespace LicenseHeaderManager.PackageCommands
           if (ProjectItemInspection.IsPhysicalFile(item) && ProjectItemInspection.IsLink(item))
             linkedItems.Add(item);
           else
-            countSubLicenseHeadersFound = licenseReplacer.RemoveOrReplaceHeaderRecursive(item, headers);
+            countSubLicenseHeadersFound = _licenseReplacer.RemoveOrReplaceHeaderRecursive(item, headers);
         }
       }
 

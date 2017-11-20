@@ -62,13 +62,20 @@ namespace LicenseHeaderManager.Headers
       return fileName;
     }
 
+    public static string GetHeaderDefinitionFilePathForSolution(Solution solution)
+    {
+      string solutionDirectory = Path.GetDirectoryName(solution.FullName);
+      string solutionFileName = Path.GetFileName(solution.FullName);
+      return Path.Combine(solutionDirectory, solutionFileName + LicenseHeader.Extension);
+    }
+
     public static bool ShowQuestionForAddingLicenseHeaderFile (Project activeProject, IDefaultLicenseHeaderPage page)
     {
       string message = string.Format(Resources.Error_NoHeaderDefinition, activeProject.Name).Replace (@"\n", "\n");
       var messageBoxResult = MessageBox.Show (message, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
       if (messageBoxResult != MessageBoxResult.Yes)
         return false;
-      var licenseHeaderDefinitionFile = AddLicenseHeaderDefinitionFile(activeProject, page);
+      var licenseHeaderDefinitionFile = AddHeaderDefinitionFile(activeProject, page);
       licenseHeaderDefinitionFile.Open(Constants.vsViewKindCode).Activate();
       return true;
     }
@@ -77,7 +84,7 @@ namespace LicenseHeaderManager.Headers
     /// <summary>
     /// Adds a new License Header Definition file to the active project.
     /// </summary>
-    public static ProjectItem AddLicenseHeaderDefinitionFile (Project activeProject, IDefaultLicenseHeaderPage page)
+    public static ProjectItem AddHeaderDefinitionFile (Project activeProject, IDefaultLicenseHeaderPage page)
     {
       if (IsValidProject (activeProject))
         return null;
