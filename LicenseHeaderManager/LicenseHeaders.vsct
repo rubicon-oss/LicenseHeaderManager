@@ -308,7 +308,7 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <CommandName>AddNewSolutionLicenseHeaderDefinitionFile</CommandName>
-          <ButtonText>Add New Solution License Header Definition File</ButtonText>
+          <ButtonText>Add New Solution-Wide License Header Definition File</ButtonText>
         </Strings>
       </Button>
 
@@ -318,7 +318,7 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <CommandName>OpenSolutionLicenseHeaderDefinitionFile</CommandName>
-          <ButtonText>Open Solution License Header Definition File</ButtonText>
+          <ButtonText>Open Solution-Wide License Header Definition File</ButtonText>
         </Strings>
       </Button>
 
@@ -328,7 +328,7 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <CommandName>RemoveSolutionLicenseHeaderDefinitionFile</CommandName>
-          <ButtonText>Remove Solution License Header Definition File</ButtonText>
+          <ButtonText>Remove Solution-Wide License Header Definition File</ButtonText>
         </Strings>
       </Button>
 
