@@ -161,9 +161,11 @@ namespace LicenseHeaderManager
         {
           _websiteItemEvents = events.GetObject ("WebSiteItemsEvents") as ProjectItemsEvents;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-          OutputWindowHandler.WriteMessage ("Exception when trying to access WebSiteItemsEvents. \n" + ex);
+          //TODO: Add log statement as soon as we have added logging.
+          //This probably only throws an exception if no WebSite component is installed on the machine.
+          //If no WebSite component is installed, they are probably not using a WebSite Project and therefore dont need that feature.
         }
 
         if (_websiteItemEvents != null)
