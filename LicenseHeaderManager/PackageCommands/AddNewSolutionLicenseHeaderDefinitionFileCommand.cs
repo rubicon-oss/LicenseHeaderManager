@@ -14,6 +14,7 @@
 
 using System;
 using System.IO;
+using System.Text;
 using EnvDTE;
 using LicenseHeaderManager.Headers;
 
@@ -35,7 +36,7 @@ namespace LicenseHeaderManager.PackageCommands
       // Add file
       string defaultLicenseHeaderFileText = this._defaultHeaderDefinitionFunc();
 
-      File.WriteAllText (solutionHeaderDefinitionFilePath, defaultLicenseHeaderFileText);
+      File.WriteAllText (solutionHeaderDefinitionFilePath, defaultLicenseHeaderFileText, Encoding.UTF8);
 
       solution.DTE.OpenFile (EnvDTE.Constants.vsViewKindTextView, solutionHeaderDefinitionFilePath).Activate();
     }
