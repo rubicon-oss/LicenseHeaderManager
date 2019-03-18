@@ -50,7 +50,7 @@ namespace LicenseHeaderManager.Options
         new Language { Extensions = new[] { ".aspx", ".ascx", }, BeginComment = "<%--", EndComment = "--%>" },
         new Language { Extensions = new[] { ".htm", ".html", ".xhtml", ".xml", ".xaml", ".resx", ".config", ".xsd" }, BeginComment = "<!--", EndComment = "-->", SkipExpression = @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?( |\t)*(\n|\r\n|\r)?" },
         new Language { Extensions = new[] { ".css" }, BeginComment = "/*", EndComment = "*/" },
-        new Language { Extensions = new[] { ".js", ".ts" }, LineComment = "//", BeginComment = "/*", EndComment = "*/", SkipExpression = @"/// *<reference.*/>( |\t)*(\n|\r\n|\r)?"},
+        new Language { Extensions = new[] { ".js", ".ts" }, LineComment = "//", BeginComment = "/*", EndComment = "*/", SkipExpression = @"(/// *<reference.*/>( |\t)*(\n|\r\n|\r)?)*"},
         new Language { Extensions = new[] { ".sql" }, BeginComment = "/*", EndComment = "*/", LineComment = "--"},
         new Language { Extensions = new[] { ".php" }, BeginComment = "/*", EndComment = "*/", LineComment = "//"},
         new Language { Extensions = new[] { ".wxs", ".wxl", ".wxi" }, BeginComment = "<!--", EndComment = "-->"},
