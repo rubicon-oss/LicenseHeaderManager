@@ -19,6 +19,7 @@ using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
 using EnvDTE;
 using EnvDTE80;
@@ -34,6 +35,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Constants = EnvDTE.Constants;
 using Document = LicenseHeaderManager.Headers.Document;
+using Task = System.Threading.Tasks.Task;
 
 namespace LicenseHeaderManager
 {
@@ -50,7 +52,7 @@ namespace LicenseHeaderManager
   /// </summary>
   // This attribute tells the PkgDef creation utility (CreatePkgDef.exe) that this class is
   // a package.
-  [PackageRegistration (UseManagedResourcesOnly = true)]
+  [PackageRegistration (UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
   // This attribute is used to register the informations needed to show the this package
   // in the Help/About dialog of Visual Studio.
   [InstalledProductRegistration ("#110", "#112", Version, IconResourceID = 400)]
@@ -62,9 +64,9 @@ namespace LicenseHeaderManager
   [ProvideProfile (typeof (OptionsPage), c_licenseHeaders, c_general, 0, 0, true)]
   [ProvideProfile (typeof (LanguagesPage), c_licenseHeaders, c_languages, 0, 0, true)]
   [ProvideProfile (typeof (DefaultLicenseHeaderPage), c_licenseHeaders, c_defaultLicenseHeader, 0, 0, true)]
-  [ProvideAutoLoad (VSConstants.UICONTEXT.SolutionOpening_string)]
+  [ProvideAutoLoad (VSConstants.UICONTEXT.SolutionOpening_string, PackageAutoLoadFlags.BackgroundLoad)]
   [Guid (GuidList.guidLicenseHeadersPkgString)]
-  public sealed class LicenseHeadersPackage : Package, ILicenseHeaderExtension
+  public sealed class LicenseHeadersPackage : AsyncPackage, ILicenseHeaderExtension
   {
     /// <summary>
     /// Default constructor of the package.
@@ -110,17 +112,19 @@ namespace LicenseHeaderManager
     /// Initialization of the package; this method is called right after the package is sited, so this is the 
     /// place where you can put all the initilaization code that rely on services provided by VisualStudio.
     /// </summary>
-    protected override void Initialize ()
+    protected override async Task InitializeAsync (CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
     {
-      base.Initialize();
+      await base.InitializeAsync(cancellationToken, progress);
+      await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+
       OutputWindowHandler.Initialize (GetGlobalService (typeof (SVsOutputWindow)) as IVsOutputWindow);
       _licenseReplacer = new LicenseHeaderReplacer (this);
-      _dte = GetService (typeof (DTE)) as DTE2;
+      _dte = await GetServiceAsync (typeof (DTE)) as DTE2;
       _addedItems = new Stack<ProjectItem>();
       var buttonHandlerFactory = new ButtonHandlerFactory (this, _licenseReplacer);
 
       //register commands
-      OleMenuCommandService mcs = GetService (typeof (IMenuCommandService)) as OleMenuCommandService;
+      OleMenuCommandService mcs = await GetServiceAsync (typeof (IMenuCommandService)) as OleMenuCommandService;
       if (mcs != null)
       {
         AddNewSolutionLicenseHeaderDefinitionFileCommand.Initialize (
