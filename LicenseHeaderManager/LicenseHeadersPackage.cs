@@ -1,4 +1,4 @@
-﻿#region copyright
+#region copyright
 // Copyright (c) rubicon IT GmbH
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
@@ -79,7 +79,7 @@ namespace LicenseHeaderManager
     {
     }
 
-    public const string Version = "2.0.3";
+    public const string Version = "3.0.0";
 
     private const string c_licenseHeaders = "License Header Manager";
     private const string c_general = "General";

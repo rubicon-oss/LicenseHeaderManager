@@ -1,4 +1,4 @@
-﻿#region copyright
+#region copyright
 // Copyright (c) rubicon IT GmbH
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
@@ -43,8 +43,8 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion ("2.0.3.0")]
-[assembly: AssemblyFileVersion ("2.0.3.0")]
+[assembly: AssemblyVersion ("3.0.0.0")]
+[assembly: AssemblyFileVersion ("3.0.0.0")]
 
 [assembly:
     InternalsVisibleTo (
