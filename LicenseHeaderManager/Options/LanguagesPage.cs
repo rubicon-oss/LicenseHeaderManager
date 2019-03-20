@@ -43,6 +43,7 @@ namespace LicenseHeaderManager.Options
       new Language { Extensions = new[] { ".wxs", ".wxl", ".wxi" }, BeginComment = "<!--", EndComment = "-->" },
       new Language { Extensions = new[] { ".py" }, BeginComment = "\"\"\"", EndComment = "\"\"\"" },
       new Language { Extensions = new[] { ".fs" }, BeginComment = "(*", EndComment = "*)", LineComment = "//" },
+      new Language { Extensions = new[] { ".cshtml", ".vbhtml" }, BeginComment = "@*", EndComment = "*@" },
     };
 
     private readonly LanguageConverter _languageConverter = new LanguageConverter();
