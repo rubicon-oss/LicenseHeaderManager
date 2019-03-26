@@ -12,6 +12,8 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 #endregion
 
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -27,6 +29,12 @@ namespace LicenseHeaderManager.Options
   [Guid ("EB6F9B18-D203-43E3-8033-35AD9BEFC70D")]
   public class OptionsPage : VersionedDialogPage, IOptionsPage
   {
+
+    private const bool c_defaultInsertInNewFiles = false;
+    private const bool c_defaultUseRequiredKeywords = true;
+    private const string c_defaultRequiredKeywords = "license, copyright, (c), ©";
+    private readonly ObservableCollection<LinkedCommand> _defaultLinkedCommands = new ObservableCollection<LinkedCommand>();
+
     private readonly LinkedCommandConverter _linkedCommandConverter = new LinkedCommandConverter();
 
     public event NotifyCollectionChangedEventHandler LinkedCommandsChanged;
@@ -36,6 +44,7 @@ namespace LicenseHeaderManager.Options
       get { return GetService (typeof(DTE)) as DTE2; }
     }
 
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Commands Commands
     {
       get { return Dte.Commands; }
@@ -90,10 +99,10 @@ namespace LicenseHeaderManager.Options
 
     public override sealed void ResetSettings ()
     {
-      InsertInNewFiles = false;
-      UseRequiredKeywords = true;
-      RequiredKeywords = "license, copyright, (c), ©";
-      LinkedCommands = new ObservableCollection<LinkedCommand>();
+      InsertInNewFiles = c_defaultInsertInNewFiles;
+      UseRequiredKeywords = c_defaultUseRequiredKeywords;
+      RequiredKeywords = c_defaultRequiredKeywords;
+      LinkedCommands = _defaultLinkedCommands;
       base.ResetSettings();
     }
 
@@ -107,5 +116,41 @@ namespace LicenseHeaderManager.Options
         return host;
       }
     }
+
+    #region version updates
+
+    protected override IEnumerable<UpdateStep> GetVersionUpdateSteps ()
+    {
+      yield return new UpdateStep (new Version (3, 0, 1), MigrateStorageLocation_3_0_1);
+    }
+
+    private void MigrateStorageLocation_3_0_1 ()
+    {
+      if (!System.Version.TryParse (Version, out var version) || version < new Version (3, 0, 0))
+      {
+        LoadRegistryValuesBefore_3_0_0();
+      }
+      else
+      {
+        var migratedOptionsPage = new OptionsPage();
+        LoadRegistryValuesBefore_3_0_0 (migratedOptionsPage);
+
+        InsertInNewFiles = ThreeWaySelectionForMigration (
+            InsertInNewFiles,
+            migratedOptionsPage.InsertInNewFiles,
+            c_defaultInsertInNewFiles);
+        UseRequiredKeywords = ThreeWaySelectionForMigration (
+            UseRequiredKeywords,
+            migratedOptionsPage.UseRequiredKeywords,
+            c_defaultUseRequiredKeywords);
+        RequiredKeywords = ThreeWaySelectionForMigration (
+            RequiredKeywords,
+            migratedOptionsPage.RequiredKeywords,
+            c_defaultRequiredKeywords);
+        LinkedCommands = migratedOptionsPage.LinkedCommands;
+      }
+    }
+
+    #endregion
   }
 }
