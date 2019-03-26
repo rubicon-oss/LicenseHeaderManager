@@ -29,11 +29,36 @@ namespace LicenseHeaderManager.Options
   [Guid ("D1B5984C-1693-4F26-891E-0BA3BF5760B4")]
   public class LanguagesPage : VersionedDialogPage, ILanguagesPage
   {
+    private readonly IList<Language> _defaultLanguages = new ObservableCollection<Language>
+    {
+      new Language { Extensions = new[] { ".cs" }, LineComment = "//", BeginComment = "/*", EndComment = "*/", BeginRegion = "#region", EndRegion = "#endregion" },
+      new Language { Extensions = new[] { ".c", ".cpp", ".cxx", ".h", ".hpp" }, LineComment = "//", BeginComment = "/*", EndComment = "*/" },
+      new Language { Extensions = new[] { ".vb" }, LineComment = "'", BeginRegion = "#Region", EndRegion = "#End Region" },
+      new Language { Extensions = new[] { ".aspx", ".ascx", }, BeginComment = "<%--", EndComment = "--%>" },
+      new Language { Extensions = new[] { ".htm", ".html", ".xhtml", ".xml", ".xaml", ".resx", ".config", ".xsd" }, BeginComment = "<!--", EndComment = "-->", SkipExpression = @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?( |\t)*(\n|\r\n|\r)?" },
+      new Language { Extensions = new[] { ".css" }, BeginComment = "/*", EndComment = "*/" },
+      new Language { Extensions = new[] { ".js", ".ts" }, LineComment = "//", BeginComment = "/*", EndComment = "*/", SkipExpression = @"(/// *<reference.*/>( |\t)*(\n|\r\n|\r)?)*" },
+      new Language { Extensions = new[] { ".sql" }, BeginComment = "/*", EndComment = "*/", LineComment = "--" },
+      new Language { Extensions = new[] { ".php" }, BeginComment = "/*", EndComment = "*/", LineComment = "//" },
+      new Language { Extensions = new[] { ".wxs", ".wxl", ".wxi" }, BeginComment = "<!--", EndComment = "-->" },
+      new Language { Extensions = new[] { ".py" }, BeginComment = "\"\"\"", EndComment = "\"\"\"" },
+      new Language { Extensions = new[] { ".fs" }, BeginComment = "(*", EndComment = "*)", LineComment = "//" },
+    };
+
+    private readonly LanguageConverter _languageConverter = new LanguageConverter();
+
     //serialized properties
 
-    [TypeConverter (typeof(LanguageConverter))]
-    [DesignerSerializationVisibility (DesignerSerializationVisibility.Visible)]
+    [DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
     public IList<Language> Languages { get; set; }
+
+    [DesignerSerializationVisibility (DesignerSerializationVisibility.Visible)]
+    // ReSharper disable once UnusedMember.Global
+    public string LanguagesSerialized
+    {
+      get { return _languageConverter.ToXml (Languages); }
+      set { Languages = new ObservableCollection<Language> (_languageConverter.FromXml (value)); }
+    }
 
     public LanguagesPage ()
     {
@@ -42,21 +67,7 @@ namespace LicenseHeaderManager.Options
 
     public override sealed void ResetSettings ()
     {
-      Languages = new ObservableCollection<Language>
-      {
-        new Language { Extensions = new[] { ".cs" }, LineComment = "//", BeginComment = "/*", EndComment = "*/", BeginRegion = "#region", EndRegion = "#endregion"},
-        new Language { Extensions = new[] { ".c", ".cpp", ".cxx", ".h", ".hpp" }, LineComment = "//", BeginComment = "/*", EndComment = "*/"},
-        new Language { Extensions = new[] { ".vb" }, LineComment = "'", BeginRegion = "#Region", EndRegion = "#End Region" },
-        new Language { Extensions = new[] { ".aspx", ".ascx", }, BeginComment = "<%--", EndComment = "--%>" },
-        new Language { Extensions = new[] { ".htm", ".html", ".xhtml", ".xml", ".xaml", ".resx", ".config", ".xsd" }, BeginComment = "<!--", EndComment = "-->", SkipExpression = @"(<\?xml(.|\s)*?\?>)?(\s*<!DOCTYPE(.|\s)*?>)?( |\t)*(\n|\r\n|\r)?" },
-        new Language { Extensions = new[] { ".css" }, BeginComment = "/*", EndComment = "*/" },
-        new Language { Extensions = new[] { ".js", ".ts" }, LineComment = "//", BeginComment = "/*", EndComment = "*/", SkipExpression = @"(/// *<reference.*/>( |\t)*(\n|\r\n|\r)?)*"},
-        new Language { Extensions = new[] { ".sql" }, BeginComment = "/*", EndComment = "*/", LineComment = "--"},
-        new Language { Extensions = new[] { ".php" }, BeginComment = "/*", EndComment = "*/", LineComment = "//"},
-        new Language { Extensions = new[] { ".wxs", ".wxl", ".wxi" }, BeginComment = "<!--", EndComment = "-->"},
-        new Language { Extensions = new[] { ".py" }, BeginComment = "\"\"\"", EndComment = "\"\"\""},
-        new Language { Extensions = new[] { ".fs" }, BeginComment = "(*", EndComment = "*)", LineComment = "//"},
-      };
+      Languages = _defaultLanguages;
       base.ResetSettings ();
     }
 
@@ -72,6 +83,7 @@ namespace LicenseHeaderManager.Options
     }
 
     #region version updates
+
     protected override IEnumerable<UpdateStep> GetVersionUpdateSteps ()
     {
       yield return new UpdateStep (new Version (1, 1, 4), AddDefaultSkipExpressions_1_1_4);
@@ -80,6 +92,7 @@ namespace LicenseHeaderManager.Options
       yield return new UpdateStep (new Version (1, 3, 2), AddXmlXsd_1_3_2);
       yield return new UpdateStep (new Version (1, 3, 6), ReduceToBaseExtensions_1_3_6);
       yield return new UpdateStep (new Version (1, 7, 3), AddMultipleDefaultExtensions_1_7_3);
+      yield return new UpdateStep (new Version (3, 0, 1), MigrateStorageLocation_3_0_1);
     }
 
     private void AddDefaultSkipExpressions_1_1_4 ()
@@ -217,6 +230,21 @@ namespace LicenseHeaderManager.Options
       }
     }
 
+    private void MigrateStorageLocation_3_0_1 ()
+    {
+      if (!System.Version.TryParse (Version, out var version) || version < new Version (3, 0, 0))
+      {
+        LoadRegistryValuesBefore_3_0_0();
+      }
+      else
+      {
+        var migratedLanguagesPage = new LanguagesPage();
+        LoadRegistryValuesBefore_3_0_0 (migratedLanguagesPage);
+
+        Languages = migratedLanguagesPage.Languages;
+      }
+    }
+
     private bool AddExtensionToExistingExtension (string existingExtension, string newExtension)
     {
       if (Languages.Any (x => x.Extensions.Contains (newExtension)))
@@ -260,6 +288,7 @@ namespace LicenseHeaderManager.Options
 
       return false;
     }
+
     #endregion
   }
 }

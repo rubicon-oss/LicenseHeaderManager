@@ -41,11 +41,6 @@ namespace LicenseHeaderManager.Options
       base.ResetSettings();
     }
 
-    protected override IEnumerable<UpdateStep> GetVersionUpdateSteps ()
-    {
-      yield return new UpdateStep (new Version (1, 2, 1), InitializeFromResourceIfRequired);
-    }
-
     [Browsable (false)]
     [DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
     protected override IWin32Window Window
@@ -57,6 +52,31 @@ namespace LicenseHeaderManager.Options
       }
     }
 
+    private void InitializeFromResource ()
+    {
+      LicenseHeaderFileText = GetDefaultLicenseHeader();
+    }
+
+    private string GetDefaultLicenseHeader ()
+    {
+      using (var resource = Assembly.GetExecutingAssembly()
+          .GetManifestResourceStream (typeof (LicenseHeadersPackage), "Resources.default.licenseheader"))
+      {
+        using (StreamReader streamreader = new StreamReader (resource, Encoding.UTF8))
+        {
+          return streamreader.ReadToEnd();
+        }
+      }
+    }
+
+    #region version updates
+
+    protected override IEnumerable<UpdateStep> GetVersionUpdateSteps ()
+    {
+      yield return new UpdateStep (new Version (1, 2, 1), InitializeFromResourceIfRequired);
+      yield return new UpdateStep (new Version (3, 0, 1), MigrateStorageLocation_3_0_1);
+    }
+
     private void InitializeFromResourceIfRequired ()
     {
       if (string.IsNullOrEmpty (LicenseHeaderFileText))
@@ -66,19 +86,24 @@ namespace LicenseHeaderManager.Options
       }
     }
 
-    private void InitializeFromResource ()
+    private void MigrateStorageLocation_3_0_1 ()
     {
-      using (var resource = Assembly.GetExecutingAssembly()
-          .GetManifestResourceStream (typeof(LicenseHeadersPackage), "Resources.default.licenseheader"))
+      if (!System.Version.TryParse (Version, out var version) || version < new Version (3, 0, 0))
       {
-        string text;
-        using (StreamReader streamreader = new StreamReader (resource, Encoding.UTF8))
-        {
-          text = streamreader.ReadToEnd();
-        }
+        LoadRegistryValuesBefore_3_0_0();
+      }
+      else
+      {
+        var migratedDefaultLicenseHeaderPage = new DefaultLicenseHeaderPage();
+        LoadRegistryValuesBefore_3_0_0 (migratedDefaultLicenseHeaderPage);
 
-        LicenseHeaderFileText = text;
+        LicenseHeaderFileText = ThreeWaySelectionForMigration (
+            LicenseHeaderFileText,
+            migratedDefaultLicenseHeaderPage.LicenseHeaderFileText,
+            GetDefaultLicenseHeader());
       }
     }
+
+    #endregion
   }
 }

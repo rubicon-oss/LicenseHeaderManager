@@ -13,10 +13,14 @@
 #endregion
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using LicenseHeaderManager.Options.Converters;
 using LicenseHeaderManager.Utils;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.Win32;
 
 namespace LicenseHeaderManager.Options
 {
@@ -95,5 +99,88 @@ namespace LicenseHeaderManager.Options
     {
       return System.Version.Parse (LicenseHeadersPackage.Version);
     }
+
+    #region migration to 3.0.1
+
+    protected void LoadRegistryValuesBefore_3_0_0 (DialogPage dialogPage = null)
+    {
+      using (var key = GetOldRegistryKey())
+      {
+        foreach (var property in GetVisibleProperties())
+        {
+          var converter = GetPropertyConverterOrDefault (property);
+          var registryValue = GetRegistryValue (key, property.Name);
+
+          if (registryValue != null)
+          {
+            try
+            {
+              property.SetValue (
+                  dialogPage ?? AutomationObject,
+                  DeserializeValue (converter, registryValue));
+            }
+            catch (Exception)
+            {
+              OutputWindowHandler.WriteMessage ($"Could not restore registry value for {property.Name}");
+            }
+          }
+        }
+      }
+    }
+
+    private RegistryKey GetOldRegistryKey ()
+    {
+      var oldSettingsRegistryPath = $"DialogPage\\LicenseHeaderManager.Options.{GetType().Name}";
+      var service = (AsyncPackage) GetService (typeof (AsyncPackage));
+      return service?.UserRegistryRoot.OpenSubKey (oldSettingsRegistryPath);
+    }
+
+    private IEnumerable<PropertyDescriptor> GetVisibleProperties ()
+    {
+      return TypeDescriptor.GetProperties (AutomationObject)
+          .Cast<PropertyDescriptor>();
+    }
+
+    private TypeConverter GetPropertyConverterOrDefault (PropertyDescriptor propertyDescriptor)
+    {
+      if (propertyDescriptor.Name == nameof(LanguagesPage.Languages))
+      {
+        return new LanguageConverter();
+      }
+
+      if (propertyDescriptor.Name == nameof(OptionsPage.LinkedCommands))
+      {
+        return new LinkedCommandConverter();
+      }
+
+      return propertyDescriptor.Converter;
+    }
+
+    private string GetRegistryValue (RegistryKey key, string subKeyName)
+    {
+      return key?.GetValue (subKeyName)?.ToString();
+    }
+
+    private object DeserializeValue (TypeConverter converter, string value)
+    {
+      return converter.ConvertFromInvariantString (value);
+    }
+
+    protected T ThreeWaySelectionForMigration<T> (T currentValue, T migratedValue, T defaultValue)
+    {
+      if (defaultValue is IEnumerable)
+      {
+        throw new InvalidOperationException ("ThreeWaySelectionForMigration does currently not support IEnumerables.");
+      }
+
+      if (currentValue.Equals (defaultValue))
+      {
+        return migratedValue;
+      }
+
+      return currentValue;
+    }
+
+    #endregion
   }
 }
