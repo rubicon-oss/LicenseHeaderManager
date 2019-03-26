@@ -29,11 +29,20 @@ namespace LicenseHeaderManager.Options
   [Guid ("D1B5984C-1693-4F26-891E-0BA3BF5760B4")]
   public class LanguagesPage : VersionedDialogPage, ILanguagesPage
   {
+    private readonly LanguageConverter _languageConverter = new LanguageConverter();
+
     //serialized properties
 
-    [TypeConverter (typeof(LanguageConverter))]
-    [DesignerSerializationVisibility (DesignerSerializationVisibility.Visible)]
+    [DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
     public IList<Language> Languages { get; set; }
+
+    [DesignerSerializationVisibility (DesignerSerializationVisibility.Visible)]
+    // ReSharper disable once UnusedMember.Global
+    public string LanguagesSerialized
+    {
+      get { return _languageConverter.ToXml (Languages); }
+      set { Languages = new ObservableCollection<Language> (_languageConverter.FromXml (value)); }
+    }
 
     public LanguagesPage ()
     {

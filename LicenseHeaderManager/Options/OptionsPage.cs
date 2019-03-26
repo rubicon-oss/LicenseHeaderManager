@@ -27,6 +27,8 @@ namespace LicenseHeaderManager.Options
   [Guid ("EB6F9B18-D203-43E3-8033-35AD9BEFC70D")]
   public class OptionsPage : VersionedDialogPage, IOptionsPage
   {
+    private readonly LinkedCommandConverter _linkedCommandConverter = new LinkedCommandConverter();
+
     public event NotifyCollectionChangedEventHandler LinkedCommandsChanged;
 
     private DTE2 Dte
@@ -46,8 +48,7 @@ namespace LicenseHeaderManager.Options
 
     private ObservableCollection<LinkedCommand> _linkedCommands;
 
-    [TypeConverter (typeof(LinkedCommandConverter))]
-    [DesignerSerializationVisibility (DesignerSerializationVisibility.Visible)]
+    [DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
     public ObservableCollection<LinkedCommand> LinkedCommands
     {
       get { return _linkedCommands; }
@@ -67,6 +68,14 @@ namespace LicenseHeaderManager.Options
           LinkedCommandsChanged?.Invoke (value, new NotifyCollectionChangedEventArgs (NotifyCollectionChangedAction.Add, _linkedCommands));
         }
       }
+    }
+
+    [DesignerSerializationVisibility (DesignerSerializationVisibility.Visible)]
+    // ReSharper disable once UnusedMember.Global
+    public string LinkedCommandsSerialized
+    {
+      get { return _linkedCommandConverter.ToXml (_linkedCommands); }
+      set { _linkedCommands = new ObservableCollection<LinkedCommand> (_linkedCommandConverter.FromXml (value)); }
     }
 
     private void OnLinkedCommandsChanged (object sender, NotifyCollectionChangedEventArgs e)
