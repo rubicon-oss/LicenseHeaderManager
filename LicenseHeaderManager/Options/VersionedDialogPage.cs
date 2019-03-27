@@ -168,9 +168,9 @@ namespace LicenseHeaderManager.Options
 
     protected T ThreeWaySelectionForMigration<T> (T currentValue, T migratedValue, T defaultValue)
     {
-      if (defaultValue is IEnumerable)
+      if (defaultValue is ICollection)
       {
-        throw new InvalidOperationException ("ThreeWaySelectionForMigration does currently not support IEnumerables.");
+        throw new InvalidOperationException ("ThreeWaySelectionForMigration does currently not support ICollections.");
       }
 
       if (currentValue.Equals (defaultValue))
