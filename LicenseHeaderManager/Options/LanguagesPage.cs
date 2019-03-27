@@ -93,7 +93,7 @@ namespace LicenseHeaderManager.Options
       yield return new UpdateStep (new Version (1, 3, 2), AddXmlXsd_1_3_2);
       yield return new UpdateStep (new Version (1, 3, 6), ReduceToBaseExtensions_1_3_6);
       yield return new UpdateStep (new Version (1, 7, 3), AddMultipleDefaultExtensions_1_7_3);
-      yield return new UpdateStep (new Version (3, 0, 1), MigrateStorageLocation_3_0_1);
+      yield return new UpdateStep (new Version (3, 0, 1), MigrateStorageLocation_3_0_1, AddDefaultRazorFileSettings_3_0_1);
     }
 
     private void AddDefaultSkipExpressions_1_1_4 ()
@@ -246,6 +246,53 @@ namespace LicenseHeaderManager.Options
       }
     }
 
+    private void AddDefaultRazorFileSettings_3_0_1 ()
+    {
+      var added = false;
+
+      added |= AddLanguageIfNotExistsOrAddExtensionsIfExists (
+          new Language { Extensions = new[] { ".cshtml", ".vbhtml" }, BeginComment = "@*", EndComment = "*@" });
+
+      if (added)
+      {
+        MessageBox.Show (
+            "License Header Manager has automatically updated its configuration to add Language settings for multiple file extensions."
+            + Environment.NewLine +
+            "You can see all Language Settings at 'Options -> License Header Manager -> Languages'." + Environment.NewLine +
+            Environment.NewLine +
+            "Added file extension settings:" + Environment.NewLine +
+            ".cshtml & .vbhtml",
+            "License Header Manager Update");
+      }
+    }
+
+    private bool AddLanguageIfNotExistsOrAddExtensionsIfExists (Language language)
+    {
+      if (language.Extensions.All (ExtensionExists))
+      {
+        return false;
+      }
+
+      if (language.Extensions.Any (ExtensionExists))
+      {
+        var extensionsToAdd = language.Extensions.Where (e => !ExtensionExists (e));
+        var existingExtension = language.Extensions.First (ExtensionExists);
+        foreach (var extension in extensionsToAdd)
+        {
+          AddExtensionToExistingExtension (existingExtension, extension);
+        }
+        return true;
+      }
+
+      if (!language.Extensions.Any (ExtensionExists))
+      {
+        Languages.Add (language);
+        return true;
+      }
+
+      return false;
+    }
+
     private bool AddExtensionToExistingExtension (string existingExtension, string newExtension)
     {
       if (Languages.Any (x => x.Extensions.Contains (newExtension)))
@@ -281,13 +328,18 @@ namespace LicenseHeaderManager.Options
     private bool AddLanguageIfNotExistent (string extension, Language language)
     {
       //We just want to check if our extension is already added as extension somewhere and add it as new Language if not
-      if (!Languages.Any (x => x.Extensions.Contains (extension)))
+      if (!ExtensionExists (extension))
       {
         Languages.Add (language);
         return true;
       }
 
       return false;
+    }
+
+    private bool ExtensionExists (string extension)
+    {
+      return Languages.Any (x => x.Extensions.Contains (extension));
     }
 
     #endregion
