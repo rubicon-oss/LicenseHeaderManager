@@ -29,7 +29,7 @@ namespace LicenseHeaderManager.Options
   [Guid ("D1B5984C-1693-4F26-891E-0BA3BF5760B4")]
   public class LanguagesPage : VersionedDialogPage, ILanguagesPage
   {
-    private readonly IList<Language> _defaultLanguages = new ObservableCollection<Language>
+    private readonly ObservableCollection<Language> _defaultLanguages = new ObservableCollection<Language>
     {
       new Language { Extensions = new[] { ".cs" }, LineComment = "//", BeginComment = "/*", EndComment = "*/", BeginRegion = "#region", EndRegion = "#endregion" },
       new Language { Extensions = new[] { ".c", ".cpp", ".cxx", ".h", ".hpp" }, LineComment = "//", BeginComment = "/*", EndComment = "*/" },
@@ -51,7 +51,7 @@ namespace LicenseHeaderManager.Options
     //serialized properties
 
     [DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
-    public IList<Language> Languages { get; set; }
+    public ObservableCollection<Language> Languages { get; set; }
 
     [DesignerSerializationVisibility (DesignerSerializationVisibility.Visible)]
     // ReSharper disable once UnusedMember.Global

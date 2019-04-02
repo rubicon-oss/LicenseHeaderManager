@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using EnvDTE;
 using LicenseHeaderManager.Headers;
@@ -199,7 +200,7 @@ namespace LicenseHeaderManager.Test
 
       private void PrepareLanguagePage (string fileEnding)
       {
-        _languagesPage.Expect (x => x.Languages).Return (new List<Language> { new Language { Extensions = new[] { fileEnding } } });
+        _languagesPage.Expect (x => x.Languages).Return (new ObservableCollection<Language> { new Language { Extensions = new[] { fileEnding } } });
       }
     }
   }
