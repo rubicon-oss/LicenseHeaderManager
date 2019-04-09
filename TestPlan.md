@@ -7,33 +7,47 @@ Open the TestSolution with the to be tested LicenseHeaderManager Version and fol
 
 ## Quick Test
 
-| ID          | Right-Click project file          | Remove LicenseHeaders - changed files | Add LicenseHeaders                                      | Add LicenseHeaders again         |
-|-------------|-----------------------------------|---------------------------------------|---------------------------------------------------------|----------------------------------|
-| 1           | App2/App2.Windows                 | 6 changed files                       | There should be no changed files                        | There should be no changed files |
-| 2           | SharedApp/BlankSharedApp1.Windows | 1 changed files                       | Press "no" on dialog - There should be no changed files | There should be no changed files |
-| 3           | App1                              | 5 changed files                       | There should be no changed files                        | There should be no changed files |
-| 4           | ConsoleApplication1               | 2 changed files                       | There should be no changed files                        | There should be no changed files |
-| 5           | LHM-CsProjTest                    | 5 changed files                       | There should be no changed files                        | There should be no changed files |
-| 6           | OfficeApp1                        | 2 changed files                       | There should be no changed files                        | There should be no changed files |
-| 7           | OfficeApp1Web                     | 268 changed files                     | There should be no changed files                        | There should be no changed files |
-| 8           | PHPWebProject1                    | 2 changed files                       | There should be no changed files                        | There should be no changed files |
-| 9           | PythonApplication1                | 3 changed files                       | There should be no changed files                        | There should be no changed files |
-| 10          | SetupProject1                     | 3 changed files                       | There should be no changed files                        | There should be no changed files |
-| 11          | TypeScriptHTMLApp1                | 5 changed files                       | There should be no changed files                        | There should be no changed files |
+| ID | Right-Click project file          | Remove LicenseHeaders - changed files | Add LicenseHeaders                                      | Add LicenseHeaders again         |
+|----|-----------------------------------|---------------------------------------|---------------------------------------------------------|----------------------------------|
+| 1  | App2/App2.Windows                 | 6 changed files                       | There should be no changed files                        | There should be no changed files |
+| 2  | SharedApp/BlankSharedApp1.Windows | 1 changed files                       | Press "no" on dialog - There should be no changed files | There should be no changed files |
+| 3  | App1                              | 5 changed files                       | There should be no changed files                        | There should be no changed files |
+| 4  | ConsoleApplication1               | 2 changed files                       | There should be no changed files                        | There should be no changed files |
+| 5  | LHM-CsProjTest                    | 5 changed files                       | There should be no changed files                        | There should be no changed files |
+| 6  | OfficeApp1                        | 2 changed files                       | There should be no changed files                        | There should be no changed files |
+| 7  | OfficeApp1Web                     | 268 changed files                     | There should be no changed files                        | There should be no changed files |
+| 8  | PHPWebProject1                    | 2 changed files                       | There should be no changed files                        | There should be no changed files |
+| 9  | PythonApplication1                | 3 changed files                       | There should be no changed files                        | There should be no changed files |
+| 10 | SetupProject1                     | 3 changed files                       | There should be no changed files                        | There should be no changed files |
+| 11 | TypeScriptHTMLApp1                | 5 changed files                       | There should be no changed files                        | There should be no changed files |
 
 ## Solution Test
 
-| ID            | Right-Click solution | Remove LicenseHeaders - changed files | Add LicenseHeaders - click "no" on dialog | Add LicenseHeaders again - click "no" on dialog |
-|---------------|----------------------|---------------------------------------|-------------------------------------------|-------------------------------------------------|
-| 12            | LHM-CsProjTest       | 302 changed files                     | There should be no changed files          | There should be no changed files                |
+| ID | Right-Click solution | Remove LicenseHeaders - changed files | Add LicenseHeaders - click "no" on dialog | Add LicenseHeaders again - click "no" on dialog |
+|----|----------------------|---------------------------------------|-------------------------------------------|-------------------------------------------------|
+| 12 | LHM-CsProjTest       | 302 changed files                     | There should be no changed files          | There should be no changed files                |
 
-## Settings Test
+## Settings Persistence Test
 
-| ID            | Go to Tools->Options->License Header Manager | Change Setting                                            |  Close options page and reopen   | Close Visual Studio and reopen   | 
-|---------------|----------------------------------------------|-----------------------------------------------------------|----------------------------------|----------------------------------|
-| 13            | General                                      | Change one checkbox, edit the textbox and add one command | Changed settings should be there | Changed settings should be there |
-| 14            | Default Header                               | Change default header                                     | Changed settings should be there | Changed settings should be there |
-| 15            | Languages                                    | Add a new language, change existing language              | Changed settings should be there | Changed settings should be there |
+| ID | Go to Tools->Options->License Header Manager | Change Setting                                                  | Close options page abd reopen                             | Close Visual Studio and reopen   |
+|----|----------------------------------------------|-----------------------------------------------------------------|-----------------------------------------------------------|----------------------------------|
+| 13 | General                                      | Change the first checkbox, edit the textbox and add one command | Changed settings should be there                          | Changed settings should be there |
+| 14 | Default Header                               | Change default header                                           | Changed settings should be there                          | Changed settings should be there |
+| 15 | Languages                                    | Add a new language, change existing language                    | Changed settings should be there                          | Changed settings should be there |
+
+## Settings Functionality Test
+
+| ID | Setting                                                                       | Action                                                                                                         | Result                                        |
+|----|-------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------|-----------------------------------------------|
+| 16 | Checkbox "Automatically insert license headers in new files"                  | Check, create a new file "test1.cs"                                                                            | License Header should be there                |
+| 17 | Checkbox "Automatically insert license headers in new files"                  | Uncheck, create new file "test2.cs"                                                                            | License Header should not be there            |
+| 18 | Checkbox "Only remove comments containing at least one of the keywords below" | Uncheck, go to "test1.cs", remove copyright region, add license header                                         | There should be two license headers now       |
+| 19 | Checkbox "Only remove comments containing at least one of the keywords below" | Check, change textbox below to "foo", go to "test1.cs", add license header                                     | There should be three license headers now     |
+| 20 | Linked Commands                                                               | Add a command you don't already have e.g. "File.SaveAll", go to "test2.cs", do the command"                    | License Header should be there                |
+| 21 | Linked Commands                                                               | Remove the added command and remove the license header from "test2.cs", do the command                         | License Header should not be there            |
+| 22 | Default Header                                                                | Change default license header, remove license header file, generate new one, add license header to "test2.cs"  | New License Header should be there            |
+| 23 | Languages                                                                     | Remove .cs from languages, right click "test2.cs"                                                              | There should be no license header options     |
+| 24 | Languages                                                                     | Add .cs to languages, right click "test2.cs"                                                                   | There should be license header options        |
 
 # Defects
 
