@@ -83,8 +83,8 @@ namespace LicenseHeaderManager.Options
     // ReSharper disable once UnusedMember.Global
     public string LinkedCommandsSerialized
     {
-      get { return _linkedCommandConverter.ToXml (_linkedCommands); }
-      set { _linkedCommands = new ObservableCollection<LinkedCommand> (_linkedCommandConverter.FromXml (value)); }
+      get { return _linkedCommandConverter.ToXml (LinkedCommands); }
+      set { LinkedCommands = new ObservableCollection<LinkedCommand> (_linkedCommandConverter.FromXml (value)); }
     }
 
     private void OnLinkedCommandsChanged (object sender, NotifyCollectionChangedEventArgs e)
