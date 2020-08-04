@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
+  <Import Project="..\packages\Microsoft.CodeAnalysis.BannedApiAnalyzers.2.9.8\build\Microsoft.CodeAnalysis.BannedApiAnalyzers.props" Condition="Exists('..\packages\Microsoft.CodeAnalysis.BannedApiAnalyzers.2.9.8\build\Microsoft.CodeAnalysis.BannedApiAnalyzers.props')" />
   <Import Project="..\packages\Microsoft.VSSDK.BuildTools.15.1.192\build\Microsoft.VSSDK.BuildTools.props" Condition="Exists('..\packages\Microsoft.VSSDK.BuildTools.15.1.192\build\Microsoft.VSSDK.BuildTools.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -60,6 +61,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <DeployExtension>False</DeployExtension>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseWithoutDeploy|AnyCPU'">
     <OutputPath>bin\ReleaseWithoutDeploy\</OutputPath>
@@ -72,6 +74,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <DeployExtension>False</DeployExtension>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -81,8 +84,9 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DeployExtension>False</DeployExtension>
+    <DeployExtension>True</DeployExtension>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -93,6 +97,7 @@
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -102,6 +107,13 @@
     <Reference Include="EnvDTE80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <HintPath>..\packages\EnvDTE80.8.0.3\lib\net10\EnvDTE80.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.CommandBars, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -184,11 +196,36 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.1\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encodings.Web, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.4.7.1\lib\net461\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Json.4.7.2\lib\net461\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
@@ -197,72 +234,93 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ButtonHandler\ButtonHandlerFactory.cs" />
-    <Compile Include="ButtonHandler\AddLicenseHeaderToAllProjectsButtonHandler.cs" />
-    <Compile Include="ButtonHandler\SolutionLevelButtonThreadWorker.cs" />
-    <Compile Include="PackageCommands\AddNewSolutionLicenseHeaderDefinitionFileCommand.cs" />
-    <Compile Include="PackageCommands\OpenSolutionLicenseHeaderDefinitionFileCommand.cs" />
-    <Compile Include="PackageCommands\RemoveSolutionLicenseHeaderDefinitionFileCommand.cs" />
+    <Compile Include="Interfaces\IMenuItemButtonHandler.cs" />
+    <Compile Include="MenuItemButtonHandler\MenuItemButtonHandlerFactory.cs" />
+    <Compile Include="MenuItemButtonHandler\MenuItemButtonHandlerImplementation.cs" />
+    <Compile Include="MenuItemButtonHandler\MenuItemButtonLevel.cs" />
+    <Compile Include="MenuItemButtonHandler\MenuItemButtonOperation.cs" />
+    <Compile Include="MenuItemButtonHandler\FolderProjectMenuItemButtonHandler.cs" />
+    <Compile Include="MenuItemButtonHandler\SolutionMenuItemButtonHandler.cs" />
+    <Compile Include="MenuItemButtonHandler\Implementations\AddLicenseHeaderToAllFilesInFolderProjectImplementation.cs" />
+    <Compile Include="MenuItemCommands\Common\FolderProjectMenuHelper.cs" />
+    <Compile Include="MenuItemButtonHandler\Implementations\RemoveLicenseHeaderToAllFilesInFolderProjectImplementation.cs" />
+    <Compile Include="MenuItemCommands\FolderMenu\AddExistingLicenseHeaderDefinitionFileToFolderCommand.cs" />
+    <Compile Include="MenuItemCommands\ProjectMenu\AddExistingLicenseHeaderDefinitionFileToProjectCommand.cs" />
+    <Compile Include="MenuItemCommands\ProjectItemMenu\AddHeaderToProjectItemCommand.cs" />
+    <Compile Include="MenuItemCommands\EditorMenu\AddLicenseHeaderEditorAdvancedMenuCommand.cs" />
+    <Compile Include="MenuItemCommands\FolderMenu\AddLicenseHeaderToAllFilesInFolderCommand.cs" />
+    <Compile Include="MenuItemCommands\ProjectMenu\AddLicenseHeaderToAllFilesInProjectCommand.cs" />
+    <Compile Include="MenuItemCommands\SolutionMenu\AddLicenseHeaderToAllFilesInSolutionCommand.cs" />
+    <Compile Include="MenuItemCommands\FolderMenu\AddNewLicenseHeaderDefinitionFileToFolderCommand.cs" />
+    <Compile Include="MenuItemCommands\ProjectMenu\AddNewLicenseHeaderDefinitionFileToProjectCommand.cs" />
+    <Compile Include="MenuItemCommands\SolutionMenu\AddNewSolutionLicenseHeaderDefinitionFileCommand.cs" />
+    <Compile Include="MenuItemCommands\ProjectMenu\LicenseHeaderOptionsCommand.cs" />
+    <Compile Include="MenuItemCommands\SolutionMenu\OpenSolutionLicenseHeaderDefinitionFileCommand.cs" />
+    <Compile Include="MenuItemCommands\ProjectItemMenu\RemoveHeaderFromProjectItemCommand.cs" />
+    <Compile Include="MenuItemCommands\EditorMenu\RemoveLicenseHeaderEditorAdvancedMenuCommand.cs" />
+    <Compile Include="MenuItemCommands\FolderMenu\RemoveLicenseHeaderFromAllFilesInFolderCommand.cs" />
+    <Compile Include="MenuItemCommands\ProjectMenu\RemoveLicenseHeaderFromAllFilesInProjectCommand.cs" />
+    <Compile Include="MenuItemCommands\SolutionMenu\RemoveLicenseHeaderFromAllFilesInSolutionCommand.cs" />
+    <Compile Include="MenuItemCommands\SolutionMenu\RemoveSolutionLicenseHeaderDefinitionFileCommand.cs" />
+    <Compile Include="Options\DialogPages\OptionsStoreMode.cs" />
+    <Compile Include="Options\Model\BaseOptionPageModel.cs" />
+    <Compile Include="Options\DialogPages\BaseOptionPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\Model\DefaultLicenseHeaderPageModel.cs" />
+    <Compile Include="Options\DialogPages\DefaultLicenseHeaderPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\DialogPages\OptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\DialogPages\LanguagesPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\Model\GeneralOptionsPageModel.cs" />
+    <Compile Include="Options\OptionsFacade.cs" />
+    <Compile Include="Options\Model\LanguagesPageModel.cs" />
+    <Compile Include="Options\VisualStudioOptions.cs" />
+    <Compile Include="UpdateViewModels\BaseUpdateViewModel.cs" />
+    <Compile Include="UpdateViewModels\FolderProjectUpdateViewModel.cs" />
+    <Compile Include="UpdateViews\FolderProjectUpdateDialog.xaml.cs">
+      <DependentUpon>FolderProjectUpdateDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateViews\IntToMaximumConverter.cs" />
+    <Compile Include="Utils\CoreHelpers.cs" />
+    <Compile Include="Utils\OutputPaneAppender.cs" />
     <Compile Include="Utils\ProjectItemParentFinder.cs" />
-    <Compile Include="Interfaces\ISolutionLevelCommand.cs" />
-    <Compile Include="PackageCommands\AddExistingLicenseHeaderDefinitionFileToProjectCommand.cs" />
+    <Compile Include="MenuItemCommands\Common\ExistingLicenseHeaderDefinitionFileAdder.cs" />
     <Compile Include="Headers\NewLineConst.cs" />
-    <Compile Include="Interfaces\ICommentParser.cs" />
-    <Compile Include="OutputWindowHandler.cs" />
-    <Compile Include="PackageCommands\AddLicenseHeaderToAllFilesInProjectCommand.cs" />
-    <Compile Include="PackageCommands\AddLicenseHeaderToAllFilesInSolutionCommand.cs" />
-    <Compile Include="Headers\CreateDocumentResult.cs" />
-    <Compile Include="Headers\Document.cs" />
-    <Compile Include="Guids.cs" />
-    <Compile Include="Headers\DocumentHeader.cs" />
-    <Compile Include="Headers\DocumentHeaderProperties.cs" />
-    <Compile Include="Headers\DocumentHeaderProperty.cs" />
+    <Compile Include="MenuItemCommands\Common\AddLicenseHeaderToAllFilesInProjectHelper.cs" />
+    <Compile Include="MenuItemButtonHandler\Implementations\AddLicenseHeaderToAllFilesInSolutionImplementation.cs" />
     <Compile Include="Headers\LicenseHeaderFinder.cs" />
-    <Compile Include="Headers\LicenseHeader.cs" />
-    <Compile Include="Headers\LicenseHeaderReplacer.cs" />
-    <Compile Include="Headers\LineEndInformation.cs" />
-    <Compile Include="Headers\NewLineManager.cs" />
-    <Compile Include="Headers\ParseException.cs" />
-    <Compile Include="Headers\CommentParser.cs" />
-    <Compile Include="Headers\UserInfo.cs" />
+    <Compile Include="Headers\LicenseHeaderDefinitionFileHelper.cs" />
     <Compile Include="Interfaces\ILicenseHeaderExtension.cs" />
     <Compile Include="Interfaces\ILinkedFileFilter.cs" />
-    <Compile Include="Options\IDefaultLicenseHeaderPage.cs" />
-    <Compile Include="Options\ILanguagesPage.cs" />
-    <Compile Include="Options\IOptionsPage.cs" />
-    <Compile Include="Options\WpfEditDefaultLicenseHeaderDialog.xaml.cs">
+    <Compile Include="Options\Model\IDefaultLicenseHeaderPageModel.cs" />
+    <Compile Include="Options\Model\ILanguagesPageModel.cs" />
+    <Compile Include="Options\Model\IGeneralOptionsPageModel.cs" />
+    <Compile Include="Options\DialogPageControls\WpfEditDefaultLicenseHeaderDialog.xaml.cs">
       <DependentUpon>WpfEditDefaultLicenseHeaderDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Options\DefaultLicenseHeaderPage .cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Options\VersionedDialogPage.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Options\LinkedCommand.cs" />
     <Compile Include="Options\Converters\LinkedCommandConverter.cs" />
     <Compile Include="Options\Converters\ExtensionConverter.cs" />
     <Compile Include="Options\Converters\XmlTypeConverter.cs" />
     <Compile Include="Options\UpdateStep.cs" />
-    <Compile Include="Options\WpfDefaultLicenseHeader.xaml.cs">
+    <Compile Include="Options\DialogPageControls\WpfDefaultLicenseHeader.xaml.cs">
       <DependentUpon>WpfDefaultLicenseHeader.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Options\WpfLanguageDialog.xaml.cs">
+    <Compile Include="Options\DialogPageControls\WpfLanguageDialog.xaml.cs">
       <DependentUpon>WpfLanguageDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Options\Converters\LanguageConverter.cs" />
-    <Compile Include="Options\OptionsPage.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Options\Language.cs" />
-    <Compile Include="Options\LanguagesPage.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Options\WpfLanguages.xaml.cs">
+    <Compile Include="Options\DialogPageControls\WpfLanguages.xaml.cs">
       <DependentUpon>WpfLanguages.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PackageCommands\RemoveLicenseHeaderFromAllFilesInProjectCommand.cs" />
-    <Compile Include="PackageCommands\RemoveLicenseHeaderFromAllFilesInSolutionCommand.cs" />
+    <Compile Include="MenuItemCommands\Common\RemoveLicenseHeaderFromAllFilesInProjectHelper.cs" />
+    <Compile Include="MenuItemButtonHandler\Implementations\RemoveLicenseHeaderFromAllFilesInSolutionImplementation.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -271,8 +329,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="LicenseHeadersPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PkgCmdID.cs" />
-    <Compile Include="Options\WpfOptions.xaml.cs">
+    <Compile Include="Options\DialogPageControls\WpfOptions.xaml.cs">
       <DependentUpon>WpfOptions.xaml</DependentUpon>
     </Compile>
     <Compile Include="Options\WpfHost.cs">
@@ -281,24 +338,23 @@
     <Compile Include="Options\WpfHost.Designer.cs">
       <DependentUpon>WpfHost.cs</DependentUpon>
     </Compile>
-    <Compile Include="Options\WpfCommandDialog.xaml.cs">
+    <Compile Include="Options\DialogPageControls\WpfCommandDialog.xaml.cs">
       <DependentUpon>WpfCommandDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ReturnObjects\AddLicenseHeaderToAllFilesReturn.cs" />
-    <Compile Include="SolutionUpdateViewModels\RelayCommand.cs" />
-    <Compile Include="SolutionUpdateViews\SolutionUpdateDialog.xaml.cs">
+    <Compile Include="ResultObjects\AddLicenseHeaderToAllFilesResult.cs" />
+    <Compile Include="UpdateViewModels\RelayCommand.cs" />
+    <Compile Include="UpdateViews\SolutionUpdateDialog.xaml.cs">
       <DependentUpon>SolutionUpdateDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SolutionUpdateViewModels\SolutionUpdateViewModel.cs" />
+    <Compile Include="UpdateViewModels\SolutionUpdateViewModel.cs" />
     <Compile Include="Utils\AllSolutionProjectsSearcher.cs" />
     <Compile Include="Utils\CommandUtility.cs" />
-    <Compile Include="Utils\LicenseHeaderPreparer.cs" />
     <Compile Include="Utils\LinkedFileFilter.cs" />
     <Compile Include="Utils\LinkedFileHandler.cs" />
     <Compile Include="Utils\MessageBoxHelper.cs" />
-    <Compile Include="Utils\PathUtility.cs" />
     <Compile Include="Utils\ProjectItemInspection.cs" />
-    <Compile Include="Utils\StringExtensions.cs" />
+    <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Utils\ReplacerProgress.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
@@ -317,8 +373,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\default.licenseheader" />
-    <None Include="LicenseHeaderManager.licenseheader" />
+    <None Include="..\LicenseHeaderManager.sln.licenseheader">
+      <Link>LicenseHeaderManager.sln.licenseheader</Link>
+    </None>
+    <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -337,31 +395,35 @@
     <None Include="Resources\Images.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Options\WpfEditDefaultLicenseHeaderDialog.xaml">
+    <Page Include="Options\DialogPageControls\WpfEditDefaultLicenseHeaderDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Options\WpfDefaultLicenseHeader.xaml">
+    <Page Include="Options\DialogPageControls\WpfDefaultLicenseHeader.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Options\WpfLanguageDialog.xaml">
+    <Page Include="Options\DialogPageControls\WpfLanguageDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Options\WpfLanguages.xaml">
+    <Page Include="Options\DialogPageControls\WpfLanguages.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Options\WpfOptions.xaml">
+    <Page Include="Options\DialogPageControls\WpfOptions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Options\WpfCommandDialog.xaml">
+    <Page Include="Options\DialogPageControls\WpfCommandDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SolutionUpdateViews\SolutionUpdateDialog.xaml">
+    <Page Include="UpdateViews\FolderProjectUpdateDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UpdateViews\SolutionUpdateDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -394,6 +456,21 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{b8d94ed6-4b73-443e-aba0-2c373b9e6735}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.BannedApiAnalyzers.2.9.8\analyzers\dotnet\cs\Microsoft.CodeAnalysis.BannedApiAnalyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.BannedApiAnalyzers.2.9.8\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.BannedApiAnalyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.VisualStudio.SDK.Analyzers.16.6.11\analyzers\cs\Microsoft.VisualStudio.SDK.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\Microsoft.VisualStudio.SDK.Analyzers.16.6.11\analyzers\cs\Microsoft.VisualStudio.SDK.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.6.13\analyzers\cs\Microsoft.VisualStudio.Threading.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.6.13\analyzers\cs\Microsoft.VisualStudio.Threading.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
   </PropertyGroup>
@@ -406,9 +483,14 @@
     <Error Condition="!Exists('..\packages\Microsoft.VisualStudio.SDK.EmbedInteropTypes.15.0.27\build\Microsoft.VisualStudio.SDK.EmbedInteropTypes.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VisualStudio.SDK.EmbedInteropTypes.15.0.27\build\Microsoft.VisualStudio.SDK.EmbedInteropTypes.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.VSSDK.BuildTools.15.1.192\build\Microsoft.VSSDK.BuildTools.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VSSDK.BuildTools.15.1.192\build\Microsoft.VSSDK.BuildTools.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.VSSDK.BuildTools.15.1.192\build\Microsoft.VSSDK.BuildTools.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VSSDK.BuildTools.15.1.192\build\Microsoft.VSSDK.BuildTools.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.BannedApiAnalyzers.2.9.8\build\Microsoft.CodeAnalysis.BannedApiAnalyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.BannedApiAnalyzers.2.9.8\build\Microsoft.CodeAnalysis.BannedApiAnalyzers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.6.13\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.6.13\build\Microsoft.VisualStudio.Threading.Analyzers.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.VisualStudio.SDK.Analyzers.16.6.11\build\Microsoft.VisualStudio.SDK.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VisualStudio.SDK.Analyzers.16.6.11\build\Microsoft.VisualStudio.SDK.Analyzers.targets'))" />
   </Target>
   <Import Project="..\packages\Microsoft.VisualStudio.SDK.EmbedInteropTypes.15.0.27\build\Microsoft.VisualStudio.SDK.EmbedInteropTypes.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.SDK.EmbedInteropTypes.15.0.27\build\Microsoft.VisualStudio.SDK.EmbedInteropTypes.targets')" />
   <Import Project="..\packages\Microsoft.VSSDK.BuildTools.15.1.192\build\Microsoft.VSSDK.BuildTools.targets" Condition="Exists('..\packages\Microsoft.VSSDK.BuildTools.15.1.192\build\Microsoft.VSSDK.BuildTools.targets')" />
+  <Import Project="..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.6.13\build\Microsoft.VisualStudio.Threading.Analyzers.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.6.13\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" />
+  <Import Project="..\packages\Microsoft.VisualStudio.SDK.Analyzers.16.6.11\build\Microsoft.VisualStudio.SDK.Analyzers.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.SDK.Analyzers.16.6.11\build\Microsoft.VisualStudio.SDK.Analyzers.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

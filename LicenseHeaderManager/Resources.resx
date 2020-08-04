@@ -120,9 +120,6 @@
   <data name="Add" xml:space="preserve">
     <value>Add...</value>
   </data>
-  <data name="AddExistingLicenseHeaderFileQuestion" xml:space="preserve">
-    <value>Do you want to Add Existing License Header Definition File?</value>
-  </data>
   <data name="After" xml:space="preserve">
     <value>After</value>
   </data>
@@ -165,14 +162,8 @@
   <data name="Error_CreatingFile" xml:space="preserve">
     <value>The file could not be created.</value>
   </data>
-  <data name="Error_InvalidLicenseHeader" xml:space="preserve">
-    <value>An error occured while parsing the file {0}.\nMake sure the comment syntax is correct.</value>
-  </data>
   <data name="Error_LanguageInvalid" xml:space="preserve">
     <value>Please provide at least an extension and either a line comment or begin and end comment tags.</value>
-  </data>
-  <data name="Error_LanguageNotFound" xml:space="preserve">
-    <value>No comment definitions found for {0} files.\nDo you want to add them to the configuration?</value>
   </data>
   <data name="Error_MultipleProjectsNoLicenseHeaderFile" xml:space="preserve">
     <value>No license header definition file found in following projects:\n\n{0}\n\nDo you want to add an existing License Header Definition File into these Projects?</value>
@@ -180,17 +171,8 @@
   <data name="Error_NoHeaderDefinition" xml:space="preserve">
     <value>No license header definition file found in project {0}.\nDo you want to add a new License Header Definition File?</value>
   </data>
-  <data name="Error_NoHeaderFound" xml:space="preserve">
-    <value>This extension currently has no header defined in the license header definition file\n </value>
-  </data>
-  <data name="Error_NoLicenseHeaderFile" xml:space="preserve">
-    <value>The project has no license header file.</value>
-  </data>
   <data name="Execute" xml:space="preserve">
     <value>Execute 'Add license header' command</value>
-  </data>
-  <data name="Extension" xml:space="preserve">
-    <value>Extension</value>
   </data>
   <data name="Extensions" xml:space="preserve">
     <value>Extensions</value>
@@ -200,12 +182,6 @@
   </data>
   <data name="FileHeaderTextLabel" xml:space="preserve">
     <value>Text for new license header definitions</value>
-  </data>
-  <data name="Help" xml:space="preserve">
-    <value>Help</value>
-  </data>
-  <data name="Information_NoDefinitionFileStopUpdating" xml:space="preserve">
-    <value>Cannot add License Headers because there is no License Header Definition File. Please add one and try again.</value>
   </data>
   <data name="InsertInNewFiles" xml:space="preserve">
     <value>Automatically insert license headers in new files</value>
@@ -225,14 +201,8 @@
   <data name="LinkedFileUpdateInformation" xml:space="preserve">
     <value>We could not update following linked files, because there is no license header definition file in their original project, or the original project is not part of this solution.\n\n{0}</value>
   </data>
-  <data name="NameOfThisExtension" xml:space="preserve">
-    <value>License Header Manager</value>
-  </data>
   <data name="Ok" xml:space="preserve">
     <value>OK</value>
-  </data>
-  <data name="Question_StopForConfiguringDefinitionFilesMultipleFiles" xml:space="preserve">
-    <value>License Header Definition Files added. Do you want to stop the update process to configure them?</value>
   </data>
   <data name="Question_StopForConfiguringDefinitionFilesSingleFile" xml:space="preserve">
     <value>License Header Definition File added. Do you want to stop the update process to configure it?</value>
@@ -252,26 +222,17 @@
   <data name="SkipExpressionHelp" xml:space="preserve">
     <value>Some languages require special instructions at the very beginning of the file.\nXML-based languages need the &lt;?xml ... ?&gt; declaration for example. You can\ndefine a regular expression that identifies these instructions here so that the\nlicense header comment can be inserted after them, leaving the file valid.\n\nSee the online documentation on https://github.com/rubicon-oss/LicenseHeaderManager\nfor more detailed information.</value>
   </data>
-  <data name="UpdateSolution" xml:space="preserve">
-    <value>Updating Project {0}/{1}</value>
-  </data>
   <data name="Update_1_1_3" xml:space="preserve">
     <value>License Header Manager has automatically updated its configuration to add SkipExpressions.\n\nPlease check your language settings if they were modified\nbefore the update.\n\nIf you added any XML-based languages, you might need to add\na SkipExpression.</value>
   </data>
   <data name="Update_1_3_1" xml:space="preserve">
     <value>License Header Manager has automatically updated its configuration to add .config and .xsd.\n\nPlease check your language settings if they were modified\nbefore the update.</value>
   </data>
-  <data name="Update_DefaultLicenseHeader_1_2_1" xml:space="preserve">
-    <value>License Header Manager has automatically updated its configuration\nto include settings for the default license header definition file.</value>
-  </data>
   <data name="Update_RegionSettings_1_2_1" xml:space="preserve">
     <value>License Header Manager has automatically updated its configuration\nto fix the settings for C# and VB.NET regions.\n\nPlease check your language settings if they were modified\nbefore the update.</value>
   </data>
   <data name="Update_SkipExpressions_1_2_2" xml:space="preserve">
     <value>License Header Manager has automatically updated its configuration\nto fix a problem with the SkipExpressions for XML, HTML (and similar), and JS files.\n\nPlease check your language settings if they were modified\nbefore the update.</value>
-  </data>
-  <data name="UpdatingFiles" xml:space="preserve">
-    <value>Updating files...</value>
   </data>
   <data name="UseRequiredKeywords" xml:space="preserve">
     <value>Only remove comments containing at least one of the keywords below</value>
@@ -283,7 +244,7 @@
     <value>The selected license header definition file already exists in this project. It is not possible to add a link to an item that already exists in the project.</value>
   </data>
   <data name="Warning_InvalidLicenseHeader" xml:space="preserve">
-    <value>The header definition for {0} files contains non-comment text.\nIf you insert this header, you will not be able to remove or replace the header automatically!\nDo you really want to add this header to the file?</value>
+    <value>HeaderDefinitionExtension: {0}\n\nThe header definition for {0} files contains non-comment text.\nIf you insert this header, you will not be able to remove or replace the header automatically!\n\nDo you really want to add this header to the file?</value>
   </data>
   <data name="WpfDefaultLicenseHeaderDialogTitle" xml:space="preserve">
     <value>Edit default header definition</value>
@@ -292,23 +253,22 @@
     <value>Edit language</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Constant_DisplayNameLookup_TimeDifferenceInSecondsBeforeTooOld" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="UserInfo_LookupFailure_Information" xml:space="preserve">
-    <value>Exception caught while trying to lookup the display name with 'UserPrincipal.Current.DisplayName'. \nStacktrace: {0}
-</value>
-  </data>
-  <data name="UserInfo_UnknownDisplayNameString" xml:space="preserve">
-    <value>&lt;Unknown&gt;</value>
-  </data>
-  <data name="UserInfo_LookupFailure_FileNotFoundException_Information" xml:space="preserve">
-    <value>FileNotFoundException caught while trying to lookup the display name with 'UserPrincipal.Current.DisplayName'. \nThis is likely caused by an Windows 10 update and can be fixed by updating the registry. \nSee https://git.io/vza4O for more information.</value>
-  </data>
   <data name="Question_AddNewLicenseHeaderDefinitionForSolution" xml:space="preserve">
-    <value>No License Header Definition File found. Do you want to add a new one for the Solution?</value>
+    <value>The file scan has finished.\nNo License Header Definition File found. Do you want to add a new one for the Solution?</value>
   </data>
   <data name="Question_AddExistingDefinitionFileToProject" xml:space="preserve">
-    <value>No License Header Definition File found in the Project. Do you want to add an existing License Header Definition File to the project?</value>
+    <value>The file scan has finished.\nNo License Header Definition File found in the Project. Do you want to add an existing License Header Definition File to the project?</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="TaskFailed" xml:space="preserve">
+    <value>Execution of asynchronous Task failed</value>
   </data>
 </root>
