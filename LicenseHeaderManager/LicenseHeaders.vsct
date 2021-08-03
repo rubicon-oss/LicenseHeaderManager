@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
 <CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <!--  This is the file that defines the actual layout and type of the commands.
@@ -24,8 +25,6 @@
   <!--<Extern href="msobtnid.h" xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" />-->
 
 
-
-
   <!--The Commands section is where we the commands, menus and menu groups are defined.
       This section uses a Guid to identify the package that provides the command defined inside it. -->
   <Commands package="guidLicenseHeadersPkg">
@@ -37,7 +36,7 @@
     group; your package should define its own command set in order to avoid collisions  
     with command ids defined by other packages. -->
 
-    
+
     <!-- In this section you can define new menu groups. A menu group is a container for 
          other menus or buttons (commands); from a visual point of view you can see the 
          group as the part of a menu contained between two lines. The parent of a group 
@@ -62,7 +61,7 @@
       <Group guid="guidLicenseHeadersCmdSet" id="ProjectSubMenuGroup1" priority="0x0100">
         <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenu" />
       </Group>
-      
+
       <Group guid="guidLicenseHeadersCmdSet" id="ProjectSubMenuGroup2" priority="0x0200">
         <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenu" />
       </Group>
@@ -96,17 +95,20 @@
       </Group>
 
       <Group guid="guidLicenseHeadersCmdSet" id="SolutionMenuGroup" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_SOLNNODE"/>
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_SOLNNODE" />
       </Group>
 
       <Group guid="guidLicenseHeadersCmdSet" id="SolutionSubMenuGroup1" priority="0x0100">
         <Parent guid="guidLicenseHeadersCmdSet" id="SolutionSubMenu" />
       </Group>
-      
+
       <Group guid="guidLicenseHeadersCmdSet" id="SolutionSubMenuGroup2" priority="0x0200">
         <Parent guid="guidLicenseHeadersCmdSet" id="SolutionSubMenu" />
       </Group>
-      
+
+      <Group guid="guidLicenseHeadersPackageCmdSet" id="MyMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
+      </Group>
     </Groups>
 
     <Menus>
@@ -117,7 +119,7 @@
           <CommandName>License Headers</CommandName>
         </Strings>
       </Menu>
-      
+
       <Menu guid="guidLicenseHeadersCmdSet" id="ProjectItemSubMenu" priority="0x0100">
         <Parent guid="guidLicenseHeadersCmdSet" id="ProjectItemMenuGroup" />
         <Strings>
@@ -142,7 +144,7 @@
         </Strings>
       </Menu>
     </Menus>
-    
+
     <!--Buttons section. -->
     <!--This section defines the elements the user can interact with, like a menu command or a button 
         or combo box in a toolbar. -->
@@ -154,186 +156,165 @@
               <CommandFlag>DefaultInvisible</CommandFlag>
               <CommandFlag>DynamicVisibility</CommandFlag>
           If you do not want an image next to your command, remove the Icon node or set it to <Icon guid="guidOfficeIcon" id="msotcidNoIcon" /> -->
-      
-      
-      <Button guid="guidLicenseHeadersCmdSet" id="AddLicenseHeader" priority="0x0100" type="Button">
-        <Parent guid="guidLicenseHeadersCmdSet" id="EditMenuGroup" />
-        <Icon guid="guidImages" id="bmpAddLicenseHeader" />
-        <CommandFlag>DynamicVisibility</CommandFlag>
-        <CommandFlag>DefaultInvisible</CommandFlag>
-        <Strings>
-          <CommandName>AddLicenseHeader</CommandName>
-          <ButtonText>Add License Header</ButtonText>
-        </Strings>
-      </Button>
 
-      <Button guid="guidLicenseHeadersCmdSet" id="RemoveLicenseHeader" priority="0x0200" type="Button">
-        <Parent guid="guidLicenseHeadersCmdSet" id="EditMenuGroup" />
-        <Icon guid="guidImages" id="bmpRemoveLicenseHeader" />
-        <CommandFlag>DynamicVisibility</CommandFlag>
-        <CommandFlag>DefaultInvisible</CommandFlag>
-        <Strings>
-          <CommandName>RemoveLicenseHeader</CommandName>
-          <ButtonText>Remove License Header</ButtonText>
-        </Strings>
-      </Button>
-
-      <Button guid="guidLicenseHeadersCmdSet" id="AddLicenseHeaderToProjectItem" priority="0x0100" type="Button">
+      <Button guid="guidLicenseHeadersPackageCmdSet" id="cmdidAddHeaderToProjectItemCommand" priority="0x0100" type="Button">
         <Parent guid="guidLicenseHeadersCmdSet" id="ProjectItemSubMenuGroup" />
         <Icon guid="guidImages" id="bmpAddLicenseHeader" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-          <CommandName>AddLicenseHeader</CommandName>
           <ButtonText>Add License Header</ButtonText>
         </Strings>
       </Button>
 
-      <Button guid="guidLicenseHeadersCmdSet" id="RemoveLicenseHeaderFromProjectItem" priority="0x0200" type="Button">
+      <Button guid="guidLicenseHeadersPackageCmdSet" id="cmdidRemoveHeaderFromProjectItemCommand" priority="0x0200" type="Button">
         <Parent guid="guidLicenseHeadersCmdSet" id="ProjectItemSubMenuGroup" />
         <Icon guid="guidImages" id="bmpRemoveLicenseHeader" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-          <CommandName>RemoveLicenseHeader</CommandName>
           <ButtonText>Remove License Header</ButtonText>
         </Strings>
       </Button>
 
-      <Button guid="guidLicenseHeadersCmdSet" id="AddLicenseHeadersToAllFilesInProject" priority="0x0100" type="Button">
-        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup1" />
-        <Icon guid="guidImages" id="bmpAddLicenseHeadersToAllFiles" />
-        <CommandFlag>DynamicVisibility</CommandFlag>
-        <CommandFlag>DefaultInvisible</CommandFlag>
-        <Strings>
-          <CommandName>AddLicenseHeadersToAllFilesInProject</CommandName>
-          <ButtonText>Add License Headers to All Files</ButtonText>
-        </Strings>
-      </Button>
-
-      <Button guid="guidLicenseHeadersCmdSet" id="RemoveLicenseHeadersFromAllFilesInProject" priority="0x0200" type="Button">
-        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup1" />
-        <Icon guid="guidImages" id="bmpRemoveLicenseHeadersFromAllFiles" />
-        <CommandFlag>DynamicVisibility</CommandFlag>
-        <CommandFlag>DefaultInvisible</CommandFlag>
-        <Strings>
-          <CommandName>RemoveLicenseHeadersFromAllFilesInProject</CommandName>
-          <ButtonText>Remove License Headers from All Files</ButtonText>
-        </Strings>
-      </Button>
-
-      <Button guid="guidLicenseHeadersCmdSet" id="AddNewLicenseHeaderDefinitionFileToProject" priority="0x0100" type="Button">
-        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup2" />
-        <Icon guid="guidImages" id="bmpAddNewLicenseHeaderDefinitionFile" />
-        <Strings>
-          <CommandName>AddNewLicenseHeaderDefinitionFileToProject</CommandName>
-          <ButtonText>Add New License Header Definition File</ButtonText>
-        </Strings>
-      </Button>
-
-      <Button guid="guidLicenseHeadersCmdSet" id="AddExistingLicenseHeaderDefinitionFileToProject" priority="0x0200" type="Button">
-        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup2" />
-        <Icon guid="guidImages" id="bmpAddExistingLicenseHeaderDefinitionFile" />
-        <Strings>
-          <CommandName>AddExistingLicenseHeaderDefinitionFileToProject</CommandName>
-          <ButtonText>Add Existing License Header Definition File...</ButtonText>
-        </Strings>
-      </Button>
-
-      <Button guid="guidLicenseHeadersCmdSet" id="AddLicenseHeadersToAllFilesInProject" priority="0x0100" type="Button">
-        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenuGroup1" />
-        <Icon guid="guidImages" id="bmpAddLicenseHeadersToAllFiles" />
-        <Strings>
-          <CommandName>AddLicenseHeadersToAllFilesInProject</CommandName>
-          <ButtonText>Add License Headers to All Files</ButtonText>
-        </Strings>
-      </Button>
-
-      <Button guid="guidLicenseHeadersCmdSet" id="RemoveLicenseHeadersFromAllFilesInProject" priority="0x0200" type="Button">
-        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenuGroup1" />
-        <Icon guid="guidImages" id="bmpRemoveLicenseHeadersFromAllFiles" />
-        <Strings>
-          <CommandName>RemoveLicenseHeadersFromAllFilesInProject</CommandName>
-          <ButtonText>Remove License Headers from All Files</ButtonText>
-        </Strings>
-      </Button>
-
-      <Button guid="guidLicenseHeadersCmdSet" id="AddNewLicenseHeaderDefinitionFileToProject" priority="0x0100" type="Button">
-        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenuGroup2" />
-        <Icon guid="guidImages" id="bmpAddNewLicenseHeaderDefinitionFile" />
-        <Strings>
-          <CommandName>AddNewLicenseHeaderDefinitionFileToProject</CommandName>
-          <ButtonText>Add New License Header Definition File</ButtonText>
-        </Strings>
-      </Button>
-      
-      <Button guid="guidLicenseHeadersCmdSet" id="AddExistingLicenseHeaderDefinitionFileToProject" priority="0x0200" type="Button">
-        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenuGroup2" />
-        <Icon guid="guidImages" id="bmpAddExistingLicenseHeaderDefinitionFile" />
-        <Strings>
-          <CommandName>AddExistingLicenseHeaderDefinitionFileToProject</CommandName>
-          <ButtonText>Add Existing License Header Definition File...</ButtonText>
-        </Strings>
-      </Button>
-
-      <Button guid="guidLicenseHeadersCmdSet" id="LicenseHeaderOptions" priority="0x0100" type="Button">
-        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenuGroup3" />
-        <Strings>
-          <CommandName>LicenseHeaderOptions</CommandName>
-          <ButtonText>Options...</ButtonText>
-        </Strings>
-      </Button>
-        
-      <Button guid="guidLicenseHeadersCmdSet" id="AddLicenseHeadersToAllFilesInSolution" priority="0x0100" type="Button">
+      <Button guid="guidLicenseHeadersPackageCmdSet" id="cmdidAddLicenseHeaderToAllFilesInSolutionCommand" priority="0x0100" type="Button">
         <Parent guid="guidLicenseHeadersCmdSet" id="SolutionSubMenuGroup1" />
         <Icon guid="guidImages" id="bmpAddLicenseHeadersToAllFiles" />
         <Strings>
-          <CommandName>AddLicenseHeadersToAllFilesInSolution</CommandName>
           <ButtonText>Add License Headers to All Files</ButtonText>
         </Strings>
       </Button>
 
-      <Button guid="guidLicenseHeadersCmdSet" id="RemoveLicenseHeadersFromAllFilesInSolution" priority="0x0200" type="Button">
+      <Button guid="guidLicenseHeadersPackageCmdSet" id="cmdidRemoveLicenseHeaderFromAllFilesInSolutionCommand" priority="0x0200" type="Button">
         <Parent guid="guidLicenseHeadersCmdSet" id="SolutionSubMenuGroup1" />
         <Icon guid="guidImages" id="bmpRemoveLicenseHeadersFromAllFiles" />
         <Strings>
-          <CommandName>RemoveLicenseHeadersFromAllFilesInSolution</CommandName>
           <ButtonText>Remove License Headers from All Files</ButtonText>
         </Strings>
       </Button>
-      
-      <Button guid="guidLicenseHeadersCmdSet" id="AddNewSolutionLicenseHeaderDefinitionFile" priority="0x0100" type="Button">
+      <Button guid="guidLicenseHeadersPackageCmdSet" id="cmdidAddNewSolutionLicenseHeaderDefinitionFileCommand" priority="0x0100" type="Button">
         <Parent guid="guidLicenseHeadersCmdSet" id="SolutionSubMenuGroup2" />
         <Icon guid="guidImages" id="bmpAddNewLicenseHeaderDefinitionFile" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <CommandName>AddNewSolutionLicenseHeaderDefinitionFile</CommandName>
           <ButtonText>Add New Solution-Wide License Header Definition File</ButtonText>
         </Strings>
       </Button>
 
-      <Button guid="guidLicenseHeadersCmdSet" id="OpenSolutionLicenseHeaderDefinitionFile" priority="0x0200" type="Button">
+      <Button guid="guidLicenseHeadersPackageCmdSet" id="cmdidOpenSolutionLicenseHeaderDefinitionFileCommand" priority="0x0200" type="Button">
         <Parent guid="guidLicenseHeadersCmdSet" id="SolutionSubMenuGroup2" />
         <Icon guid="guidImages" id="bmpOpenLicenseHeaderDefinitionFile" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <CommandName>OpenSolutionLicenseHeaderDefinitionFile</CommandName>
           <ButtonText>Open Solution-Wide License Header Definition File</ButtonText>
         </Strings>
       </Button>
 
-      <Button guid="guidLicenseHeadersCmdSet" id="RemoveSolutionLicenseHeaderDefinitionFile" priority="0x0300" type="Button">
+      <Button guid="guidLicenseHeadersPackageCmdSet" id="cmdidRemoveSolutionLicenseHeaderDefinitionFileCommand" priority="0x0300" type="Button">
         <Parent guid="guidLicenseHeadersCmdSet" id="SolutionSubMenuGroup2" />
         <Icon guid="guidImages" id="bmpRemoveLicenseHeaderDefinitionFile" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
-          <CommandName>RemoveSolutionLicenseHeaderDefinitionFile</CommandName>
           <ButtonText>Remove Solution-Wide License Header Definition File</ButtonText>
         </Strings>
       </Button>
 
+      <Button guid="guidLicenseHeadersPackageCmdSet" id="cmdidAddLicenseHeaderToAllFilesInProjectCommand" priority="0x0100" type="Button">
+        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenuGroup1" />
+        <Icon guid="guidImages" id="bmpAddLicenseHeadersToAllFiles" />
+        <Strings>
+          <ButtonText>Add License Headers to All Files</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLicenseHeadersPackageCmdSet" id="cmdidRemoveLicenseHeaderFromAllFilesInProjectCommand" priority="0x0200" type="Button">
+        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenuGroup1" />
+        <Icon guid="guidImages" id="bmpRemoveLicenseHeadersFromAllFiles" />
+        <Strings>
+          <ButtonText>Remove License Headers from All Files</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLicenseHeadersPackageCmdSet" id="cmdidAddNewLicenseHeaderDefinitionFileToProject" priority="0x0100" type="Button">
+        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenuGroup2" />
+        <Icon guid="guidImages" id="bmpAddNewLicenseHeaderDefinitionFile" />
+        <Strings>
+          <ButtonText>Add New License Header Definition File</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLicenseHeadersPackageCmdSet" id="cmdidAddExistingLicenseHeaderDefinitionFileToProject" priority="0x0200" type="Button">
+        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenuGroup2" />
+        <Icon guid="guidImages" id="bmpAddExistingLicenseHeaderDefinitionFile" />
+        <Strings>
+          <ButtonText>Add Existing License Header Definition File...</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLicenseHeadersPackageCmdSet" id="cmdidLicenseHeaderOptions" priority="0x0100" type="Button">
+        <Parent guid="guidLicenseHeadersCmdSet" id="ProjectSubMenuGroup3" />
+        <Strings>
+          <ButtonText>Options...</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLicenseHeadersPackageCmdSet" id="cmdidAddLicenseHeaderToAllFilesInFolderCommand" priority="0x0100" type="Button">
+        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup1" />
+        <Icon guid="guidImages" id="bmpAddLicenseHeadersToAllFiles" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Add License Headers to All Files</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLicenseHeadersPackageCmdSet" id="cmdidRemoveLicenseHeaderFromAllFilesInFolderCommand" priority="0x0200" type="Button">
+        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup1" />
+        <Icon guid="guidImages" id="bmpRemoveLicenseHeadersFromAllFiles" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Remove License Headers from All Files</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLicenseHeadersPackageCmdSet" id="cmdidAddNewLicenseHeaderDefinitionFileToFolderCommand" priority="0x0100" type="Button">
+        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup2" />
+        <Icon guid="guidImages" id="bmpAddNewLicenseHeaderDefinitionFile" />
+        <Strings>
+          <ButtonText>Add New License Header Definition File</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLicenseHeadersPackageCmdSet" id="cmdidAddExistingLicenseHeaderDefinitionFileToFolderCommand" priority="0x0200" type="Button">
+        <Parent guid="guidLicenseHeadersCmdSet" id="FolderSubMenuGroup2" />
+        <Icon guid="guidImages" id="bmpAddExistingLicenseHeaderDefinitionFile" />
+        <Strings>
+          <ButtonText>Add Existing License Header Definition File...</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLicenseHeadersPackageCmdSet" id="cmdidAddLicenseHeaderEditorAdvancedMenuCommand" priority="0x0100" type="Button">
+        <Parent guid="guidLicenseHeadersCmdSet" id="EditMenuGroup" />
+        <Icon guid="guidImages" id="bmpAddLicenseHeader" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Add License Header</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidLicenseHeadersPackageCmdSet" id="cmdidRemoveLicenseHeaderEditorAdvancedMenuCommand" priority="0x0200" type="Button">
+        <Parent guid="guidLicenseHeadersCmdSet" id="EditMenuGroup" />
+        <Icon guid="guidImages" id="bmpRemoveLicenseHeader" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Remove License Header</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
-   
+
     <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
     <Bitmaps>
       <!--  The bitmap id is defined in a way that is a little bit different from the others: 
@@ -341,10 +322,10 @@
             bitmap strip containing the bitmaps and then there are the numeric ids of the elements used 
             inside a button definition. An important aspect of this declaration is that the element id 
             must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
-      <Bitmap guid="guidImages" href="Resources\Images.bmp" usedList="bmpAddLicenseHeader, bmpRemoveLicenseHeader, bmpAddLicenseHeadersToAllFiles, bmpRemoveLicenseHeadersFromAllFiles, bmpAddExistingLicenseHeaderDefinitionFile, bmpAddNewLicenseHeaderDefinitionFile, bmpOpenLicenseHeaderDefinitionFile, bmpRemoveLicenseHeaderDefinitionFile" />
-
+      <Bitmap guid="guidImages" href="Resources\Images.bmp"
+              usedList="bmpAddLicenseHeader, bmpRemoveLicenseHeader, bmpAddLicenseHeadersToAllFiles, bmpRemoveLicenseHeadersFromAllFiles, bmpAddExistingLicenseHeaderDefinitionFile, bmpAddNewLicenseHeaderDefinitionFile, bmpOpenLicenseHeaderDefinitionFile, bmpRemoveLicenseHeaderDefinitionFile" />
     </Bitmaps>
- 
+
   </Commands>
 
   <KeyBindings>
@@ -368,15 +349,15 @@
       <IDSymbol name="FolderMenuGroup" value="0x1008" />
       <IDSymbol name="FolderSubMenuGroup1" value="0x1009" />
       <IDSymbol name="FolderSubMenuGroup2" value="0x1010" />
-      <IDSymbol name="SolutionMenuGroup" value="0x1012"/>
-      <IDSymbol name="SolutionSubMenuGroup1" value="0x1013"/>
-      <IDSymbol name="SolutionSubMenuGroup2" value="0x1014"/>
+      <IDSymbol name="SolutionMenuGroup" value="0x1012" />
+      <IDSymbol name="SolutionSubMenuGroup1" value="0x1013" />
+      <IDSymbol name="SolutionSubMenuGroup2" value="0x1014" />
 
       <IDSymbol name="ProjectSubMenu" value="0x2001" />
       <IDSymbol name="ProjectItemSubMenu" value="0x2002" />
       <IDSymbol name="FolderSubMenu" value="0x2003" />
       <IDSymbol name="SolutionSubMenu" value="0x2004" />
-      
+
       <IDSymbol name="LicenseHeaderOptions" value="0x0001" />
       <IDSymbol name="AddLicenseHeader" value="0x0002" />
       <IDSymbol name="RemoveLicenseHeader" value="0x0003" />
@@ -386,13 +367,13 @@
       <IDSymbol name="AddExistingLicenseHeaderDefinitionFileToProject" value="0x0007" />
       <IDSymbol name="AddLicenseHeaderToProjectItem" value="0x0008" />
       <IDSymbol name="RemoveLicenseHeaderFromProjectItem" value="0x0009" />
-      <IDSymbol name="AddLicenseHeadersToAllFilesInSolution" value="0x0010"/>
-      <IDSymbol name="RemoveLicenseHeadersFromAllFilesInSolution" value="0x0011"/>
-      <IDSymbol name="AddNewSolutionLicenseHeaderDefinitionFile" value="0x0012"/>
-      <IDSymbol name="OpenSolutionLicenseHeaderDefinitionFile" value="0x0013"/>
-      <IDSymbol name="RemoveSolutionLicenseHeaderDefinitionFile" value="0x0014"/>
+      <IDSymbol name="AddLicenseHeadersToAllFilesInSolution" value="0x0010" />
+      <IDSymbol name="RemoveLicenseHeadersFromAllFilesInSolution" value="0x0011" />
+      <IDSymbol name="AddNewSolutionLicenseHeaderDefinitionFile" value="0x0012" />
+      <IDSymbol name="OpenSolutionLicenseHeaderDefinitionFile" value="0x0013" />
+      <IDSymbol name="RemoveSolutionLicenseHeaderDefinitionFile" value="0x0014" />
     </GuidSymbol>
-      
+
     <GuidSymbol name="guidImages" value="{d52c5a04-6352-4a9c-8d55-990945d89fe8}">
       <IDSymbol name="bmpAddLicenseHeader" value="1" />
       <IDSymbol name="bmpRemoveLicenseHeader" value="2" />
@@ -404,7 +385,28 @@
       <IDSymbol name="bmpRemoveLicenseHeaderDefinitionFile" value="8" />
     </GuidSymbol>
 
-    
+
+    <GuidSymbol value="{1a75d6da-3b30-4ec9-81ae-72b8b7eba1a0}" name="guidLicenseHeadersPackageCmdSet">
+      <IDSymbol value="4128" name="MyMenuGroup" />
+      <IDSymbol value="256" name="cmdidAddHeaderToProjectItemCommand" />
+      <IDSymbol value="4129" name="cmdidRemoveHeaderFromProjectItemCommand" />
+      <IDSymbol value="4130" name="cmdidAddLicenseHeaderToAllFilesInSolutionCommand" />
+      <IDSymbol value="4131" name="cmdidRemoveLicenseHeaderFromAllFilesInSolutionCommand" />
+      <IDSymbol value="4132" name="cmdidAddNewSolutionLicenseHeaderDefinitionFileCommand" />
+      <IDSymbol value="4133" name="cmdidOpenSolutionLicenseHeaderDefinitionFileCommand" />
+      <IDSymbol value="4134" name="cmdidRemoveSolutionLicenseHeaderDefinitionFileCommand" />
+      <IDSymbol value="4135" name="cmdidAddLicenseHeaderToAllFilesInProjectCommand" />
+      <IDSymbol value="4136" name="cmdidAddNewLicenseHeaderDefinitionFileToProject" />
+      <IDSymbol value="4137" name="cmdidAddExistingLicenseHeaderDefinitionFileToProject" />
+      <IDSymbol value="4138" name="cmdidLicenseHeaderOptions" />
+      <IDSymbol value="4139" name="cmdidRemoveLicenseHeaderFromAllFilesInProjectCommand" />
+      <IDSymbol value="4140" name="cmdidAddLicenseHeaderToAllFilesInFolderCommand" />
+      <IDSymbol value="4141" name="cmdidRemoveLicenseHeaderFromAllFilesInFolderCommand" />
+      <IDSymbol value="4142" name="cmdidAddExistingLicenseHeaderDefinitionFileToFolderCommand" />
+      <IDSymbol value="4143" name="cmdidAddNewLicenseHeaderDefinitionFileToFolderCommand" />
+      <IDSymbol value="4144" name="cmdidAddLicenseHeaderEditorAdvancedMenuCommand" />
+      <IDSymbol value="4145" name="cmdidRemoveLicenseHeaderEditorAdvancedMenuCommand" />
+    </GuidSymbol>
   </Symbols>
 
 </CommandTable>

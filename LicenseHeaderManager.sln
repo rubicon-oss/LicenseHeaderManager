@@ -1,16 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2006
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D3308A06-7879-4144-B50B-E476C11F5801}"
 	ProjectSection(SolutionItems) = preProject
+		LicenseHeaderManager\Key.snk = LicenseHeaderManager\Key.snk
+		LicenseHeaderManager.sln.licenseheader = LicenseHeaderManager.sln.licenseheader
 		README.md = README.md
+		teamcity.properties = teamcity.properties
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseHeaderManager", "LicenseHeaderManager\LicenseHeaderManager.csproj", "{8E234F35-CABF-48BF-B747-3DC0EC2776C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseHeaderManager.Test", "LicenseHeaderManager.Test\LicenseHeaderManager.Test.csproj", "{F224872B-FDB9-4DA1-BEA4-0FA4F1BA3E82}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseHeaderManager.Tests", "LicenseHeaderManager.Tests\LicenseHeaderManager.Tests.csproj", "{F224872B-FDB9-4DA1-BEA4-0FA4F1BA3E82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{B8D94ED6-4B73-443E-ABA0-2C373B9E6735}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Tests", "Core.Tests\Core.Tests.csproj", "{87AC04E1-0862-4491-BCD8-9F507BFD97AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +33,14 @@ Global
 		{F224872B-FDB9-4DA1-BEA4-0FA4F1BA3E82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F224872B-FDB9-4DA1-BEA4-0FA4F1BA3E82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F224872B-FDB9-4DA1-BEA4-0FA4F1BA3E82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8D94ED6-4B73-443E-ABA0-2C373B9E6735}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8D94ED6-4B73-443E-ABA0-2C373B9E6735}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8D94ED6-4B73-443E-ABA0-2C373B9E6735}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8D94ED6-4B73-443E-ABA0-2C373B9E6735}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87AC04E1-0862-4491-BCD8-9F507BFD97AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87AC04E1-0862-4491-BCD8-9F507BFD97AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87AC04E1-0862-4491-BCD8-9F507BFD97AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87AC04E1-0862-4491-BCD8-9F507BFD97AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
