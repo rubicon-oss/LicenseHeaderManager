@@ -19,7 +19,7 @@ namespace LicenseHeaderManager {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -66,15 +66,6 @@ namespace LicenseHeaderManager {
         public static string Add {
             get {
                 return ResourceManager.GetString("Add", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Do you want to Add Existing License Header Definition File?.
-        /// </summary>
-        public static string AddExistingLicenseHeaderFileQuestion {
-            get {
-                return ResourceManager.GetString("AddExistingLicenseHeaderFileQuestion", resourceCulture);
             }
         }
         
@@ -151,16 +142,6 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Int32 similar to 5.
-        /// </summary>
-        public static int Constant_DisplayNameLookup_TimeDifferenceInSecondsBeforeTooOld {
-            get {
-                object obj = ResourceManager.GetObject("Constant_DisplayNameLookup_TimeDifferenceInSecondsBeforeTooOld", resourceCulture);
-                return ((int)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Edit....
         /// </summary>
         public static string Edit {
@@ -215,29 +196,11 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An error occured while parsing the file {0}.\nMake sure the comment syntax is correct..
-        /// </summary>
-        public static string Error_InvalidLicenseHeader {
-            get {
-                return ResourceManager.GetString("Error_InvalidLicenseHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Please provide at least an extension and either a line comment or begin and end comment tags..
         /// </summary>
         public static string Error_LanguageInvalid {
             get {
                 return ResourceManager.GetString("Error_LanguageInvalid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No comment definitions found for {0} files.\nDo you want to add them to the configuration?.
-        /// </summary>
-        public static string Error_LanguageNotFound {
-            get {
-                return ResourceManager.GetString("Error_LanguageNotFound", resourceCulture);
             }
         }
         
@@ -260,38 +223,11 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This extension currently has no header defined in the license header definition file\n .
-        /// </summary>
-        public static string Error_NoHeaderFound {
-            get {
-                return ResourceManager.GetString("Error_NoHeaderFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The project has no license header file..
-        /// </summary>
-        public static string Error_NoLicenseHeaderFile {
-            get {
-                return ResourceManager.GetString("Error_NoLicenseHeaderFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Execute &apos;Add license header&apos; command.
         /// </summary>
         public static string Execute {
             get {
                 return ResourceManager.GetString("Execute", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Extension.
-        /// </summary>
-        public static string Extension {
-            get {
-                return ResourceManager.GetString("Extension", resourceCulture);
             }
         }
         
@@ -319,24 +255,6 @@ namespace LicenseHeaderManager {
         public static string FileHeaderTextLabel {
             get {
                 return ResourceManager.GetString("FileHeaderTextLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Help.
-        /// </summary>
-        public static string Help {
-            get {
-                return ResourceManager.GetString("Help", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cannot add License Headers because there is no License Header Definition File. Please add one and try again..
-        /// </summary>
-        public static string Information_NoDefinitionFileStopUpdating {
-            get {
-                return ResourceManager.GetString("Information_NoDefinitionFileStopUpdating", resourceCulture);
             }
         }
         
@@ -395,11 +313,11 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to License Header Manager.
+        ///   Looks up a localized string similar to Message.
         /// </summary>
-        public static string NameOfThisExtension {
+        public static string Message {
             get {
-                return ResourceManager.GetString("NameOfThisExtension", resourceCulture);
+                return ResourceManager.GetString("Message", resourceCulture);
             }
         }
         
@@ -413,7 +331,16 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No License Header Definition File found in the Project. Do you want to add an existing License Header Definition File to the project?.
+        ///   Looks up a localized string similar to Question.
+        /// </summary>
+        public static string Question {
+            get {
+                return ResourceManager.GetString("Question", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file scan has finished.\nNo License Header Definition File found in the Project. Do you want to add an existing License Header Definition File to the project?.
         /// </summary>
         public static string Question_AddExistingDefinitionFileToProject {
             get {
@@ -422,20 +349,11 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No License Header Definition File found. Do you want to add a new one for the Solution?.
+        ///   Looks up a localized string similar to The file scan has finished.\nNo License Header Definition File found. Do you want to add a new one for the Solution?.
         /// </summary>
         public static string Question_AddNewLicenseHeaderDefinitionForSolution {
             get {
                 return ResourceManager.GetString("Question_AddNewLicenseHeaderDefinitionForSolution", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to License Header Definition Files added. Do you want to stop the update process to configure them?.
-        /// </summary>
-        public static string Question_StopForConfiguringDefinitionFilesMultipleFiles {
-            get {
-                return ResourceManager.GetString("Question_StopForConfiguringDefinitionFilesMultipleFiles", resourceCulture);
             }
         }
         
@@ -494,6 +412,24 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Execution of asynchronous Task failed.
+        /// </summary>
+        public static string TaskFailed {
+            get {
+                return ResourceManager.GetString("TaskFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update.
+        /// </summary>
+        public static string Update {
+            get {
+                return ResourceManager.GetString("Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to License Header Manager has automatically updated its configuration to add SkipExpressions.\n\nPlease check your language settings if they were modified\nbefore the update.\n\nIf you added any XML-based languages, you might need to add\na SkipExpression..
         /// </summary>
         public static string Update_1_1_3 {
@@ -508,15 +444,6 @@ namespace LicenseHeaderManager {
         public static string Update_1_3_1 {
             get {
                 return ResourceManager.GetString("Update_1_3_1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to License Header Manager has automatically updated its configuration\nto include settings for the default license header definition file..
-        /// </summary>
-        public static string Update_DefaultLicenseHeader_1_2_1 {
-            get {
-                return ResourceManager.GetString("Update_DefaultLicenseHeader_1_2_1", resourceCulture);
             }
         }
         
@@ -539,57 +466,11 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Updating Project {0}/{1}.
-        /// </summary>
-        public static string UpdateSolution {
-            get {
-                return ResourceManager.GetString("UpdateSolution", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Updating files....
-        /// </summary>
-        public static string UpdatingFiles {
-            get {
-                return ResourceManager.GetString("UpdatingFiles", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Only remove comments containing at least one of the keywords below.
         /// </summary>
         public static string UseRequiredKeywords {
             get {
                 return ResourceManager.GetString("UseRequiredKeywords", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to FileNotFoundException caught while trying to lookup the display name with &apos;UserPrincipal.Current.DisplayName&apos;. \nThis is likely caused by an Windows 10 update and can be fixed by updating the registry. \nSee https://git.io/vza4O for more information..
-        /// </summary>
-        public static string UserInfo_LookupFailure_FileNotFoundException_Information {
-            get {
-                return ResourceManager.GetString("UserInfo_LookupFailure_FileNotFoundException_Information", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Exception caught while trying to lookup the display name with &apos;UserPrincipal.Current.DisplayName&apos;. \nStacktrace: {0}
-        ///.
-        /// </summary>
-        public static string UserInfo_LookupFailure_Information {
-            get {
-                return ResourceManager.GetString("UserInfo_LookupFailure_Information", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &lt;Unknown&gt;.
-        /// </summary>
-        public static string UserInfo_UnknownDisplayNameString {
-            get {
-                return ResourceManager.GetString("UserInfo_UnknownDisplayNameString", resourceCulture);
             }
         }
         
@@ -612,7 +493,7 @@ namespace LicenseHeaderManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The header definition for {0} files contains non-comment text.\nIf you insert this header, you will not be able to remove or replace the header automatically!\nDo you really want to add this header to the file?.
+        ///   Looks up a localized string similar to HeaderDefinitionExtension: {0}\n\nThe header definition for {0} files contains non-comment text.\nIf you insert this header, you will not be able to remove or replace the header automatically!\n\nDo you really want to add this header to the file?.
         /// </summary>
         public static string Warning_InvalidLicenseHeader {
             get {

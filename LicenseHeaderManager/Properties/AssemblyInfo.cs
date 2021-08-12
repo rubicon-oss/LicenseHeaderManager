@@ -1,16 +1,15 @@
-#region copyright
-// Copyright (c) rubicon IT GmbH
-
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
-// to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-// The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-// FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-// WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
-#endregion
+/* Copyright (c) rubicon IT GmbH
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+ */
 
 using System;
 using System.Reflection;
@@ -47,5 +46,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion ("3.0.3.0")]
 
 [assembly:
-    InternalsVisibleTo (
-    "LicenseHeaderManager.Test, PublicKey=0024000004800000940000000602000000240000525341310004000001000100A51863EC92C8300AC3838C02FC45700305E1D0C531FC50BB69386935BBE857706DFCAF2025F9B7D88FBF232E68308DB5D131D04FED6D1B5F628D9F62BEE787A4B59232A12F2D8A9524CA0B598203C75C3F3F348A5F9DC26516C8275DE7B665126EDB9CD8627BAC1F4EC69AA98F16912B8F604BD1BDF07EDF008CE165436031B6")]
+  InternalsVisibleTo (
+      "LicenseHeaderManager.Tests, PublicKey=0024000004800000940000000602000000240000525341310004000001000100A51863EC92C8300AC3838C02FC45700305E1D0C531FC50BB69386935BBE857706DFCAF2025F9B7D88FBF232E68308DB5D131D04FED6D1B5F628D9F62BEE787A4B59232A12F2D8A9524CA0B598203C75C3F3F348A5F9DC26516C8275DE7B665126EDB9CD8627BAC1F4EC69AA98F16912B8F604BD1BDF07EDF008CE165436031B6")]
