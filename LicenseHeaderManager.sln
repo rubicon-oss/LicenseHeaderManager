@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Tests", "Core.Tests\Core.Tests.csproj", "{87AC04E1-0862-4491-BCD8-9F507BFD97AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseHeaderManager.Console", "LicenseHeaderManager.Console\LicenseHeaderManager.Console.csproj", "{912F8A5E-80BB-45CB-89F8-47D4B3C3A658}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{87AC04E1-0862-4491-BCD8-9F507BFD97AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87AC04E1-0862-4491-BCD8-9F507BFD97AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87AC04E1-0862-4491-BCD8-9F507BFD97AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{912F8A5E-80BB-45CB-89F8-47D4B3C3A658}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{912F8A5E-80BB-45CB-89F8-47D4B3C3A658}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{912F8A5E-80BB-45CB-89F8-47D4B3C3A658}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{912F8A5E-80BB-45CB-89F8-47D4B3C3A658}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
