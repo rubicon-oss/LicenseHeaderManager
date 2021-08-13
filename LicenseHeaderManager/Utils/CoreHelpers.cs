@@ -185,32 +185,20 @@ namespace LicenseHeaderManager.Utils
           }
 
           error = resultIgnoringNonCommentText.Error;
+          ProcessError (error);
           break;
 
         case ReplacerErrorType.LanguageNotFound:
-          // TODO possible feature: show languages page if language is not found
-          // in below code, languages page closes immediately after opening because we return from the method -> remedy for this would be needed 
-          // var showLanguagePage = MessageBoxHelper.AskYesNo (error.Description, Resources.Error);
-          // if (showLanguagePage) extension.ShowLanguagesPage();
-          return;
+          return; // ignore such an error (i. e. do not propagate to user)
 
         case ReplacerErrorType.LicenseHeaderDocument:
           return; // ignore such an error (i. e. do not propagate to user)
 
         default:
-          s_log.Warn ($"File '{error.Input.DocumentPath}' failed with error '{error.Type}': {error.Description}");
-          MessageBoxHelper.ShowMessage ($"Could not modify license headers of file '{error.Input.DocumentPath}':\n{error.Description}", Resources.Warning, true);
+          ProcessError (error);
           break;
       }
     }
-
-    ///// <summary>
-    /////   Handles the given result object and shows the corresponding message box if an error occurred.
-    ///// </summary>
-    ///// <param name="result">Specifies the replacer result. Indicates whether the specific operation succeeded or failed.</param>
-    ///// <param name="extension">Specifies the extension of the language.</param>
-    ///// <param name="isOpen">Specifies if the current file is currently open.</param>
-    ///// <param name="calledByUser">Specifies whether this method was called explicitly by the user or by the program.</param>
 
     /// <summary>
     ///   Processes a range of <see cref="ReplacerResult{TSuccess,TError}" /> objects, including possible error handling.
@@ -356,6 +344,12 @@ namespace LicenseHeaderManager.Utils
 
       s_log.Error ($"Updating license header for file {replacerSuccess.FilePath} failed.");
       MessageBoxHelper.ShowError ($"Updating license header for file {replacerSuccess.FilePath} failed.");
+    }
+
+    private static void ProcessError (ReplacerError<LicenseHeaderContentInput> error)
+    {
+      s_log.Warn ($"File '{error.Input.DocumentPath}' failed with error '{error.Type}': {error.Description}");
+      MessageBoxHelper.ShowMessage ($"Could not modify license headers of file '{error.Input.DocumentPath}':\n{error.Description}", Resources.Warning, true);
     }
 
     private static bool TrySetContent (string itemPath, Solution solution, string content, bool wasOpen, ILicenseHeaderExtension extension)
