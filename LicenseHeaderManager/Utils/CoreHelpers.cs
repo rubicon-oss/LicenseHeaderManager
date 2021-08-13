@@ -198,11 +198,10 @@ namespace LicenseHeaderManager.Utils
           return; // ignore such an error (i. e. do not propagate to user)
 
         default:
-          throw new ArgumentOutOfRangeException();
+          s_log.Warn ($"File '{error.Input.DocumentPath}' failed with error '{error.Type}': {error.Description}");
+          MessageBoxHelper.ShowMessage ($"Could not modify license headers of file '{error.Input.DocumentPath}':\n{error.Description}", Resources.Warning, true);
+          break;
       }
-
-      s_log.Error ($"File '{error.Input.DocumentPath}' failed with error '{error.Type}': {error.Description}");
-      MessageBoxHelper.ShowError ($"An unexpected error has occurred: {error.Description}");
     }
 
     ///// <summary>
