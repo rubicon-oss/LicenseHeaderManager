@@ -71,7 +71,7 @@ namespace LicenseHeaderManager
   [Guid (c_guidLicenseHeadersPkgString)]
   public sealed class LicenseHeadersPackage : AsyncPackage, ILicenseHeaderExtension
   {
-    public const string Version = "3.1.0";
+    public const string Version = "4.0.0";
     private const string c_guidLicenseHeadersPkgString = "4c570677-8476-4d33-bd0c-da36c89287c8";
 
     private const string c_licenseHeaders = "License Header Manager";
