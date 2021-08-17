@@ -14,8 +14,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Core;
 using EnvDTE;
+using LicenseHeaderManager.Core;
 using LicenseHeaderManager.Interfaces;
 using LicenseHeaderManager.Utils;
 using NUnit.Framework;

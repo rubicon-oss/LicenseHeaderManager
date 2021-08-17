@@ -131,9 +131,9 @@
     <Compile Include="VisualStudioBaseTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj">
+    <ProjectReference Include="..\LicenseHeaderManager.Core\LicenseHeaderManager.Core.csproj">
       <Project>{b8d94ed6-4b73-443e-aba0-2c373b9e6735}</Project>
-      <Name>Core</Name>
+      <Name>LicenseHeaderManager.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\LicenseHeaderManager\LicenseHeaderManager.csproj">
       <Project>{8E234F35-CABF-48BF-B747-3DC0EC2776C9}</Project>

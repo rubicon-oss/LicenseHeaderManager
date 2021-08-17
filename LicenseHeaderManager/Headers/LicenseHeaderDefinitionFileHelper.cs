@@ -14,8 +14,8 @@
 using System;
 using System.IO;
 using System.Text;
-using Core;
 using EnvDTE;
+using LicenseHeaderManager.Core;
 using LicenseHeaderManager.Options.Model;
 using LicenseHeaderManager.Utils;
 using Microsoft.VisualStudio.Shell;

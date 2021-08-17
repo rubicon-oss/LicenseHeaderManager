@@ -18,8 +18,8 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Core;
-using Core.Options;
+using LicenseHeaderManager.Core;
+using LicenseHeaderManager.Core.Options;
 
 namespace LicenseHeaderManager.Options
 {

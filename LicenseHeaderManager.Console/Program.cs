@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using CommandLine;
-using Core;
-using Core.Options;
+using LicenseHeaderManager.Core;
+using LicenseHeaderManager.Core.Options;
 
 namespace LicenseHeaderManager.Console
 {

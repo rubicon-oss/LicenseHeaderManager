@@ -13,8 +13,8 @@
 
 using System;
 using System.Linq;
-using Core;
 using EnvDTE;
+using LicenseHeaderManager.Core;
 using Microsoft.VisualStudio.Shell;
 
 namespace LicenseHeaderManager.Utils

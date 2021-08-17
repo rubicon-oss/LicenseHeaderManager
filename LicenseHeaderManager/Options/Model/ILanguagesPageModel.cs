@@ -13,7 +13,7 @@
 
 using System;
 using System.Collections.ObjectModel;
-using Core;
+using LicenseHeaderManager.Core;
 
 namespace LicenseHeaderManager.Options.Model
 {
