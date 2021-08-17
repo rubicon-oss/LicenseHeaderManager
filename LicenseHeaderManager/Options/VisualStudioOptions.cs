@@ -16,7 +16,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
-using Core.Options;
+using LicenseHeaderManager.Core.Options;
 
 namespace LicenseHeaderManager.Options
 {

@@ -13,8 +13,8 @@
 
 using System;
 using System.ComponentModel.Design;
-using Core;
 using EnvDTE;
+using LicenseHeaderManager.Core;
 using LicenseHeaderManager.Interfaces;
 using LicenseHeaderManager.Utils;
 using Microsoft.VisualStudio.Shell;

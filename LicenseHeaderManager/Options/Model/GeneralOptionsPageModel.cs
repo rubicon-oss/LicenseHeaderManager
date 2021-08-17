@@ -15,9 +15,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using Core.Options;
 using EnvDTE;
 using EnvDTE80;
+using LicenseHeaderManager.Core.Options;
 using Microsoft.VisualStudio.Shell;
 
 namespace LicenseHeaderManager.Options.Model

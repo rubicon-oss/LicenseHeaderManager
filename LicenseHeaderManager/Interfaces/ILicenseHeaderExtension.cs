@@ -12,9 +12,9 @@
  */
 
 using System;
-using Core;
 using EnvDTE;
 using EnvDTE80;
+using LicenseHeaderManager.Core;
 using LicenseHeaderManager.Options.Model;
 using Microsoft.VisualStudio.Threading;
 

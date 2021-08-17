@@ -12,7 +12,7 @@
  */
 
 using System;
-using Core.Options;
+using LicenseHeaderManager.Core.Options;
 
 namespace LicenseHeaderManager.Options.Model
 {

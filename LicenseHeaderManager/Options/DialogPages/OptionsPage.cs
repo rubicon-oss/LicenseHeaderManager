@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
-using Core.Options;
+using LicenseHeaderManager.Core.Options;
 using LicenseHeaderManager.Options.DialogPageControls;
 using LicenseHeaderManager.Options.Model;
 using log4net;

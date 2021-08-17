@@ -13,7 +13,7 @@
 
 using System;
 using System.Windows;
-using Core;
+using LicenseHeaderManager.Core;
 using LicenseHeaderManager.Utils;
 
 namespace LicenseHeaderManager.Options.DialogPageControls

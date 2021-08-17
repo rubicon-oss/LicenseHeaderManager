@@ -15,9 +15,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseHeaderManager", "Lic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseHeaderManager.Tests", "LicenseHeaderManager.Tests\LicenseHeaderManager.Tests.csproj", "{F224872B-FDB9-4DA1-BEA4-0FA4F1BA3E82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{B8D94ED6-4B73-443E-ABA0-2C373B9E6735}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseHeaderManager.Core", "LicenseHeaderManager.Core\LicenseHeaderManager.Core.csproj", "{B8D94ED6-4B73-443E-ABA0-2C373B9E6735}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Tests", "Core.Tests\Core.Tests.csproj", "{87AC04E1-0862-4491-BCD8-9F507BFD97AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseHeaderManager.Core.Tests", "LicenseHeaderManager.Core.Tests\LicenseHeaderManager.Core.Tests.csproj", "{87AC04E1-0862-4491-BCD8-9F507BFD97AA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicenseHeaderManager.Console", "LicenseHeaderManager.Console\LicenseHeaderManager.Console.csproj", "{912F8A5E-80BB-45CB-89F8-47D4B3C3A658}"
 EndProject

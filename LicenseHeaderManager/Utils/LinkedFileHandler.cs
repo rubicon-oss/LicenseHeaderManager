@@ -13,7 +13,7 @@
 
 using System;
 using System.Linq;
-using Core;
+using LicenseHeaderManager.Core;
 using LicenseHeaderManager.Headers;
 using LicenseHeaderManager.Interfaces;
 using Microsoft.VisualStudio.Shell;
