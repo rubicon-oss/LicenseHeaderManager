@@ -55,13 +55,13 @@ namespace LicenseHeaderManager.Core.Tests
     }
 
     [Test]
-    public void GetLanguageFromExtension_LanguagesAreEmpty_ReturnsNull()
+    public void GetLanguageFromExtension_LanguagesAreEmpty_ReturnsNull ()
     {
-      var replacer = new LicenseHeaderReplacer(Enumerable.Empty<Language>(), Enumerable.Empty<string>());
+      var replacer = new LicenseHeaderReplacer (Enumerable.Empty<Language>(), Enumerable.Empty<string>());
 
-      var language = replacer.GetLanguageFromExtension(".cs");
+      var language = replacer.GetLanguageFromExtension (".cs");
 
-      Assert.That(language, Is.Null);
+      Assert.That (language, Is.Null);
     }
 
     [Test]
