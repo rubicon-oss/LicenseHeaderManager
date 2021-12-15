@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>A1A851B2-F77D-468E-ABD9-DB13F21929FA</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>LicenseHeaderManager.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)GlobalSuppressions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\LicenseHeaderDefinitionFileHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\LicenseHeaderFinder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\NewLineConst.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ILicenseHeaderExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ILinkedFileFilter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IMenuItemButtonHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LicenseHeadersPackage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemButtonHandler\FolderProjectMenuItemButtonHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemButtonHandler\Implementations\AddLicenseHeaderToAllFilesInFolderProjectImplementation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemButtonHandler\Implementations\AddLicenseHeaderToAllFilesInSolutionImplementation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemButtonHandler\Implementations\RemoveLicenseHeaderFromAllFilesInSolutionImplementation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemButtonHandler\Implementations\RemoveLicenseHeaderToAllFilesInFolderProjectImplementation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemButtonHandler\MenuItemButtonHandlerFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemButtonHandler\MenuItemButtonHandlerImplementation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemButtonHandler\MenuItemButtonLevel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemButtonHandler\MenuItemButtonOperation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemButtonHandler\SolutionMenuItemButtonHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\Common\AddLicenseHeaderToAllFilesInProjectHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\Common\ExistingLicenseHeaderDefinitionFileAdder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\Common\FolderProjectMenuHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\Common\RemoveLicenseHeaderFromAllFilesInProjectHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\EditorMenu\AddLicenseHeaderEditorAdvancedMenuCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\EditorMenu\RemoveLicenseHeaderEditorAdvancedMenuCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\FolderMenu\AddExistingLicenseHeaderDefinitionFileToFolderCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\FolderMenu\AddLicenseHeaderToAllFilesInFolderCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\FolderMenu\AddNewLicenseHeaderDefinitionFileToFolderCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\FolderMenu\RemoveLicenseHeaderFromAllFilesInFolderCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\ProjectItemMenu\AddHeaderToProjectItemCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\ProjectItemMenu\RemoveHeaderFromProjectItemCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\ProjectMenu\AddExistingLicenseHeaderDefinitionFileToProjectCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\ProjectMenu\AddLicenseHeaderToAllFilesInProjectCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\ProjectMenu\AddNewLicenseHeaderDefinitionFileToProjectCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\ProjectMenu\LicenseHeaderOptionsCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\ProjectMenu\RemoveLicenseHeaderFromAllFilesInProjectCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\SolutionMenu\AddLicenseHeaderToAllFilesInSolutionCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\SolutionMenu\AddNewSolutionLicenseHeaderDefinitionFileCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\SolutionMenu\OpenSolutionLicenseHeaderDefinitionFileCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\SolutionMenu\RemoveLicenseHeaderFromAllFilesInSolutionCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuItemCommands\SolutionMenu\RemoveSolutionLicenseHeaderDefinitionFileCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Options\Converters\ExtensionConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Options\Converters\LanguageConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Options\Converters\LinkedCommandConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Options\Converters\XmlTypeConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Options\DialogPageControls\WpfCommandDialog.xaml.cs">
+      <DependentUpon>WpfCommandDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Options\DialogPageControls\WpfDefaultLicenseHeader.xaml.cs">
+      <DependentUpon>WpfDefaultLicenseHeader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Options\DialogPageControls\WpfEditDefaultLicenseHeaderDialog.xaml.cs">
+      <DependentUpon>WpfEditDefaultLicenseHeaderDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Options\DialogPageControls\WpfLanguageDialog.xaml.cs">
+      <DependentUpon>WpfLanguageDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Options\DialogPageControls\WpfLanguages.xaml.cs">
+      <DependentUpon>WpfLanguages.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Options\DialogPageControls\WpfOptions.xaml.cs">
+      <DependentUpon>WpfOptions.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Options\DialogPages\BaseOptionPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Options\DialogPages\DefaultLicenseHeaderPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Options\DialogPages\LanguagesPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Options\DialogPages\OptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Options\DialogPages\OptionsStoreMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Options\LinkedCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Options\Model\BaseOptionPageModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Options\Model\DefaultLicenseHeaderPageModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Options\Model\GeneralOptionsPageModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Options\Model\IDefaultLicenseHeaderPageModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Options\Model\IGeneralOptionsPageModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Options\Model\ILanguagesPageModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Options\Model\LanguagesPageModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Options\OptionsFacade.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Options\UpdateStep.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Options\VisualStudioOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Options\WpfHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Options\WpfHost.Designer.cs">
+      <DependentUpon>WpfHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ResultObjects\AddLicenseHeaderToAllFilesResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UpdateViewModels\BaseUpdateViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UpdateViewModels\FolderProjectUpdateViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UpdateViewModels\RelayCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UpdateViewModels\SolutionUpdateViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UpdateViews\FolderProjectUpdateDialog.xaml.cs">
+      <DependentUpon>FolderProjectUpdateDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)UpdateViews\IntToMaximumConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UpdateViews\SolutionUpdateDialog.xaml.cs">
+      <DependentUpon>SolutionUpdateDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\AllSolutionProjectsSearcher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\CommandUtility.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\CoreHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\LinkedFileFilter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\LinkedFileHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\MessageBoxHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\OutputPaneAppender.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\ProjectItemInspection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\ProjectItemParentFinder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\ReplacerProgress.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Options\DialogPageControls\WpfCommandDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Options\DialogPageControls\WpfDefaultLicenseHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Options\DialogPageControls\WpfEditDefaultLicenseHeaderDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Options\DialogPageControls\WpfLanguageDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Options\DialogPageControls\WpfLanguages.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Options\DialogPageControls\WpfOptions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)UpdateViews\FolderProjectUpdateDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)UpdateViews\SolutionUpdateDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Options\WpfHost.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WpfHost.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)VSPackage.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="$(MSBuildThisFileDirectory)Resources\Package.ico" />
+  </ItemGroup>
+</Project>

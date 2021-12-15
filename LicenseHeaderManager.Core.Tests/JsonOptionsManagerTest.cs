@@ -66,15 +66,6 @@ namespace LicenseHeaderManager.Core.Tests
     }
 
     [Test]
-    public void Deserialize_JsonConverterNotFound_ThrowsNotSupportedException ()
-    {
-      var testFilePath = CreateTestFile();
-      Assert.That (
-          async () => await JsonOptionsManager.DeserializeAsync<NotSupportedOptions> (testFilePath),
-          Throws.InstanceOf<SerializationException>().With.Message.EqualTo ("At least one JSON converter for deserializing configuration members was not found"));
-    }
-
-    [Test]
     public void Deserialize_NoFile_ThrowsFileNotFoundException ()
     {
       Assert.That (
@@ -113,16 +104,6 @@ namespace LicenseHeaderManager.Core.Tests
       var testFile = Path.Combine (Path.GetTempPath(), Guid.NewGuid() + ".json");
       _paths.Add (testFile);
       Assert.That (async () => await JsonOptionsManager.SerializeAsync (_options, testFile), Throws.Nothing);
-    }
-
-    [Test]
-    public void SerializeAsync_JsonConverterNotFound_ThrowsNotSupportedException ()
-    {
-      var notSupportedOptions = new NotSupportedOptions();
-
-      Assert.That (
-          async () => await JsonOptionsManager.SerializeAsync (notSupportedOptions, Path.Combine (Path.GetTempPath(), Guid.NewGuid() + ".json")),
-          Throws.InstanceOf<SerializationException>().With.Message.EqualTo ("At least one JSON converter for deserializing configuration members was not found"));
     }
 
     [Test]

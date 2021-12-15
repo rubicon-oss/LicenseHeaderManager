@@ -7,15 +7,14 @@
         <DisplayName>License Header Manager</DisplayName>
         <Description xml:space="preserve">An extension for adding license headers to source code files.</Description>
         <MoreInfo>https://github.com/rubicon-oss/LicenseHeaderManager</MoreInfo>
-        <License>VsixInformation/MIT.txt</License>
         <GettingStartedGuide>https://github.com/rubicon-oss/LicenseHeaderManager/wiki</GettingStartedGuide>
         <Icon>VsixInformation/Icon.png</Icon>
         <PreviewImage>VsixInformation/Preview.png</PreviewImage>
     </Metadata>
     <Installation>
-        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0, 17.0)" />
-        <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[14.0, 17.0)" />
-        <InstallationTarget Id="Microsoft.VisualStudio.Enterprise" Version="[14.0, 17.0)" />
+        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[16.0, 17.0)"/>
+        <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[16.0, 17.0)"/>
+        <InstallationTarget Id="Microsoft.VisualStudio.Enterprise" Version="[16.0, 17.0)"/>
     </Installation>
     <Dependencies>
         <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.0,)" />

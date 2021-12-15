@@ -25,7 +25,7 @@ using Rhino.Mocks;
 namespace LicenseHeaderManager.Tests
 {
   [TestFixture]
-  internal class LinkedFileHandlerTest : VisualStudioBaseTest
+  internal class LinkedFileHandlerTest
   {
     [SetUp]
     public void SetUp ()
@@ -33,13 +33,17 @@ namespace LicenseHeaderManager.Tests
       // In order to make the "await LicenseHeadersPackage.Instance.JoinableTaskFactory.SwitchToMainThreadAsync();" call in
       // LinkedFileHandler.HandleAsync work, we need to set the private JoinableTaskFactory property accordingly.
       // Source: https://github.com/microsoft/vs-threading/blob/main/doc/testing_vs.md
+#pragma warning disable VSSDK005
       var jtc = new JoinableTaskContext();
-      SetPrivateSetPackageProperty (nameof(ILicenseHeaderExtension.JoinableTaskFactory), jtc.Factory);
+#pragma warning restore VSSDK005
+      VisualStudioTestContext.SetPrivateSetPackageProperty (nameof(ILicenseHeaderExtension.JoinableTaskFactory), jtc.Factory);
     }
 
     [Test]
     public async Task HandleAsync_NoLicenseHeaderFileGiven_MessageInformsAboutFilesThatCouldNotBeProcessed ()
     {
+      await VisualStudioTestContext.SwitchToMainThread();
+
       var extension = MockRepository.GenerateStub<ILicenseHeaderExtension>();
       var licenseHeaderReplacer = MockRepository.GenerateStrictMock<LicenseHeaderReplacer>();
       extension.Expect (x => x.LicenseHeaderReplacer).Return (licenseHeaderReplacer);
@@ -66,6 +70,8 @@ namespace LicenseHeaderManager.Tests
     [Test]
     public async Task HandleAsync_NoProjectItemsGiven_NothingToBeDoneAndErrorMessageEmpty ()
     {
+      await VisualStudioTestContext.SwitchToMainThread();
+
       var solution = MockRepository.GenerateStub<Solution>();
       var extension = MockRepository.GenerateStub<ILicenseHeaderExtension>();
       var linkedFileFilter = MockRepository.GenerateStrictMock<LinkedFileFilter> (solution);

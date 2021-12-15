@@ -12,6 +12,7 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using EnvDTE;
 using LicenseHeaderManager.Utils;
 using NUnit.Framework;
@@ -20,13 +21,15 @@ using Rhino.Mocks;
 namespace LicenseHeaderManager.Tests
 {
   [TestFixture]
-  public class ProjectItemInspectionTest : VisualStudioBaseTest
+  public class ProjectItemInspectionTest
   {
     [Test]
     [TestCase ("test.licenseheader", true)]
     [TestCase ("test.cs", false)]
-    public void IsLicenseHeader_FileWithExtensionGiven_DeterminesIfLicenseHeaderDefinitionFile (string name, bool isLicenseHeader)
+    public async Task IsLicenseHeader_FileWithExtensionGiven_DeterminesIfLicenseHeaderDefinitionFile (string name, bool isLicenseHeader)
     {
+      await VisualStudioTestContext.SwitchToMainThread();
+
       var licenseHeader = MockRepository.GenerateMock<ProjectItem>();
       licenseHeader.Expect (x => x.Name).Return (name);
 
@@ -35,8 +38,10 @@ namespace LicenseHeaderManager.Tests
 
     [Test]
     [Ignore ("#68 changed access to IsLink which cant be mocked anymore.")]
-    public void IsLink_GivenLinkedItem_ReturnsTrue ()
+    public async Task IsLink_GivenLinkedItem_ReturnsTrue ()
     {
+      await VisualStudioTestContext.SwitchToMainThread();
+
       var linkedProjectItem = MockRepository.GenerateMock<ProjectItem>();
 
       var propertyStub = MockRepository.GenerateStub<Property>();
@@ -50,8 +55,10 @@ namespace LicenseHeaderManager.Tests
 
     [Test]
     [Ignore ("#68 changed access to IsLink which cant be mocked anymore.")]
-    public void IsLink_GivenNonLinkedItem_ReturnsFalse ()
+    public async Task IsLink_GivenNonLinkedItem_ReturnsFalse ()
     {
+      await VisualStudioTestContext.SwitchToMainThread();
+
       var linkedProjectItem = MockRepository.GenerateMock<ProjectItem>();
 
       linkedProjectItem.Stub (x => x.Properties).Return (MockRepository.GenerateStub<Properties>());
@@ -63,8 +70,10 @@ namespace LicenseHeaderManager.Tests
     [Test]
     [TestCase (Constants.vsProjectItemKindPhysicalFile, true)]
     [TestCase (Constants.vsProjectItemKindVirtualFolder, false)]
-    public void IsPhysicalFile_GivenProjectItem_DeterminesIfPhysicalFile (string projectItemKind, bool isPhysicalFile)
+    public async Task IsPhysicalFile_GivenProjectItem_DeterminesIfPhysicalFile (string projectItemKind, bool isPhysicalFile)
     {
+      await VisualStudioTestContext.SwitchToMainThread();
+
       var physicalFile = MockRepository.GenerateMock<ProjectItem>();
       physicalFile.Expect (x => x.Kind).Return (projectItemKind);
 

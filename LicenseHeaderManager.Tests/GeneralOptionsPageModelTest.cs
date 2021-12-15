@@ -13,6 +13,7 @@
 
 using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using LicenseHeaderManager.Options;
 using LicenseHeaderManager.Options.Converters;
 using LicenseHeaderManager.Options.Model;
@@ -21,11 +22,13 @@ using NUnit.Framework;
 namespace LicenseHeaderManager.Tests
 {
   [TestFixture]
-  public class GeneralOptionsPageModelTest : VisualStudioBaseTest
+  public class GeneralOptionsPageModelTest
   {
     [Test]
-    public void GeneralOptionsPage_AddLinkedCommand_LinkedCommandsChangedEventTriggered ()
+    public async Task GeneralOptionsPage_AddLinkedCommand_LinkedCommandsChangedEventTriggered ()
     {
+      await VisualStudioTestContext.SwitchToMainThread();
+
       var optionsPage = new GeneralOptionsPageModel();
       var wasCalled = false;
       optionsPage.LinkedCommandsChanged += (sender, args) => wasCalled = true;
@@ -35,8 +38,10 @@ namespace LicenseHeaderManager.Tests
     }
 
     [Test]
-    public void GeneralOptionsPage_CreateNewLinkedCommandCollection_LinkedCommandsChangedEventTriggered ()
+    public async Task GeneralOptionsPage_CreateNewLinkedCommandCollection_LinkedCommandsChangedEventTriggered ()
     {
+      await VisualStudioTestContext.SwitchToMainThread();
+
       var optionsPage = new GeneralOptionsPageModel();
       var wasCalled = false;
       optionsPage.LinkedCommandsChanged += (sender, args) => wasCalled = true;
