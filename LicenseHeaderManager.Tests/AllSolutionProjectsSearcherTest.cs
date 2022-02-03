@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using EnvDTE;
 using EnvDTE80;
 using LicenseHeaderManager.Utils;
@@ -23,11 +24,13 @@ using Rhino.Mocks;
 namespace LicenseHeaderManager.Tests
 {
   [TestFixture]
-  internal class AllSolutionProjectsSearcherBaseTest : VisualStudioBaseTest
+  public class AllSolutionProjectsSearcherBaseTest
   {
     [Test]
-    public void TestGetAllProjects_ReturnsOnlyProjects ()
+    public async Task TestGetAllProjects_ReturnsOnlyProjects ()
     {
+      await VisualStudioTestContext.SwitchToMainThread();
+
       var solution = MockRepository.GenerateStub<Solution>();
 
       var legitProject1 = MockRepository.GenerateStub<Project>();
@@ -49,8 +52,10 @@ namespace LicenseHeaderManager.Tests
     }
 
     [Test]
-    public void TestGetAllProjects_FindsNestedProject ()
+    public async Task TestGetAllProjects_FindsNestedProject ()
     {
+      await VisualStudioTestContext.SwitchToMainThread();
+
       var solution = MockRepository.GenerateStub<Solution>();
 
       var legitProject1 = MockRepository.GenerateStub<Project>();
@@ -74,8 +79,10 @@ namespace LicenseHeaderManager.Tests
     }
 
     [Test]
-    public void TestGetAllProjects_ShouldReturnListOfProjects ()
+    public async Task TestGetAllProjects_ShouldReturnListOfProjects ()
     {
+      await VisualStudioTestContext.SwitchToMainThread();
+
       var solution = MockRepository.GenerateStub<Solution>();
 
       var legitProject1 = MockRepository.GenerateStub<Project>();

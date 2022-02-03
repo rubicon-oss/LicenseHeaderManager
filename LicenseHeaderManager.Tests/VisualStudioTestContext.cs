@@ -12,7 +12,11 @@
  */
 
 using System;
+using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.VisualStudio.Sdk.TestFramework;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Threading;
 using NUnit.Framework;
 
 namespace LicenseHeaderManager.Tests
@@ -21,32 +25,26 @@ namespace LicenseHeaderManager.Tests
   ///   Provides an abstract base test fixture that allows for tests that invoke methods with assertions
   ///   ensuring execution from the UI thread (<c>ThreadHelper.ThrowIfNotOnUIThread()</c>) to succeed.
   /// </summary>
-  public abstract class VisualStudioBaseTest
+  [SetUpFixture]
+  public sealed class VisualStudioTestContext
   {
-    private Application _application;
-    private LicenseHeadersPackage _licenseHeaderPackage;
+    public static LicenseHeadersPackage LicenseHeaderPackage;
+    private static GlobalServiceProvider s_mockServiceProvider;
 
     [OneTimeSetUp]
     public void FixtureSetup ()
     {
-      // ThreadHelper.ThrowIfNotOnUIThread() accesses Application.Current.Dispatcher to determine whether
-      // a call is made from the context of the UI thread. When running unit tests, Application.Current is null.
-      // This property returns a static private variable of type Application that is set when the Application constructor
-      // is executed. Hence, it is enough to simply create an Application object to satisfy the assertion that is present
-      // in the production code.
-      // Source: https://referencesource.microsoft.com/#PresentationFramework/src/Framework/System/Windows/Application.cs,143
-      if (Application.Current == null)
-        _application = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
+      s_mockServiceProvider = new GlobalServiceProvider();
 
       // The static Instance is set in the LicenseHeadersPackage constructor. Therefore, set it in the fixture setup
       // such that it is accessible during tests.
-      _licenseHeaderPackage = new LicenseHeadersPackage();
+      LicenseHeaderPackage = new LicenseHeadersPackage();
     }
 
     [OneTimeTearDown]
     public void FixtureTearDown ()
     {
-      _application?.Shutdown();
+      s_mockServiceProvider.Dispose();
     }
 
     /// <summary>
@@ -54,9 +52,16 @@ namespace LicenseHeaderManager.Tests
     /// </summary>
     /// <param name="propertyName">The name of the private-set property whose value should be set.</param>
     /// <param name="propertyValue">The value the property determined by <paramref name="propertyName" /> should be set to.</param>
-    protected void SetPrivateSetPackageProperty (string propertyName, object propertyValue)
+    public static void SetPrivateSetPackageProperty (string propertyName, object propertyValue)
     {
-      typeof (LicenseHeadersPackage).GetProperty (propertyName)?.SetValue (_licenseHeaderPackage, propertyValue);
+      typeof (LicenseHeadersPackage).GetProperty (propertyName)?.SetValue (LicenseHeaderPackage, propertyValue);
+    }
+
+    public static JoinableTaskFactory.MainThreadAwaitable SwitchToMainThread ()
+    {
+#pragma warning disable VSTHRD004
+      return ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+#pragma warning restore VSTHRD004
     }
   }
 }

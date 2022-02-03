@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using EnvDTE;
 using LicenseHeaderManager.Core;
 using LicenseHeaderManager.Interfaces;
@@ -24,11 +25,13 @@ using Rhino.Mocks;
 namespace LicenseHeaderManager.Tests
 {
   [TestFixture]
-  internal class LinkedFileFilterTest : VisualStudioBaseTest
+  internal class LinkedFileFilterTest
   {
     [Test]
-    public void Filter_GivenEmptyList_YieldsEmptyProperties ()
+    public async Task Filter_GivenEmptyList_YieldsEmptyProperties ()
     {
+      await VisualStudioTestContext.SwitchToMainThread();
+
       var solution = MockRepository.GenerateMock<Solution>();
       var linkedFileFilter = new LinkedFileFilter (solution);
 
@@ -40,8 +43,10 @@ namespace LicenseHeaderManager.Tests
     }
 
     [Test]
-    public void Filter_GivenNonSolutionItem_PopulatesNotInSolutionProperty ()
+    public async Task Filter_GivenNonSolutionItem_PopulatesNotInSolutionProperty ()
     {
+      await VisualStudioTestContext.SwitchToMainThread();
+
       var solution = MockRepository.GenerateMock<Solution>();
       var linkedFile = MockRepository.GenerateMock<ProjectItem>();
       solution.Expect (x => x.FindProjectItem ("linkedFile.cs")).Return (null);
@@ -56,8 +61,10 @@ namespace LicenseHeaderManager.Tests
     }
 
     [Test]
-    public void Filter_GivenLicenseHeaderFile_PopulatesToBeProgressedProperty ()
+    public async Task Filter_GivenLicenseHeaderFile_PopulatesToBeProgressedProperty ()
     {
+      await VisualStudioTestContext.SwitchToMainThread();
+
       const string licenseHeaderFileName = "test.licenseheader";
 
       try
@@ -87,7 +94,7 @@ namespace LicenseHeaderManager.Tests
         // LicenseHeaderFinder is invoked by LinkedFileFilter and uses LicenseHeadersPackage.Instance.LicenseHeaderExtractor.
         // Since LicenseHeaderExtractor is set during MEF-controlled initialization, set the private-set LicenseHeaderExtractor
         // to make it work via tests as well.
-        SetPrivateSetPackageProperty (nameof(ILicenseHeaderExtension.LicenseHeaderExtractor), new LicenseHeaderExtractor());
+        VisualStudioTestContext.SetPrivateSetPackageProperty (nameof(ILicenseHeaderExtension.LicenseHeaderExtractor), new LicenseHeaderExtractor());
 
         var linkedFileFilter = new LinkedFileFilter (solution);
         linkedFileFilter.Filter (new List<ProjectItem> { linkedFile });
@@ -103,8 +110,10 @@ namespace LicenseHeaderManager.Tests
     }
 
     [Test]
-    public void Filter_GivenNonLicenseHeaderFile_PopulatesNoLicenseHeaderFileProperty ()
+    public async Task Filter_GivenNonLicenseHeaderFile_PopulatesNoLicenseHeaderFileProperty ()
     {
+      await VisualStudioTestContext.SwitchToMainThread();
+
       var solution = MockRepository.GenerateMock<Solution>();
       solution.Expect (x => x.FullName).Return (@"d:\projects\Stuff.sln");
 

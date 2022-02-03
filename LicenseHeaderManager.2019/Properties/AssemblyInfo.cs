@@ -1,4 +1,4 @@
-﻿/* Copyright (c) rubicon IT GmbH
+/* Copyright (c) rubicon IT GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
@@ -13,27 +13,24 @@
 
 using System;
 using System.Reflection;
+using System.Resources;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle ("LicenseHeaderManager.Test")]
-[assembly: AssemblyDescription ("")]
+[assembly: AssemblyTitle ("License Header Manager")]
+[assembly: AssemblyDescription ("Visual Studio extension for adding license headers to source code files.")]
 [assembly: AssemblyConfiguration ("")]
-[assembly: AssemblyCompany ("")]
-[assembly: AssemblyProduct ("LicenseHeaderManager.Test")]
-[assembly: AssemblyCopyright ("")]
+[assembly: AssemblyCompany ("rubicon IT GmbH")]
+[assembly: AssemblyProduct ("License Header Manager")]
+[assembly: AssemblyCopyright ("(c) 2011 rubicon IT GmbH, www.rubicon.eu")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
-
-// Setting ComVisible to false makes the types in this assembly not visible 
-// to COM components.  If you need to access a type in this assembly from 
-// COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible (false)]
-
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid ("aef4c085-ee15-4b7b-a5ae-f2465950e7c7")]
+[assembly: CLSCompliant (false)]
+[assembly: NeutralResourcesLanguage ("en-US")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -42,8 +39,12 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Build and Revision Numbers 
+// You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
+
 [assembly: AssemblyVersion ("4.0.0.0")]
 [assembly: AssemblyFileVersion ("4.0.0.0")]
+
+[assembly:
+  InternalsVisibleTo (
+      "LicenseHeaderManager.Tests, PublicKey=0024000004800000940000000602000000240000525341310004000001000100A51863EC92C8300AC3838C02FC45700305E1D0C531FC50BB69386935BBE857706DFCAF2025F9B7D88FBF232E68308DB5D131D04FED6D1B5F628D9F62BEE787A4B59232A12F2D8A9524CA0B598203C75C3F3F348A5F9DC26516C8275DE7B665126EDB9CD8627BAC1F4EC69AA98F16912B8F604BD1BDF07EDF008CE165436031B6")]
