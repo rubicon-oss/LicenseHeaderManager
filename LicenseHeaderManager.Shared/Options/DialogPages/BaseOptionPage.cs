@@ -179,36 +179,39 @@ namespace LicenseHeaderManager.Options.DialogPages
     {
       using var currentRegistryKey = GetRegistryKey (@$"ApplicationPrivateSettings\LicenseHeaderManager\Options\{GetType().Name}");
 
-      s_log.Info ($"Loading values from registry key: {currentRegistryKey.Name}");
-
-      foreach (var property in GetVisibleProperties())
+      if (currentRegistryKey != null)
       {
-        if (property.Name == "Commands")
-          continue;
+        s_log.Info ($"Loading values from registry key: {currentRegistryKey.Name}");
 
-        var propertyName = property.Name switch
+        foreach (var property in GetVisibleProperties())
         {
-            "LinkedCommands" => "LinkedCommandsSerialized",
-            "Languages" => "LanguagesSerialized",
-            _ => property.Name
-        };
+          if (property.Name == "Commands")
+            continue;
 
-        var converter = GetPropertyConverterOrDefault (property);
-        var registryValue = GetRegistryValue (currentRegistryKey, propertyName);
-        s_log.Debug ($"Property {propertyName} with value '{registryValue}' read from registry");
+          var propertyName = property.Name switch
+          {
+              "LinkedCommands" => "LinkedCommandsSerialized",
+              "Languages" => "LanguagesSerialized",
+              _ => property.Name
+          };
 
-        if (registryValue == null)
-          continue;
+          var converter = GetPropertyConverterOrDefault (property);
+          var registryValue = GetRegistryValue (currentRegistryKey, propertyName);
+          s_log.Debug ($"Property {propertyName} with value '{registryValue}' read from registry");
 
-        try
-        {
-          var deserializedValue = DeserializeValue (converter, registryValue);
-          property.SetValue (dialogPage ?? AutomationObject, deserializedValue);
-          s_log.Debug ($"Deserialized value: '{deserializedValue}'");
-        }
-        catch (Exception ex)
-        {
-          s_log.Error ($"Could not restore registry value for {propertyName}", ex);
+          if (registryValue == null)
+            continue;
+
+          try
+          {
+            var deserializedValue = DeserializeValue (converter, registryValue);
+            property.SetValue (dialogPage ?? AutomationObject, deserializedValue);
+            s_log.Debug ($"Deserialized value: '{deserializedValue}'");
+          }
+          catch (Exception ex)
+          {
+            s_log.Error ($"Could not restore registry value for {propertyName}", ex);
+          }
         }
       }
 
