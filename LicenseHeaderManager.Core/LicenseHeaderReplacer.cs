@@ -62,6 +62,9 @@ namespace LicenseHeaderManager.Core
 
     public Language GetLanguageFromExtension (string extension)
     {
+      if (extension == null)
+        return null;
+
       return _languages?.FirstOrDefault (x => x.Extensions.Any (y => extension.EndsWith (y, StringComparison.OrdinalIgnoreCase)));
     }
 

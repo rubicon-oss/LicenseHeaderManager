@@ -65,6 +65,16 @@ namespace LicenseHeaderManager.Core.Tests
     }
 
     [Test]
+    public void GetLanguageFromExtension_NullExtension_ReturnsNull()
+    {
+      var replacer = new LicenseHeaderReplacer(_languages, Enumerable.Empty<string>());
+
+      var language = replacer.GetLanguageFromExtension(null);
+
+      Assert.That(language, Is.Null);
+    }
+
+    [Test]
     public void GetLanguageFromExtension_LanguagesAreNull_DoesNotThrowExceptionAndReturnsNull ()
     {
       var replacer = new LicenseHeaderReplacer (null, Enumerable.Empty<string>());
